@@ -6,79 +6,86 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Customer {
 
-	@Id
-	private String publicID;
-	private int userID;
-	private int queueNumber;
-	private String userQueueStatus;
-	private int numberofUnits;
-	private int payAmount;
-	private String paymentStatus;
-	private String userstatus;
-	private String invoiceNumber;
-	private String currency;
-	
-	public String getPublicID() {
-		return publicID;
-	}
-	public void setPublicID(String publicID) {
-		this.publicID = publicID;
-	}
-	public int getUserID() {
-		return userID;
-	}
-	public void setUserID(int userID) {
-		this.userID = userID;
-	}
-	public int getQueueNumber() {
-		return queueNumber;
-	}
-	public void setQueueNumber(int queueNumber) {
-		this.queueNumber = queueNumber;
-	}
-	public String getUserQueueStatus() {
-		return userQueueStatus;
-	}
-	public void setUserQueueStatus(String userQueueStatus) {
-		this.userQueueStatus = userQueueStatus;
-	}
-	public int getNumberofUnits() {
-		return numberofUnits;
-	}
-	public void setNumberofUnits(int numberofUnits) {
-		this.numberofUnits = numberofUnits;
-	}
-	public int getPayAmount() {
-		return payAmount;
-	}
-	public void setPayAmount(int payAmount) {
-		this.payAmount = payAmount;
-	}
-	public String getPaymentStatus() {
-		return paymentStatus;
-	}
-	public void setPaymentStatus(String paymentStatus) {
-		this.paymentStatus = paymentStatus;
-	}
-	public String getUserstatus() {
-		return userstatus;
-	}
-	public void setUserstatus(String userstatus) {
-		this.userstatus = userstatus;
-	}
-	public String getInvoiceNumber() {
-		return invoiceNumber;
-	}
-	public void setInvoiceNumber(String invoiceNumber) {
-		this.invoiceNumber = invoiceNumber;
-	}
-	public String getCurrency() {
-		return currency;
-	}
-	public void setCurrency(String currency) {
-		this.currency = currency;
-	}
-		
-	
+  @Id
+  private String id;
+  String custcode 		;
+  String customerName 	;
+  String phoneNumber 	;
+  String mobileNumber 	;
+  String address 		;
+  String country 		;
+  String city 			;
+  String email 			;
+  String lastedit 		;
+  String addeddate 		;
+public String getId() {
+	return id;
+}
+public void setId(String id) {
+	this.id = id;
+}
+public String getCustcode() {
+	return custcode;
+}
+public void setCustcode(String custcode) {
+	this.custcode = custcode;
+}
+public String getCustomerName() {
+	return customerName;
+}
+public void setCustomerName(String customerName) {
+	this.customerName = customerName;
+}
+public String getPhoneNumber() {
+	return phoneNumber;
+}
+public void setPhoneNumber(String phoneNumber) {
+	this.phoneNumber = phoneNumber;
+}
+public String getMobileNumber() {
+	return mobileNumber;
+}
+public void setMobileNumber(String mobileNumber) {
+	this.mobileNumber = mobileNumber;
+}
+public String getAddress() {
+	return address;
+}
+public void setAddress(String address) {
+	this.address = address;
+}
+public String getCountry() {
+	return country;
+}
+public void setCountry(String country) {
+	this.country = country;
+}
+public String getCity() {
+	return city;
+}
+public void setCity(String city) {
+	this.city = city;
+}
+public String getEmail() {
+	return email;
+}
+public void setEmail(String email) {
+	this.email = email;
+}
+public String getLastedit() {
+	return lastedit;
+}
+public void setLastedit(String lastedit) {
+	this.lastedit = lastedit;
+}
+public String getAddeddate() {
+	return addeddate;
+}
+public void setAddeddate(String addeddate) {
+	this.addeddate = addeddate;
+}
+  
+  
+  
 	
 }
