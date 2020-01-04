@@ -77,10 +77,10 @@ public class CustomerImpl implements CustomerDAL {
 	public Customer updateCustomer(Customer customer) {
 		Update update = new Update();
 		Query query = new Query();
-		query.addCriteria(Criteria.where("invoiceNumber").is(customer.getInvoiceNumber()));
-		update.set("userQueueStatus", "OUT");
-		update.set("queueNumber", 0);	
-		update.set("userstatus", "CLOSED");	
+		query.addCriteria(Criteria.where("id").is(customer.getId()));
+		//update.set("userQueueStatus", "OUT");
+		//update.set("queueNumber", 0);	
+		//update.set("userstatus", "CLOSED");	
 		mongoTemplate.updateFirst(query, update, Customer.class);
 		return customer;
 	}

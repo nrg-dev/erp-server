@@ -40,7 +40,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SpringBootApplication
-@RestController("/customer")
+@RestController
+@RequestMapping(value="/customer")
 public class CustomerService implements Filter{
 	
 	public static final Logger logger = LoggerFactory.getLogger(CustomerService.class);

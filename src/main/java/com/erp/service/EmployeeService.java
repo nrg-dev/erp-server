@@ -32,15 +32,17 @@ import org.springframework.http.ResponseEntity;
 
 import com.erp.bo.ErpBo;
 import com.erp.dto.Member;
-import com.erp.mongo.dal.CustomerDAL;
+import com.erp.mongo.dal.EmployeeDAL;
 import com.erp.service.EmployeeService;
-import com.ggl.mongo.model.Customer;
+import com.ggl.mongo.model.Employee;
+import com.ggl.mongo.model.Vendor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SpringBootApplication
-@RestController("/employee")
+@RestController
+@RequestMapping(value="/employee")
 public class EmployeeService implements Filter{
 	
 	public static final Logger logger = LoggerFactory.getLogger(EmployeeService.class);
@@ -52,16 +54,15 @@ public class EmployeeService implements Filter{
 
 	//private final RandamNumberRepository randamNumberRepository;
 
-	private final CustomerDAL customerdal;
+	private final EmployeeDAL employeedal;
 
 	List<String> publicfiles = new ArrayList<String>();
 	List<String> privatefiles = new ArrayList<String>();
 	List<String> ownfiles = new ArrayList<String>();
 	List<String> minifiles = new ArrayList<String>();
 	
-	public EmployeeService(CustomerDAL customerdal) {
-		//this.randamNumberDAL = randamNumberDAL;
-		this.customerdal = customerdal;
+	public EmployeeService(EmployeeDAL employeedal) {
+		this.employeedal = employeedal;
 	}
 
 
@@ -90,10 +91,10 @@ public class EmployeeService implements Filter{
       // Save
 		@CrossOrigin(origins = "http://localhost:8080")
 		@RequestMapping(value="/save",method=RequestMethod.POST)
-		public ResponseEntity<?>  save(@RequestBody Customer customer) {
+		public ResponseEntity<?>  save(@RequestBody Employee employee) {
 			try {	   
-				customer=  customerdal.saveCustomer(customer);				 
-				   return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
+				employee=  employeedal.save(employee);				 
+				   return new ResponseEntity<Employee>(employee, HttpStatus.CREATED);
 
 			
 
@@ -104,7 +105,7 @@ public class EmployeeService implements Filter{
 		   finally{
 			   
 		   }
-		   return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
+		   return new ResponseEntity<Employee>(employee, HttpStatus.CREATED);
 		}
 
 
@@ -113,11 +114,11 @@ public class EmployeeService implements Filter{
 		@RequestMapping(value="/get",method=RequestMethod.GET)
 		public ResponseEntity<?> get(String id)
 		{
-			logger.info("------------- Inside getTempPublicTree-----------------");
-			List<Customer> responseList=null;
+			logger.info("------------- Inside get Employee -----------------");
+			List<Employee> responseList=null;
 		   try {
-				logger.info("-----------Inside getTempPublicTree Called----------");
-				responseList=customerdal.getCustomer(id);
+				logger.info("-----------Inside get employee ----------");
+				responseList=employeedal.get(id);
 				
 				}catch(Exception e){
 				logger.info("Exception ------------->"+e.getMessage());
@@ -125,7 +126,7 @@ public class EmployeeService implements Filter{
 			}finally{
 				
 			}
-			return new ResponseEntity<List<Customer>>(responseList, HttpStatus.CREATED);
+			return new ResponseEntity<List<Employee>>(responseList, HttpStatus.CREATED);
 
 		}
 			
@@ -133,11 +134,11 @@ public class EmployeeService implements Filter{
 		// update	
 		@CrossOrigin(origins = "http://localhost:8080")
 		@RequestMapping(value="/update",method=RequestMethod.POST)
-		public ResponseEntity<?>  update(@RequestBody Customer customer) {
+		public ResponseEntity<?>  update(@RequestBody Employee employee) {
 	   try 
 	   {	   
-		  customer=  customerdal.updateCustomer(customer);				  
-		  return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
+		   employee=  employeedal.update(employee);				  
+		  return new ResponseEntity<Employee>(employee, HttpStatus.CREATED);
 		   
 	   }catch(Exception e) {
 		   logger.info("Exception ------------->"+e.getMessage());
@@ -145,7 +146,7 @@ public class EmployeeService implements Filter{
 	   	}finally{
 		   
 	   	}
-	  	return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
+	  	return new ResponseEntity<Employee>(employee, HttpStatus.CREATED);
 		}
 
 				
@@ -156,10 +157,10 @@ public class EmployeeService implements Filter{
 		public ResponseEntity<?> load()
 		{
 			logger.info("------------- Inside getTempOwnTree-----------------");
-			List<Customer> responseList=null;
+			List<Employee> responseList=null;
 		   try {
 				logger.info("-----------Inside getTempOwnTree Called----------");
-				responseList=customerdal.loadCustomer(responseList);
+				responseList=employeedal.load(responseList);
 				
 				}catch(Exception e){
 				logger.info("Exception ------------->"+e.getMessage());
@@ -167,7 +168,7 @@ public class EmployeeService implements Filter{
 			}finally{
 				
 			}
-			return new ResponseEntity<List<Customer>>(responseList, HttpStatus.CREATED);
+			return new ResponseEntity<List<Employee>>(responseList, HttpStatus.CREATED);
 	
 		}
 
@@ -179,9 +180,9 @@ public class EmployeeService implements Filter{
 
 
 		   try {
-				logger.info("-----------Before Calling  removeCustomer ----------");
-				customerdal.removeCustomer(id);
-				logger.info("-----------Successfully Called  removeCustomer ----------");
+				logger.info("-----------Before Calling  remove employee ----------");
+				employeedal.remove(id);
+				logger.info("-----------Successfully Called  remo employee ----------");
 			
 				}catch(Exception e){ 
 				//	member.setStatus("bad");
