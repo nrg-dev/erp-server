@@ -38,10 +38,7 @@ public class EmployerDetails implements Serializable {
 	
 	
 	
-	//bi-directional many-to-one association to UserLogin
-	@ManyToOne
-	@JoinColumn(name="employer_Login_ID")
-	private EmployerLogin employerLogin;
+	
 
 	public EmployerDetails() {
 	}
@@ -126,13 +123,7 @@ public class EmployerDetails implements Serializable {
 		Employer_status = employer_status;
 	}
 
-	public EmployerLogin getEmployerLogin() {
-		return this.employerLogin;
-	}
 
-	public void setEmployerLogin(EmployerLogin employerLogin) {
-		this.employerLogin = employerLogin;
-	}
 	
 	
 	

@@ -9,7 +9,6 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/x
 		<class>com.erp.model.CountryDetail</class>
 		<class>com.erp.model.UserRoleType</class>
 		<class>com.erp.model.RandamNumber</class>
-		<class>com.erp.model.EmployerLogin</class>
 		<class>com.erp.model.EmployerDetails</class>
 
 	

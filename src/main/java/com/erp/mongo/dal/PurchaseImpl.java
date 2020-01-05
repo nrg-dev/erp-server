@@ -3,6 +3,8 @@ package com.erp.mongo.dal;
 import java.util.Collections;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,19 +36,21 @@ import com.erp.dto.Member;
 import com.erp.model.UserDetail;
 import com.erp.util.Email;
 import com.ggl.mongo.model.Customer;
+import com.ggl.mongo.model.PurchaseOrder;
 
 
 @Repository
-public class CustomerImpl implements CustomerDAL {
+public class PurchaseImpl implements PurchaseDAL {
 	
-	public static final Logger logger = LoggerFactory.getLogger(CustomerImpl.class);
+	public static final Logger logger = LoggerFactory.getLogger(PurchaseImpl.class);
 
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
-	@Autowired
-	ErpBo investmentBo1;
+	/*
+	 * @Autowired ErpBo investmentBo1;
+	 */
 
 	
 	
@@ -55,47 +59,49 @@ public class CustomerImpl implements CustomerDAL {
 	// save
 	
 	@Override
-	public Customer saveCustomer(Customer customer) {
+	public PurchaseOrder savePurchase(PurchaseOrder purchaseorder) {
 		//mongoTemplate.insert(customer);//(query, RandamNumber.class);
-		mongoTemplate.save(customer);
-		customer.setStatus("success");
-		return customer;
+		mongoTemplate.insert(purchaseorder);
+		//po.setStatus("success");
+		return purchaseorder;
 	}
-	// get
-	@Override
-	public List<Customer> getCustomer(String primaryKey) {
-		List<Customer> list;
-		Query query = new Query();
-		query.addCriteria(Criteria.where("userID").is(Integer.valueOf(primaryKey)));
-		list = mongoTemplate.find(query, Customer.class);
+	
+	
+	public List<PurchaseOrder> loadPurchase(List<PurchaseOrder> list){
+		//List<PurchaseOrder> 
+		list =  mongoTemplate.findAll(PurchaseOrder.class);//.find(query, OwnTree.class); return
 		return list;
-		//return mongoTemplate.find(query, Publictree.class);
-	}
+			  
+		} 
 	
-	
-	// update
-	@Override
-	public Customer updateCustomer(Customer customer) {
-		Update update = new Update();
-		Query query = new Query();
-		query.addCriteria(Criteria.where("id").is(customer.getId()));
-		//update.set("userQueueStatus", "OUT");
-		//update.set("queueNumber", 0);	
-		//update.set("userstatus", "CLOSED");	
-		mongoTemplate.updateFirst(query, update, Customer.class);
-		return customer;
-	}
-	
-	public List<Customer> loadCustomer(List<Customer> list){
-		list = mongoTemplate.findAll(Customer.class);//.find(query, OwnTree.class);
-		return list;
-		
-	}
-	public void removeCustomer(String customer) {
-		mongoTemplate.remove(customer);
-	
-	}
-			
+	/*
+	 * // get
+	 * 
+	 * @Override public List<Customer> getCustomer(String primaryKey) {
+	 * List<Customer> list; Query query = new Query();
+	 * query.addCriteria(Criteria.where("userID").is(Integer.valueOf(primaryKey)));
+	 * list = mongoTemplate.find(query, Customer.class); return list; //return
+	 * mongoTemplate.find(query, Publictree.class); }
+	 * 
+	 * 
+	 * // update
+	 * 
+	 * @Override public Customer updateCustomer(Customer customer) { Update update =
+	 * new Update(); Query query = new Query();
+	 * query.addCriteria(Criteria.where("id").is(customer.getId()));
+	 * //update.set("userQueueStatus", "OUT"); //update.set("queueNumber", 0);
+	 * //update.set("userstatus", "CLOSED"); mongoTemplate.updateFirst(query,
+	 * update, Customer.class); return customer; }
+	 * 
+	 * public List<Customer> loadPurchase(List<PurchaseOrder> list){ list =
+	 * mongoTemplate.findAll(PurchaseOrder.class);//.find(query, OwnTree.class); return
+	 * list;
+	 * 
+	 * } public void removeCustomer(String customer) {
+	 * mongoTemplate.remove(customer);
+	 * 
+	 * }
+	 */
 	
 		
 	

@@ -18,6 +18,8 @@ public class Customer {
   String email 			;
   String lastedit 		;
   String addeddate 		;
+  String status 		;
+
 public String getId() {
 	return id;
 }
@@ -83,6 +85,12 @@ public String getAddeddate() {
 }
 public void setAddeddate(String addeddate) {
 	this.addeddate = addeddate;
+}
+public String getStatus() {
+	return status;
+}
+public void setStatus(String status) {
+	this.status = status;
 }
   
   

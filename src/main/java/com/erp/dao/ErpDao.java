@@ -3,7 +3,6 @@ package com.erp.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.erp.dto.GLGMem;
 import com.erp.dto.Member;
 import com.erp.dto.User;
 import com.erp.model.CountryDetail;
