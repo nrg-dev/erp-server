@@ -27,7 +27,6 @@ import org.springframework.stereotype.Service;
 
 import com.erp.dao.ErpDao;
 import com.erp.dto.Dropbox;
-import com.erp.dto.GLGMem;
 import com.erp.dto.Member;
 import com.erp.dto.User;
 
@@ -35,9 +34,11 @@ import com.erp.model.CountryDetail;
 import com.erp.model.IndustryDetail;
 import com.erp.model.UserDetail;
 import com.erp.model.UserLogin;
+import com.erp.mongo.dal.CustomerDAL;
 import com.erp.util.Custom;
 import com.erp.util.Email;
 import com.erp.util.ErpException;
+import com.ggl.mongo.model.Customer;
 
 
 @Service("bo")
@@ -57,8 +58,19 @@ public class ErpBoImpl implements ErpBo{
 	@Autowired
 	ErpDao dao;
 	
-
-
+	/*
+	 * @Autowired CustomerDAL customerdal;
+	 */
+	/*
+	 * private final CustomerDAL customerdal;
+	 * 
+	 * public ErpBoImpl(CustomerDAL customerdal) { //this.randamNumberDAL =
+	 * randamNumberDAL; this.customerdal = customerdal; }
+	 */
+	/*
+	 * public Customer saveCustomer(Customer customer) { return
+	 * customerdal.saveCustomer(customer); }
+	 */
 	
 	
 }

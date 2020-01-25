@@ -4,11 +4,14 @@ import org.json.JSONArray;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mongodb.util.JSON;
 
 @Document
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class PurchaseOrder {
 
 	
@@ -16,17 +19,19 @@ public class PurchaseOrder {
 	@JsonIgnore
     public JSONArray purchaseorder;
 
-	public JSONArray getPurchaseorder() {
-		return purchaseorder;
-	}
-
-	public void setPurchaseorder(JSONArray purchaseorder) {
-		this.purchaseorder = purchaseorder;
-	}
 	
-	/*
-	 * @JsonProperty public String data;
-	 */
+	
+	
+	
+	  public JSONArray getPurchaseorder() { return purchaseorder; }
+	  
+	  public void setPurchaseorder(JSONArray purchaseorder) { this.purchaseorder =
+	  purchaseorder; }
+	 
+	
+	
+	//  @JsonProperty public String data;
+	 
 	/*
 	 * @Id private String id; JSON po_order ; String status ;
 	 * 

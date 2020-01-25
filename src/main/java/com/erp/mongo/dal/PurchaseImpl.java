@@ -36,7 +36,9 @@ import com.erp.dto.Member;
 import com.erp.model.UserDetail;
 import com.erp.util.Email;
 import com.ggl.mongo.model.Customer;
+import com.ggl.mongo.model.POInvoiceDetails;
 import com.ggl.mongo.model.PurchaseOrder;
+import com.ggl.mongo.model.RandomNumber;
 
 
 @Repository
@@ -54,17 +56,66 @@ public class PurchaseImpl implements PurchaseDAL {
 
 	
 	
+	@Override
+	public RandomNumber getRandamNumber() {
+		RandomNumber radamNumber=null;
+		try {
+			logger.info("----------- Inside getRandamNumber-----------");
+			Query query = new Query();
+			logger.info("-----------  Before addCriteria-----------");
+		    query.addCriteria(Criteria.where("type").is("invoice"));
+
+			logger.info("-----------  After addCriteria-----------");
+			radamNumber = mongoTemplate.findOne(query, RandomNumber.class);		
+			logger.info("Invoice number ----------->"+radamNumber.getPoinvoicenumber());
+
+			return radamNumber;//mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return radamNumber;
+
+
+		}finally {
+			
+		}
+		
+	}
+	
+	
+	@Override
+	public String updateRandamNumber(RandomNumber rn) {
+		logger.info("currentqueueNumber"+rn.getPoinvoicenumber());	
+		
+		Query query = new Query();
+	    query.addCriteria(Criteria.where("poinvoicenumber").is(1));
+			Update update = new Update();
+			update.set("poinvoicenumber", rn.getPoinvoicenumber()+1);			
+		mongoTemplate.updateFirst(query, update, RandomNumber.class);//(query, RandamNumber.class);
+		return "";//mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
+	}
+	
 	
 
 	// save
 	
 	@Override
-	public PurchaseOrder savePurchase(PurchaseOrder purchaseorder) {
+	public POInvoiceDetails savePurchase(POInvoiceDetails purchaseorder) {
 		//mongoTemplate.insert(customer);//(query, RandamNumber.class);
-		mongoTemplate.insert(purchaseorder);
+		System.out.println("Before save Invoice");
+		mongoTemplate.save(purchaseorder);
+		System.out.println("After save Invoice");
 		//po.setStatus("success");
 		return purchaseorder;
 	}
+	
+	
+	
+	/*
+	 * @Override public PurchaseOrder savePurchase(PurchaseOrder purchaseorder) {
+	 * //mongoTemplate.insert(customer);//(query, RandamNumber.class);
+	 * mongoTemplate.save(purchaseorder); //po.setStatus("success"); return
+	 * purchaseorder; }
+	 */
 	
 	
 	public List<PurchaseOrder> loadPurchase(List<PurchaseOrder> list){

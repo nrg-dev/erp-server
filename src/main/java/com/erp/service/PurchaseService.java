@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 
@@ -41,11 +43,12 @@ import com.erp.mongo.dal.PurchaseDAL;
 import com.erp.service.PurchaseService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ggl.mongo.model.Customer;
+import com.ggl.mongo.model.POInvoiceDetails;
 import com.ggl.mongo.model.PurchaseOrder;
+import com.ggl.mongo.model.RandomNumber;
 import com.mongodb.BasicDBObject;
 import com.mongodb.util.JSON;
 import com.sun.xml.txw2.Document;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -66,10 +69,7 @@ public class PurchaseService implements Filter{
 	//private final RandamNumberRepository randamNumberRepository;
 
 
-	List<String> publicfiles = new ArrayList<String>();
-	List<String> privatefiles = new ArrayList<String>();
-	List<String> ownfiles = new ArrayList<String>();
-	List<String> minifiles = new ArrayList<String>();
+	
 	
 	private final PurchaseDAL purchasedal;
 
@@ -100,55 +100,102 @@ public class PurchaseService implements Filter{
 	
 	
 	
-      // Save
+        // Save
 		@CrossOrigin(origins = "http://localhost:8080")
 		@RequestMapping(value="/save",method=RequestMethod.POST)
 		public ResponseEntity<?>  savePurchase(@RequestBody String purchsearray) {
 			System.out.println("--------save savePurchase-------------");
 			Purchase purchase=null;
-			try {	   
-				 purchase=new Purchase();
-
-				//for(Purchase p:purchsearray) {
-					System.out.println(purchsearray);
-				//}
-					PurchaseOrder po = new PurchaseOrder();
-					System.out.println("1");
+			JSONArray jsonArray = null;
+			PurchaseOrder po=null;
+			POInvoiceDetails podetails=null;
+			ObjectMapper mapper = new ObjectMapper();
+			try {	
+				 System.out.println("Json -->"+purchsearray);
+				 	/*purchase=new Purchase();
+				 	po = new PurchaseOrder();
+					System.out.println("Json array format-->"+purchsearray);
 					//JSON.parse(purchsearray); 
-					JSONArray value = new JSONArray(purchsearray);
-					po.setPurchaseorder(value);
-					
-					
-					//po.setData(purchsearray);
-					//po.setPo_order(purchsearray.toJson());
-					System.out.println("2");
-
-					//final Object myRestData  = JSON.parse(purchsearray.toString());
-
-					//JSONObject rat = Rat.getJSONObject(purchsearray);
-					//String newrat = rat.toString();
-
-					//collection.insertOne(doc);
-
-
-					//PurchaseOrder doc = PurchaseOrder.parse(purchsearray);
-					//collection.insertOne(doc);
-
+					jsonArray = new JSONArray(purchsearray);
+					po.setPurchaseorder(jsonArray);
 				    purchasedal.savePurchase(po);	
 					System.out.println("3");
+					*/
+				 
+				 // Store into parent table to show in first data table view
+				 RandomNumber randomnumber = purchasedal.getRandamNumber();	
+				 System.out.println("Current random number-->"+randomnumber.getPoinvoicenumber());
+				 //podetails.setStatus("Waiting");
+                        /// one row add into main tale.
+				 // end 
+				 
+				 JSONArray jsonArr = new JSONArray(purchsearray);
+				    List<Purchase> dataList = new ArrayList<Purchase>();
+				    for (int i = 0; i < jsonArr.length(); i++) {
+				    	System.out.println("Loop 1...."+i);
+				    	if(jsonArr.optJSONArray(i)!=null) {
+				    		
+				    	
+				    	JSONArray arr2 = jsonArr.optJSONArray(i);
+				    	
+				    	for (int j = 0; j < arr2.length(); j++) {
+				    		System.out.println("Loop 2...."+j);
+				    		if(arr2.getJSONObject(j)!=null) {
+				    			JSONObject jObject = arr2.getJSONObject(j);
+								System.out.println(jObject.getString("productName"));
+								System.out.println(jObject.getString("category"));
+								podetails = new POInvoiceDetails();
+								podetails.setInvoicenumber("INV001");// random table..
+								podetails.setCategory(jObject.getString("category"));
+								podetails.setItemname(jObject.getString("productName"));
+								podetails.setDescription(jObject.getString("description"));
+								podetails.setUnitprice(jObject.getString("unitPrice"));
+								podetails.setQty(jObject.getString("quantity"));
+								podetails.setSubtotal(jObject.getString("netAmount"));
+								purchasedal.savePurchase(podetails);
+				    		}
+				    		
+				    		
+				    		else {
+				    			System.out.println("Null....");
+				    		}
+				    		
 
-				//customer=  erpBo.saveCustomer(customer);	
-					purchase.setStatus("success");
-					
-					//purchsearray="success";
+				       }
+				    	
+				      //  JSONObject jsonObj = jsonArr.getJSONObject(i);				       
+					   // System.out.println(jsonObj.getString("category"));
+						//System.out.println(jsonObj.getString("productName"));
+						//System.out.println(item.getQuantity());
+						//System.out.println(item.getUnitPrice());
+						//System.out.println(item.getNetAmount());
+						
+				    }  
+				    	else {
+			    			System.out.println("Outer Null....");
+			    		}
+				    }
+				    
+				    //purchasedal.savePurchase(podetails);
+				    System.out.println("Service call start.....");
+					purchase.setStatus("success");					
+					return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
+
+			  }
+			
+			catch(NullPointerException ne) {
+				purchase=new Purchase();
+			    System.out.println("Inside null pointer exception ....");
+				purchase.setStatus("success");					
+
 				return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
 
-			
-
-		   }catch(Exception e) {
+			   }
+			catch(Exception e) {
 			   logger.info("Exception ------------->"+e.getMessage());
 			   e.printStackTrace();
 		   }
+			
 		   finally{
 			   
 		   }
@@ -195,29 +242,93 @@ public class PurchaseService implements Filter{
 	  
 	  // load
 	  
-		ArrayList<String> res = new ArrayList<String>();
-	  
+		//ArrayList<String> res = new ArrayList<String>();
+		ArrayList<JSONArray> res= new ArrayList<JSONArray>(); 
+
 	  @CrossOrigin(origins = "http://localhost:8080")	  
 	  @GetMapping(value="/load",produces=MediaType.APPLICATION_JSON_VALUE) 
 	  public  ResponseEntity<?> loadPurchase() {
 	  logger.info("------------- Inside loadPurchase-----------------");
-	  List<PurchaseOrder> responseList= new ArrayList<PurchaseOrder>(); 
+	  List<PurchaseOrder> response= new ArrayList<PurchaseOrder>();
+	  List<Purchase> responseList= new ArrayList<Purchase>();
+	 // List<JSONArray> res= new ArrayList<JSONArray>(); 
+	  Purchase purchase;
+	  
 	  try {
 	  logger.info("-----------Inside loadPurchase Called----------");
-	  responseList=purchasedal.loadPurchase(responseList);
-	  for(PurchaseOrder po:responseList) {
-		  System.out.println("product name-->"+po.getPurchaseorder());
-		 // res.add(po.getPurchaseorder().toString());
+	  response=purchasedal.loadPurchase(response);
+	  int lenth = response.size();
+	  System.out.println("List size-->"+lenth);
+	  int i=0;
+			/*
+			 * for(PurchaseOrder po:response) {
+			 * 
+			 * }
+			 */
+      ObjectMapper mapper = new ObjectMapper();
+
+	  for(PurchaseOrder po:response) {
+		 
+		  System.out.println("lenth-->"+po.getPurchaseorder().length());
+		  System.out.println("value-->"+po.getPurchaseorder().get(i));
+		   purchase = new Purchase();
+			  String json= String.valueOf(po.getPurchaseorder().get(i));
+
+           List<Purchase> jsonlist = Arrays.asList(mapper.readValue(json, Purchase[].class));
+
+		 // JSONArray jsonArr = new JSONArray(po.getPurchaseorder().get(i));
+		  System.out.println("\nJSON array to List of objects");
+		  for(Purchase item : jsonlist){
+			  System.out.println("For Loop");
+				System.out.println(item.getNetAmount());
+	            purchase.setNetAmount(item.getNetAmount());
+
+			}
+		  
+		  responseList.add(purchase);
+				/*
+				 * ppl2.forEach(name -> { System.out.println(name); });
+				 */
+		 
+		  
+		  //ppl2.stream().forEach(x -> 
+          
+        //  System.out.println(x.getNetAmount()));
+          
+		   // for (int i = 0; i < jsonArr.length(); i++) {
+		     //   JSONObject jsonObj = jsonArr.getJSONObject(i);
+		       
+		      //  purchase.setQuantity(jsonObj.getString("quantity"));
+//		        data.setTitle(jsonObj.getString("title"));
+//		        data.setDescription(jsonObj.getString("description"));
+//		        data.setUserId(jsonObj.getString("user_id"));
+		        responseList.add(purchase);
+		 //   }
+		    
+				/*
+				 * for(int j=0;j<=po.getPurchaseorder().length();i++) { purchase = new
+				 * Purchase(); System.out.println("test..");
+				 * purchase.setNetAmount(po.getPurchaseorder().get(i).toString());
+				 * responseList.add(purchase); }
+				 */
+	 // System.out.println(po.getPurchaseorder());
+		 // res.add(po.getPurchaseorder());
+		  i++;
 	  }
-	  System.out.println("list size--->"+responseList.size());
-	  return new ResponseEntity<List<PurchaseOrder>>(responseList,
-			  HttpStatus.CREATED);
+	  
+			/*
+			 * for(int j=0;j<response.length();i++) { System.out.println("test.."); }
+			 */
+	//  System.out.println("list size--->"+res.size());
+	  return new ResponseEntity<List<Purchase>>(responseList, HttpStatus.CREATED);
+	 // return ResponseEntity.ok(res);
+	  
 	  }catch(Exception e){ logger.info("loadPurchase Exception ------------->"+e.getMessage());
 	  e.printStackTrace(); }finally{
 	  
-	  } return new ResponseEntity<List<PurchaseOrder>>(responseList,
-	  HttpStatus.CREATED);
-	  
+	  } 
+	  return new ResponseEntity<List<Purchase>>(responseList,HttpStatus.CREATED);
+  
 	  }
 	  
 	  // Remove

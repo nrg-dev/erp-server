@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.erp.dto.GLGMem;
 import com.erp.dto.Member;
 import com.erp.dto.User;
 

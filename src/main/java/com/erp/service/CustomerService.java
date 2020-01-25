@@ -48,18 +48,19 @@ public class CustomerService implements Filter{
 		
 	
 	@Autowired
-	ErpBo investmentBo;
+	ErpBo erpBo;
 
 
 	//private final RandamNumberRepository randamNumberRepository;
 
-	private final CustomerDAL customerdal;
 
 	List<String> publicfiles = new ArrayList<String>();
 	List<String> privatefiles = new ArrayList<String>();
 	List<String> ownfiles = new ArrayList<String>();
 	List<String> minifiles = new ArrayList<String>();
 	
+	private final CustomerDAL customerdal;
+
 	public CustomerService(CustomerDAL customerdal) {
 		//this.randamNumberDAL = randamNumberDAL;
 		this.customerdal = customerdal;
@@ -92,9 +93,12 @@ public class CustomerService implements Filter{
 		@CrossOrigin(origins = "http://localhost:8080")
 		@RequestMapping(value="/save",method=RequestMethod.POST)
 		public ResponseEntity<?>  saveCustomer(@RequestBody Customer customer) {
+			System.out.println("--------save customer-------------");
 			try {	   
-				customer=  customerdal.saveCustomer(customer);				 
-				   return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
+				customer=  customerdal.saveCustomer(customer);	
+				//customer=  erpBo.saveCustomer(customer);	
+				
+				return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
 
 			
 

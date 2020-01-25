@@ -2,10 +2,21 @@ package com.erp.dto;
 
 public class Purchase {
 	
-	  String productName; String category; String vendorName; String poDate; String
-	  quantity; String netAmount;
-	 
-	String status;
+	
+	/*
+	 * Purchase(){
+	 * 
+	 * }
+	 */
+	  String productName; 
+	  String category; 
+	  String vendorName; 
+	  String poDate; 
+	  String quantity; 
+	  String netAmount;	 
+	  String unitPrice;
+	  String status;
+	  String description;
 	
 	  public String getProductName() { return productName; } public void
 	  setProductName(String productName) { this.productName = productName; } public
@@ -19,12 +30,24 @@ public class Purchase {
 	  } public void setNetAmount(String netAmount) { this.netAmount = netAmount; }
 	 
 
+	public String getUnitPrice() {
+		return unitPrice;
+	}
+	public void setUnitPrice(String unitPrice) {
+		this.unitPrice = unitPrice;
+	}
 	public String getStatus() {
 		return status;
 	}
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	
