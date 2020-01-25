@@ -95,12 +95,8 @@ public class CustomerService implements Filter{
 		public ResponseEntity<?>  saveCustomer(@RequestBody Customer customer) {
 			System.out.println("--------save customer-------------");
 			try {	   
-				customer=  customerdal.saveCustomer(customer);	
-				//customer=  erpBo.saveCustomer(customer);	
-				
-				return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
-
-			
+				customer=  customerdal.saveCustomer(customer);					
+				return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);			
 
 		   }catch(Exception e) {
 			   logger.info("Exception ------------->"+e.getMessage());
