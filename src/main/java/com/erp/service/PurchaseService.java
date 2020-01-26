@@ -42,6 +42,7 @@ import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.service.PurchaseService;
+import com.erp.util.Custom;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -98,7 +99,7 @@ public class PurchaseService implements Filter{
 	
         // Save
 		@CrossOrigin(origins = "http://localhost:8080")
-		@RequestMapping(value="/save",method=RequestMethod.POST)
+		@RequestMapping(value="/save",method=RequestMethod.POST) // you need to pass vendor info or vendor id and po date
 		public ResponseEntity<?>  savePurchase(@RequestBody String purchsearray) {
 			System.out.println("--------save savePurchase-------------");
 			Purchase purchase=null;
@@ -125,38 +126,41 @@ public class PurchaseService implements Filter{
 				    for (int i = 0; i < jsonArr.length(); i++) {
 				    	System.out.println("Loop 1...."+i);
 				    	if(jsonArr.optJSONArray(i)!=null) {  		
-				    	JSONArray arr2 = jsonArr.optJSONArray(i);				    	
-				    	for (int j = 0; j < arr2.length(); j++) {
-				    		System.out.println("Loop 2...."+j);
-				    		if(arr2.getJSONObject(j)!=null) {
-				    			JSONObject jObject = arr2.getJSONObject(j);
-								System.out.println(jObject.getString("productName"));
-								System.out.println(jObject.getString("category"));
-								podetails = new POInvoiceDetails();
-								podetails.setInvoicenumber(invoice);// random table..
-								podetails.setCategory(jObject.getString("category"));
-								podetails.setItemname(jObject.getString("productName"));
-								podetails.setDescription(jObject.getString("description"));
-								podetails.setUnitprice(jObject.getString("unitPrice"));
-								podetails.setQty(jObject.getString("quantity"));
-								podetails.setSubtotal(jObject.getString("netAmount"));
-								purchasedal.savePurchase(podetails);
-				    		}
-				    		else {
-				    			System.out.println("Null....");
-				    		}
+					    	JSONArray arr2 = jsonArr.optJSONArray(i);				    	
+					    	for (int j = 0; j < arr2.length(); j++) {
+					    		System.out.println("Loop 2...."+j);
+					    		if(arr2.getJSONObject(j)!=null) {
+					    			JSONObject jObject = arr2.getJSONObject(j);
+									System.out.println(jObject.getString("productName"));
+									System.out.println(jObject.getString("category"));
+									podetails = new POInvoiceDetails();
+									podetails.setInvoicenumber(invoice);// random table..
+									podetails.setCategory(jObject.getString("category"));
+									podetails.setItemname(jObject.getString("productName"));
+									podetails.setDescription(jObject.getString("description"));
+									podetails.setUnitprice(jObject.getString("unitPrice"));
+									podetails.setQty(jObject.getString("quantity"));
+									podetails.setSubtotal(jObject.getString("netAmount"));
+									purchasedal.savePurchase(podetails);
+					    		}
+					    		else {
+					    			System.out.println("Null....");
+					    		}
 				    		
 
-				       }
-			    }  
+				    		}
+				    	}  
 				    	else {
 			    			System.out.println("Outer Null....");
 			    		}
 				    }
 				     poinvoice=new POInvoice();
-				     LocalDateTime localDateTime = LocalDateTime.now();
-				     LocalTime localTime = localDateTime.toLocalTime();
-				     poinvoice.setInvoicedate(localTime);
+				    // LocalDateTime localDateTime = LocalDateTime.now();
+				    // LocalTime localTime = localDateTime.toLocalTime();
+				     poinvoice.setInvoicedate(Custom.getCurrentDate());
+				     logger.info("Invoice Date --->"+poinvoice.getInvoicedate());
+				     logger.info("Vendor name --->"+jsonArr.get(0).toString());
+				     //poinvoice.setInvoicedate(localTime);
 	                 poinvoice.setInvoicenumber(invoice);
 	                 poinvoice.setStatus("Waiting");
 	                 poinvoice.setVendorname("Alex Ubalton");

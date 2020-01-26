@@ -1,6 +1,6 @@
 package com.erp.bo;
 
-import com.ggl.mongo.model.Customer;
+import com.erp.mongo.model.Customer;
 
 public interface ErpBo {
 	

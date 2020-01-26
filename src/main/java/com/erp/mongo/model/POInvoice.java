@@ -11,7 +11,7 @@ public class POInvoice {
 
 	@Id
 	private String id;
-	private LocalTime invoicedate;
+	private Date invoicedate;
 	private String invoicenumber;			
 	private String vendorname;		
 	private int totalqty; 	
@@ -27,10 +27,10 @@ public class POInvoice {
 	}
 	
 	
-	public LocalTime getInvoicedate() {
+	public Date getInvoicedate() {
 		return invoicedate;
 	}
-	public void setInvoicedate(LocalTime invoicedate) {
+	public void setInvoicedate(Date invoicedate) {
 		this.invoicedate = invoicedate;
 	}
 	public String getInvoicenumber() {
