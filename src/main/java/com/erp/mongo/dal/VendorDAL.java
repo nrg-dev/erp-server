@@ -2,16 +2,9 @@ package com.erp.mongo.dal;
 
 import java.util.List;
 
-import com.erp.dto.Member;
-import com.ggl.mongo.model.Customer;
-import com.ggl.mongo.model.Vendor;
+import com.erp.mongo.model.Vendor;
 
-import java.nio.file.Path;
-//import java.util.List;
-import java.util.stream.Stream;
 
-import org.springframework.core.io.Resource;
-import org.springframework.web.multipart.MultipartFile;
 public interface VendorDAL {
 
 	public Vendor saveVendor(Vendor vendor);

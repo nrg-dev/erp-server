@@ -33,8 +33,8 @@ import com.erp.bo.ErpBo;
 import com.erp.dto.Member;
 import com.erp.model.UserDetail;
 import com.erp.util.Email;
-import com.ggl.mongo.model.Customer;
-import com.ggl.mongo.model.Vendor;
+import com.erp.mongo.model.Customer;
+import com.erp.mongo.model.Vendor;
 
 
 @Repository
