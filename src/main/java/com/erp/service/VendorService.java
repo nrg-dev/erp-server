@@ -33,18 +33,20 @@ import org.springframework.http.ResponseEntity;
 import com.erp.bo.ErpBo;
 import com.erp.dto.Member;
 import com.erp.mongo.dal.CustomerDAL;
-import com.erp.mongo.model.Customer;
-import com.erp.service.CustomerService;
+import com.erp.mongo.dal.VendorDAL;
+import com.erp.service.VendorService;
+import com.ggl.mongo.model.Customer;
+import com.ggl.mongo.model.Vendor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SpringBootApplication
 @RestController
-@RequestMapping(value="/customer")
-public class CustomerService implements Filter{
+@RequestMapping(value="/vendor")
+public class VendorService implements Filter{
 	
-	public static final Logger logger = LoggerFactory.getLogger(CustomerService.class);
+	public static final Logger logger = LoggerFactory.getLogger(VendorService.class);
 		
 	
 	@Autowired
@@ -54,16 +56,13 @@ public class CustomerService implements Filter{
 	//private final RandamNumberRepository randamNumberRepository;
 
 
-	List<String> publicfiles = new ArrayList<String>();
-	List<String> privatefiles = new ArrayList<String>();
-	List<String> ownfiles = new ArrayList<String>();
-	List<String> minifiles = new ArrayList<String>();
-	
-	private final CustomerDAL customerdal;
 
-	public CustomerService(CustomerDAL customerdal) {
+	
+	private final VendorDAL vendordal;
+
+	public VendorService(VendorDAL vendordal) {
 		//this.randamNumberDAL = randamNumberDAL;
-		this.customerdal = customerdal;
+		this.vendordal = vendordal;
 	}
 
 
@@ -92,55 +91,50 @@ public class CustomerService implements Filter{
         // Save
 		@CrossOrigin(origins = "http://localhost:8080")
 		@RequestMapping(value="/save",method=RequestMethod.POST)
-		public ResponseEntity<?>  saveCustomer(@RequestBody Customer customer) {
-			logger.info("country name -->"+customer.getCountry());
+		public ResponseEntity<?>  saveVendor(@RequestBody Vendor vendor) {
 			System.out.println("--------save customer-------------");
 			try {	   
-				customer=  customerdal.saveCustomer(customer);					
-				return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);			
+				vendor=  vendordal.saveVendor(vendor);					
+				return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);			
 
 		   }catch(Exception e) {
-			   customer.setStatus("failure");
 			   logger.info("Exception ------------->"+e.getMessage());
 			   e.printStackTrace();
 		   }
 		   finally{
 			   
 		   }
-		   return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
+		   return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);
 		}
 
 
-		 // get
+		// get
 		@CrossOrigin(origins = "http://localhost:8080")
 		@RequestMapping(value="/get",method=RequestMethod.GET)
-		public ResponseEntity<?> geCustomer(String id)
+		public ResponseEntity<?> geVendor(String id)
 		{
-			logger.info("------------- Inside getTempPublicTree-----------------");
-			List<Customer> responseList=null;
+			logger.info("------------- Inside get Vendor -----------------");
+			List<Vendor> responseList=null;
 		   try {
-				logger.info("-----------Inside getTempPublicTree Called----------");
-				responseList=customerdal.getCustomer(id);
-				
+				logger.info("-----------Inside get Vendor Called----------");
+				responseList=vendordal.getVendor(id);				
 				}catch(Exception e){
 				logger.info("Exception ------------->"+e.getMessage());
 				e.printStackTrace();
 			}finally{
 				
 			}
-			return new ResponseEntity<List<Customer>>(responseList, HttpStatus.CREATED);
-
+			return new ResponseEntity<List<Vendor>>(responseList, HttpStatus.CREATED);
 		}
-			
 		
 		// update	
 		@CrossOrigin(origins = "http://localhost:8080")
 		@RequestMapping(value="/update",method=RequestMethod.POST)
-		public ResponseEntity<?>  updateCustomer(@RequestBody Customer customer) {
+		public ResponseEntity<?>  updateCustomer(@RequestBody Vendor vendor) {
 	   try 
 	   {	   
-		  customer=  customerdal.updateCustomer(customer);				  
-		  return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
+		   vendor=  vendordal.updateVendor(vendor);				  
+		  return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);
 		   
 	   }catch(Exception e) {
 		   logger.info("Exception ------------->"+e.getMessage());
@@ -148,21 +142,19 @@ public class CustomerService implements Filter{
 	   	}finally{
 		   
 	   	}
-	  	return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
-		}
-
-				
+	  	return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);
+		}				
 
 		 // load
 		@CrossOrigin(origins = "http://localhost:8080")
 		@RequestMapping(value="/load",method=RequestMethod.GET)
-		public ResponseEntity<?> loadCustomer()
+		public ResponseEntity<?> loadVendor()
 		{
 			logger.info("------------- Inside getTempOwnTree-----------------");
-			List<Customer> responseList=null;
+			List<Vendor> responseList=null;
 		   try {
 				logger.info("-----------Inside getTempOwnTree Called----------");
-				responseList=customerdal.loadCustomer(responseList);
+				responseList=vendordal.loadVendor(responseList);
 				
 				}catch(Exception e){
 				logger.info("Exception ------------->"+e.getMessage());
@@ -170,7 +162,7 @@ public class CustomerService implements Filter{
 			}finally{
 				
 			}
-			return new ResponseEntity<List<Customer>>(responseList, HttpStatus.CREATED);
+			return new ResponseEntity<List<Vendor>>(responseList, HttpStatus.CREATED);
 	
 		}
 
@@ -179,16 +171,12 @@ public class CustomerService implements Filter{
 		@RequestMapping(value="/remove",method=RequestMethod.DELETE)
 		public ResponseEntity<?> removeCustomer(String id)
 		{
-
-
 		   try {
 				logger.info("-----------Before Calling  removeCustomer ----------");
-				customerdal.removeCustomer(id);
+				vendordal.removeVendor(id);
 				logger.info("-----------Successfully Called  removeCustomer ----------");
 			
 				}catch(Exception e){ 
-				//	member.setStatus("bad");
-
 				logger.info("Exception ------------->"+e.getMessage());
 				e.printStackTrace();
 			}finally{

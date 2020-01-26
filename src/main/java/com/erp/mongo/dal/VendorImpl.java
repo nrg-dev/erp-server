@@ -32,14 +32,15 @@ import java.util.stream.Stream;
 import com.erp.bo.ErpBo;
 import com.erp.dto.Member;
 import com.erp.model.UserDetail;
-import com.erp.mongo.model.Customer;
 import com.erp.util.Email;
+import com.ggl.mongo.model.Customer;
+import com.ggl.mongo.model.Vendor;
 
 
 @Repository
-public class CustomerImpl implements CustomerDAL {
+public class VendorImpl implements VendorDAL {
 	
-	public static final Logger logger = LoggerFactory.getLogger(CustomerImpl.class);
+	public static final Logger logger = LoggerFactory.getLogger(VendorImpl.class);
 
 
 	@Autowired
@@ -55,20 +56,20 @@ public class CustomerImpl implements CustomerDAL {
 	// save
 	
 	@Override
-	public Customer saveCustomer(Customer customer) {
-		System.out.println("Save Customer");
+	public Vendor saveVendor(Vendor vendor) {
+		System.out.println("Save Vendor");
 		//mongoTemplate.insert(customer);//(query, RandamNumber.class);
-		mongoTemplate.save(customer);
-		customer.setStatus("success");
-		return customer;
+		mongoTemplate.save(vendor);
+		vendor.setStatus("success");
+		return vendor;
 	}
 	// get
 	@Override
-	public List<Customer> getCustomer(String primaryKey) {
-		List<Customer> list;
+	public List<Vendor> getVendor(String primaryKey) {
+		List<Vendor> list;
 		Query query = new Query();
 		query.addCriteria(Criteria.where("userID").is(Integer.valueOf(primaryKey)));
-		list = mongoTemplate.find(query, Customer.class);
+		list = mongoTemplate.find(query, Vendor.class);
 		return list;
 		//return mongoTemplate.find(query, Publictree.class);
 	}
@@ -76,24 +77,24 @@ public class CustomerImpl implements CustomerDAL {
 	
 	// update
 	@Override
-	public Customer updateCustomer(Customer customer) {
+	public Vendor updateVendor(Vendor vendor) {
 		Update update = new Update();
 		Query query = new Query();
-		query.addCriteria(Criteria.where("id").is(customer.getId()));
+		query.addCriteria(Criteria.where("id").is(vendor.getId()));
 		//update.set("userQueueStatus", "OUT");
-		//update.set("queueNumber", 0);	
-		//update.set("userstatus", "CLOSED");	
-		mongoTemplate.updateFirst(query, update, Customer.class);
-		return customer;
+		mongoTemplate.updateFirst(query, update, Vendor.class);
+		return vendor;
 	}
 	
-	public List<Customer> loadCustomer(List<Customer> list){
-		list = mongoTemplate.findAll(Customer.class);//.find(query, OwnTree.class);
+	// Load
+	public List<Vendor> loadVendor(List<Vendor> list){
+		list = mongoTemplate.findAll(Vendor.class);//.find(query, OwnTree.class);
 		return list;
 		
 	}
-	public void removeCustomer(String customer) {
-		mongoTemplate.remove(customer);
+	// revmoe 
+	public void removeVendor(String vendor) {
+		mongoTemplate.remove(vendor);
 	
 	}
 			
