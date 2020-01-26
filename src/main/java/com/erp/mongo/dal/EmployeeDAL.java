@@ -3,8 +3,8 @@ package com.erp.mongo.dal;
 import java.util.List;
 
 import com.erp.dto.Member;
-import com.ggl.mongo.model.Customer;
-import com.ggl.mongo.model.Employee;
+import com.erp.mongo.model.Customer;
+import com.erp.mongo.model.Employee;
 
 import java.nio.file.Path;
 //import java.util.List;

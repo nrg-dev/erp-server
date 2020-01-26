@@ -33,9 +33,9 @@ import org.springframework.http.ResponseEntity;
 import com.erp.bo.ErpBo;
 import com.erp.dto.Member;
 import com.erp.mongo.dal.EmployeeDAL;
+import com.erp.mongo.model.Employee;
+import com.erp.mongo.model.Vendor;
 import com.erp.service.EmployeeService;
-import com.ggl.mongo.model.Employee;
-import com.ggl.mongo.model.Vendor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package com.ggl.mongo.model;
+package com.erp.mongo.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

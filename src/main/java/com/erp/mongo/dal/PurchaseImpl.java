@@ -34,11 +34,12 @@ import java.util.stream.Stream;
 import com.erp.bo.ErpBo;
 import com.erp.dto.Member;
 import com.erp.model.UserDetail;
+import com.erp.mongo.model.Customer;
+import com.erp.mongo.model.POInvoice;
+import com.erp.mongo.model.POInvoiceDetails;
+import com.erp.mongo.model.PurchaseOrder;
+import com.erp.mongo.model.RandomNumber;
 import com.erp.util.Email;
-import com.ggl.mongo.model.Customer;
-import com.ggl.mongo.model.POInvoiceDetails;
-import com.ggl.mongo.model.PurchaseOrder;
-import com.ggl.mongo.model.RandomNumber;
 
 
 @Repository
@@ -55,56 +56,21 @@ public class PurchaseImpl implements PurchaseDAL {
 	 */
 
 	
+	// Save PO Invoice 
+	public POInvoice savePOInvoice(POInvoice poinvoice) {
+		System.out.println("Before save Invoice");
+		mongoTemplate.save(poinvoice);
+		System.out.println("After save Invoice");
+		return poinvoice;
 	
-	@Override
-	public RandomNumber getRandamNumber() {
-		RandomNumber radamNumber=null;
-		try {
-			logger.info("----------- Inside getRandamNumber-----------");
-			Query query = new Query();
-			logger.info("-----------  Before addCriteria-----------");
-		    query.addCriteria(Criteria.where("type").is("invoice"));
-
-			logger.info("-----------  After addCriteria-----------");
-			radamNumber = mongoTemplate.findOne(query, RandomNumber.class);		
-			logger.info("Invoice number ----------->"+radamNumber.getPoinvoicenumber());
-
-			return radamNumber;//mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
-		}catch(Exception e) {
-			e.printStackTrace();
-			return radamNumber;
-
-
-		}finally {
-			
-		}
-		
 	}
-	
-	
-	@Override
-	public String updateRandamNumber(RandomNumber rn) {
-		logger.info("currentqueueNumber"+rn.getPoinvoicenumber());	
-		
-		Query query = new Query();
-	    query.addCriteria(Criteria.where("poinvoicenumber").is(1));
-			Update update = new Update();
-			update.set("poinvoicenumber", rn.getPoinvoicenumber()+1);			
-		mongoTemplate.updateFirst(query, update, RandomNumber.class);//(query, RandamNumber.class);
-		return "";//mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
-	}
-	
-	
 
-	// save
-	
+	// Save PO Invoice details	
 	@Override
 	public POInvoiceDetails savePurchase(POInvoiceDetails purchaseorder) {
-		//mongoTemplate.insert(customer);//(query, RandamNumber.class);
-		System.out.println("Before save Invoice");
+		System.out.println("Before save PO Invoice details");
 		mongoTemplate.save(purchaseorder);
-		System.out.println("After save Invoice");
-		//po.setStatus("success");
+		System.out.println("After save Invoice details");
 		return purchaseorder;
 	}
 	
@@ -118,9 +84,9 @@ public class PurchaseImpl implements PurchaseDAL {
 	 */
 	
 	
-	public List<PurchaseOrder> loadPurchase(List<PurchaseOrder> list){
+	public List<POInvoice> loadPurchase(List<POInvoice> list){
 		//List<PurchaseOrder> 
-		list =  mongoTemplate.findAll(PurchaseOrder.class);//.find(query, OwnTree.class); return
+		list =  mongoTemplate.findAll(POInvoice.class);//.find(query, OwnTree.class); return
 		return list;
 			  
 		} 

@@ -15,14 +15,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-
-
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -36,19 +34,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import com.erp.bo.ErpBo;
-import com.erp.dto.Member;
 import com.erp.dto.Purchase;
-import com.erp.mongo.dal.CustomerDAL;
 import com.erp.mongo.dal.PurchaseDAL;
+import com.erp.mongo.dal.RandomNumberDAL;
+import com.erp.mongo.model.POInvoice;
+import com.erp.mongo.model.POInvoiceDetails;
+import com.erp.mongo.model.PurchaseOrder;
+import com.erp.mongo.model.RandomNumber;
 import com.erp.service.PurchaseService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ggl.mongo.model.Customer;
-import com.ggl.mongo.model.POInvoiceDetails;
-import com.ggl.mongo.model.PurchaseOrder;
-import com.ggl.mongo.model.RandomNumber;
-import com.mongodb.BasicDBObject;
-import com.mongodb.util.JSON;
-import com.sun.xml.txw2.Document;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -72,9 +66,11 @@ public class PurchaseService implements Filter{
 	
 	
 	private final PurchaseDAL purchasedal;
+	private final RandomNumberDAL randomnumberdal;
 
-	public PurchaseService(PurchaseDAL purchasedal) {
+	public PurchaseService(PurchaseDAL purchasedal,RandomNumberDAL randomnumberdal) {
 		this.purchasedal = purchasedal;
+		this.randomnumberdal = randomnumberdal;
 	}
 
 
@@ -106,38 +102,30 @@ public class PurchaseService implements Filter{
 		public ResponseEntity<?>  savePurchase(@RequestBody String purchsearray) {
 			System.out.println("--------save savePurchase-------------");
 			Purchase purchase=null;
-			JSONArray jsonArray = null;
-			PurchaseOrder po=null;
+			POInvoice poinvoice=null;
 			POInvoiceDetails podetails=null;
-			ObjectMapper mapper = new ObjectMapper();
-			try {	
-				 System.out.println("Json -->"+purchsearray);
-				 	/*purchase=new Purchase();
-				 	po = new PurchaseOrder();
-					System.out.println("Json array format-->"+purchsearray);
-					//JSON.parse(purchsearray); 
-					jsonArray = new JSONArray(purchsearray);
-					po.setPurchaseorder(jsonArray);
-				    purchasedal.savePurchase(po);	
-					System.out.println("3");
-					*/
+			RandomNumber randomnumber=null;
+			try {
+				ObjectMapper mapper = new ObjectMapper();
+				 System.out.println("Json -->"+purchsearray);		
 				 
 				 // Store into parent table to show in first data table view
-				 RandomNumber randomnumber = purchasedal.getRandamNumber();	
-				 System.out.println("Current random number-->"+randomnumber.getPoinvoicenumber());
+				 randomnumber = randomnumberdal.getRandamNumber();	
+				 System.out.println("PO Invoice random number-->"+randomnumber.getPoinvoicenumber());
+				 System.out.println("PO Invoice random code-->"+randomnumber.getPoinvoicecode());
+                 String invoice = randomnumber.getPoinvoicecode() + randomnumber.getPoinvoicenumber();
+                 System.out.println("Invoice number -->"+invoice);
+                
+				 
 				 //podetails.setStatus("Waiting");
                         /// one row add into main tale.
 				 // end 
 				 
 				 JSONArray jsonArr = new JSONArray(purchsearray);
-				    List<Purchase> dataList = new ArrayList<Purchase>();
 				    for (int i = 0; i < jsonArr.length(); i++) {
 				    	System.out.println("Loop 1...."+i);
-				    	if(jsonArr.optJSONArray(i)!=null) {
-				    		
-				    	
-				    	JSONArray arr2 = jsonArr.optJSONArray(i);
-				    	
+				    	if(jsonArr.optJSONArray(i)!=null) {  		
+				    	JSONArray arr2 = jsonArr.optJSONArray(i);				    	
 				    	for (int j = 0; j < arr2.length(); j++) {
 				    		System.out.println("Loop 2...."+j);
 				    		if(arr2.getJSONObject(j)!=null) {
@@ -145,7 +133,7 @@ public class PurchaseService implements Filter{
 								System.out.println(jObject.getString("productName"));
 								System.out.println(jObject.getString("category"));
 								podetails = new POInvoiceDetails();
-								podetails.setInvoicenumber("INV001");// random table..
+								podetails.setInvoicenumber(invoice);// random table..
 								podetails.setCategory(jObject.getString("category"));
 								podetails.setItemname(jObject.getString("productName"));
 								podetails.setDescription(jObject.getString("description"));
@@ -154,29 +142,27 @@ public class PurchaseService implements Filter{
 								podetails.setSubtotal(jObject.getString("netAmount"));
 								purchasedal.savePurchase(podetails);
 				    		}
-				    		
-				    		
 				    		else {
 				    			System.out.println("Null....");
 				    		}
 				    		
 
 				       }
-				    	
-				      //  JSONObject jsonObj = jsonArr.getJSONObject(i);				       
-					   // System.out.println(jsonObj.getString("category"));
-						//System.out.println(jsonObj.getString("productName"));
-						//System.out.println(item.getQuantity());
-						//System.out.println(item.getUnitPrice());
-						//System.out.println(item.getNetAmount());
-						
-				    }  
+			    }  
 				    	else {
 			    			System.out.println("Outer Null....");
 			    		}
 				    }
-				    
-				    //purchasedal.savePurchase(podetails);
+				     poinvoice=new POInvoice();
+				     LocalDateTime localDateTime = LocalDateTime.now();
+				     LocalTime localTime = localDateTime.toLocalTime();
+				     poinvoice.setInvoicedate(localTime);
+	                 poinvoice.setInvoicenumber(invoice);
+	                 poinvoice.setStatus("Waiting");
+	                 poinvoice.setVendorname("Alex Ubalton");
+	                 poinvoice.setTotalqty(100);
+	                 poinvoice.setTotalprice(1000000);
+	                 purchasedal.savePOInvoice(poinvoice);
 				    System.out.println("Service call start.....");
 					purchase.setStatus("success");					
 					return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
@@ -187,6 +173,7 @@ public class PurchaseService implements Filter{
 				purchase=new Purchase();
 			    System.out.println("Inside null pointer exception ....");
 				purchase.setStatus("success");					
+				 boolean status = randomnumberdal.updateRandamNumber(randomnumber);	
 
 				return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
 
@@ -249,81 +236,15 @@ public class PurchaseService implements Filter{
 	  @GetMapping(value="/load",produces=MediaType.APPLICATION_JSON_VALUE) 
 	  public  ResponseEntity<?> loadPurchase() {
 	  logger.info("------------- Inside loadPurchase-----------------");
-	  List<PurchaseOrder> response= new ArrayList<PurchaseOrder>();
+	  List<POInvoice> response= new ArrayList<POInvoice>();
 	  List<Purchase> responseList= new ArrayList<Purchase>();
-	 // List<JSONArray> res= new ArrayList<JSONArray>(); 
-	  Purchase purchase;
-	  
 	  try {
 	  logger.info("-----------Inside loadPurchase Called----------");
-	  response=purchasedal.loadPurchase(response);
-	  int lenth = response.size();
-	  System.out.println("List size-->"+lenth);
-	  int i=0;
-			/*
-			 * for(PurchaseOrder po:response) {
-			 * 
-			 * }
-			 */
-      ObjectMapper mapper = new ObjectMapper();
-
-	  for(PurchaseOrder po:response) {
-		 
-		  System.out.println("lenth-->"+po.getPurchaseorder().length());
-		  System.out.println("value-->"+po.getPurchaseorder().get(i));
-		   purchase = new Purchase();
-			  String json= String.valueOf(po.getPurchaseorder().get(i));
-
-           List<Purchase> jsonlist = Arrays.asList(mapper.readValue(json, Purchase[].class));
-
-		 // JSONArray jsonArr = new JSONArray(po.getPurchaseorder().get(i));
-		  System.out.println("\nJSON array to List of objects");
-		  for(Purchase item : jsonlist){
-			  System.out.println("For Loop");
-				System.out.println(item.getNetAmount());
-	            purchase.setNetAmount(item.getNetAmount());
-
-			}
-		  
-		  responseList.add(purchase);
-				/*
-				 * ppl2.forEach(name -> { System.out.println(name); });
-				 */
-		 
-		  
-		  //ppl2.stream().forEach(x -> 
-          
-        //  System.out.println(x.getNetAmount()));
-          
-		   // for (int i = 0; i < jsonArr.length(); i++) {
-		     //   JSONObject jsonObj = jsonArr.getJSONObject(i);
-		       
-		      //  purchase.setQuantity(jsonObj.getString("quantity"));
-//		        data.setTitle(jsonObj.getString("title"));
-//		        data.setDescription(jsonObj.getString("description"));
-//		        data.setUserId(jsonObj.getString("user_id"));
-		        responseList.add(purchase);
-		 //   }
-		    
-				/*
-				 * for(int j=0;j<=po.getPurchaseorder().length();i++) { purchase = new
-				 * Purchase(); System.out.println("test..");
-				 * purchase.setNetAmount(po.getPurchaseorder().get(i).toString());
-				 * responseList.add(purchase); }
-				 */
-	 // System.out.println(po.getPurchaseorder());
-		 // res.add(po.getPurchaseorder());
-		  i++;
-	  }
+	  response=purchasedal.loadPurchase(response);	 
+	  return new ResponseEntity<List<POInvoice>>(response, HttpStatus.CREATED);
 	  
-			/*
-			 * for(int j=0;j<response.length();i++) { System.out.println("test.."); }
-			 */
-	//  System.out.println("list size--->"+res.size());
-	  return new ResponseEntity<List<Purchase>>(responseList, HttpStatus.CREATED);
-	 // return ResponseEntity.ok(res);
-	  
-	  }catch(Exception e){ logger.info("loadPurchase Exception ------------->"+e.getMessage());
+	  }catch(Exception e)
+	  { logger.info("loadPurchase Exception ------------->"+e.getMessage());
 	  e.printStackTrace(); }finally{
 	  
 	  } 

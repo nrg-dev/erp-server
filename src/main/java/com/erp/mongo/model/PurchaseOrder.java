@@ -1,4 +1,4 @@
-package com.ggl.mongo.model;
+package com.erp.mongo.model;
 
 import org.json.JSONArray;
 import org.springframework.data.annotation.Id;

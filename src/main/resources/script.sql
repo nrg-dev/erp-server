@@ -1,11 +1,12 @@
 mongo localhost/admin;
 use ErpDB;
 db.createCollection("test")
-db.createCollection("RandomNumber")
-db.RandomNumber.insert({"poinvoicenumber" : "INVPO001","salesinvoicenumber" : "INVSA001","type" : "invoice"})
+db.createCollection("randomNumber")
+db.randomNumber.insert({ "randomID" : 1,"poinvoicenumber" : 001,"poinvoicecode" : "INVPO","salesinvoicenumber" : 001,"salesinvoicecode":"INVSA"})
+db.randomNumber.drop()
 
-db.RandomNumber.find();
-db.RandomNumber.remove( { } )
+db.randomNumber.find();
+db.randomNumber.remove( { } )
 
 
 db.test.insert({"name" : "alex"})

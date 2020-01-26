@@ -33,8 +33,8 @@ import org.springframework.http.ResponseEntity;
 import com.erp.bo.ErpBo;
 import com.erp.dto.Member;
 import com.erp.mongo.dal.CustomerDAL;
+import com.erp.mongo.model.Customer;
 import com.erp.service.CustomerService;
-import com.ggl.mongo.model.Customer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

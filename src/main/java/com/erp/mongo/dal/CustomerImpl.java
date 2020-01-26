@@ -32,8 +32,8 @@ import java.util.stream.Stream;
 import com.erp.bo.ErpBo;
 import com.erp.dto.Member;
 import com.erp.model.UserDetail;
+import com.erp.mongo.model.Customer;
 import com.erp.util.Email;
-import com.ggl.mongo.model.Customer;
 
 
 @Repository

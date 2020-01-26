@@ -1,4 +1,7 @@
-package com.ggl.mongo.model;
+package com.erp.mongo.model;
+
+import java.time.LocalTime;
+import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -8,11 +11,12 @@ public class POInvoice {
 
 	@Id
 	private String id;
+	private LocalTime invoicedate;
 	private String invoicenumber;			
 	private String vendorname;		
-	private String totalqty; 	
+	private int totalqty; 	
 	private String deliveryprice;			
-	private String totalprice;			
+	private int totalprice;			
 	private String status 	;		
 
 	public String getId() {
@@ -20,6 +24,14 @@ public class POInvoice {
 	}
 	public void setId(String id) {
 		this.id = id;
+	}
+	
+	
+	public LocalTime getInvoicedate() {
+		return invoicedate;
+	}
+	public void setInvoicedate(LocalTime invoicedate) {
+		this.invoicedate = invoicedate;
 	}
 	public String getInvoicenumber() {
 		return invoicenumber;
@@ -33,10 +45,10 @@ public class POInvoice {
 	public void setVendorname(String vendorname) {
 		this.vendorname = vendorname;
 	}
-	public String getTotalqty() {
+	public int getTotalqty() {
 		return totalqty;
 	}
-	public void setTotalqty(String totalqty) {
+	public void setTotalqty(int totalqty) {
 		this.totalqty = totalqty;
 	}
 	
@@ -46,10 +58,11 @@ public class POInvoice {
 	public void setDeliveryprice(String deliveryprice) {
 		this.deliveryprice = deliveryprice;
 	}
-	public String getTotalprice() {
+	
+	public int getTotalprice() {
 		return totalprice;
 	}
-	public void setTotalprice(String totalprice) {
+	public void setTotalprice(int totalprice) {
 		this.totalprice = totalprice;
 	}
 	public String getStatus() {

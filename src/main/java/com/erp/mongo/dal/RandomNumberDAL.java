@@ -17,9 +17,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
-public interface PurchaseDAL {
-	public POInvoice savePOInvoice(POInvoice poinvoice);
-	public POInvoiceDetails savePurchase(POInvoiceDetails purchaseorder);
-	public List<POInvoice> loadPurchase(List<POInvoice> list);
+public interface RandomNumberDAL {
+
+	public RandomNumber getRandamNumber();
+	public boolean updateRandamNumber(RandomNumber rn);
+	
+
+
 	
 }
