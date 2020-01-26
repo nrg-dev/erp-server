@@ -30,7 +30,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.dal.VendorDAL;
+import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.Vendor;
 import com.erp.service.VendorService;
 
@@ -52,12 +54,13 @@ public class VendorService implements Filter{
 	//private final RandamNumberRepository randamNumberRepository;
 
 
-
 	
 	private final VendorDAL vendordal;
+	private final RandomNumberDAL randomnumberdal;
 
-	public VendorService(VendorDAL vendordal) {
-		//this.randamNumberDAL = randamNumberDAL;
+
+	public VendorService(VendorDAL vendordal,RandomNumberDAL randomnumberdal) {
+		this.randomnumberdal = randomnumberdal;
 		this.vendordal = vendordal;
 	}
 
@@ -89,10 +92,20 @@ public class VendorService implements Filter{
 		@RequestMapping(value="/save",method=RequestMethod.POST)
 		public ResponseEntity<?>  saveVendor(@RequestBody Vendor vendor) {
 			System.out.println("--------save customer-------------");
-			try {	   
-				vendor=  vendordal.saveVendor(vendor);					
+			RandomNumber randomnumber=null;
+			try {
+				randomnumber = randomnumberdal.getVendorRandamNumber();
+				System.out.println("Vendor Invoice random number-->"+randomnumber.getVendorinvoicenumber());
+				System.out.println("Vendor Invoice random code-->"+randomnumber.getVendorinvoicecode());
+                String invoice = randomnumber.getVendorinvoicecode() + randomnumber.getVendorinvoicenumber();
+                System.out.println("Invoice number -->"+invoice);
+                
+                vendor.setVendorcode(invoice);
+				vendor=  vendordal.saveVendor(vendor);	
+				if(vendor.getStatus().equalsIgnoreCase("success")) {
+					boolean status = randomnumberdal.updateVendorRandamNumber(randomnumber);
+				}
 				return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);			
-
 		   }catch(Exception e) {
 			   logger.info("Exception ------------->"+e.getMessage());
 			   e.printStackTrace();
