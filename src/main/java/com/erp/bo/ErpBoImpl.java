@@ -38,7 +38,7 @@ import com.erp.mongo.dal.CustomerDAL;
 import com.erp.util.Custom;
 import com.erp.util.Email;
 import com.erp.util.ErpException;
-import com.ggl.mongo.model.Customer;
+import com.erp.mongo.model.Customer;
 
 
 @Service("bo")

@@ -74,6 +74,36 @@ public class RandomNumberImpl implements RandomNumberDAL {
 	}
 	
 	
-
+	//---- Vendor RandomCade Getting ---
+	@Override
+	public RandomNumber getVendorRandamNumber() {
+		RandomNumber radomNumber=null;
+		try {
+			logger.info("----------- Inside getVendorRandamNumber-----------");
+			Query query = new Query();
+			logger.info("-----------  Before addCriteria-----------");
+		    query.addCriteria(Criteria.where("randomID").is(2));
+			logger.info("-----------  After addCriteria-----------");
+			radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
+			logger.info("Vendor Invoice number ----------->"+radomNumber.getVendorinvoicenumber());
+			return radomNumber;
+		}catch(Exception e) {
+			e.printStackTrace();
+			return radomNumber;
+		}finally {
+			
+		}	
+	}
+	
+	@Override
+	public boolean updateVendorRandamNumber(RandomNumber rn) {
+		logger.info("current Vendor invoice number -->"+rn.getVendorinvoicenumber());		
+		Query query = new Query();
+	    query.addCriteria(Criteria.where("randomID").is(2));
+		Update update = new Update();
+		update.set("vendorinvoicenumber", rn.getVendorinvoicenumber()+1);			
+		mongoTemplate.updateFirst(query, update, RandomNumber.class);//(query, RandamNumber.class);
+		return true;//mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
+	}
 		
 }

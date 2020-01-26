@@ -12,6 +12,8 @@ public class RandomNumber {
 	private String poinvoicecode;
 	private long salesinvoicenumber;
 	private String salesinvoicecode;
+	private long vendorinvoicenumber;
+	private String vendorinvoicecode;
 
 	public String getId() {
 		return id;
@@ -43,7 +45,18 @@ public class RandomNumber {
 	public void setSalesinvoicecode(String salesinvoicecode) {
 		this.salesinvoicecode = salesinvoicecode;
 	}
-	
+	public long getVendorinvoicenumber() {
+		return vendorinvoicenumber;
+	}
+	public void setVendorinvoicenumber(long vendorinvoicenumber) {
+		this.vendorinvoicenumber = vendorinvoicenumber;
+	}
+	public String getVendorinvoicecode() {
+		return vendorinvoicecode;
+	}
+	public void setVendorinvoicecode(String vendorinvoicecode) {
+		this.vendorinvoicecode = vendorinvoicecode;
+	}
 	
 
 	
