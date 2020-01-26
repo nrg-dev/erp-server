@@ -30,13 +30,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.erp.bo.ErpBo;
-import com.erp.dto.Member;
-import com.erp.mongo.dal.CustomerDAL;
 import com.erp.mongo.dal.VendorDAL;
+import com.erp.mongo.model.Vendor;
 import com.erp.service.VendorService;
-import com.ggl.mongo.model.Customer;
-import com.ggl.mongo.model.Vendor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,10 +45,10 @@ public class VendorService implements Filter{
 	public static final Logger logger = LoggerFactory.getLogger(VendorService.class);
 		
 	
-	@Autowired
-	ErpBo erpBo;
-
-
+	/*
+	 * @Autowired ErpBo erpBo;
+	 * 
+	 */
 	//private final RandamNumberRepository randamNumberRepository;
 
 
