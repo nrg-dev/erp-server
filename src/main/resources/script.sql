@@ -32,3 +32,7 @@ db.pOInvoiceDetails.remove( { } )
 
 db.vendor.find();
 db.vendor.remove( { } )
+
+
+db.customer.find();
+db.customer.remove( { } )

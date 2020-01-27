@@ -1,7 +1,7 @@
 package com.erp.mongo.model;
 
 import java.time.LocalTime;
-import java.util.Date;
+import java.sql.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

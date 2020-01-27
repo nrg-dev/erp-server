@@ -33,6 +33,7 @@ import com.erp.bo.ErpBo;
 import com.erp.dto.Member;
 import com.erp.model.UserDetail;
 import com.erp.mongo.model.Customer;
+import com.erp.mongo.model.Vendor;
 import com.erp.util.Email;
 
 
@@ -79,10 +80,14 @@ public class CustomerImpl implements CustomerDAL {
 	public Customer updateCustomer(Customer customer) {
 		Update update = new Update();
 		Query query = new Query();
-		query.addCriteria(Criteria.where("id").is(customer.getId()));
-		//update.set("userQueueStatus", "OUT");
-		//update.set("queueNumber", 0);	
-		//update.set("userstatus", "CLOSED");	
+		query.addCriteria(Criteria.where("custcode").is(customer.getCustcode()));
+		update.set("customerName", customer.getCustomerName());
+		update.set("phoneNumber", customer.getPhoneNumber());
+		update.set("mobileNumber", customer.getMobileNumber());
+		update.set("country", customer.getCountry());
+		update.set("email", customer.getEmail());
+		update.set("city", customer.getCity());
+		update.set("address", customer.getAddress());
 		mongoTemplate.updateFirst(query, update, Customer.class);
 		return customer;
 	}
@@ -92,8 +97,12 @@ public class CustomerImpl implements CustomerDAL {
 		return list;
 		
 	}
-	public void removeCustomer(String customer) {
-		mongoTemplate.remove(customer);
+	public Customer removeCustomer(String custcode) {
+		Customer response=null;
+		Query query= new Query();
+		query.addCriteria(Criteria.where("custcode").is(custcode));
+		mongoTemplate.remove(query,Vendor.class);
+		return response;
 	
 	}
 			

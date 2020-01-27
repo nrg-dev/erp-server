@@ -34,6 +34,7 @@ import com.erp.mongo.dal.VendorDAL;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.Vendor;
 import com.erp.service.VendorService;
+import com.erp.util.Custom;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +57,7 @@ public class VendorService implements Filter{
 	
 	private final VendorDAL vendordal;
 	private final RandomNumberDAL randomnumberdal;
-
+	Vendor vendor = null;
 
 	public VendorService(VendorDAL vendordal,RandomNumberDAL randomnumberdal) {
 		this.randomnumberdal = randomnumberdal;
@@ -100,9 +101,11 @@ public class VendorService implements Filter{
                 System.out.println("Invoice number -->"+invoice);
                 
                 vendor.setVendorcode(invoice);
+                vendor.setAddeddate(Custom.getCurrentDate());
+				System.out.println("Current Date --->"+Custom.getCurrentDate());
 				vendor=  vendordal.saveVendor(vendor);	
 				if(vendor.getStatus().equalsIgnoreCase("success")) {
-					boolean status = randomnumberdal.updateVendorRandamNumber(randomnumber);
+					boolean status = randomnumberdal.updateVendorRandamNumber(randomnumber,1);
 				}
 				return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);			
 		   }catch(Exception e) {
@@ -137,20 +140,21 @@ public class VendorService implements Filter{
 		
 		// update	
 		@CrossOrigin(origins = "http://localhost:8080")
-		@RequestMapping(value="/update",method=RequestMethod.POST)
-		public ResponseEntity<?>  updateCustomer(@RequestBody Vendor vendor) {
-	   try 
-	   {	   
-		   vendor=  vendordal.updateVendor(vendor);				  
-		  return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);
+		@RequestMapping(value="/update",method=RequestMethod.PUT)
+		public ResponseEntity<?>  updateVendor(@RequestBody Vendor vendor) {
+			try 
+			{	   
+			   System.out.println("vendor code inside try--->"+vendor.getVendorcode());
+			   vendor=  vendordal.updateVendor(vendor);	
+			   return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);
 		   
-	   }catch(Exception e) {
-		   logger.info("Exception ------------->"+e.getMessage());
-		   e.printStackTrace();
-	   	}finally{
-		   
-	   	}
-	  	return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);
+		   }catch(Exception e) {
+			   logger.info("Exception ------------->"+e.getMessage());
+			   e.printStackTrace();
+		   	}finally{
+			   
+		   	}
+		  	return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);
 		}				
 
 		 // load
@@ -177,20 +181,25 @@ public class VendorService implements Filter{
 		// Remove
 		@CrossOrigin(origins = "http://localhost:8080")
 		@RequestMapping(value="/remove",method=RequestMethod.DELETE)
-		public ResponseEntity<?> removeCustomer(String id)
+		public ResponseEntity<?> removeVendor(String vendorcode)
 		{
 		   try {
+			   vendor = new Vendor();
 				logger.info("-----------Before Calling  removeCustomer ----------");
-				vendordal.removeVendor(id);
+				System.out.println("Remove vendor code"+vendorcode);
+				vendordal.removeVendor(vendorcode);
+				vendor.setStatus("Success");
 				logger.info("-----------Successfully Called  removeCustomer ----------");
-			
-				}catch(Exception e){ 
+
+			}catch(Exception e){ 
 				logger.info("Exception ------------->"+e.getMessage());
+				vendor.setStatus("failure");
 				e.printStackTrace();
+
 			}finally{
 				
 			}
-			return new ResponseEntity<String>("ok", HttpStatus.CREATED);
+			return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);
 
 		}
 	    
