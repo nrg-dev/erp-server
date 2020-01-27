@@ -80,8 +80,14 @@ public class VendorImpl implements VendorDAL {
 	public Vendor updateVendor(Vendor vendor) {
 		Update update = new Update();
 		Query query = new Query();
-		query.addCriteria(Criteria.where("id").is(vendor.getId()));
-		//update.set("userQueueStatus", "OUT");
+		query.addCriteria(Criteria.where("vendorcode").is(vendor.getVendorcode()));
+		update.set("vendorName", vendor.getVendorName());
+		update.set("phoneNumber", vendor.getPhoneNumber());
+		update.set("mobileNumber", vendor.getMobileNumber());
+		update.set("country", vendor.getCountry());
+		update.set("email", vendor.getEmail());
+		update.set("city", vendor.getCity());
+		update.set("address", vendor.getAddress());
 		mongoTemplate.updateFirst(query, update, Vendor.class);
 		return vendor;
 	}
@@ -93,9 +99,12 @@ public class VendorImpl implements VendorDAL {
 		
 	}
 	// revmoe 
-	public void removeVendor(String vendor) {
-		mongoTemplate.remove(vendor);
-	
+	public Vendor removeVendor(String vendorcode) {
+		Vendor response=null;
+		Query query= new Query();
+		query.addCriteria(Criteria.where("vendorcode").is(vendorcode));
+		mongoTemplate.remove(query,Vendor.class);
+		return response;
 	}
 			
 	

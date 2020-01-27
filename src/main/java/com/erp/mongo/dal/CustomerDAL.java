@@ -17,7 +17,7 @@ public interface CustomerDAL {
 	public List<Customer> getCustomer(String id);
 	public Customer updateCustomer(Customer customer);
 	public List<Customer> loadCustomer(List<Customer> list);
-	public void removeCustomer(String id);
+	public Customer removeCustomer(String id);
 
 	
 }

@@ -33,7 +33,10 @@ import org.springframework.http.ResponseEntity;
 import com.erp.bo.ErpBo;
 import com.erp.dto.Member;
 import com.erp.mongo.dal.CustomerDAL;
+import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.model.Customer;
+import com.erp.mongo.model.RandomNumber;
+import com.erp.mongo.model.Vendor;
 import com.erp.service.CustomerService;
 
 import org.slf4j.Logger;
@@ -60,10 +63,13 @@ public class CustomerService implements Filter{
 	List<String> minifiles = new ArrayList<String>();
 	
 	private final CustomerDAL customerdal;
+	private final RandomNumberDAL randomnumberdal;
+	Customer customer = null;
 
-	public CustomerService(CustomerDAL customerdal) {
+	public CustomerService(CustomerDAL customerdal,RandomNumberDAL randomnumberdal) {
 		//this.randamNumberDAL = randamNumberDAL;
 		this.customerdal = customerdal;
+		this.randomnumberdal=randomnumberdal;
 	}
 
 
@@ -95,8 +101,19 @@ public class CustomerService implements Filter{
 		public ResponseEntity<?>  saveCustomer(@RequestBody Customer customer) {
 			logger.info("country name -->"+customer.getCountry());
 			System.out.println("--------save customer-------------");
-			try {	   
-				customer=  customerdal.saveCustomer(customer);					
+			RandomNumber randomnumber=null;
+			try {
+				randomnumber = randomnumberdal.getVendorRandamNumber();
+				System.out.println("Customer Invoice random number-->"+randomnumber.getCustomerinvoicenumber());
+				System.out.println("Customer Invoice random code-->"+randomnumber.getCustomerinvoicecode());
+                String invoice = randomnumber.getCustomerinvoicecode() + randomnumber.getCustomerinvoicenumber();
+                System.out.println("Invoice number -->"+invoice);
+                
+				customer.setCustcode(invoice);
+				customer=  customerdal.saveCustomer(customer);
+				if(customer.getStatus().equalsIgnoreCase("success")) {
+					boolean status = randomnumberdal.updateVendorRandamNumber(randomnumber,2);
+				}
 				return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);			
 
 		   }catch(Exception e) {
@@ -135,10 +152,10 @@ public class CustomerService implements Filter{
 		
 		// update	
 		@CrossOrigin(origins = "http://localhost:8080")
-		@RequestMapping(value="/update",method=RequestMethod.POST)
+		@RequestMapping(value="/update",method=RequestMethod.PUT)
 		public ResponseEntity<?>  updateCustomer(@RequestBody Customer customer) {
 	   try 
-	   {	   
+	   {
 		  customer=  customerdal.updateCustomer(customer);				  
 		  return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
 		   
@@ -177,24 +194,26 @@ public class CustomerService implements Filter{
 		// Remove
 		@CrossOrigin(origins = "http://localhost:8080")
 		@RequestMapping(value="/remove",method=RequestMethod.DELETE)
-		public ResponseEntity<?> removeCustomer(String id)
+		public ResponseEntity<?> removeCustomer(String custcode)
 		{
 
 
 		   try {
+			   customer = new Customer();
 				logger.info("-----------Before Calling  removeCustomer ----------");
-				customerdal.removeCustomer(id);
+				customerdal.removeCustomer(custcode);
+				customer.setStatus("Success");
 				logger.info("-----------Successfully Called  removeCustomer ----------");
 			
 				}catch(Exception e){ 
-				//	member.setStatus("bad");
+					customer.setStatus("failure");
 
 				logger.info("Exception ------------->"+e.getMessage());
 				e.printStackTrace();
 			}finally{
 				
 			}
-			return new ResponseEntity<String>("ok", HttpStatus.CREATED);
+			return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
 
 		}
 	    

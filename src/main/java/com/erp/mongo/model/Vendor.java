@@ -1,5 +1,7 @@
 package com.erp.mongo.model;
 
+import java.util.Date;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -17,8 +19,8 @@ public class Vendor {
       String city 			;
       String email 			;
       String lastedit 		;
-      String addeddate 		;
       String status 		;
+      private Date addeddate;
 
 	public String getId() {
 		return id;
@@ -80,18 +82,19 @@ public class Vendor {
 	public void setLastedit(String lastedit) {
 		this.lastedit = lastedit;
 	}
-	public String getAddeddate() {
-		return addeddate;
-	}
-	public void setAddeddate(String addeddate) {
-		this.addeddate = addeddate;
-	}
 	public String getStatus() {
 		return status;
 	}
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	public Date getAddeddate() {
+		return addeddate;
+	}
+	public void setAddeddate(Date addeddate) {
+		this.addeddate = addeddate;
+	}
+	
 	
 	
 }

@@ -86,6 +86,7 @@ public class RandomNumberImpl implements RandomNumberDAL {
 			logger.info("-----------  After addCriteria-----------");
 			radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
 			logger.info("Vendor Invoice number ----------->"+radomNumber.getVendorinvoicenumber());
+			logger.info("Customer Invoice number ----------->"+radomNumber.getCustomerinvoicenumber());
 			return radomNumber;
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -96,12 +97,17 @@ public class RandomNumberImpl implements RandomNumberDAL {
 	}
 	
 	@Override
-	public boolean updateVendorRandamNumber(RandomNumber rn) {
-		logger.info("current Vendor invoice number -->"+rn.getVendorinvoicenumber());		
+	public boolean updateVendorRandamNumber(RandomNumber rn,int num) {
+		logger.info("current Vendor invoice number -->"+rn.getVendorinvoicenumber());	
+		logger.info("Number for Vendor/Customer -->"+num);
 		Query query = new Query();
 	    query.addCriteria(Criteria.where("randomID").is(2));
 		Update update = new Update();
-		update.set("vendorinvoicenumber", rn.getVendorinvoicenumber()+1);			
+		if(num == 1) {
+			update.set("vendorinvoicenumber", rn.getVendorinvoicenumber()+1);			
+		}else if(num == 2) {
+			update.set("customerinvoicenumber", rn.getCustomerinvoicenumber()+1);			
+		}
 		mongoTemplate.updateFirst(query, update, RandomNumber.class);//(query, RandamNumber.class);
 		return true;//mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
 	}
