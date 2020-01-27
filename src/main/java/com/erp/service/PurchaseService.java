@@ -6,12 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 //import javax.enterprise.inject.Produces;
 
- import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -41,7 +43,6 @@ import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
-import com.erp.service.PurchaseService;
 import com.erp.util.Custom;
 
 import org.json.JSONArray;
@@ -95,21 +96,29 @@ public class PurchaseService implements Filter{
 	public void destroy() {
 	}
 	
-	
+	/*@PostMapping("/save")
+	@CrossOrigin(origins = "http://localhost:8080")
+	public ResponseEntity<String> savePurchase(@RequestParam("purchsearray") String purchsearray , @RequestParam("vendorName") String vendorName ) {
+		String purchase = "sucesss"; 
+		System.out.println("Json -->"+purchsearray);	
+		 System.out.println("Vendor Name -->"+vendorName);	
+		 return new ResponseEntity<String>(purchase, HttpStatus.CREATED);
+	}*/
 	
         // Save
 		@CrossOrigin(origins = "http://localhost:8080")
 		@RequestMapping(value="/save",method=RequestMethod.POST) // you need to pass vendor info or vendor id and po date
-		public ResponseEntity<?>  savePurchase(@RequestBody String purchsearray) {
+		public ResponseEntity<Purchase>  savePurchase(@RequestBody Purchase purchase) {
 			System.out.println("--------save savePurchase-------------");
-			Purchase purchase=null;
+			//Purchase purchase=null;
 			POInvoice poinvoice=null;
 			POInvoiceDetails podetails=null;
 			RandomNumber randomnumber=null;
 			try {
 				ObjectMapper mapper = new ObjectMapper();
-				 System.out.println("Json -->"+purchsearray);		
-				 
+				 System.out.println("Json -->"+purchase.getPurchasearray());		
+				 System.out.println("Vendor Name -->"+purchase.getVendorName());	
+				  // logger.info("Vendor name --->"+vendorName);
 				 // Store into parent table to show in first data table view
 				 randomnumber = randomnumberdal.getRandamNumber();	
 				 System.out.println("PO Invoice random number-->"+randomnumber.getPoinvoicenumber());
@@ -122,7 +131,7 @@ public class PurchaseService implements Filter{
                         /// one row add into main tale.
 				 // end 
 				 
-				 JSONArray jsonArr = new JSONArray(purchsearray);
+				 JSONArray jsonArr = new JSONArray(purchase.getPurchasearray());
 				    for (int i = 0; i < jsonArr.length(); i++) {
 				    	System.out.println("Loop 1...."+i);
 				    	if(jsonArr.optJSONArray(i)!=null) {  		
@@ -141,6 +150,7 @@ public class PurchaseService implements Filter{
 									podetails.setUnitprice(jObject.getString("unitPrice"));
 									podetails.setQty(jObject.getString("quantity"));
 									podetails.setSubtotal(jObject.getString("netAmount"));
+									//podetails.setVendorname(jObject.getString("vendorName")); 
 									purchasedal.savePurchase(podetails);
 					    		}
 					    		else {
@@ -159,11 +169,11 @@ public class PurchaseService implements Filter{
 				    // LocalTime localTime = localDateTime.toLocalTime();
 				     poinvoice.setInvoicedate(Custom.getCurrentDate());
 				     logger.info("Invoice Date --->"+poinvoice.getInvoicedate());
-				     logger.info("Vendor name --->"+jsonArr.get(0).toString());
+				  
 				     //poinvoice.setInvoicedate(localTime);
 	                 poinvoice.setInvoicenumber(invoice);
 	                 poinvoice.setStatus("Waiting");
-	                 poinvoice.setVendorname("Alex Ubalton");
+	                 //poinvoice.setVendorname(jObject.getString("vendorName"));
 	                 poinvoice.setTotalqty(100);
 	                 poinvoice.setTotalprice(1000000);
 	                 purchasedal.savePOInvoice(poinvoice);
