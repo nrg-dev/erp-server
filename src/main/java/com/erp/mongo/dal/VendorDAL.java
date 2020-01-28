@@ -11,7 +11,7 @@ public interface VendorDAL {
 	public List<Vendor> getVendor(String id);
 	public Vendor updateVendor(Vendor vendor);
 	public List<Vendor> loadVendor(List<Vendor> list);
-	public void removeVendor(String id);
+	public Vendor removeVendor(String Vendorcode);
 
 	
 }
