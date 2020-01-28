@@ -92,16 +92,19 @@ public class CustomerImpl implements CustomerDAL {
 		return customer;
 	}
 	
+	//Load
 	public List<Customer> loadCustomer(List<Customer> list){
 		list = mongoTemplate.findAll(Customer.class);//.find(query, OwnTree.class);
 		return list;
 		
 	}
+	
+	//Remove
 	public Customer removeCustomer(String custcode) {
 		Customer response=null;
 		Query query= new Query();
 		query.addCriteria(Criteria.where("custcode").is(custcode));
-		mongoTemplate.remove(query,Vendor.class);
+		mongoTemplate.remove(query,Customer.class);
 		return response;
 	
 	}

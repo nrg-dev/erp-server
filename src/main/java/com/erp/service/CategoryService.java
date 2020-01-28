@@ -39,6 +39,7 @@ import com.erp.mongo.model.Category;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.RandomNumber;
+import com.erp.mongo.model.Vendor;
 import com.erp.service.CategoryService;
 import com.erp.util.Custom;
 
@@ -56,9 +57,12 @@ public class CategoryService implements Filter{
 		
 		
 	private final CategoryDAL categorydal;
+	private final RandomNumberDAL randomnumberdal;
+	Category category = null;
 
-	public CategoryService(CategoryDAL categorydal) {
+	public CategoryService(CategoryDAL categorydal,RandomNumberDAL randomnumberdal) {
 		this.categorydal = categorydal;
+		this.randomnumberdal = randomnumberdal;
 	}
 
 
@@ -89,12 +93,17 @@ public class CategoryService implements Filter{
 		@RequestMapping(value="/save",method=RequestMethod.POST)
 		public ResponseEntity<?>  saveCategory(@RequestBody Category category) {
 			System.out.println("-------- saveCategory-------------");
+			RandomNumber randomnumber=null;
 			try {
+				randomnumber = randomnumberdal.getCategoryRandomNumber();
+				String invoice = randomnumber.getCategoryinvoicecode() + randomnumber.getCategoryinvoicenumber();
+				category.setCategorycode(invoice);
 				System.out.println("Category name -->"+category.getName());
-
-				 // Store into parent table to show in first data table view
-                 categorydal.saveCategory(category);
-                 category.setStatus("success");					
+				
+				category=categorydal.saveCategory(category);	
+				if(category.getStatus().equalsIgnoreCase("success")) {
+					boolean status = randomnumberdal.updateCategoryRandamNumber(randomnumber,1);
+				}
   				 return new ResponseEntity<Category>(category, HttpStatus.CREATED);
 
 			  }
@@ -110,18 +119,18 @@ public class CategoryService implements Filter{
 		}
 
 	  // Load
-	  @CrossOrigin(origins = "http://localhost:8080")	  
-	  @GetMapping(value="/load",produces=MediaType.APPLICATION_JSON_VALUE) 
+	  @CrossOrigin(origins = "http://localhost:8080")	
+	  @RequestMapping(value="/load",method=RequestMethod.GET)
 	  public  ResponseEntity<?> loadCategory() {
-	  logger.info("------------- Inside loadPurchase-----------------");
+	  logger.info("------------- Inside loadCategory-----------------");
 	  List<Category> categorylist= new ArrayList<Category>();
 	  try {
-	  logger.info("-----------Inside loadPurchase Called----------");
+	  logger.info("-----------Inside loadCategory Called----------");
 	  categorylist=categorydal.loadCategory(categorylist);	 
 	  return new ResponseEntity<List<Category>>(categorylist, HttpStatus.CREATED);
 	  
 	  }catch(Exception e)
-	  { logger.info("loadPurchase Exception ------------->"+e.getMessage());
+	  { logger.info("loadCategory Exception ------------->"+e.getMessage());
 	  e.printStackTrace(); }finally{
 	  
 	  } 
@@ -151,51 +160,50 @@ public class CategoryService implements Filter{
 	  
 	  
 	  // update
-	  
-	/*
-	 * @CrossOrigin(origins = "http://localhost:8080")
-	 * 
-	 * @RequestMapping(value="/update",method=RequestMethod.POST) public
-	 * ResponseEntity<?> updateCustomer(@RequestBody Customer customer) { try {
-	 * customer= customerdal.updateCustomer(customer); return new
-	 * ResponseEntity<Customer>(customer, HttpStatus.CREATED);
-	 * 
-	 * }catch(Exception e) { logger.info("Exception ------------->"+e.getMessage());
-	 * e.printStackTrace(); }finally{
-	 * 
-	 * } return new ResponseEntity<Customer>(customer, HttpStatus.CREATED); }
-	 * 
-	 */
-	  
-	  // load
-	  
-		//ArrayList<String> res = new ArrayList<String>();
+	  @CrossOrigin(origins = "http://localhost:8080")
+		@RequestMapping(value="/update",method=RequestMethod.PUT)
+		public ResponseEntity<?>  updateCategory(@RequestBody Category category) {
+			try 
+			{	   
+			   System.out.println("vendor code inside try--->"+category.getCategorycode());
+			   category=  categorydal.updateCategory(category);	
+			   return new ResponseEntity<Category>(category, HttpStatus.CREATED);
+		   
+		   }catch(Exception e) {
+			   logger.info("Exception ------------->"+e.getMessage());
+			   e.printStackTrace();
+		   	}finally{
+			   
+		   	}
+		  	return new ResponseEntity<Category>(category, HttpStatus.CREATED);
+		}				
   
 	  
 	  // Remove
-	  
-	 /* 
-	  @CrossOrigin(origins = "http://localhost:8080")
-	  
-	  @RequestMapping(value="/remove",method=RequestMethod.DELETE) public
-	  ResponseEntity<?> removeCustomer(String id) {
-	  
-	  
-	  try { 
-	 // logger.info("-----------Before Calling  removeCustomer ----------");
-	  customerdal.removeCustomer(id);
-	  logger.info("-----------Successfully Called  removeCustomer ----------");
-	  
-	  }catch(Exception e){ 
-	  
-	  logger.info("Exception ------------->"+e.getMessage()); e.printStackTrace();
-	  }finally{
-	  
-	  } return new ResponseEntity<String>("ok", HttpStatus.CREATED);
-	  
-	  }
-	  
-	 */
+	// Remove
+			@CrossOrigin(origins = "http://localhost:8080")
+			@RequestMapping(value="/remove",method=RequestMethod.DELETE)
+			public ResponseEntity<?> removeCategory(String categorycode)
+			{
+			   try {
+				   	category = new Category();
+					logger.info("-----------Before Calling  removeCategory ----------");
+					System.out.println("Remove Category code"+categorycode);
+					categorydal.removeCategory(categorycode);
+					category.setStatus("Success");
+					logger.info("-----------Successfully Called  removeCategory ----------");
+
+				}catch(Exception e){ 
+					logger.info("Exception ------------->"+e.getMessage());
+					category.setStatus("failure");
+					e.printStackTrace();
+
+				}finally{
+					
+				}
+				return new ResponseEntity<Category>(category, HttpStatus.CREATED);
+
+			}
 
 		
 	

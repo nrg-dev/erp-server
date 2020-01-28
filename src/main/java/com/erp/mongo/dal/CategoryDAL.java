@@ -9,5 +9,5 @@ public interface CategoryDAL {
 	public List<Category> loadCategory(List<Category> categorylist);
 	public Category getCategory(String categoryid);
 	public Category updateCategory(Category category);
-	public void removeCategory(String categoryid);	
+	public Category removeCategory(String categorycode);	
 }

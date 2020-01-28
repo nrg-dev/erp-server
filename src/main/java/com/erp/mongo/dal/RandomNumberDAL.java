@@ -27,4 +27,9 @@ public interface RandomNumberDAL {
 	public RandomNumber getVendorRandamNumber();
 	public boolean updateVendorRandamNumber(RandomNumber rn,int num);
 	
+	
+	//----Category and product RandomDAL Calling
+	public RandomNumber getCategoryRandomNumber();
+	public boolean updateCategoryRandamNumber(RandomNumber rn,int num);
+	
 }
