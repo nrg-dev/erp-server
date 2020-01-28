@@ -39,6 +39,7 @@ import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
+import com.erp.mongo.model.Vendor;
 import com.erp.util.Email;
 
 
@@ -82,70 +83,37 @@ public class PurchaseImpl implements PurchaseDAL {
 	 * mongoTemplate.save(purchaseorder); //po.setStatus("success"); return
 	 * purchaseorder; }
 	 */
-	
+	public List<Vendor> loadVendorList(List<Vendor> list){
+		list =  mongoTemplate.findAll(Vendor.class);//.find(query, OwnTree.class); return
+		return list;
+			  
+	} 
 	
 	public List<POInvoice> loadPurchase(List<POInvoice> list){
 		//List<PurchaseOrder> 
 		list =  mongoTemplate.findAll(POInvoice.class);//.find(query, OwnTree.class); return
 		return list;
 			  
-		} 
+	} 
 	
-	/*
-	 * // get
-	 * 
-	 * @Override public List<Customer> getCustomer(String primaryKey) {
-	 * List<Customer> list; Query query = new Query();
-	 * query.addCriteria(Criteria.where("userID").is(Integer.valueOf(primaryKey)));
-	 * list = mongoTemplate.find(query, Customer.class); return list; //return
-	 * mongoTemplate.find(query, Publictree.class); }
-	 * 
-	 * 
-	 * // update
-	 * 
-	 * @Override public Customer updateCustomer(Customer customer) { Update update =
-	 * new Update(); Query query = new Query();
-	 * query.addCriteria(Criteria.where("id").is(customer.getId()));
-	 * //update.set("userQueueStatus", "OUT"); //update.set("queueNumber", 0);
-	 * //update.set("userstatus", "CLOSED"); mongoTemplate.updateFirst(query,
-	 * update, Customer.class); return customer; }
-	 * 
-	 * public List<Customer> loadPurchase(List<PurchaseOrder> list){ list =
-	 * mongoTemplate.findAll(PurchaseOrder.class);//.find(query, OwnTree.class); return
-	 * list;
-	 * 
-	 * } public void removeCustomer(String customer) {
-	 * mongoTemplate.remove(customer);
-	 * 
-	 * }
-	 */
+	// get Purchase on Impl
+	@Override
+	public List<POInvoiceDetails> getPurchase(String invoiceNumber) {
+		List<POInvoiceDetails> podetaillist;
+		Query query = new Query();
+		query.addCriteria(Criteria.where("invoicenumber").is(invoiceNumber));
+		podetaillist = mongoTemplate.find(query, POInvoiceDetails.class);
+		return podetaillist;
+	}
 	
-		
+	@Override
+	public Vendor getVendorDetails(String vendorCode) {
+		Vendor vendor;
+		Query query = new Query();
+		query.addCriteria(Criteria.where("vendorcode").is(vendorCode));
+		vendor = mongoTemplate.findOne(query, Vendor.class);
+		return vendor;
+	}
 	
-		
-		
-		
-		
-		
-
-		
-		
-		// Server
-		private String privatefiles="/home/ec2-user/GGL/PrivatePayment/";
-		private String publicfiles="/home/ec2-user/GGL/PublicPayment/";
-		private String ownfiles="/home/ec2-user/GGL/OwnPayment/";
-		private String minifiles="/home/ec2-user/GGL/MiniPayment/";
-
-		// Local
-		/*private String privatefiles="E:\\temp\\PrivatePayment\\";
-		private String publicfiles="E:\\temp\\PublicPayment\\";
-		private String ownfiles="E:\\temp\\OwnPayment\\";*/
-
-		
-		private final Path publicrootLocation = Paths.get(publicfiles);
-		private final Path privateRootLocation = Paths.get(privatefiles);
-		private final Path ownRootLocation = Paths.get(ownfiles);
-		private final Path minirootLocation = Paths.get(minifiles);
-
 		
 }

@@ -21,7 +21,10 @@ public class Purchase {
 	  String description;
 	  String purchasearray;
 	
-	 
+	  String vendorPhone;
+	  String vendorEmail;
+	  String vendorCity;
+	  String vendorCountry;
 
 	public String getProductName() {
 		return productName;
@@ -84,6 +87,33 @@ public class Purchase {
 	public void setPurchasearray(String purchasearray) {
 		this.purchasearray = purchasearray;
 	}
+	
+	public String getVendorPhone() {
+		return vendorPhone;
+	}
+	public void setVendorPhone(String vendorPhone) {
+		this.vendorPhone = vendorPhone;
+	}
+	public String getVendorEmail() {
+		return vendorEmail;
+	}
+	public void setVendorEmail(String vendorEmail) {
+		this.vendorEmail = vendorEmail;
+	}
+	public String getVendorCity() {
+		return vendorCity;
+	}
+	public void setVendorCity(String vendorCity) {
+		this.vendorCity = vendorCity;
+	}
+	public String getVendorCountry() {
+		return vendorCountry;
+	}
+	public void setVendorCountry(String vendorCountry) {
+		this.vendorCountry = vendorCountry;
+	}
+	
+	
 	
 	
 }

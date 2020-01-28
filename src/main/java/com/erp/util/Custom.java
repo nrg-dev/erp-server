@@ -9,11 +9,29 @@ import java.util.Calendar;
 */import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Date;
 
 public class Custom {
 
 	//private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
    // private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+	
+	
+
+	public static String getCurrentInvoiceDate() {
+		//SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		Date date = new Date();
+		System.out.println(formatter.format(date));
+		System.out.println("Invoice Date -->"+date);
+		return formatter.format(date);
+	}
+
+	
+	
+	
+	
+	
     private static final DateFormat sdff = new SimpleDateFormat("HH:mm:ss");
    
     public static String getCurrentDateandTime() {

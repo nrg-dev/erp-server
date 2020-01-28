@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -43,6 +44,7 @@ import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
+import com.erp.mongo.model.Vendor;
 import com.erp.util.Custom;
 
 import org.json.JSONArray;
@@ -105,19 +107,44 @@ public class PurchaseService implements Filter{
 		 return new ResponseEntity<String>(purchase, HttpStatus.CREATED);
 	}*/
 	
+		//------- Load Vendor ----
+		@CrossOrigin(origins = "http://localhost:8080")	  
+		@GetMapping(value="/loadVendor",produces=MediaType.APPLICATION_JSON_VALUE) 
+		public  ResponseEntity<?> loadVendorList() {
+			  logger.info("------------- Inside loadVendor List Calling -----------------");
+			  List<Vendor> response= new ArrayList<Vendor>();
+			  List<Purchase> responseList = new ArrayList<Purchase>();
+			  Purchase purhase;
+			 try {
+				  logger.info("-----------Inside loadVendor Called----------");
+				  response=purchasedal.loadVendorList(response);	
+				  for(Vendor venList : response) {
+					  purhase = new Purchase();
+					  purhase.setVendorName(venList.getVendorName()+ "-"+venList.getVendorcode());
+					  responseList.add(purhase);
+				  }
+			 }catch(Exception e){
+				  logger.info("loadVendor Exception ------------->"+e.getMessage());
+				  e.printStackTrace(); 
+			 }finally{
+			 } 
+			 return new ResponseEntity<List<Purchase>>(responseList,HttpStatus.CREATED);
+	
+		 }
+	
         // Save
 		@CrossOrigin(origins = "http://localhost:8080")
 		@RequestMapping(value="/save",method=RequestMethod.POST) // you need to pass vendor info or vendor id and po date
-		public ResponseEntity<Purchase>  savePurchase(@RequestParam Purchase purchase) {
+		public ResponseEntity<?>  savePurchase(@RequestBody  String purchsearray) {
 			System.out.println("--------save savePurchase-------------");
-			//Purchase purchase=null;
+			Purchase purchase=null;
 			POInvoice poinvoice=null;
 			POInvoiceDetails podetails=null;
 			RandomNumber randomnumber=null;
 			try {
 				ObjectMapper mapper = new ObjectMapper();
-				 System.out.println("Json -->"+purchase.getPurchasearray());		
-				 System.out.println("Vendor Name -->"+purchase.getVendorName());	
+				 System.out.println("Json -->"+purchsearray);		
+				 //System.out.println("Vendor Name -->"+vendorName);	
 				  // logger.info("Vendor name --->"+vendorName);
 				 // Store into parent table to show in first data table view
 				 randomnumber = randomnumberdal.getRandamNumber();	
@@ -131,7 +158,7 @@ public class PurchaseService implements Filter{
                         /// one row add into main tale.
 				 // end 
 				 
-				 JSONArray jsonArr = new JSONArray(purchase.getPurchasearray());
+				 JSONArray jsonArr = new JSONArray(purchsearray);
 				    for (int i = 0; i < jsonArr.length(); i++) {
 				    	System.out.println("Loop 1...."+i);
 				    	if(jsonArr.optJSONArray(i)!=null) {  		
@@ -149,8 +176,9 @@ public class PurchaseService implements Filter{
 									podetails.setDescription(jObject.getString("description"));
 									podetails.setUnitprice(jObject.getString("unitPrice"));
 									podetails.setQty(jObject.getString("quantity"));
-									podetails.setSubtotal(jObject.getString("netAmount"));
-									//podetails.setVendorname(jObject.getString("vendorName")); 
+									podetails.setSubtotal(jObject.getDouble("netAmount"));
+									podetails.setVendorname("Alex Ubalton-VEN2"); 
+									podetails.setPoDate(Custom.getCurrentInvoiceDate());
 									purchasedal.savePurchase(podetails);
 					    		}
 					    		else {
@@ -167,13 +195,13 @@ public class PurchaseService implements Filter{
 				     poinvoice=new POInvoice();
 				    // LocalDateTime localDateTime = LocalDateTime.now();
 				    // LocalTime localTime = localDateTime.toLocalTime();
-				     poinvoice.setInvoicedate(Custom.getCurrentDate());
+				     poinvoice.setInvoicedate(Custom.getCurrentInvoiceDate());
 				     logger.info("Invoice Date --->"+poinvoice.getInvoicedate());
 				  
 				     //poinvoice.setInvoicedate(localTime);
 	                 poinvoice.setInvoicenumber(invoice);
 	                 poinvoice.setStatus("Waiting");
-	                 //poinvoice.setVendorname(jObject.getString("vendorName"));
+	                 poinvoice.setVendorname("Alex Ubalton-VEN2");
 	                 poinvoice.setTotalqty(100);
 	                 poinvoice.setTotalprice(1000000);
 	                 purchasedal.savePOInvoice(poinvoice);
@@ -202,44 +230,6 @@ public class PurchaseService implements Filter{
 		   }
 		   return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
 		}
-
-	
-	  // get
-	 /* 
-	  @CrossOrigin(origins = "http://localhost:8080")
-	  
-	  @RequestMapping(value="/get",method=RequestMethod.GET) public
-	  ResponseEntity<?> geCustomer(String id) {
-	  logger.info("------------- Inside getTempPublicTree-----------------");
-	  List<Customer> responseList=null; try {
-	  logger.info("-----------Inside getTempPublicTree Called----------");
-	  responseList=customerdal.getCustomer(id);
-	  
-	  }catch(Exception e){ logger.info("Exception ------------->"+e.getMessage());
-	  e.printStackTrace(); }finally{
-	  
-	  } return new ResponseEntity<List<Customer>>(responseList,
-	  HttpStatus.CREATED);
-	  
-	  }*/
-	  
-	  
-	  // update
-	  
-	/*
-	 * @CrossOrigin(origins = "http://localhost:8080")
-	 * 
-	 * @RequestMapping(value="/update",method=RequestMethod.POST) public
-	 * ResponseEntity<?> updateCustomer(@RequestBody Customer customer) { try {
-	 * customer= customerdal.updateCustomer(customer); return new
-	 * ResponseEntity<Customer>(customer, HttpStatus.CREATED);
-	 * 
-	 * }catch(Exception e) { logger.info("Exception ------------->"+e.getMessage());
-	 * e.printStackTrace(); }finally{
-	 * 
-	 * } return new ResponseEntity<Customer>(customer, HttpStatus.CREATED); }
-	 * 
-	 */
 	  
 	  // load
 	  
@@ -249,61 +239,74 @@ public class PurchaseService implements Filter{
 	  @CrossOrigin(origins = "http://localhost:8080")	  
 	  @GetMapping(value="/load",produces=MediaType.APPLICATION_JSON_VALUE) 
 	  public  ResponseEntity<?> loadPurchase() {
-	  logger.info("------------- Inside loadPurchase-----------------");
-	  List<POInvoice> response= new ArrayList<POInvoice>();
-	  List<Purchase> responseList= new ArrayList<Purchase>();
-	  try {
-	  logger.info("-----------Inside loadPurchase Called----------");
-	  response=purchasedal.loadPurchase(response);	 
-	  return new ResponseEntity<List<POInvoice>>(response, HttpStatus.CREATED);
+		  logger.info("------------- Inside loadPurchase-----------------");
+		  List<POInvoice> response= new ArrayList<POInvoice>();
+		  List<Purchase> responseList= new ArrayList<Purchase>();
+		  try {
+			  logger.info("-----------Inside loadPurchase Called----------");
+			  response=purchasedal.loadPurchase(response);	 
+			  return new ResponseEntity<List<POInvoice>>(response, HttpStatus.CREATED);
 	  
-	  }catch(Exception e)
-	  { logger.info("loadPurchase Exception ------------->"+e.getMessage());
-	  e.printStackTrace(); }finally{
-	  
-	  } 
-	  return new ResponseEntity<List<Purchase>>(responseList,HttpStatus.CREATED);
+		  }catch(Exception e){
+			  logger.info("loadPurchase Exception ------------->"+e.getMessage());
+			  e.printStackTrace(); 
+		  }finally{
+		  } 
+		  return new ResponseEntity<List<Purchase>>(responseList,HttpStatus.CREATED);
   
 	  }
 	  
-	  // Remove
-	  
-	 /* 
-	  @CrossOrigin(origins = "http://localhost:8080")
-	  
-	  @RequestMapping(value="/remove",method=RequestMethod.DELETE) public
-	  ResponseEntity<?> removeCustomer(String id) {
-	  
-	  
-	  try { 
-	 // logger.info("-----------Before Calling  removeCustomer ----------");
-	  customerdal.removeCustomer(id);
-	  logger.info("-----------Successfully Called  removeCustomer ----------");
-	  
-	  }catch(Exception e){ 
-	  
-	  logger.info("Exception ------------->"+e.getMessage()); e.printStackTrace();
-	  }finally{
-	  
-	  } return new ResponseEntity<String>("ok", HttpStatus.CREATED);
-	  
-	  }
-	  
-	 */
-
+	 
 		
+	// get
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value="/get",method=RequestMethod.GET)
+	public ResponseEntity<?> getPurchase(String id)
+	{
+		logger.info("------------- Inside get Purchase -----------------");
+		List<POInvoiceDetails> responseList = null;
+		try {
+			logger.info("-----------Inside get Purchase Called----------");
+			responseList = purchasedal.getPurchase(id);	
+		}catch(Exception e){
+			logger.info("getPurchase Exception ------------->"+e.getMessage());
+			e.printStackTrace();
+		}finally{
+			
+		}
+		return new ResponseEntity<List<POInvoiceDetails>>(responseList, HttpStatus.CREATED);
+	}
+	
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value="/getVendorDetails",method=RequestMethod.GET)
+	public ResponseEntity<?> getVendorDetails(String vendorname)
+	{
+		logger.info("------------- Inside get getVendorDetails -----------------");
+		Vendor vendor = null;
+		Purchase purchase = null;
+		try { 
+			logger.info("Vendor Name -->"+vendorname);
+			vendor = new Vendor();
+			purchase = new Purchase();
+			String[] res = vendorname.split("-");
+			String vendorCode = res[1];
+			logger.info("After Split Vendor Name -->"+vendorCode);
+			vendor = purchasedal.getVendorDetails(vendorCode);	
+			purchase.setVendorName(vendor.getVendorName());
+			purchase.setVendorCity(vendor.getCity());
+			purchase.setVendorCountry(vendor.getCountry());
+			purchase.setVendorPhone(vendor.getPhoneNumber());
+			purchase.setVendorEmail(vendor.getEmail());
+		}catch(Exception e){
+			logger.info("getVendorDetails Exception ------------->"+e.getMessage());
+			e.printStackTrace();
+		}finally{
+			
+		}
+		return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
+	}
 	
 	
-			
-	
-		
-		
-		
-		
-			
-			
-	
-			
 	
 }
 		

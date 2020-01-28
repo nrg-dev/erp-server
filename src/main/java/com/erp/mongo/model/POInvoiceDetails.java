@@ -13,12 +13,13 @@ public class POInvoiceDetails {
 	private String itemname; 	
 	private String description;			
 	private String unitprice;
-	private String subtotal;
-	private String totalprice;
+	private double subtotal;
+	private double totalprice;
 	private String qty;
 	private String vendorname;
 	private String category;
 	private String status ;	
+	private String poDate;
 
 	public String getId() {
 		return id;
@@ -56,10 +57,11 @@ public class POInvoiceDetails {
 	public void setUnitprice(String unitprice) {
 		this.unitprice = unitprice;
 	}
-	public String getTotalprice() {
+	
+	public double getTotalprice() {
 		return totalprice;
 	}
-	public void setTotalprice(String totalprice) {
+	public void setTotalprice(double totalprice) {
 		this.totalprice = totalprice;
 	}
 	public String getVendorname() {
@@ -74,10 +76,11 @@ public class POInvoiceDetails {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public String getSubtotal() {
+
+	public double getSubtotal() {
 		return subtotal;
 	}
-	public void setSubtotal(String subtotal) {
+	public void setSubtotal(double subtotal) {
 		this.subtotal = subtotal;
 	}
 	public String getQty() {
@@ -91,6 +94,12 @@ public class POInvoiceDetails {
 	}
 	public void setCategory(String category) {
 		this.category = category;
+	}
+	public String getPoDate() {
+		return poDate;
+	}
+	public void setPoDate(String poDate) {
+		this.poDate = poDate;
 	}
 	
 

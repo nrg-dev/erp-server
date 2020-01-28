@@ -1,7 +1,7 @@
 package com.erp.mongo.model;
 
 import java.time.LocalTime;
-import java.sql.Date;
+import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,7 +11,7 @@ public class POInvoice {
 
 	@Id
 	private String id;
-	private Date invoicedate;
+	private String invoicedate;
 	private String invoicenumber;			
 	private String vendorname;		
 	private int totalqty; 	
@@ -27,10 +27,11 @@ public class POInvoice {
 	}
 	
 	
-	public Date getInvoicedate() {
+	
+	public String getInvoicedate() {
 		return invoicedate;
 	}
-	public void setInvoicedate(Date invoicedate) {
+	public void setInvoicedate(String invoicedate) {
 		this.invoicedate = invoicedate;
 	}
 	public String getInvoicenumber() {
