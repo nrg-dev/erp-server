@@ -198,6 +198,7 @@ public class CustomerService implements Filter{
 
 
 		   try {
+			   System.out.println("Remove cust code is---->"+custcode);
 			   customer = new Customer();
 				logger.info("-----------Before Calling  removeCustomer ----------");
 				customerdal.removeCustomer(custcode);

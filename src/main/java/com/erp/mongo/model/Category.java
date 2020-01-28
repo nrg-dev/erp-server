@@ -8,6 +8,7 @@ public class Category {
 
   @Id
   private String id		;
+  String categorycode   ;
   String name 			;
   String description 	;
   String updateddate 	;
@@ -44,6 +45,12 @@ public String getUpdateddate() {
 }
 public void setUpdateddate(String updateddate) {
 	this.updateddate = updateddate;
+}
+public String getCategorycode() {
+	return categorycode;
+}
+public void setCategorycode(String categorycode) {
+	this.categorycode = categorycode;
 }
   
   

@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.mongodb.core.query.Update;
 import com.erp.mongo.model.Category;
+import com.erp.mongo.model.Vendor;
 
 
 @Repository
@@ -23,26 +24,46 @@ public class CategoryImpl implements CategoryDAL {
 	private MongoTemplate mongoTemplate;
 
 	
-
+	//save
 	public Category saveCategory(Category category) {
 		mongoTemplate.save(category);
+		category.setStatus("success");
 		return category;
 	}
+	
+	//load
 	public List<Category> loadCategory(List<Category> categorylist){
+		categorylist = mongoTemplate.findAll(Category.class);
 		return categorylist;
 		
 	}
+	
+	//get
 	public Category getCategory(String categoryid) {
 		Category category=null;
 		return category;
 		
 	}
+	
+	//update
+	@Override
 	public Category updateCategory(Category category) {
+		Update update = new Update();
+		Query query = new Query();
+		query.addCriteria(Criteria.where("vendorcode").is(category.getCategorycode()));
+		update.set("name", category.getName());
+		update.set("description", category.getDescription());
+		mongoTemplate.updateFirst(query, update, Category.class);
 		return category;
 		
 	}
-	public void removeCategory(String categoryid) {
-		
+	
+	//remove
+	public Category removeCategory(String categorycode) {
+		Category response=null;
+		Query query= new Query();
+		query.addCriteria(Criteria.where("categorycode").is(categorycode));
+		mongoTemplate.remove(query,Category.class);
+		return response;
 	}
-		
 }

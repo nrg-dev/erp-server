@@ -10,12 +10,21 @@ public class RandomNumber {
 	private String id;
 	private long poinvoicenumber;	
 	private String poinvoicecode;
+	
 	private long salesinvoicenumber;
 	private String salesinvoicecode;
+	
 	private long vendorinvoicenumber;
 	private String vendorinvoicecode;
+	
 	private long customerinvoicenumber;
 	private String customerinvoicecode;
+	
+	private long categoryinvoicenumber;
+	private String categoryinvoicecode;
+	
+	private long productinvoicenumber;
+	private String productinvoicecode;
 	
 
 	public String getId() {
@@ -72,6 +81,32 @@ public class RandomNumber {
 	public void setCustomerinvoicecode(String customerinvoicecode) {
 		this.customerinvoicecode = customerinvoicecode;
 	}
+	
+	public long getCategoryinvoicenumber() {
+		return categoryinvoicenumber;
+	}
+	public void setCategoryinvoicenumber(long categoryinvoicenumber) {
+		this.categoryinvoicenumber = categoryinvoicenumber;
+	}
+	public String getCategoryinvoicecode() {
+		return categoryinvoicecode;
+	}
+	public void setCategoryinvoicecode(String categoryinvoicecode) {
+		this.categoryinvoicecode = categoryinvoicecode;
+	}
+	public long getProductinvoicenumber() {
+		return productinvoicenumber;
+	}
+	public void setProductinvoicenumber(long productinvoicenumber) {
+		this.productinvoicenumber = productinvoicenumber;
+	}
+	public String getProductinvoicecode() {
+		return productinvoicecode;
+	}
+	public void setProductinvoicecode(String productinvoicecode) {
+		this.productinvoicecode = productinvoicecode;
+	}
+	
 	
 
 	

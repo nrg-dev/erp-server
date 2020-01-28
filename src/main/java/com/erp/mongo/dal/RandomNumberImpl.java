@@ -111,5 +111,44 @@ public class RandomNumberImpl implements RandomNumberDAL {
 		mongoTemplate.updateFirst(query, update, RandomNumber.class);//(query, RandamNumber.class);
 		return true;//mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
 	}
-		
+	
+	
+	//Category RandomNumber Getting
+	@Override
+	public RandomNumber getCategoryRandomNumber() {
+		RandomNumber radomNumber=null;
+		try {
+			logger.info("----------- Inside getVendorRandamNumber-----------");
+			Query query = new Query();
+			logger.info("-----------  Before addCriteria-----------");
+		    query.addCriteria(Criteria.where("randomID").is(3));
+			logger.info("-----------  After addCriteria-----------");
+			radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
+			logger.info("Vendor Invoice number ----------->"+radomNumber.getCategoryinvoicenumber());
+			logger.info("Customer Invoice number ----------->"+radomNumber.getCategoryinvoicecode());
+			return radomNumber;
+		}catch(Exception e) {
+			e.printStackTrace();
+			return radomNumber;
+		}finally {
+			
+		}	
+	}
+	
+	
+	@Override
+	public boolean updateCategoryRandamNumber(RandomNumber rn,int num) {
+		logger.info("current Vendor invoice number -->"+rn.getCategoryinvoicenumber());	
+		logger.info("Number for category -->"+num);
+		Query query = new Query();
+	    query.addCriteria(Criteria.where("randomID").is(3));
+		Update update = new Update();
+		if(num == 1) {
+			update.set("categoryinvoicenumber", rn.getCategoryinvoicenumber()+1);			
+		}else if(num == 2) {
+			update.set("productinvoicenumber", rn.getProductinvoicenumber()+1);			
+		}
+		mongoTemplate.updateFirst(query, update, RandomNumber.class);//(query, RandamNumber.class);
+		return true;//mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
+	}
 }
