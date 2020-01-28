@@ -19,7 +19,7 @@ public class Purchase {
 	  String unitPrice;
 	  String status;
 	  String description;
-	  String[] purchasearray;
+	  String purchasearray;
 	
 	 
 
@@ -78,13 +78,12 @@ public class Purchase {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String[] getPurchasearray() {
+	public String getPurchasearray() {
 		return purchasearray;
 	}
-	public void setPurchasearray(String[] purchasearray) {
+	public void setPurchasearray(String purchasearray) {
 		this.purchasearray = purchasearray;
 	}
-	
 	
 	
 }

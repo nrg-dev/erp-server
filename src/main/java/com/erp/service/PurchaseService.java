@@ -108,7 +108,7 @@ public class PurchaseService implements Filter{
         // Save
 		@CrossOrigin(origins = "http://localhost:8080")
 		@RequestMapping(value="/save",method=RequestMethod.POST) // you need to pass vendor info or vendor id and po date
-		public ResponseEntity<Purchase>  savePurchase(@RequestBody Purchase purchase) {
+		public ResponseEntity<Purchase>  savePurchase(@RequestParam Purchase purchase) {
 			System.out.println("--------save savePurchase-------------");
 			//Purchase purchase=null;
 			POInvoice poinvoice=null;
