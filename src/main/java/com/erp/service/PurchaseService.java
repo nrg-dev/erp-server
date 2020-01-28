@@ -131,10 +131,10 @@ public class PurchaseService implements Filter{
 			 return new ResponseEntity<List<Purchase>>(responseList,HttpStatus.CREATED);
 	
 		 }
-	
+	/*
         // Save
 		@CrossOrigin(origins = "http://localhost:8080")
-		@RequestMapping(value="/save",method=RequestMethod.POST) // you need to pass vendor info or vendor id and po date
+		@RequestMapping(value="/save",method=RequestMethod.POST)
 		public ResponseEntity<?>  savePurchase(@RequestBody  String purchsearray) {
 			System.out.println("--------save savePurchase-------------");
 			Purchase purchase=null;
@@ -144,61 +144,73 @@ public class PurchaseService implements Filter{
 			try {
 				ObjectMapper mapper = new ObjectMapper();
 				 System.out.println("Json -->"+purchsearray);		
-				 //System.out.println("Vendor Name -->"+vendorName);	
-				  // logger.info("Vendor name --->"+vendorName);
-				 // Store into parent table to show in first data table view
 				 randomnumber = randomnumberdal.getRandamNumber();	
 				 System.out.println("PO Invoice random number-->"+randomnumber.getPoinvoicenumber());
 				 System.out.println("PO Invoice random code-->"+randomnumber.getPoinvoicecode());
                  String invoice = randomnumber.getPoinvoicecode() + randomnumber.getPoinvoicenumber();
                  System.out.println("Invoice number -->"+invoice);
-                
+                 ArrayList<String> list = new ArrayList<String>();     
+        	     JSONArray jsonArr = new JSONArray(purchsearray);
+				 int len = jsonArr.length();
+				 int remove = 0;
+				 if (jsonArr != null) { 
+				    for (int i=0;i<jsonArr.length();i++){ 
+				     list.add(jsonArr.get(i).toString());
+				     remove++;
+				    } 
+				 }
+				 int postion = remove-1;
+				 System.out.println("Position-->"+postion);
+				 list.remove(postion);				 
+				 System.out.println("Size -------->"+jsonArr.length());
+				 int l=1;
 				 
-				 //podetails.setStatus("Waiting");
-                        /// one row add into main tale.
-				 // end 
-				 
-				 JSONArray jsonArr = new JSONArray(purchsearray);
 				    for (int i = 0; i < jsonArr.length(); i++) {
 				    	System.out.println("Loop 1...."+i);
-				    	if(jsonArr.optJSONArray(i)!=null) {  		
-					    	JSONArray arr2 = jsonArr.optJSONArray(i);				    	
-					    	for (int j = 0; j < arr2.length(); j++) {
-					    		System.out.println("Loop 2...."+j);
-					    		if(arr2.getJSONObject(j)!=null) {
-					    			JSONObject jObject = arr2.getJSONObject(j);
-									System.out.println(jObject.getString("productName"));
-									System.out.println(jObject.getString("category"));
-									podetails = new POInvoiceDetails();
-									podetails.setInvoicenumber(invoice);// random table..
-									podetails.setCategory(jObject.getString("category"));
-									podetails.setItemname(jObject.getString("productName"));
-									podetails.setDescription(jObject.getString("description"));
-									podetails.setUnitprice(jObject.getString("unitPrice"));
-									podetails.setQty(jObject.getString("quantity"));
-									podetails.setSubtotal(jObject.getDouble("netAmount"));
-									podetails.setVendorname("Alex Ubalton-VEN2"); 
-									podetails.setPoDate(Custom.getCurrentInvoiceDate());
-									purchasedal.savePurchase(podetails);
-					    		}
-					    		else {
-					    			System.out.println("Null....");
-					    		}
-				    		
+				    	JSONArray arr2 = jsonArr.optJSONArray(i);   	
 
-				    		}
-				    	}  
+				    	if(l==jsonArr.length()) {
+				    		System.out.println("Last Value");
+		    				JSONObject jObject = arr2.getJSONObject(0);
+							System.out.println("PO Date -->"+jObject.getString("podate"));
+							System.out.println("Vendor Name -->"+jObject.getString("vendorname"));
+				    	}
+				    	
 				    	else {
-			    			System.out.println("Outer Null....");
-			    		}
+				    		if(jsonArr.optJSONArray(i)!=null) {  		
+						    	//JSONArray arr2 = jsonArr.optJSONArray(i);				    	
+						    	for (int j = 0; j < arr2.length(); j++) {
+						    		System.out.println("Loop 2...."+j);
+						    		if(arr2.getJSONObject(j)!=null) {						    			
+						    				JSONObject jObject = arr2.getJSONObject(j);
+											System.out.println(jObject.getString("productName"));
+											System.out.println(jObject.getString("category"));
+											podetails = new POInvoiceDetails();
+											podetails.setInvoicenumber(invoice);// random table..
+											podetails.setCategory(jObject.getString("category"));
+											podetails.setItemname(jObject.getString("productName"));
+											podetails.setDescription(jObject.getString("description"));
+											podetails.setUnitprice(jObject.getString("unitPrice"));
+											podetails.setQty(jObject.getString("quantity"));
+											podetails.setSubtotal(jObject.getDouble("netAmount"));
+											podetails.setVendorname("Alex Ubalton-VEN2"); 
+											podetails.setPoDate(Custom.getCurrentInvoiceDate());
+											purchasedal.savePurchase(podetails);
+						    		}
+						    		else {
+						    			System.out.println("Null....");
+						    		}				    		
+					    		}
+					    	}  
+					    	else {
+				    			System.out.println("Outer Null....");
+				    		}
+				    	}
+				    	l++;
 				    }
 				     poinvoice=new POInvoice();
-				    // LocalDateTime localDateTime = LocalDateTime.now();
-				    // LocalTime localTime = localDateTime.toLocalTime();
 				     poinvoice.setInvoicedate(Custom.getCurrentInvoiceDate());
 				     logger.info("Invoice Date --->"+poinvoice.getInvoicedate());
-				  
-				     //poinvoice.setInvoicedate(localTime);
 	                 poinvoice.setInvoicenumber(invoice);
 	                 poinvoice.setStatus("Waiting");
 	                 poinvoice.setVendorname("Alex Ubalton-VEN2");
@@ -230,11 +242,118 @@ public class PurchaseService implements Filter{
 		   }
 		   return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
 		}
-	  
-	  // load
-	  
-		//ArrayList<String> res = new ArrayList<String>();
-		ArrayList<JSONArray> res= new ArrayList<JSONArray>(); 
+	  8
+	  */
+		
+		// Save
+				@CrossOrigin(origins = "http://localhost:4200")
+				@PostMapping(value="/save")
+				public ResponseEntity<?>  savePurchase(@RequestBody String purchasesearcharray			) {
+					String temp = purchasesearcharray;
+					System.out.println("Mapped value -->"+temp);
+					System.out.println("--------save savePurchase-------------");
+					Purchase purchase=null;
+					POInvoice poinvoice=null;
+					POInvoiceDetails podetails=null;
+					RandomNumber randomnumber=null;
+					try {
+						ObjectMapper mapper = new ObjectMapper();
+						// System.out.println("Vendor Name -->"+purchase.getVendorName());	
+						 System.out.println("Post Json -->"+purchasesearcharray);	
+						  // logger.info("Vendor name --->"+vendorName);
+						 // Store into parent table to show in first data table view
+						 randomnumber = randomnumberdal.getRandamNumber();	
+						 System.out.println("PO Invoice random number-->"+randomnumber.getPoinvoicenumber());
+						 System.out.println("PO Invoice random code-->"+randomnumber.getPoinvoicecode());
+		                 String invoice = randomnumber.getPoinvoicecode() + randomnumber.getPoinvoicenumber();
+		                 System.out.println("Invoice number -->"+invoice);
+		                 ArrayList<String> list = new ArrayList<String>();     
+		        	     JSONArray jsonArr = new JSONArray(purchasesearcharray);
+						 int len = jsonArr.length();
+						 int remove = 0;
+						 if (jsonArr != null) { 
+						    for (int i=0;i<jsonArr.length();i++){ 
+						     list.add(jsonArr.get(i).toString());
+						     remove++;
+						    } 
+						 }
+						 int postion = remove-1;
+						 System.out.println("Position-->"+postion);
+						 list.remove(postion);				 
+						 System.out.println("Size -------->"+jsonArr.length());
+						 int l=1;
+						    for (int i = 0; i < jsonArr.length(); i++) {
+						    	System.out.println("Loop 1...."+i);
+						    	JSONArray arr2 = jsonArr.optJSONArray(i);    	
+						    	if(l==jsonArr.length()) {
+						    		System.out.println("Last Value");
+				    				JSONObject jObject = arr2.getJSONObject(0);
+									System.out.println("PO Date -->"+jObject.getString("podate"));
+									System.out.println("Vendor Name -->"+jObject.getString("vendorname"));
+						    	}
+						    	else {
+						    		if(jsonArr.optJSONArray(i)!=null) {  		
+								    	//JSONArray arr2 = jsonArr.optJSONArray(i);				    	
+								    	for (int j = 0; j < arr2.length(); j++) {
+								    		System.out.println("Loop 2...."+j);
+								    		if(arr2.getJSONObject(j)!=null) {						    			
+								    				JSONObject jObject = arr2.getJSONObject(j);
+													System.out.println(jObject.getString("productName"));
+													System.out.println(jObject.getString("category"));
+													podetails = new POInvoiceDetails();
+													podetails.setInvoicenumber(invoice);// random table..
+													podetails.setCategory(jObject.getString("category"));
+													podetails.setItemname(jObject.getString("productName"));
+													podetails.setDescription(jObject.getString("description"));
+													podetails.setUnitprice(jObject.getString("unitPrice"));
+													podetails.setQty(jObject.getString("quantity"));
+													//podetails.setSubtotal(jObject.getString("netAmount"));
+													purchasedal.savePurchase(podetails);
+								    		}
+								    		else {
+								    			System.out.println("Null....");
+								    		}				    		
+							    		}
+							    	}  
+							    	else {
+						    			System.out.println("Outer Null....");
+						    		}
+						    	}
+						    	l++;
+						    }
+						     poinvoice=new POInvoice();
+						     //poinvoice.setInvoicedate(Custom.getCurrentDate());
+						     logger.info("Invoice Date --->"+poinvoice.getInvoicedate());				  
+			                 poinvoice.setInvoicenumber(invoice);
+			                 poinvoice.setStatus("Waiting");
+			                 poinvoice.setTotalqty(100);
+			                 poinvoice.setTotalprice(1000000);
+			                 purchasedal.savePOInvoice(poinvoice);
+						    System.out.println("Service call start.....");
+							purchase.setStatus("success");					
+							return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
+					  }
+					
+					catch(NullPointerException ne) {
+						purchase=new Purchase();
+					    System.out.println("Inside null pointer exception ....");
+						purchase.setStatus("success");					
+						 boolean status = randomnumberdal.updateRandamNumber(randomnumber);
+						return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
+
+					   }
+					catch(Exception e) {
+					   logger.info("Exception ------------->"+e.getMessage());
+					   e.printStackTrace();
+				   }
+					
+				   finally{
+					   
+				   }
+				   return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
+				}
+		// load
+	  ArrayList<JSONArray> res= new ArrayList<JSONArray>(); 
 
 	  @CrossOrigin(origins = "http://localhost:8080")	  
 	  @GetMapping(value="/load",produces=MediaType.APPLICATION_JSON_VALUE) 
