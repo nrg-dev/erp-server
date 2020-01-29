@@ -162,10 +162,10 @@ public class VendorService implements Filter{
 		@RequestMapping(value="/load",method=RequestMethod.GET)
 		public ResponseEntity<?> loadVendor()
 		{
-			logger.info("------------- Inside getTempOwnTree-----------------");
+			logger.info("------------- Inside load vendor-----------------");
 			List<Vendor> responseList=null;
 		   try {
-				logger.info("-----------Inside getTempOwnTree Called----------");
+				logger.info("-----------Inside load vendor Called----------");
 				responseList=vendordal.loadVendor(responseList);
 				
 				}catch(Exception e){

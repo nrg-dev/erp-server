@@ -174,10 +174,10 @@ public class CustomerService implements Filter{
 		@RequestMapping(value="/load",method=RequestMethod.GET)
 		public ResponseEntity<?> loadCustomer()
 		{
-			logger.info("------------- Inside getTempOwnTree-----------------");
+			logger.info("------------- Inside load customer-----------------");
 			List<Customer> responseList=null;
 		   try {
-				logger.info("-----------Inside getTempOwnTree Called----------");
+				logger.info("-----------Inside load customer Called----------");
 				responseList=customerdal.loadCustomer(responseList);
 				
 				}catch(Exception e){

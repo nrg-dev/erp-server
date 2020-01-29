@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 //import java.util.List;
 
 import com.erp.mongo.model.Item;
+import com.erp.mongo.model.Vendor;
 
 
 @Repository
@@ -27,11 +28,16 @@ public class ItemImpl implements ItemDAL {
 	private MongoTemplate mongoTemplate;
 
 	
-
-	public Item saveItem(Item Item) {
-		return Item;
+	//item save
+	public Item saveItem(Item product) {
+		mongoTemplate.save(product);
+		product.setStatus("success");
+		return product;
 	}
+	
+	//item load
 	public List<Item> loadItem(List<Item> itemlist){
+		itemlist = mongoTemplate.findAll(Item.class);
 		return itemlist;
 		
 	}

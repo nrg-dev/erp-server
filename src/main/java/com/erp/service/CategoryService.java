@@ -122,21 +122,48 @@ public class CategoryService implements Filter{
 	  @CrossOrigin(origins = "http://localhost:8080")	
 	  @RequestMapping(value="/load",method=RequestMethod.GET)
 	  public  ResponseEntity<?> loadCategory() {
-	  logger.info("------------- Inside loadCategory-----------------");
+		  logger.info("------------- Inside loadCategory-----------------");
+		  List<Category> categorylist= new ArrayList<Category>();
+		  try {
+			  logger.info("-----------Inside loadCategory Called----------");
+			  categorylist=categorydal.loadCategory(categorylist);	 
+			  return new ResponseEntity<List<Category>>(categorylist, HttpStatus.CREATED);
+		  
+		  }catch(Exception e){
+			  logger.info("loadCategory Exception ------------->"+e.getMessage());
+			  e.printStackTrace();
+		  }finally{
+		  
+		  } 
+		  return new ResponseEntity<List<Category>>(categorylist,HttpStatus.CREATED);
+  
+	  }
+	  
+	  //load allcategorylist
+	  /*@CrossOrigin(origins = "http://localhost:8080")	
+	  @RequestMapping(value="/loadAllCategory",method=RequestMethod.GET)
+	  public  ResponseEntity<?> loadAllCategory() {
+	  logger.info("------------- Inside loadAllCategory-----------------");
 	  List<Category> categorylist= new ArrayList<Category>();
+	  List<Category> allCategorylist= new ArrayList<Category>();
+	  Category cat = new Category();
 	  try {
-	  logger.info("-----------Inside loadCategory Called----------");
-	  categorylist=categorydal.loadCategory(categorylist);	 
-	  return new ResponseEntity<List<Category>>(categorylist, HttpStatus.CREATED);
+	  logger.info("-----------Inside loadAllCategory Called----------");
+	  categorylist=categorydal.loadCategory(categorylist);	
+	  for( int i=0; i<categorylist.size(); i++) {
+		  cat.setName((categorylist.get(i).getName()));
+		  allCategorylist.add(cat);
+	  }
+	  return new ResponseEntity<List<Category>>(allCategorylist, HttpStatus.CREATED);
 	  
 	  }catch(Exception e)
-	  { logger.info("loadCategory Exception ------------->"+e.getMessage());
+	  { logger.info("loadAllCategory Exception ------------->"+e.getMessage());
 	  e.printStackTrace(); }finally{
 	  
 	  } 
-	  return new ResponseEntity<List<Category>>(categorylist,HttpStatus.CREATED);
+	  return new ResponseEntity<List<Category>>(allCategorylist,HttpStatus.CREATED);
   
-	  }
+	  } */
 		
 	
 	  // get

@@ -32,6 +32,7 @@ import org.springframework.http.ResponseEntity;
 import com.erp.bo.ErpBo;
 import com.erp.mongo.dal.ItemDAL;
 import com.erp.mongo.dal.RandomNumberDAL;
+import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.service.ItemService;
@@ -82,46 +83,64 @@ public class ItemService implements Filter{
 	
 	
 	
-	    // Save
-		@CrossOrigin(origins = "http://localhost:8080")
-		@RequestMapping(value="/save",method=RequestMethod.POST) // you need to pass vendor info or vendor id and po date
-		public ResponseEntity<?>  saveItem(@RequestBody Item item) {
-			System.out.println("--------save savePurchase-------------");
-			RandomNumber randomnumber=null;
-			try {
-				 
-				 // Store into parent table to show in first data table view
-				 randomnumber = randomnumberdal.getRandamNumber();	
-				 System.out.println("Item random number-->"+randomnumber.getPoinvoicenumber());
-				 System.out.println("Item random code-->"+randomnumber.getPoinvoicecode());
-	             String invoice = randomnumber.getPoinvoicecode() + randomnumber.getPoinvoicenumber();
-	             System.out.println("Item number -->"+invoice);
-				 boolean status = randomnumberdal.updateRandamNumber(randomnumber);	
-	
-				return new ResponseEntity<Item>(item, HttpStatus.CREATED);
-	
-			  }
-			
-			catch(Exception e) {
-			   logger.info("Exception ------------->"+e.getMessage());
-			   e.printStackTrace();
-		   }
-			
-		   finally{
-			   
-		   }
-		   return new ResponseEntity<Item>(item, HttpStatus.CREATED);
-		}
+    // Save
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value="/productsave",method=RequestMethod.POST)
+	public ResponseEntity<?> saveItem(@RequestBody Item item) {
+		System.out.println("--------save product-------------");
+		RandomNumber randomnumber=null;
+		try {
+			randomnumber = randomnumberdal.getCategoryRandomNumber();
+			System.out.println("item Invoice random number-->"+randomnumber.getProductinvoicenumber());
+			System.out.println("item Invoice random code-->"+randomnumber.getProductinvoicecode());
+            String invoice = randomnumber.getProductinvoicecode() + randomnumber.getProductinvoicenumber();
+            System.out.println("Invoice number -->"+invoice);
+            System.out.println("category code--->"+item.getCategorycode());
+            System.out.println("vendor code--->"+item.getVendorcode());
+            if(item.getCategorycode()!=null) {
+            String[] parts1 = item.getCategorycode().split("-");
+            String part2 = parts1[1]; 
+            item.setCategorycode(part2);
+            }
+            if(item.getVendorcode()!=null) {
+            String[] parts2 = item.getVendorcode().split("-");
+            String part3 = parts2[1]; // 034556
+            item.setVendorcode(part3);
+            }
+            
+            item.setProdcode(invoice);
+            item=  itemdal.saveItem(item);
+			if(item.getStatus().equalsIgnoreCase("success")) {
+			boolean status = randomnumberdal.updateCategoryRandamNumber(randomnumber,2);
+
+		  }
+			return new ResponseEntity<Item>(item, HttpStatus.CREATED);	
+		
+		}catch(Exception e) {
+			item.setStatus("failure");
+		   logger.info("Exception ------------->"+e.getMessage());
+		   e.printStackTrace();
+	   }
+		
+	   finally{
+		   
+	   }
+	   return new ResponseEntity<Item>(item, HttpStatus.CREATED);
+	}
 
 	  // load
-	  @CrossOrigin(origins = "http://localhost:8080")	  
-	  @GetMapping(value="/load",produces=MediaType.APPLICATION_JSON_VALUE) 
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value="/load",method=RequestMethod.GET)
 	  public  ResponseEntity<?> loadItem() {
-	  logger.info("------------- Inside loadPurchase-----------------");
+	  logger.info("------------- Inside ItemLoad-----------------");
 	  List<Item> itemlist= new ArrayList<Item>();
 	  try {
-	  logger.info("-----------Inside loadPurchase Called----------");
+	  logger.info("-----------Inside ItemLoad Called----------");
 	  itemlist=itemdal.loadItem(itemlist);	 
+	  for(Item item:itemlist) {
+		  System.out.println("product code -->"+item.getProdcode());
+		  
+	  }
 	  return new ResponseEntity<List<Item>>(itemlist, HttpStatus.CREATED);
 	  
 	  }catch(Exception e)

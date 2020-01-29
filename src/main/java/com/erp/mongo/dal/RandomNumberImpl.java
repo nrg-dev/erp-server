@@ -74,7 +74,7 @@ public class RandomNumberImpl implements RandomNumberDAL {
 	}
 	
 	
-	//---- Vendor RandomCade Getting ---
+	//---- Vendor and customer RandomCade Getting ---
 	@Override
 	public RandomNumber getVendorRandamNumber() {
 		RandomNumber radomNumber=null;
@@ -113,19 +113,19 @@ public class RandomNumberImpl implements RandomNumberDAL {
 	}
 	
 	
-	//Category RandomNumber Getting
+	//Category and product RandomNumber Getting
 	@Override
 	public RandomNumber getCategoryRandomNumber() {
 		RandomNumber radomNumber=null;
 		try {
-			logger.info("----------- Inside getVendorRandamNumber-----------");
+			logger.info("----------- Inside getcategory and prod RandamNumber-----------");
 			Query query = new Query();
 			logger.info("-----------  Before addCriteria-----------");
 		    query.addCriteria(Criteria.where("randomID").is(3));
 			logger.info("-----------  After addCriteria-----------");
 			radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
-			logger.info("Vendor Invoice number ----------->"+radomNumber.getCategoryinvoicenumber());
-			logger.info("Customer Invoice number ----------->"+radomNumber.getCategoryinvoicecode());
+			logger.info("category and prod Invoice number ----------->"+radomNumber.getCategoryinvoicenumber());
+			logger.info("category and prod Invoice code ----------->"+radomNumber.getCategoryinvoicecode());
 			return radomNumber;
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -135,10 +135,9 @@ public class RandomNumberImpl implements RandomNumberDAL {
 		}	
 	}
 	
-	
 	@Override
 	public boolean updateCategoryRandamNumber(RandomNumber rn,int num) {
-		logger.info("current Vendor invoice number -->"+rn.getCategoryinvoicenumber());	
+		logger.info("current category and prod invoice number -->"+rn.getCategoryinvoicenumber());	
 		logger.info("Number for category -->"+num);
 		Query query = new Query();
 	    query.addCriteria(Criteria.where("randomID").is(3));
@@ -146,6 +145,7 @@ public class RandomNumberImpl implements RandomNumberDAL {
 		if(num == 1) {
 			update.set("categoryinvoicenumber", rn.getCategoryinvoicenumber()+1);			
 		}else if(num == 2) {
+			System.out.println("updated random number--->"+rn.getProductinvoicenumber());
 			update.set("productinvoicenumber", rn.getProductinvoicenumber()+1);			
 		}
 		mongoTemplate.updateFirst(query, update, RandomNumber.class);//(query, RandamNumber.class);
