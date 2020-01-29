@@ -6,8 +6,12 @@ import com.erp.mongo.model.Category;
 
 public interface CategoryDAL {
 	public Category saveCategory(Category category);
+
 	public List<Category> loadCategory(List<Category> categorylist);
+
 	public Category getCategory(String categoryid);
+
 	public Category updateCategory(Category category);
-	public Category removeCategory(String categorycode);	
+
+	public Category removeCategory(String categorycode);
 }
