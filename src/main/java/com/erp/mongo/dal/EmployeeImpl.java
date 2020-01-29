@@ -70,7 +70,7 @@ public class EmployeeImpl implements EmployeeDAL {
 
 		Update update = new Update();
 		Query query = new Query();
-		query.addCriteria(Criteria.where("vendorcode").is(employee.getId());
+		//query.addCriteria(Criteria.where("vendorcode").is(employee.getId());
 		update.set("name", employee.getName());
 		update.set("email", employee.getEmail());
 		mongoTemplate.updateFirst(query, update, Category.class);
