@@ -115,5 +115,39 @@ public class PurchaseImpl implements PurchaseDAL {
 		return vendor;
 	}
 	
+	// revmoe 
+	@Override
+	public String removePurchase(String invoiceNumber) {
+		String response= "failure";
+		Query query= new Query();
+		query.addCriteria(Criteria.where("invoicenumber").is(invoiceNumber));
+		mongoTemplate.remove(query,POInvoiceDetails.class);
+		mongoTemplate.remove(query,POInvoice.class);
+		response= "Success";
+		return response;
+	}
+	
+	// revmoe 
+	@Override
+	public String removePartId(String id,String invoiceNumber, int temp) {
+		String response= "failure";
+		Query query= new Query();
+		Query query2= new Query();
+		query.addCriteria(
+		    new Criteria().andOperator(
+	    		Criteria.where("id").is(id),
+	    		Criteria.where("invoicenumber").is(invoiceNumber)
+		    )
+		);
+		if(temp == 1) {
+			mongoTemplate.remove(query,POInvoiceDetails.class);
+		}else if(temp == 2) {
+			mongoTemplate.remove(query,POInvoiceDetails.class);
+			query2.addCriteria(Criteria.where("invoicenumber").is(invoiceNumber));
+			mongoTemplate.remove(query2,POInvoice.class);
+		}
+		response= "Success";
+		return response;
+	}
 		
 }

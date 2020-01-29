@@ -25,6 +25,8 @@ public interface PurchaseDAL {
 	public List<POInvoice> loadPurchase(List<POInvoice> list);
 	public List<POInvoiceDetails> getPurchase(String id);
 	public List<Vendor> loadVendorList(List<Vendor> response);
-	public Vendor getVendorDetails(String id);   
+	public Vendor getVendorDetails(String id);
+	public String removePurchase(String invoiceNumber);
+	public String removePartId(String id, String invoiceNumber, int temp);    
 	
 }

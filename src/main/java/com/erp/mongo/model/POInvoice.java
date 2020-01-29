@@ -17,7 +17,7 @@ public class POInvoice {
 	private int totalqty; 	
 	private String deliveryprice;			
 	private int totalprice;			
-	private String status 	;		
+	private String status;		
 
 	public String getId() {
 		return id;
