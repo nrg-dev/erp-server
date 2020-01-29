@@ -32,6 +32,7 @@ import java.util.stream.Stream;
 import com.erp.bo.ErpBo;
 import com.erp.dto.Member;
 import com.erp.model.UserDetail;
+import com.erp.mongo.model.Category;
 import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Employee;
 import com.erp.util.Email;
@@ -52,18 +53,32 @@ public class EmployeeImpl implements EmployeeDAL {
 	
 	
 	public Employee save(Employee employee) {
+		mongoTemplate.save(employee);
 		return employee;
+	}
+	
+	public List<Employee> load(List<Employee> list){
+		list = mongoTemplate.findAll(Employee.class);
+		return list;
 	}
 	public List<Employee> get(String id){
 		List<Employee> list =null;
+
 		return list;
 	}
 	public Employee update(Employee employee) {
+
+		Update update = new Update();
+		Query query = new Query();
+		query.addCriteria(Criteria.where("vendorcode").is(employee.getId());
+		update.set("name", employee.getName());
+		update.set("email", employee.getEmail());
+		mongoTemplate.updateFirst(query, update, Category.class);
 		return employee;
+		
+	
 	}
-	public List<Employee> load(List<Employee> list){
-		return list;
-	}
+	
 	public void remove(String id) {
 		
 	}

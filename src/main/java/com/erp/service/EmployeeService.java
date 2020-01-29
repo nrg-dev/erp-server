@@ -56,11 +56,7 @@ public class EmployeeService implements Filter{
 
 	private final EmployeeDAL employeedal;
 
-	List<String> publicfiles = new ArrayList<String>();
-	List<String> privatefiles = new ArrayList<String>();
-	List<String> ownfiles = new ArrayList<String>();
-	List<String> minifiles = new ArrayList<String>();
-	
+
 	public EmployeeService(EmployeeDAL employeedal) {
 		this.employeedal = employeedal;
 	}
@@ -88,15 +84,13 @@ public class EmployeeService implements Filter{
 	
 	
 	
-      // Save
+        // Save
 		@CrossOrigin(origins = "http://localhost:8080")
 		@RequestMapping(value="/save",method=RequestMethod.POST)
 		public ResponseEntity<?>  save(@RequestBody Employee employee) {
 			try {	   
 				employee=  employeedal.save(employee);				 
-				   return new ResponseEntity<Employee>(employee, HttpStatus.CREATED);
-
-			
+				return new ResponseEntity<Employee>(employee, HttpStatus.CREATED);			
 
 		   }catch(Exception e) {
 			   logger.info("Exception ------------->"+e.getMessage());
@@ -107,7 +101,26 @@ public class EmployeeService implements Filter{
 		   }
 		   return new ResponseEntity<Employee>(employee, HttpStatus.CREATED);
 		}
-
+		 // load
+		@CrossOrigin(origins = "http://localhost:8080")
+		@RequestMapping(value="/load",method=RequestMethod.GET)
+		public ResponseEntity<?> load()
+		{
+			logger.info("------------- Inside getTempOwnTree-----------------");
+			List<Employee> responseList=null;
+		   try {
+				logger.info("-----------Inside getTempOwnTree Called----------");
+				responseList=employeedal.load(responseList);
+				
+				}catch(Exception e){
+				logger.info("Exception ------------->"+e.getMessage());
+				e.printStackTrace();
+			}finally{
+				
+			}
+			return new ResponseEntity<List<Employee>>(responseList, HttpStatus.CREATED);
+	
+		}
 
 		 // get
 		@CrossOrigin(origins = "http://localhost:8080")
@@ -149,35 +162,11 @@ public class EmployeeService implements Filter{
 	  	return new ResponseEntity<Employee>(employee, HttpStatus.CREATED);
 		}
 
-				
-
-		 // load
-		@CrossOrigin(origins = "http://localhost:8080")
-		@RequestMapping(value="/load",method=RequestMethod.GET)
-		public ResponseEntity<?> load()
-		{
-			logger.info("------------- Inside getTempOwnTree-----------------");
-			List<Employee> responseList=null;
-		   try {
-				logger.info("-----------Inside getTempOwnTree Called----------");
-				responseList=employeedal.load(responseList);
-				
-				}catch(Exception e){
-				logger.info("Exception ------------->"+e.getMessage());
-				e.printStackTrace();
-			}finally{
-				
-			}
-			return new ResponseEntity<List<Employee>>(responseList, HttpStatus.CREATED);
-	
-		}
-
 		// Remove
 		@CrossOrigin(origins = "http://localhost:8080")
 		@RequestMapping(value="/remove",method=RequestMethod.DELETE)
 		public ResponseEntity<?> remove(String id)
 		{
-
 
 		   try {
 				logger.info("-----------Before Calling  remove employee ----------");
