@@ -30,7 +30,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.bo.ErpBo;
 import com.erp.mongo.dal.EmployeeDAL;
+import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.model.Employee;
+import com.erp.mongo.model.RandomNumber;
+import com.erp.mongo.model.Vendor;
+import com.erp.util.Custom;
 
 @SpringBootApplication
 @RestController
@@ -45,9 +49,11 @@ public class EmployeeService implements Filter {
 	// private final RandamNumberRepository randamNumberRepository;
 
 	private final EmployeeDAL employeedal;
+	private final RandomNumberDAL randomnumberdal;
 
-	public EmployeeService(EmployeeDAL employeedal) {
+	public EmployeeService(EmployeeDAL employeedal, RandomNumberDAL randomnumberdal) {
 		this.employeedal = employeedal;
+		this.randomnumberdal = randomnumberdal;
 	}
 
 	@Override
@@ -75,8 +81,20 @@ public class EmployeeService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<?> save(@RequestBody Employee employee) {
+		System.out.println("--------save employee-------------");
+		RandomNumber randomnumber = null;
 		try {
+			randomnumber = randomnumberdal.getEmployeeRandamNumber();
+			System.out.println("Employee Invoice random number-->" + randomnumber.getEmployeeinvoicenumber());
+			System.out.println("Employee Invoice random code-->" + randomnumber.getEmployeeinvoicecode());
+			String invoice = randomnumber.getEmployeeinvoicecode() + randomnumber.getEmployeeinvoicenumber();
+			System.out.println("Invoice number -->" + invoice);
+
+			employee.setEmployeecode(invoice);
+			employee.setAddeddate(Custom.getCurrentInvoiceDate());
+			System.out.println("Current Date --->" + Custom.getCurrentDate());
 			employee = employeedal.save(employee);
+			boolean status = randomnumberdal.updateEmployeeRandamNumber(randomnumber);
 			return new ResponseEntity<Employee>(employee, HttpStatus.CREATED);
 
 		} catch (Exception e) {
@@ -92,10 +110,10 @@ public class EmployeeService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/load", method = RequestMethod.GET)
 	public ResponseEntity<?> load() {
-		logger.info("------------- Inside getTempOwnTree-----------------");
+		logger.info("------------- Inside Emplist Load-----------------");
 		List<Employee> responseList = null;
 		try {
-			logger.info("-----------Inside getTempOwnTree Called----------");
+			logger.info("-----------Inside Emplist Load Called----------");
 			responseList = employeedal.load(responseList);
 
 		} catch (Exception e) {

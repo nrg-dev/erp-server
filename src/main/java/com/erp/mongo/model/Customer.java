@@ -17,7 +17,7 @@ public class Customer {
 	String city;
 	String email;
 	String lastedit;
-	String addeddate;
+    private String addeddate;
 	String status;
 
 	public String getId() {

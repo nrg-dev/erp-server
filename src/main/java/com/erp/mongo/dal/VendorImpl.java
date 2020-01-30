@@ -61,6 +61,14 @@ public class VendorImpl implements VendorDAL {
 		vendor.setStatus("success");
 		return vendor;
 	}
+	
+	// Load
+	public List<Vendor> loadVendor(List<Vendor> list){
+		list = mongoTemplate.findAll(Vendor.class);//.find(query, OwnTree.class);
+		return list;
+			
+	}
+		
 	// get
 	@Override
 	public List<Vendor> getVendor(String primaryKey) {
@@ -90,12 +98,7 @@ public class VendorImpl implements VendorDAL {
 		return vendor;
 	}
 	
-	// Load
-	public List<Vendor> loadVendor(List<Vendor> list){
-		list = mongoTemplate.findAll(Vendor.class);//.find(query, OwnTree.class);
-		return list;
-		
-	}
+	
 	// revmoe 
 	public Vendor removeVendor(String vendorcode) {
 		Vendor response=null;

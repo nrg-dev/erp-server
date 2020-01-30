@@ -113,6 +113,40 @@ public class RandomNumberImpl implements RandomNumberDAL {
 	}
 	
 	
+
+	//---- Employee RandomCade Getting ---
+	@Override
+	public RandomNumber getEmployeeRandamNumber() {
+		RandomNumber radomNumber=null;
+		try {
+			logger.info("----------- Inside getEmployeeRandamNumber-----------");
+			Query query = new Query();
+			logger.info("-----------  Before addCriteria-----------");
+		    query.addCriteria(Criteria.where("randomID").is(4));
+			logger.info("-----------  After addCriteria-----------");
+			radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
+			logger.info("Employee Invoice number ----------->"+radomNumber.getEmployeeinvoicenumber());
+			return radomNumber;
+		}catch(Exception e) {
+			e.printStackTrace();
+			return radomNumber;
+		}finally {
+			
+		}	
+	}
+	
+	@Override
+	public boolean updateEmployeeRandamNumber(RandomNumber rn) {
+		logger.info("current Employee invoice number -->"+rn.getEmployeeinvoicenumber());	
+		Query query = new Query();
+	    query.addCriteria(Criteria.where("randomID").is(4));
+		Update update = new Update();
+		update.set("employeeinvoicenumber", rn.getEmployeeinvoicenumber()+1);			
+		mongoTemplate.updateFirst(query, update, RandomNumber.class);//(query, RandamNumber.class);
+		return true;//mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
+	}
+	
+	
 	//Category and product RandomNumber Getting
 	@Override
 	public RandomNumber getCategoryRandomNumber() {
@@ -142,12 +176,7 @@ public class RandomNumberImpl implements RandomNumberDAL {
 		Query query = new Query();
 	    query.addCriteria(Criteria.where("randomID").is(3));
 		Update update = new Update();
-		if(num == 1) {
-			update.set("categoryinvoicenumber", rn.getCategoryinvoicenumber()+1);			
-		}else if(num == 2) {
-			System.out.println("updated random number--->"+rn.getProductinvoicenumber());
-			update.set("productinvoicenumber", rn.getProductinvoicenumber()+1);			
-		}
+		update.set("categoryinvoicenumber", rn.getCategoryinvoicenumber()+1);			
 		mongoTemplate.updateFirst(query, update, RandomNumber.class);//(query, RandamNumber.class);
 		return true;//mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
 	}

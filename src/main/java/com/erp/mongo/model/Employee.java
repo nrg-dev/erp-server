@@ -8,18 +8,21 @@ public class Employee {
 
 	@Id
 	private String id;
-	private String name;
-	private String rank;
-	private String phonenumber;
-	private String address;
-	private String email;
-	private String dob;
-	private String contractnumber;
-	private String npwp;
-	private String bpjs;
-	private String monthlysalary;
-	private String workHour;
-	private String annualLeave;
+	 String employeecode 	;
+	 String name;
+	 String rank;
+	 String phonenumber;
+	 String address;
+	 String email;
+	 String dob;
+	 String contractnumber;
+	 String npwp;
+	 String bpjs;
+	 String monthlysalary;
+	 String workHour;
+	 String annualLeave;
+	 String status 		;
+	 private String addeddate;
 
 	public String getId() {
 		return id;
@@ -124,5 +127,30 @@ public class Employee {
 	public void setAnnualLeave(String annualLeave) {
 		this.annualLeave = annualLeave;
 	}
+
+	public String getEmployeecode() {
+		return employeecode;
+	}
+
+	public void setEmployeecode(String employeecode) {
+		this.employeecode = employeecode;
+	}
+
+	public String getAddeddate() {
+		return addeddate;
+	}
+
+	public void setAddeddate(String addeddate) {
+		this.addeddate = addeddate;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
 
 }

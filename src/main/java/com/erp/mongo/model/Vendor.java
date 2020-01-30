@@ -20,7 +20,7 @@ public class Vendor {
       String email 			;
       String lastedit 		;
       String status 		;
-      private Date addeddate;
+      private String addeddate;
 
 	public String getId() {
 		return id;
@@ -88,12 +88,13 @@ public class Vendor {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public Date getAddeddate() {
+	public String getAddeddate() {
 		return addeddate;
 	}
-	public void setAddeddate(Date addeddate) {
+	public void setAddeddate(String addeddate) {
 		this.addeddate = addeddate;
 	}
+	
 	
 	
 	
