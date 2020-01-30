@@ -34,6 +34,7 @@ import com.erp.mongo.dal.CustomerDAL;
 import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.RandomNumber;
+import com.erp.util.Custom;
 
 @SpringBootApplication
 @RestController
@@ -98,6 +99,7 @@ public class CustomerService implements Filter {
 			System.out.println("Invoice number -->" + invoice);
 
 			customer.setCustcode(invoice);
+			customer.setAddeddate(Custom.getCurrentInvoiceDate());
 			customer = customerdal.saveCustomer(customer);
 			if (customer.getStatus().equalsIgnoreCase("success")) {
 				boolean status = randomnumberdal.updateVendorRandamNumber(randomnumber, 2);

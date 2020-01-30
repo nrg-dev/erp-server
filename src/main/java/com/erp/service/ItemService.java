@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.erp.bo.ErpBo;
 import com.erp.mongo.dal.ItemDAL;
 import com.erp.mongo.dal.RandomNumberDAL;
+import com.erp.mongo.model.Category;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.RandomNumber;
 
@@ -47,6 +48,7 @@ public class ItemService implements Filter {
 
 	private final ItemDAL itemdal;
 	private final RandomNumberDAL randomnumberdal;
+	Item item=null;
 
 	public ItemService(ItemDAL itemdal, RandomNumberDAL randomnumberdal) {
 		this.itemdal = itemdal;
@@ -166,9 +168,10 @@ public class ItemService implements Filter {
 
 	// Update
 	@CrossOrigin(origins = "http://localhost:8080")
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public ResponseEntity<?> updateCustomer(@RequestBody Item item) {
+	@RequestMapping(value = "/update", method = RequestMethod.PUT)
+	public ResponseEntity<?> updateproduct(@RequestBody Item item) {
 		try {
+			logger.info("--- Inside Product Edit ---");
 			item = itemdal.updateItem(item);
 			return new ResponseEntity<Item>(item, HttpStatus.CREATED);
 
@@ -184,19 +187,23 @@ public class ItemService implements Filter {
 	// Remove
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/remove", method = RequestMethod.DELETE)
-	public ResponseEntity<?> removeItem(String id) {
+	public ResponseEntity<?> removeItem(String prodcode) {
 		try {
+			item = new Item();
 			logger.info("-----------Before Calling  removeItem ----------");
-			itemdal.removeItem(id);
-			logger.info("-----------Successfully Called  removeItem ----------");
-		} catch (Exception e) {
+			System.out.println("Remove product code" + prodcode);
+			itemdal.removeItem(prodcode);
+			item.setStatus("Success");
+			logger.info("-----------Successfully Called  removeCategory ----------");
 
+		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
+			item.setStatus("failure");
 			e.printStackTrace();
 		} finally {
 
 		}
-		return new ResponseEntity<String>("ok", HttpStatus.CREATED);
+		return new ResponseEntity<Item>(item, HttpStatus.CREATED);
 
 	}
 

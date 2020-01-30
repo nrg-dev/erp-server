@@ -90,7 +90,7 @@ public class VendorService implements Filter {
 			System.out.println("Invoice number -->" + invoice);
 
 			vendor.setVendorcode(invoice);
-			vendor.setAddeddate(Custom.getCurrentDate());
+			vendor.setAddeddate(Custom.getCurrentInvoiceDate());
 			System.out.println("Current Date --->" + Custom.getCurrentDate());
 			vendor = vendordal.saveVendor(vendor);
 			if (vendor.getStatus().equalsIgnoreCase("success")) {
@@ -105,6 +105,26 @@ public class VendorService implements Filter {
 		}
 		return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);
 	}
+	
+	// load
+		@CrossOrigin(origins = "http://localhost:8080")
+		@RequestMapping(value = "/load", method = RequestMethod.GET)
+		public ResponseEntity<?> loadVendor() {
+			logger.info("------------- Inside load vendor-----------------");
+			List<Vendor> responseList = null;
+			try {
+				logger.info("-----------Inside load vendor Called----------");
+				responseList = vendordal.loadVendor(responseList);
+
+			} catch (Exception e) {
+				logger.info("Exception ------------->" + e.getMessage());
+				e.printStackTrace();
+			} finally {
+
+			}
+			return new ResponseEntity<List<Vendor>>(responseList, HttpStatus.CREATED);
+
+		}
 
 	// get
 	@CrossOrigin(origins = "http://localhost:8080")
@@ -142,25 +162,6 @@ public class VendorService implements Filter {
 		return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);
 	}
 
-	// load
-	@CrossOrigin(origins = "http://localhost:8080")
-	@RequestMapping(value = "/load", method = RequestMethod.GET)
-	public ResponseEntity<?> loadVendor() {
-		logger.info("------------- Inside load vendor-----------------");
-		List<Vendor> responseList = null;
-		try {
-			logger.info("-----------Inside load vendor Called----------");
-			responseList = vendordal.loadVendor(responseList);
-
-		} catch (Exception e) {
-			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
-		} finally {
-
-		}
-		return new ResponseEntity<List<Vendor>>(responseList, HttpStatus.CREATED);
-
-	}
 
 	// Remove
 	@CrossOrigin(origins = "http://localhost:8080")

@@ -13,6 +13,9 @@ public class RandomNumber {
 
 	private long salesinvoicenumber;
 	private String salesinvoicecode;
+	
+	private long employeeinvoicenumber;
+	private String employeeinvoicecode;
 
 	private long vendorinvoicenumber;
 	private String vendorinvoicecode;
@@ -129,5 +132,22 @@ public class RandomNumber {
 	public void setProductinvoicecode(String productinvoicecode) {
 		this.productinvoicecode = productinvoicecode;
 	}
+
+	public long getEmployeeinvoicenumber() {
+		return employeeinvoicenumber;
+	}
+
+	public void setEmployeeinvoicenumber(long employeeinvoicenumber) {
+		this.employeeinvoicenumber = employeeinvoicenumber;
+	}
+
+	public String getEmployeeinvoicecode() {
+		return employeeinvoicecode;
+	}
+
+	public void setEmployeeinvoicecode(String employeeinvoicecode) {
+		this.employeeinvoicecode = employeeinvoicecode;
+	}
+	
 
 }

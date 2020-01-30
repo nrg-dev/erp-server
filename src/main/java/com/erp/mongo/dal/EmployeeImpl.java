@@ -51,21 +51,25 @@ public class EmployeeImpl implements EmployeeDAL {
 	 * @Autowired ErpBo investmentBo1;
 	 */
 	
-	
+	//save
 	public Employee save(Employee employee) {
 		mongoTemplate.save(employee);
 		return employee;
 	}
 	
+	//load
 	public List<Employee> load(List<Employee> list){
 		list = mongoTemplate.findAll(Employee.class);
 		return list;
 	}
+	
+	//get
 	public List<Employee> get(String id){
 		List<Employee> list =null;
-
 		return list;
 	}
+	
+	//update
 	public Employee update(Employee employee) {
 
 		Update update = new Update();
@@ -79,6 +83,7 @@ public class EmployeeImpl implements EmployeeDAL {
 	
 	}
 	
+	//remove
 	public void remove(String id) {
 		
 	}
