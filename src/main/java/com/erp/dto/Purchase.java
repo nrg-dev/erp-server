@@ -20,6 +20,7 @@ public class Purchase {
 	  String status;
 	  String description;
 	  String purchasearray;
+	  String deliveryCost;
 	
 	  String vendorPhone;
 	  String vendorEmail;
@@ -111,6 +112,12 @@ public class Purchase {
 	}
 	public void setVendorCountry(String vendorCountry) {
 		this.vendorCountry = vendorCountry;
+	}
+	public String getDeliveryCost() {
+		return deliveryCost;
+	}
+	public void setDeliveryCost(String deliveryCost) {
+		this.deliveryCost = deliveryCost;
 	}
 	
 	

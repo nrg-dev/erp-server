@@ -34,7 +34,9 @@ import java.util.stream.Stream;
 import com.erp.bo.ErpBo;
 import com.erp.dto.Member;
 import com.erp.model.UserDetail;
+import com.erp.mongo.model.Category;
 import com.erp.mongo.model.Customer;
+import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.PurchaseOrder;
@@ -149,5 +151,28 @@ public class PurchaseImpl implements PurchaseDAL {
 		response= "Success";
 		return response;
 	}
-		
+	
+	@Override
+	public List<Item> loadItem(String categoryCode) {
+		List<Item> list;
+		Query query = new Query();
+		query.addCriteria(Criteria.where("categorycode").is(categoryCode));
+		list = mongoTemplate.find(query, Item.class);
+		return list;
+	}
+	
+	@Override
+	public Item getUnitPrice(String productCode,String categoryCode) {
+		Item item;
+		Query query = new Query();
+		query.addCriteria(Criteria.where("prodcode").is(productCode));
+		/*query.addCriteria(
+		    new Criteria().andOperator(
+	    		Criteria.where("categorycode").is(categoryCode),
+	    		Criteria.where("prodcode").is(productCode)
+		    )
+		);*/
+		item = mongoTemplate.findOne(query, Item.class);
+		return item;
+	}
 }

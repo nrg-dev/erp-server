@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.erp.dto.Member;
 import com.erp.dto.Purchase;
+import com.erp.mongo.model.Category;
 import com.erp.mongo.model.Customer;
+import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.PurchaseOrder;
@@ -27,6 +29,8 @@ public interface PurchaseDAL {
 	public List<Vendor> loadVendorList(List<Vendor> response);
 	public Vendor getVendorDetails(String id);
 	public String removePurchase(String invoiceNumber);
-	public String removePartId(String id, String invoiceNumber, int temp);    
-	
+	public String removePartId(String id, String invoiceNumber, int temp);
+	public List<Item> loadItem(String categoryCode);
+	public Item getUnitPrice(String productCode, String categoryCode);
+	 
 }

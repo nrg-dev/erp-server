@@ -38,6 +38,8 @@ import com.erp.bo.ErpBo;
 import com.erp.dto.Purchase;
 import com.erp.mongo.dal.PurchaseDAL;
 import com.erp.mongo.dal.RandomNumberDAL;
+import com.erp.mongo.model.Category;
+import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.RandomNumber;
@@ -234,7 +236,9 @@ public class PurchaseService implements Filter {
 					JSONObject jObject = arr2.getJSONObject(0);
 					System.out.println("PO Date -->" + jObject.getString("podate"));
 					System.out.println("Vendor Name -->" + jObject.getString("vendorname"));
+					System.out.println("Delivery Cost -->" + jObject.getString("deliveryCost"));
 					purchase.setVendorName(jObject.getString("vendorname"));
+					purchase.setDeliveryCost(jObject.getString("deliveryCost"));
 
 				} else {
 					if (jsonArr.optJSONArray(i) != null) {
@@ -392,6 +396,66 @@ public class PurchaseService implements Filter {
 
 	// Remove
 	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/getUnitPrice", method = RequestMethod.GET)
+	public ResponseEntity<?> getUnitPrice(String productName, String category) {
+		Item item = null;
+		try {
+			item = new Item();
+			logger.info("----------- Before Calling  getUnitPrice Purchase ----------");
+			System.out.println("Product Name -->" + productName);
+			System.out.println("category -->" + category);
+			
+			String[] res = productName.split("-");
+			String productCode = res[1];
+			logger.info("After Split productCode -->" + productCode);
+			String[] response = category.split("-");
+			String categoryCode = response[1];
+			logger.info("After Split categoryCode -->" + categoryCode);
+			
+			item = purchasedal.getUnitPrice(productCode, categoryCode);
+			logger.info("Unit Price ----------"+item.getPrice());
+
+		} catch (Exception e) {
+			logger.info("getUnitPrice Exception ------------->" + e.getMessage());
+			e.printStackTrace();
+		} finally {
+
+		}
+		return new ResponseEntity<Item>(item, HttpStatus.CREATED);
+	}
+	
+	//------- Load Item --
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/loadItem", method = RequestMethod.GET)
+	public ResponseEntity<?> loadItem(String category) {
+		logger.info("------------- Inside loadItem -----------------");
+		List<Item> item = null; 
+		Purchase purchase;
+		List<Purchase> responseList = new ArrayList<Purchase>();
+		try {
+			logger.info("Category Name -->" + category);
+			item = new ArrayList<Item>();
+			String[] res = category.split("-");
+			String categoryCode = res[1];
+			logger.info("After Split Category Code -->" + categoryCode);
+			item = purchasedal.loadItem(categoryCode);
+			for (Item itemList : item) {
+				purchase = new Purchase();
+				purchase.setProductName(itemList.getProductname() + "-" + itemList.getProdcode());
+				responseList.add(purchase);
+			}
+			logger.info("-- list Size --->"+responseList.size());
+		} catch (Exception e) {
+			logger.info("loadItem Exception ------------->" + e.getMessage());
+			e.printStackTrace();
+		} finally {
+
+		}
+		return new ResponseEntity<List<Purchase>>(responseList, HttpStatus.CREATED);
+	}
+
+	// Remove
+	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/removePartId", method = RequestMethod.DELETE)
 	public ResponseEntity<?> removePartId(String id, String invoiceNumber) {
 		Purchase purchase = null;
@@ -425,5 +489,6 @@ public class PurchaseService implements Filter {
 		return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
 
 	}
+	
 
 }
