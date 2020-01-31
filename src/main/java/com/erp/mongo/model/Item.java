@@ -12,6 +12,7 @@ public class Item {
 	String productname;
 	String description;
 	String vendorcode;
+	String vendorname;
 	String price;
 	String tax;
 	String margin;
@@ -107,4 +108,12 @@ public class Item {
 		this.categorycode = categorycode;
 	}
 
+	public String getVendorname() {
+		return vendorname;
+	}
+
+	public void setVendorname(String vendorname) {
+		this.vendorname = vendorname;
+	}
+	
 }

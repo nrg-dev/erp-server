@@ -149,7 +149,7 @@ public class VendorService implements Filter {
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateVendor(@RequestBody Vendor vendor) {
 		try {
-			System.out.println("vendor code inside try--->" + vendor.getVendorcode());
+			System.out.println("vendor update inside try--->" + vendor.getVendorcode());
 			vendor = vendordal.updateVendor(vendor);
 			return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);
 

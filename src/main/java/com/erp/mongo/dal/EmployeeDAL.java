@@ -9,7 +9,7 @@ public interface EmployeeDAL {
 	public List<Employee> load(List<Employee> list);
 	public List<Employee> get(String id);
 	public Employee update(Employee employee);
-	public void remove(String id);
+	public Employee remove(String employeecode);
 
 	
 }

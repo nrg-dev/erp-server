@@ -50,6 +50,7 @@ public class EmployeeService implements Filter {
 
 	private final EmployeeDAL employeedal;
 	private final RandomNumberDAL randomnumberdal;
+	Employee employee=null;
 
 	public EmployeeService(EmployeeDAL employeedal, RandomNumberDAL randomnumberdal) {
 		this.employeedal = employeedal;
@@ -148,9 +149,10 @@ public class EmployeeService implements Filter {
 
 	// update
 	@CrossOrigin(origins = "http://localhost:8080")
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	public ResponseEntity<?> update(@RequestBody Employee employee) {
 		try {
+			System.out.println("Employee update inside try--->" + employee.getEmployeecode());
 			employee = employeedal.update(employee);
 			return new ResponseEntity<Employee>(employee, HttpStatus.CREATED);
 
@@ -166,22 +168,24 @@ public class EmployeeService implements Filter {
 	// Remove
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/remove", method = RequestMethod.DELETE)
-	public ResponseEntity<?> remove(String id) {
+	public ResponseEntity<?> remove(String employeecode) {
 
 		try {
+			employee = new Employee();
 			logger.info("-----------Before Calling  remove employee ----------");
-			employeedal.remove(id);
+			System.out.println("Remove employee code" + employeecode);
+			employeedal.remove(employeecode);
+			employee.setStatus("Success");
 			logger.info("-----------Successfully Called  remo employee ----------");
 
 		} catch (Exception e) {
-			// member.setStatus("bad");
-
 			logger.info("Exception ------------->" + e.getMessage());
+			employee.setStatus("failure");
 			e.printStackTrace();
 		} finally {
 
 		}
-		return new ResponseEntity<String>("ok", HttpStatus.CREATED);
+		return new ResponseEntity<Employee>(employee, HttpStatus.CREATED);
 
 	}
 

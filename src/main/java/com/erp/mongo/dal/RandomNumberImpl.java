@@ -176,7 +176,11 @@ public class RandomNumberImpl implements RandomNumberDAL {
 		Query query = new Query();
 	    query.addCriteria(Criteria.where("randomID").is(3));
 		Update update = new Update();
-		update.set("categoryinvoicenumber", rn.getCategoryinvoicenumber()+1);			
+		if(num == 1) {
+			update.set("categoryinvoicenumber", rn.getCategoryinvoicenumber()+1);
+		}else if(num == 2) {
+			update.set("productinvoicenumber", rn.getProductinvoicenumber()+1);
+		}
 		mongoTemplate.updateFirst(query, update, RandomNumber.class);//(query, RandamNumber.class);
 		return true;//mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
 	}

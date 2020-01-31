@@ -35,6 +35,7 @@ import com.erp.model.UserDetail;
 import com.erp.mongo.model.Category;
 import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Employee;
+import com.erp.mongo.model.Vendor;
 import com.erp.util.Email;
 
 
@@ -74,18 +75,32 @@ public class EmployeeImpl implements EmployeeDAL {
 
 		Update update = new Update();
 		Query query = new Query();
-		//query.addCriteria(Criteria.where("vendorcode").is(employee.getId());
+		query.addCriteria(Criteria.where("employeecode").is(employee.getEmployeecode()));
 		update.set("name", employee.getName());
+		update.set("rank", employee.getRank());
+		update.set("phonenumber", employee.getPhonenumber());
+		update.set("address", employee.getAddress());
 		update.set("email", employee.getEmail());
-		mongoTemplate.updateFirst(query, update, Category.class);
+		update.set("dob", employee.getDob());
+		update.set("contractnumber", employee.getContractnumber());
+		update.set("npwp", employee.getNpwp());
+		update.set("bpjs", employee.getBpjs());
+		update.set("monthlysalary", employee.getMonthlysalary());
+		update.set("workHour", employee.getWorkHour());
+		update.set("annualLeave", employee.getAnnualLeave());
+		mongoTemplate.updateFirst(query, update, Employee.class);
 		return employee;
 		
 	
 	}
 	
 	//remove
-	public void remove(String id) {
-		
+	public Employee remove(String employeecode) {
+		Employee response=null;
+		Query query= new Query();
+		query.addCriteria(Criteria.where("employeecode").is(employeecode));
+		mongoTemplate.remove(query,Employee.class);
+		return response;
 	}
 	
 	
