@@ -32,5 +32,6 @@ public interface PurchaseDAL {
 	public String removePartId(String id, String invoiceNumber, int temp);
 	public List<Item> loadItem(String categoryCode);
 	public Item getUnitPrice(String productCode, String categoryCode);
+	public POInvoiceDetails updatePurchase(POInvoiceDetails purchase);
 	 
 }

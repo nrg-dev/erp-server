@@ -201,6 +201,9 @@ public class PurchaseService implements Filter {
 		POInvoice poinvoice = null;
 		POInvoiceDetails podetails = null;
 		RandomNumber randomnumber = null;
+		int totalQty = 0;
+		int totalPrice = 0;
+		int totalitem = 0;
 		try {
 			purchase = new Purchase();
 			ObjectMapper mapper = new ObjectMapper();
@@ -258,6 +261,9 @@ public class PurchaseService implements Filter {
 								podetails.setQty(jObject.getString("quantity"));
 								podetails.setSubtotal(jObject.getDouble("netAmount"));
 								purchasedal.savePurchase(podetails);
+								totalQty += jObject.getInt("quantity");
+								totalPrice += jObject.getDouble("netAmount");
+								totalitem = j+1;
 							} else {
 								System.out.println("Null....");
 							}
@@ -274,8 +280,10 @@ public class PurchaseService implements Filter {
 			poinvoice.setVendorname(purchase.getVendorName());
 			poinvoice.setInvoicenumber(invoice);
 			poinvoice.setStatus("Waiting");
-			poinvoice.setTotalqty(100);
-			poinvoice.setTotalprice(1000000);
+			poinvoice.setTotalqty(totalQty);
+			poinvoice.setTotalprice(totalPrice);
+			poinvoice.setTotalitem(totalitem); 
+			poinvoice.setDeliveryprice(purchase.getDeliveryCost()); 
 			purchasedal.savePOInvoice(poinvoice);
 			System.out.println("Service call start.....");
 			purchase.setStatus("success");
@@ -490,5 +498,22 @@ public class PurchaseService implements Filter {
 
 	}
 	
+	// Update
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/update", method = RequestMethod.PUT)
+	public ResponseEntity<?> updatePurchase(@RequestBody POInvoiceDetails purchase) {
+		try {
+			logger.info("--- Inside Product Edit ---");
+			purchase = purchasedal.updatePurchase(purchase);
+			return new ResponseEntity<POInvoiceDetails>(purchase, HttpStatus.CREATED);
+
+		} catch (Exception e) {
+			logger.info("Exception ------------->" + e.getMessage());
+			e.printStackTrace();
+		} finally {
+
+		}
+		return new ResponseEntity<POInvoiceDetails>(purchase, HttpStatus.CREATED);
+	}
 
 }

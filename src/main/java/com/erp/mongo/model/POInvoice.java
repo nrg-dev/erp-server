@@ -15,6 +15,7 @@ public class POInvoice {
 	private String deliveryprice;
 	private int totalprice;
 	private String status;
+	private int totalitem;
 
 	public String getId() {
 		return id;
@@ -80,4 +81,13 @@ public class POInvoice {
 		this.status = status;
 	}
 
+	public int getTotalitem() {
+		return totalitem;
+	}
+
+	public void setTotalitem(int totalitem) {
+		this.totalitem = totalitem;
+	}
+
+	 
 }
