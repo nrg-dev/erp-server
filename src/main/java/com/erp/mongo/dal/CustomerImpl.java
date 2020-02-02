@@ -105,8 +105,7 @@ public class CustomerImpl implements CustomerDAL {
 		Query query= new Query();
 		query.addCriteria(Criteria.where("custcode").is(custcode));
 		mongoTemplate.remove(query,Customer.class);
-		return response;
-	
+		return response;	
 	}
 			
 	

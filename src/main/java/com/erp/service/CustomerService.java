@@ -48,11 +48,6 @@ public class CustomerService implements Filter {
 
 	// private final RandamNumberRepository randamNumberRepository;
 
-	List<String> publicfiles = new ArrayList<String>();
-	List<String> privatefiles = new ArrayList<String>();
-	List<String> ownfiles = new ArrayList<String>();
-	List<String> minifiles = new ArrayList<String>();
-
 	private final CustomerDAL customerdal;
 	private final RandomNumberDAL randomnumberdal;
 	Customer customer = null;
@@ -115,6 +110,27 @@ public class CustomerService implements Filter {
 		}
 		return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
 	}
+	
+		// load
+		@CrossOrigin(origins = "http://localhost:8080")
+		@RequestMapping(value = "/load", method = RequestMethod.GET)
+		public ResponseEntity<?> loadCustomer() {
+			logger.info("------------- Inside load customer-----------------");
+			List<Customer> responseList = null;
+			try {
+				logger.info("-----------Inside load customer Called----------");
+				responseList = customerdal.loadCustomer(responseList);
+
+			} catch (Exception e) {
+				logger.info("Exception ------------->" + e.getMessage());
+				e.printStackTrace();
+			} finally {
+
+			}
+			return new ResponseEntity<List<Customer>>(responseList, HttpStatus.CREATED);
+
+		}
+
 
 	// get
 	@CrossOrigin(origins = "http://localhost:8080")
@@ -153,26 +169,7 @@ public class CustomerService implements Filter {
 		return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
 	}
 
-	// load
-	@CrossOrigin(origins = "http://localhost:8080")
-	@RequestMapping(value = "/load", method = RequestMethod.GET)
-	public ResponseEntity<?> loadCustomer() {
-		logger.info("------------- Inside load customer-----------------");
-		List<Customer> responseList = null;
-		try {
-			logger.info("-----------Inside load customer Called----------");
-			responseList = customerdal.loadCustomer(responseList);
-
-		} catch (Exception e) {
-			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
-		} finally {
-
-		}
-		return new ResponseEntity<List<Customer>>(responseList, HttpStatus.CREATED);
-
-	}
-
+	
 	// Remove
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/remove", method = RequestMethod.DELETE)

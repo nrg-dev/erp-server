@@ -56,6 +56,12 @@ db.randomNumber.drop()
 db.randomNumber.find();
 db.randomNumber.remove( { } )
 
+-- Petty Cash
+db.pettyCash.drop()
+db.pettyCash.find();
+db.pettyCash.remove( { } )
+
+
 
 
 
