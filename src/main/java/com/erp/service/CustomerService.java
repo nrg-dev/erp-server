@@ -93,10 +93,10 @@ public class CustomerService implements Filter {
 		RandomNumber randomnumber = null;
 		try {
 			randomnumber = randomnumberdal.getVendorRandamNumber();
-			System.out.println("Customer Invoice random number-->" + randomnumber.getCustomerinvoicenumber());
-			System.out.println("Customer Invoice random code-->" + randomnumber.getCustomerinvoicecode());
+			System.out.println("Customer  random number-->" + randomnumber.getCustomerinvoicenumber());
+			System.out.println("Customer  random code-->" + randomnumber.getCustomerinvoicecode());
 			String invoice = randomnumber.getCustomerinvoicecode() + randomnumber.getCustomerinvoicenumber();
-			System.out.println("Invoice number -->" + invoice);
+			System.out.println("custome code -->" + invoice);
 
 			customer.setCustcode(invoice);
 			customer.setAddeddate(Custom.getCurrentInvoiceDate());

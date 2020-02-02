@@ -274,7 +274,7 @@ public class PurchaseService implements Filter {
 				}
 				l++;
 			}
-			poinvoice = new POInvoice();
+			poinvoice = new POInvoice(); 
 			poinvoice.setInvoicedate(Custom.getCurrentInvoiceDate());
 			logger.info("Invoice Date --->" + poinvoice.getInvoicedate());
 			poinvoice.setVendorname(purchase.getVendorName());

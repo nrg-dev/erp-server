@@ -28,21 +28,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.mongo.dal.CategoryDAL;
-import com.erp.mongo.dal.ReportDAL;
 import com.erp.mongo.model.Category;
-import com.erp.mongo.model.Employee;
 
 @SpringBootApplication
 @RestController
-@RequestMapping(value = "/reports")
-public class ReportService implements Filter {
+@RequestMapping(value = "/stock")
+public class StockService implements Filter {
 
-	public static final Logger logger = LoggerFactory.getLogger(ReportService.class);
+	public static final Logger logger = LoggerFactory.getLogger(StockService.class);
 
-	private final ReportDAL reportdal;
+	private final CategoryDAL categorydal;
 
-	public ReportService(ReportDAL reportdal) {
-		this.reportdal = reportdal;
+	public StockService(CategoryDAL categorydal) {
+		this.categorydal = categorydal;
 	}
 
 	@Override
@@ -66,24 +64,6 @@ public class ReportService implements Filter {
 	public void destroy() {
 	}
 
-	@CrossOrigin(origins = "http://localhost:8080")
-	@RequestMapping(value = "/employeeReport", method = RequestMethod.GET)
-	public ResponseEntity<?> employeeReport() {
-		logger.info("------------- Inside employeeReport-----------------");
-		List<Employee> employeelist = new ArrayList<Employee>();
-		try {
-			logger.info("-----------Inside employeeReport Called----------");
-			employeelist = reportdal.employeeReport(employeelist);
-			return new ResponseEntity<List<Employee>>(employeelist, HttpStatus.CREATED);
-
-		} catch (Exception e) {
-			logger.info("employeeReport Exception ------------->" + e.getMessage());
-			e.printStackTrace();
-		} finally {
-
-		}
-		return new ResponseEntity<List<Employee>>(employeelist, HttpStatus.CREATED);
-
-	}
+	
 
 }
