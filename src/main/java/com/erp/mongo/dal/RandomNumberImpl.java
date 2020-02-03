@@ -184,4 +184,38 @@ public class RandomNumberImpl implements RandomNumberDAL {
 		mongoTemplate.updateFirst(query, update, RandomNumber.class);//(query, RandamNumber.class);
 		return true;//mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
 	}
+	
+	
+	//Discount RandomNumber Getting
+		@Override
+		public RandomNumber getdiscountRandamNumber() {
+			RandomNumber radomNumber=null;
+			try {
+				logger.info("----------- Inside discount RandamNumber-----------");
+				Query query = new Query();
+				logger.info("-----------  Before addCriteria-----------");
+			    query.addCriteria(Criteria.where("randomID").is(5));
+				logger.info("-----------  After addCriteria-----------");
+				radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
+				logger.info("Discount Invoice number ----------->"+radomNumber.getDiscountinvoicenumber());
+				logger.info("Discount Invoice code ----------->"+radomNumber.getDiscountinvoicecode());
+				return radomNumber;
+			}catch(Exception e) {
+				e.printStackTrace();
+				return radomNumber;
+			}finally {
+				
+			}	
+		}
+		
+		@Override
+		public boolean updatediscountRandamNumber(RandomNumber rn) {
+			logger.info("current Discount invoice number -->"+rn.getDiscountinvoicenumber());	
+			Query query = new Query();
+		    query.addCriteria(Criteria.where("randomID").is(5));
+			Update update = new Update();
+			update.set("discountinvoicenumber", rn.getDiscountinvoicenumber()+1);
+			mongoTemplate.updateFirst(query, update, RandomNumber.class);//(query, RandamNumber.class);
+			return true;//mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
+		}
 }

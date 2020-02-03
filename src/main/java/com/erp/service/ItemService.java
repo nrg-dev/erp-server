@@ -33,6 +33,7 @@ import com.erp.bo.ErpBo;
 import com.erp.mongo.dal.ItemDAL;
 import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.model.Category;
+import com.erp.mongo.model.Discount;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.RandomNumber;
 
@@ -121,6 +122,35 @@ public class ItemService implements Filter {
 		return new ResponseEntity<Item>(item, HttpStatus.CREATED);
 	}
 
+	//addpromotion save
+	
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/addpromotionsave", method = RequestMethod.POST)
+	public ResponseEntity<?> saveCategory(@RequestBody Discount discount) {
+		System.out.println("-------- saveAddPromotion-------------");
+		RandomNumber randomnumber = null;
+		try {
+			randomnumber = randomnumberdal.getdiscountRandamNumber();
+			String invoice = randomnumber.getDiscountinvoicecode() + randomnumber.getDiscountinvoicenumber();
+			discount.setDiscountcode(invoice);
+
+			discount = itemdal.saveDiscount(discount);
+			if (discount.getStatus().equalsIgnoreCase("success")) {
+				boolean status = randomnumberdal.updatediscountRandamNumber(randomnumber);
+			}
+			return new ResponseEntity<Discount>(discount, HttpStatus.CREATED);
+
+		} catch (Exception e) {
+			logger.info("Exception ------------->" + e.getMessage());
+			e.printStackTrace();
+		}
+
+		finally {
+
+		}
+		return new ResponseEntity<Discount>(discount, HttpStatus.CREATED);
+	}
+	
 	// load
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/load", method = RequestMethod.GET)
@@ -145,6 +175,32 @@ public class ItemService implements Filter {
 		return new ResponseEntity<List<Item>>(itemlist, HttpStatus.CREATED);
 
 	}
+	
+	// Add Promotion load
+		@CrossOrigin(origins = "http://localhost:8080")
+		@RequestMapping(value = "/discountload", method = RequestMethod.GET)
+		public ResponseEntity<?> loadDiscount() {
+			logger.info("------------- Inside DiscountLoad-----------------");
+			List<Discount> discountlist = new ArrayList<Discount>();
+			try {
+				logger.info("-----------Inside DiscountLoad Called----------");
+				discountlist = itemdal.loadDiscount(discountlist);
+				for (Discount discount : discountlist) {
+					System.out.println("discount code -->"+discount.getDiscountcode());
+
+				}
+				return new ResponseEntity<List<Discount>>(discountlist, HttpStatus.CREATED);
+
+			} catch (Exception e) {
+				logger.info("loadPurchase Exception ------------->" + e.getMessage());
+				e.printStackTrace();
+			} finally {
+
+			}
+			return new ResponseEntity<List<Discount>>(discountlist, HttpStatus.CREATED);
+
+		}
+
 
 	// get
 	@CrossOrigin(origins = "http://localhost:8080")

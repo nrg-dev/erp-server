@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import com.erp.mongo.model.Category;
+import com.erp.mongo.model.Discount;
 
 //import java.util.ArrayList;
 //import java.util.Collections;
@@ -43,6 +44,12 @@ public class ItemImpl implements ItemDAL {
 		return itemlist;
 		
 	}
+	//Discount load
+		public List<Discount> loadDiscount(List<Discount> discountlist){
+			discountlist = mongoTemplate.findAll(Discount.class);
+			return discountlist;
+			
+		}
 	//get
 	public Item getItem(String itemid) {
 		Item item=null;
@@ -73,6 +80,11 @@ public class ItemImpl implements ItemDAL {
 		return response;
 		
 	}
-
+	//item save
+		public Discount saveDiscount(Discount discount) {
+			mongoTemplate.save(discount);
+			discount.setStatus("success");
+			return discount;
+		}
 		
 }
