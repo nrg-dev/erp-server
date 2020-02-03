@@ -41,12 +41,14 @@ import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
+import com.erp.mongo.model.SOInvoice;
+import com.erp.mongo.model.SOInvoiceDetails;
 import com.erp.mongo.model.Vendor;
 import com.erp.util.Email;
 
 
 @Repository
-public class SalesImpl implements PurchaseDAL {
+public class SalesImpl implements SalesDAL {
 	
 	public static final Logger logger = LoggerFactory.getLogger(SalesImpl.class);
 
@@ -60,21 +62,21 @@ public class SalesImpl implements PurchaseDAL {
 
 	
 	// Save PO Invoice 
-	public POInvoice savePOInvoice(POInvoice poinvoice) {
+	public SOInvoice saveSOInvoice(SOInvoice soinvoice) {
 		System.out.println("Before save Invoice");
-		mongoTemplate.save(poinvoice);
+		mongoTemplate.save(soinvoice);
 		System.out.println("After save Invoice");
-		return poinvoice;
+		return soinvoice;
 	
 	}
 
 	// Save PO Invoice details	
 	@Override
-	public POInvoiceDetails savePurchase(POInvoiceDetails purchaseorder) {
-		System.out.println("Before save PO Invoice details");
-		mongoTemplate.save(purchaseorder);
-		System.out.println("After save Invoice details");
-		return purchaseorder;
+	public SOInvoiceDetails saveSales(SOInvoiceDetails salesorder) {
+		System.out.println("Before save SO Invoice details");
+		mongoTemplate.save(salesorder);
+		System.out.println("After save SO Invoice details");
+		return salesorder;
 	}
 	
 	
@@ -85,41 +87,40 @@ public class SalesImpl implements PurchaseDAL {
 	 * mongoTemplate.save(purchaseorder); //po.setStatus("success"); return
 	 * purchaseorder; }
 	 */
-	public List<Vendor> loadVendorList(List<Vendor> list){
-		list =  mongoTemplate.findAll(Vendor.class);//.find(query, OwnTree.class); return
+	public List<Customer> loadCustomerList(List<Customer> list){
+		list =  mongoTemplate.findAll(Customer.class);//.find(query, OwnTree.class); return
 		return list;
 			  
 	} 
 	
-	public List<POInvoice> loadPurchase(List<POInvoice> list){
-		//List<PurchaseOrder> 
-		list =  mongoTemplate.findAll(POInvoice.class);//.find(query, OwnTree.class); return
+	public List<SOInvoice> loadSales(List<SOInvoice> list){
+		list =  mongoTemplate.findAll(SOInvoice.class);//.find(query, OwnTree.class); return
 		return list;
 			  
 	} 
 	
 	// get Purchase on Impl
 	@Override
-	public List<POInvoiceDetails> getPurchase(String invoiceNumber) {
-		List<POInvoiceDetails> podetaillist;
+	public List<SOInvoiceDetails> getSales(String id) {
+		List<SOInvoiceDetails> sodetaillist;
 		Query query = new Query();
-		query.addCriteria(Criteria.where("invoicenumber").is(invoiceNumber));
-		podetaillist = mongoTemplate.find(query, POInvoiceDetails.class);
-		return podetaillist;
+		query.addCriteria(Criteria.where("invoicenumber").is(id));
+		sodetaillist = mongoTemplate.find(query, SOInvoiceDetails.class);
+		return sodetaillist;
 	}
 	
 	@Override
-	public Vendor getVendorDetails(String vendorCode) {
-		Vendor vendor;
+	public Customer getCustomerDetails(String customerCode) {
+		Customer customer;
 		Query query = new Query();
-		query.addCriteria(Criteria.where("vendorcode").is(vendorCode));
-		vendor = mongoTemplate.findOne(query, Vendor.class);
-		return vendor;
+		query.addCriteria(Criteria.where("customercode").is(customerCode));
+		customer = mongoTemplate.findOne(query, Customer.class);
+		return customer;
 	}
 	
 	// revmoe 
 	@Override
-	public String removePurchase(String invoiceNumber) {
+	public String removeSales(String invoiceNumber) {
 		String response= "failure";
 		Query query= new Query();
 		query.addCriteria(Criteria.where("invoicenumber").is(invoiceNumber));
@@ -178,16 +179,16 @@ public class SalesImpl implements PurchaseDAL {
 	
 	// update
 	@Override
-	public POInvoiceDetails updatePurchase(POInvoiceDetails purchase) {
+	public SOInvoiceDetails updateSales(SOInvoiceDetails sales) {
 		Update update = new Update();
 		Query query = new Query();
-		query.addCriteria(Criteria.where("vendorcode").is(purchase.getInvoicenumber()));
-		update.set("itemname", purchase.getItemname());
-		update.set("category", purchase.getCategory());
-		update.set("qty", purchase.getQty());
-		update.set("description", purchase.getDescription());
-		update.set("subtotal", purchase.getSubtotal());
+		query.addCriteria(Criteria.where("vendorcode").is(sales.getInvoicenumber()));
+		update.set("itemname", sales.getItemname());
+		update.set("category", sales.getCategory());
+		update.set("qty", sales.getQty());
+		update.set("description", sales.getDescription());
+		update.set("subtotal", sales.getSubtotal());
 		mongoTemplate.updateFirst(query, update, POInvoiceDetails.class);
-		return purchase;
+		return sales;
 	}
 }
