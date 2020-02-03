@@ -36,4 +36,10 @@ public interface RandomNumberDAL {
 	public RandomNumber getCategoryRandomNumber();
 	public boolean updateCategoryRandamNumber(RandomNumber rn,int num);
 	
+	
+	//--- Add Promotion Dal Random Calling --
+			public RandomNumber getdiscountRandamNumber();
+			public boolean updatediscountRandamNumber(RandomNumber rn);
+		
+	
 }
