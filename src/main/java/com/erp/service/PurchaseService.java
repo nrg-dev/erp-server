@@ -260,6 +260,7 @@ public class PurchaseService implements Filter {
 								podetails.setUnitprice(jObject.getString("unitPrice"));
 								podetails.setQty(jObject.getString("quantity"));
 								podetails.setSubtotal(jObject.getDouble("netAmount"));
+								podetails.setsNo(j+1); 
 								purchasedal.savePurchase(podetails);
 								totalQty += jObject.getInt("quantity");
 								totalPrice += jObject.getDouble("netAmount");
@@ -468,16 +469,16 @@ public class PurchaseService implements Filter {
 	public ResponseEntity<?> removePartId(String id, String invoiceNumber) {
 		Purchase purchase = null;
 		List<POInvoiceDetails> responseList = null;
-		int temp;
+		int temp = 0; 
 		try {
 			purchase = new Purchase();
-			logger.info("----------- Before Calling  remove Particular Purchase ----------");
+			logger.info("----------- Before Calling remove Particular Purchase ----------");
 			System.out.println("ObjectID -->" + id);
 			System.out.println("purchaseCode -->" + invoiceNumber);
 			// ---- Check List Size from POInvoiceDetails Table
 			responseList = purchasedal.getPurchase(invoiceNumber);
 			logger.info("List Size -->" + responseList.size());
-			if (responseList.size() == 2) {
+			if (responseList.size() == 0 || responseList.size() == 1 ) {
 				temp = 1;
 			} else {
 				temp = 2;
@@ -515,5 +516,7 @@ public class PurchaseService implements Filter {
 		}
 		return new ResponseEntity<POInvoiceDetails>(purchase, HttpStatus.CREATED);
 	}
+
+	
 
 }

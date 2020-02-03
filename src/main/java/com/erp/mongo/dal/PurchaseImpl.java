@@ -143,10 +143,10 @@ public class PurchaseImpl implements PurchaseDAL {
 		);
 		if(temp == 1) {
 			mongoTemplate.remove(query,POInvoiceDetails.class);
-		}else if(temp == 2) {
-			mongoTemplate.remove(query,POInvoiceDetails.class);
 			query2.addCriteria(Criteria.where("invoicenumber").is(invoiceNumber));
 			mongoTemplate.remove(query2,POInvoice.class);
+		}else if(temp == 2) {
+			mongoTemplate.remove(query,POInvoiceDetails.class);
 		}
 		response= "Success";
 		return response;

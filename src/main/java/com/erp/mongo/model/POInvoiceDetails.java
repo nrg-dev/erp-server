@@ -20,6 +20,7 @@ public class POInvoiceDetails {
 	private String category;
 	private String status;
 	private String poDate;
+	private int sNo;
 
 	public String getId() {
 		return id;
@@ -123,6 +124,14 @@ public class POInvoiceDetails {
 
 	public void setPoDate(String poDate) {
 		this.poDate = poDate;
+	}
+
+	public int getsNo() {
+		return sNo;
+	}
+
+	public void setsNo(int sNo) {
+		this.sNo = sNo;
 	}
 
 }

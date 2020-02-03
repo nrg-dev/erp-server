@@ -208,4 +208,30 @@ public class CategoryService implements Filter {
 
 	}
 
+	
+	// Load
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/loadCategoryName", method = RequestMethod.GET)
+	public ResponseEntity<?> loadCategoryName() {
+		logger.info("------------- Inside loadCategoryName-----------------");
+		List<Category> categorylist = new ArrayList<Category>();
+		List<String> list = new ArrayList<String>();
+		try {
+			logger.info("-----------Inside loadCategoryName Called----------");
+			categorylist = categorydal.loadCategory(categorylist);
+			for(Category cat: categorylist) {
+				System.out.println("category name-->"+cat.getName());
+				list.add(cat.getName()+"-"+cat.getCategorycode());
+			}
+	
+			return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
+
+		} catch (Exception e) {
+			logger.info("loadCategoryName Exception ------------->" + e.getMessage());
+			e.printStackTrace();
+		} finally {
+
+		}
+		return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
+	}
 }

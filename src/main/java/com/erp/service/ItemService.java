@@ -204,7 +204,32 @@ public class ItemService implements Filter {
 
 		}
 		return new ResponseEntity<Item>(item, HttpStatus.CREATED);
+	}
+	
+	// Load
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/loadItemName", method = RequestMethod.GET)
+	public ResponseEntity<?> loadItemName() {
+		logger.info("------------- Inside loadItemName-----------------");
+		List<Item> itemlist = new ArrayList<Item>();
+		List<String> list = new ArrayList<String>();
+		try {
+			logger.info("-----------Inside loadItemName Called----------");
+			itemlist = itemdal.loadItem(itemlist);
+			for(Item item: itemlist) {
+				System.out.println("Product name-->"+item.getProductname());
+				list.add(item.getProductname()+"-"+item.getProdcode());
+			}
+	
+			return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
 
+		} catch (Exception e) {
+			logger.info("loadItemName Exception ------------->" + e.getMessage());
+			e.printStackTrace();
+		} finally {
+
+		}
+		return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
 	}
 
 }
