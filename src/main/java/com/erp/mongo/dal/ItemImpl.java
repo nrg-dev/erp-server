@@ -71,6 +71,23 @@ public class ItemImpl implements ItemDAL {
 		return item;
 		
 	}
+	
+	//Discount update
+	public Discount updateDiscount(Discount discount) {
+		System.out.println("---Inside discount edit imp---");
+		Update update = new Update();
+		Query query = new Query();
+		query.addCriteria(Criteria.where("discountcode").is(discount.getDiscountcode()));
+		update.set("categorycode", discount.getCategorycode());
+		update.set("productname", discount.getProductname());
+		update.set("discount", discount.getDiscount());
+		update.set("qty", discount.getQty());
+		update.set("promotionperiod", discount.getPromotionperiod());
+		mongoTemplate.updateFirst(query, update, Discount.class);
+		return discount;
+		
+	}
+	
 	//remove
 	public Item removeItem(String prodcode) {
 		Item response=null;
@@ -80,6 +97,15 @@ public class ItemImpl implements ItemDAL {
 		return response;
 		
 	}
+	//Discount remove
+			public Discount removeDiscount(String discountcode) {
+				Discount response=null;
+				Query query= new Query();
+				query.addCriteria(Criteria.where("discountcode").is(discountcode));
+				mongoTemplate.remove(query,Discount.class);
+				return response;
+				
+			}
 	//item save
 		public Discount saveDiscount(Discount discount) {
 			mongoTemplate.save(discount);
