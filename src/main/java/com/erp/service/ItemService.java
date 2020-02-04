@@ -50,6 +50,7 @@ public class ItemService implements Filter {
 	private final ItemDAL itemdal;
 	private final RandomNumberDAL randomnumberdal;
 	Item item=null;
+	Discount discount=null;
 
 	public ItemService(ItemDAL itemdal, RandomNumberDAL randomnumberdal) {
 		this.itemdal = itemdal;
@@ -176,6 +177,31 @@ public class ItemService implements Filter {
 
 	}
 	
+	/*
+	 * // Load only item name for auto text box search for promotion add // load
+	 * 
+	 * @CrossOrigin(origins = "http://localhost:8080")
+	 * 
+	 * @RequestMapping(value = "/loadItemName", method = RequestMethod.GET) public
+	 * ResponseEntity<?> loadItemName() {
+	 * logger.info("------------- Inside loadItemName-----------------"); List<Item>
+	 * itemlist = new ArrayList<Item>(); List<String> itemnamecode = new
+	 * ArrayList<String>();
+	 * 
+	 * try { logger.info("-----------Inside loadItemName Called----------");
+	 * itemlist = itemdal.loadItem(itemlist); for (Item item : itemlist) {
+	 * itemnamecode.add(item.getProductname()+"-"+item.getProdcode());
+	 * System.out.println("product code -->" + item.getProdcode());
+	 * 
+	 * } return new ResponseEntity<List<String>>(itemnamecode, HttpStatus.CREATED);
+	 * 
+	 * } catch (Exception e) { logger.info("loadItemName Exception ------------->" +
+	 * e.getMessage()); e.printStackTrace(); } finally {
+	 * 
+	 * } return new ResponseEntity<List<String>>(itemnamecode, HttpStatus.CREATED);
+	 * 
+	 * }
+	 */
 	// Add Promotion load
 		@CrossOrigin(origins = "http://localhost:8080")
 		@RequestMapping(value = "/discountload", method = RequestMethod.GET)
@@ -240,6 +266,25 @@ public class ItemService implements Filter {
 		return new ResponseEntity<Item>(item, HttpStatus.CREATED);
 	}
 
+	//Discount Update
+		@CrossOrigin(origins = "http://localhost:8080")
+		@RequestMapping(value = "/discountupdate", method = RequestMethod.PUT)
+		public ResponseEntity<?> updatediscount(@RequestBody Discount discount) {
+			try {
+				logger.info("--- Inside Discount Edit ---");
+				System.out.println("---Discountcode---"+discount.getDiscountcode());
+				discount = itemdal.updateDiscount(discount);
+				return new ResponseEntity<Discount>(discount, HttpStatus.CREATED);
+
+			} catch (Exception e) {
+				logger.info("Exception ------------->" + e.getMessage());
+				e.printStackTrace();
+			} finally {
+
+			}
+			return new ResponseEntity<Discount>(discount, HttpStatus.CREATED);
+		}
+	
 	// Remove
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/remove", method = RequestMethod.DELETE)
@@ -261,6 +306,29 @@ public class ItemService implements Filter {
 		}
 		return new ResponseEntity<Item>(item, HttpStatus.CREATED);
 	}
+	
+	//Discount Remove
+			@CrossOrigin(origins = "http://localhost:8080")
+			@RequestMapping(value = "/discountremove", method = RequestMethod.DELETE)
+			public ResponseEntity<?> discountremove(String discountcode) {
+				try {
+					discount = new Discount();
+					logger.info("-----------Before Calling  removeDiscount ----------");
+					System.out.println("Remove Discount code" + discountcode);
+					itemdal.removeDiscount(discountcode);
+					discount.setStatus("Success");
+					logger.info("-----------Successfully Called  removeDiscount----------");
+
+				} catch (Exception e) {
+					logger.info("Exception ------------->" + e.getMessage());
+					discount.setStatus("failure");
+					e.printStackTrace();
+				} finally {
+
+				}
+				return new ResponseEntity<Discount>(discount, HttpStatus.CREATED);
+			}
+		
 	
 	// Load
 	@CrossOrigin(origins = "http://localhost:8080")
