@@ -182,12 +182,17 @@ public class PurchaseImpl implements PurchaseDAL {
 		Update update = new Update();
 		Query query = new Query();
 		query.addCriteria(Criteria.where("vendorcode").is(purchase.getInvoicenumber()));
-		update.set("itemname", purchase.getItemname());
+		
 		update.set("category", purchase.getCategory());
+		update.set("itemname", purchase.getItemname());
 		update.set("qty", purchase.getQty());
 		update.set("description", purchase.getDescription());
 		update.set("subtotal", purchase.getSubtotal());
 		mongoTemplate.updateFirst(query, update, POInvoiceDetails.class);
+			
+		update.set("status", purchase.getStatus());
+		mongoTemplate.updateFirst(query, update, POInvoice.class);
+
 		return purchase;
 	}
 }

@@ -260,7 +260,7 @@ public class PurchaseService implements Filter {
 								podetails.setUnitprice(jObject.getString("unitPrice"));
 								podetails.setQty(jObject.getString("quantity"));
 								podetails.setSubtotal(jObject.getDouble("netAmount"));
-								podetails.setsNo(j+1); 
+								//podetails.setsNo(j+1); 
 								purchasedal.savePurchase(podetails);
 								totalQty += jObject.getInt("quantity");
 								totalPrice += jObject.getDouble("netAmount");
@@ -280,7 +280,7 @@ public class PurchaseService implements Filter {
 			logger.info("Invoice Date --->" + poinvoice.getInvoicedate());
 			poinvoice.setVendorname(purchase.getVendorName());
 			poinvoice.setInvoicenumber(invoice);
-			poinvoice.setStatus("Waiting");
+			poinvoice.setStatus("Pending");
 			poinvoice.setTotalqty(totalQty);
 			poinvoice.setTotalprice(totalPrice);
 			poinvoice.setTotalitem(totalitem); 
@@ -505,6 +505,13 @@ public class PurchaseService implements Filter {
 	public ResponseEntity<?> updatePurchase(@RequestBody POInvoiceDetails purchase) {
 		try {
 			logger.info("--- Inside Product Edit ---");
+			logger.info("Product Name --->"+purchase.getItemname());
+			logger.info("Category Name --->"+purchase.getCategory());
+			logger.info("Description --->"+purchase.getDescription());
+			logger.info("Qty --->"+purchase.getQty());
+			logger.info("Total Amount --->"+purchase.getSubtotal());
+			logger.info("Status --->"+purchase.getStatus()); 
+			
 			purchase = purchasedal.updatePurchase(purchase);
 			return new ResponseEntity<POInvoiceDetails>(purchase, HttpStatus.CREATED);
 

@@ -210,7 +210,7 @@ public class SalesService implements Filter {
 			logger.info("Invoice Date --->" + soinvoice.getInvoicedate());
 			soinvoice.setVendorname(purchase.getVendorName());
 			soinvoice.setInvoicenumber(invoice);
-			soinvoice.setStatus("Waiting");
+			soinvoice.setStatus("Pending");
 			soinvoice.setTotalqty(totalQty);
 			soinvoice.setTotalprice(totalPrice);
 			soinvoice.setTotalitem(totalitem); 
