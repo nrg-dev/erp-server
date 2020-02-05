@@ -12,20 +12,20 @@ public class Sales {
 	 */
 	  String productName; 
 	  String category; 
-	  String vendorName; 
-	  String poDate; 
+	  String customerName; 
+	  String soDate; 
 	  String quantity; 
 	  String netAmount;	 
 	  String unitPrice;
 	  String status;
 	  String description;
-	  String purchasearray;
+	  String salesorderarray;
 	  String deliveryCost;
 	
-	  String vendorPhone;
-	  String vendorEmail;
-	  String vendorCity;
-	  String vendorCountry;
+	  String customerPhone;
+	  String customerEmail;
+	  String customerCity;
+	  String customerCountry;
 
 	public String getProductName() {
 		return productName;
@@ -39,18 +39,7 @@ public class Sales {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	public String getVendorName() {
-		return vendorName;
-	}
-	public void setVendorName(String vendorName) {
-		this.vendorName = vendorName;
-	}
-	public String getPoDate() {
-		return poDate;
-	}
-	public void setPoDate(String poDate) {
-		this.poDate = poDate;
-	}
+	
 	public String getQuantity() {
 		return quantity;
 	}
@@ -82,42 +71,54 @@ public class Sales {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String getPurchasearray() {
-		return purchasearray;
-	}
-	public void setPurchasearray(String purchasearray) {
-		this.purchasearray = purchasearray;
-	}
 	
-	public String getVendorPhone() {
-		return vendorPhone;
-	}
-	public void setVendorPhone(String vendorPhone) {
-		this.vendorPhone = vendorPhone;
-	}
-	public String getVendorEmail() {
-		return vendorEmail;
-	}
-	public void setVendorEmail(String vendorEmail) {
-		this.vendorEmail = vendorEmail;
-	}
-	public String getVendorCity() {
-		return vendorCity;
-	}
-	public void setVendorCity(String vendorCity) {
-		this.vendorCity = vendorCity;
-	}
-	public String getVendorCountry() {
-		return vendorCountry;
-	}
-	public void setVendorCountry(String vendorCountry) {
-		this.vendorCountry = vendorCountry;
-	}
 	public String getDeliveryCost() {
 		return deliveryCost;
 	}
 	public void setDeliveryCost(String deliveryCost) {
 		this.deliveryCost = deliveryCost;
+	}
+	public String getCustomerName() {
+		return customerName;
+	}
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+	public String getSoDate() {
+		return soDate;
+	}
+	public void setSoDate(String soDate) {
+		this.soDate = soDate;
+	}
+	public String getSalesorderarray() {
+		return salesorderarray;
+	}
+	public void setSalesorderarray(String salesorderarray) {
+		this.salesorderarray = salesorderarray;
+	}
+	public String getCustomerPhone() {
+		return customerPhone;
+	}
+	public void setCustomerPhone(String customerPhone) {
+		this.customerPhone = customerPhone;
+	}
+	public String getCustomerEmail() {
+		return customerEmail;
+	}
+	public void setCustomerEmail(String customerEmail) {
+		this.customerEmail = customerEmail;
+	}
+	public String getCustomerCity() {
+		return customerCity;
+	}
+	public void setCustomerCity(String customerCity) {
+		this.customerCity = customerCity;
+	}
+	public String getCustomerCountry() {
+		return customerCountry;
+	}
+	public void setCustomerCountry(String customerCountry) {
+		this.customerCountry = customerCountry;
 	}
 	
 	

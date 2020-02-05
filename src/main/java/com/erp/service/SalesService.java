@@ -101,22 +101,22 @@ public class SalesService implements Filter {
 	public ResponseEntity<?> loadCustomerList() {
 		logger.info("------------- Inside loadCustomer List Calling -----------------");
 		List<Customer> response = new ArrayList<Customer>();
-		List<Purchase> responseList = new ArrayList<Purchase>();
-		Purchase purhase;
+		List<Sales> responseList = new ArrayList<Sales>();
+		Sales sales;
 		try {
 			logger.info("-----------Inside loadCustomer Called----------");
 			response = salesdal.loadCustomerList(response);
-			for (Customer venList : response) {
-				purhase = new Purchase();
-				purhase.setVendorName(venList.getCustomerName() + "-" + venList.getCustcode());
-				responseList.add(purhase);
+			for (Customer customerlist : response) {
+				sales = new Sales();
+				sales.setCustomerName(customerlist.getCustomerName() + "-" + customerlist.getCustcode());
+				responseList.add(sales);
 			}
 		} catch (Exception e) {
 			logger.info("loadCustomer Exception ------------->" + e.getMessage());
 			e.printStackTrace();
 		} finally {
 		}
-		return new ResponseEntity<List<Purchase>>(responseList, HttpStatus.CREATED);
+		return new ResponseEntity<List<Sales>>(responseList, HttpStatus.CREATED);
 
 	}
 	
