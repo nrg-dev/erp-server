@@ -61,6 +61,10 @@ public class ItemImpl implements ItemDAL {
 		Update update = new Update();
 		Query query = new Query();
 		query.addCriteria(Criteria.where("prodcode").is(item.getProdcode()));
+		update.set("categoryname", item.getCategoryname());
+		update.set("categorycode", item.getCategorycode());
+		update.set("vendorname", item.getVendorname());
+		update.set("vendorcode", item.getVendorcode());		
 		update.set("productname", item.getProductname());
 		update.set("description", item.getDescription());
 		update.set("price", item.getPrice());

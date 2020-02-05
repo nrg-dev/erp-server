@@ -93,14 +93,19 @@ public class ItemService implements Filter {
 			System.out.println("category code--->" + item.getCategorycode());
 			System.out.println("vendor code--->" + item.getVendorcode());
 			if (item.getCategorycode() != null) {
-				String[] parts1 = item.getCategorycode().split("-");
-				String part2 = parts1[1];
-				item.setCategorycode(part2);
+				String[] categorynamecode = item.getCategorycode().split("-");
+				String categorycode = categorynamecode[1];
+				String categoryname = categorynamecode[0];
+				item.setCategorycode(categorycode);
+				item.setCategoryname(categoryname);
+
 			}
 			if (item.getVendorcode() != null) {
-				String[] parts2 = item.getVendorcode().split("-");
-				String part3 = parts2[1]; // 034556
-				item.setVendorcode(part3);
+				String[] vendornamecode = item.getVendorcode().split("-");
+				String vendorname = vendornamecode[0];
+				String vendorcode = vendornamecode[1];
+				item.setVendorcode(vendorcode);
+				item.setVendorname(vendorname);
 			}
 
 			item.setProdcode(invoice);
@@ -253,7 +258,27 @@ public class ItemService implements Filter {
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateproduct(@RequestBody Item item) {
 		try {
-			logger.info("--- Inside Product Edit ---");
+			logger.info("--- Inside item Edit ---");
+			logger.info("Before Category Name -->"+item.getCategoryname());
+			logger.info("Before Category Code -->"+item.getCategorycode());
+			if (item.getCategorycode() != null) {
+				String[] categorynamecode = item.getCategorycode().split("-");
+				String catname = categorynamecode[0];
+				String catcode = categorynamecode[1];
+				item.setCategoryname(catname);
+				item.setCategorycode(catcode);
+			}
+			logger.info("After Set Category Name -->"+item.getCategoryname());
+			logger.info("After Set Category Code -->"+item.getCategorycode());
+			if (item.getVendorcode() != null) {
+				String[] vendornamecode = item.getVendorcode().split("-");
+				String vendorname = vendornamecode[0];
+				String vendorcode = vendornamecode[1];
+				item.setVendorname(vendorname);
+				item.setVendorcode(vendorcode);
+			}
+			logger.info("After Set Vendor Name -->"+item.getVendorname());
+			logger.info("After Set Vendor Code -->"+item.getVendorcode());
 			item = itemdal.updateItem(item);
 			return new ResponseEntity<Item>(item, HttpStatus.CREATED);
 

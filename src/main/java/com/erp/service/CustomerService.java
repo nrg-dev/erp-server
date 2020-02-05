@@ -1,7 +1,6 @@
 package com.erp.service;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.Filter;
@@ -94,6 +93,7 @@ public class CustomerService implements Filter {
 			System.out.println("custome code -->" + invoice);
 
 			customer.setCustcode(invoice);
+			customer.setLastedit(Custom.getCurrentInvoiceDate());
 			customer.setAddeddate(Custom.getCurrentInvoiceDate());
 			customer = customerdal.saveCustomer(customer);
 			if (customer.getStatus().equalsIgnoreCase("success")) {
@@ -157,6 +157,7 @@ public class CustomerService implements Filter {
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateCustomer(@RequestBody Customer customer) {
 		try {
+			customer.setLastedit(Custom.getCurrentInvoiceDate());
 			customer = customerdal.updateCustomer(customer);
 			return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
 

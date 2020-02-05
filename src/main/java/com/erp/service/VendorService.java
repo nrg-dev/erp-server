@@ -1,6 +1,7 @@
 package com.erp.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.Filter;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.dal.VendorDAL;
+import com.erp.mongo.model.Category;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.Vendor;
 import com.erp.util.Custom;
@@ -105,26 +107,52 @@ public class VendorService implements Filter {
 		}
 		return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);
 	}
-	
+
 	// load
-		@CrossOrigin(origins = "http://localhost:8080")
-		@RequestMapping(value = "/load", method = RequestMethod.GET)
-		public ResponseEntity<?> loadVendor() {
-			logger.info("------------- Inside load vendor-----------------");
-			List<Vendor> responseList = null;
-			try {
-				logger.info("-----------Inside load vendor Called----------");
-				responseList = vendordal.loadVendor(responseList);
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/load", method = RequestMethod.GET)
+	public ResponseEntity<?> loadVendor() {
+		logger.info("------------- Inside load vendor-----------------");
+		List<Vendor> responseList = null;
+		try {
+			logger.info("-----------Inside load vendor Called----------");
+			responseList = vendordal.loadVendor(responseList);
 
-			} catch (Exception e) {
-				logger.info("Exception ------------->" + e.getMessage());
-				e.printStackTrace();
-			} finally {
-
-			}
-			return new ResponseEntity<List<Vendor>>(responseList, HttpStatus.CREATED);
+		} catch (Exception e) {
+			logger.info("Exception ------------->" + e.getMessage());
+			e.printStackTrace();
+		} finally {
 
 		}
+		return new ResponseEntity<List<Vendor>>(responseList, HttpStatus.CREATED);
+
+	}
+
+	// Load
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/loadvendornamecode", method = RequestMethod.GET)
+	public ResponseEntity<?> loadvendornamecode() {
+		logger.info("------------- Inside loadvendornamecode-----------------");
+		List<Vendor> vendorlist = new ArrayList<Vendor>();
+		List<String> list = new ArrayList<String>();
+		try {
+			logger.info("-----------Inside loadvendornamecode Called----------");
+			vendorlist = vendordal.loadVendor(vendorlist);
+			for (Vendor vendor : vendorlist) {
+				System.out.println("vendor name-->" + vendor.getVendorName());
+				list.add(vendor.getVendorName() + "-" + vendor.getVendorcode());
+			}
+
+			return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
+
+		} catch (Exception e) {
+			logger.info("loadvendornamecode Exception ------------->" + e.getMessage());
+			e.printStackTrace();
+		} finally {
+
+		}
+		return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
+	}
 
 	// get
 	@CrossOrigin(origins = "http://localhost:8080")
@@ -161,7 +189,6 @@ public class VendorService implements Filter {
 		}
 		return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);
 	}
-
 
 	// Remove
 	@CrossOrigin(origins = "http://localhost:8080")

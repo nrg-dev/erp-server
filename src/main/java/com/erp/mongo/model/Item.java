@@ -19,6 +19,7 @@ public class Item {
 	String sellingprice;
 	String status;
 	String categorycode;
+	String categoryname;
 
 	public String getId() {
 		return id;
@@ -114,6 +115,14 @@ public class Item {
 
 	public void setVendorname(String vendorname) {
 		this.vendorname = vendorname;
+	}
+
+	public String getCategoryname() {
+		return categoryname;
+	}
+
+	public void setCategoryname(String categoryname) {
+		this.categoryname = categoryname;
 	}
 	
 }
