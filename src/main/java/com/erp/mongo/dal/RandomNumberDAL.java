@@ -28,8 +28,8 @@ public interface RandomNumberDAL {
 	public boolean updateVendorRandamNumber(RandomNumber rn,int num);
 	
 	//--- Employee Dal Random Calling --
-		public RandomNumber getEmployeeRandamNumber();
-		public boolean updateEmployeeRandamNumber(RandomNumber rn);
+	public RandomNumber getEmployeeRandamNumber();
+	public boolean updateEmployeeRandamNumber(RandomNumber rn);
 	
 	
 	//----Category and product RandomDAL Calling
@@ -38,8 +38,12 @@ public interface RandomNumberDAL {
 	
 	
 	//--- Add Promotion Dal Random Calling --
-			public RandomNumber getdiscountRandamNumber();
-			public boolean updatediscountRandamNumber(RandomNumber rn);
+	public RandomNumber getdiscountRandamNumber();
+	public boolean updatediscountRandamNumber(RandomNumber rn);
+	public boolean updateSalesRandamNumber(RandomNumber randomnumber);
+	public RandomNumber getReturnRandamNumber();
+	public boolean updateReturnRandamNumber(RandomNumber randomnumber);
+	public boolean updateSalesReturnRandamNumber(RandomNumber randomnumber);   
 		
 	
 }

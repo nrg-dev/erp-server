@@ -4,22 +4,19 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class SOInvoiceDetails {
+public class SOReturnDetails {
 
 	@Id
 	private String id;
 	private String invoicenumber;
-	private String itemid;
+	private String returnStatus;
 	private String itemname;
-	private String description;
-	private String unitprice;
-	private double subtotal;
-	private double totalprice;
 	private String qty;
 	private String customername;
 	private String category;
+	private String itemStatus;
+	private String soDate;
 	private String status;
-	private String poDate;
 
 	public String getId() {
 		return id;
@@ -37,14 +34,6 @@ public class SOInvoiceDetails {
 		this.invoicenumber = invoicenumber;
 	}
 
-	public String getItemid() {
-		return itemid;
-	}
-
-	public void setItemid(String itemid) {
-		this.itemid = itemid;
-	}
-
 	public String getItemname() {
 		return itemname;
 	}
@@ -53,52 +42,12 @@ public class SOInvoiceDetails {
 		this.itemname = itemname;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getUnitprice() {
-		return unitprice;
-	}
-
-	public void setUnitprice(String unitprice) {
-		this.unitprice = unitprice;
-	}
-
-	public double getTotalprice() {
-		return totalprice;
-	}
-
-	public void setTotalprice(double totalprice) {
-		this.totalprice = totalprice;
-	}
-
 	public String getCustomername() {
 		return customername;
 	}
 
 	public void setCustomername(String customername) {
 		this.customername = customername;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public double getSubtotal() {
-		return subtotal;
-	}
-
-	public void setSubtotal(double subtotal) {
-		this.subtotal = subtotal;
 	}
 
 	public String getQty() {
@@ -117,12 +66,37 @@ public class SOInvoiceDetails {
 		this.category = category;
 	}
 
-	public String getPoDate() {
-		return poDate;
+	public String getSoDate() {
+		return soDate;
 	}
 
-	public void setPoDate(String poDate) {
-		this.poDate = poDate;
+	public void setSoDate(String soDate) {
+		this.soDate = soDate;
 	}
 
+	public String getItemStatus() {
+		return itemStatus;
+	}
+
+	public void setItemStatus(String itemStatus) {
+		this.itemStatus = itemStatus;
+	}
+
+	public String getReturnStatus() {
+		return returnStatus;
+	}
+
+	public void setReturnStatus(String returnStatus) {
+		this.returnStatus = returnStatus;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	
 }

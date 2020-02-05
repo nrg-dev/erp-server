@@ -13,6 +13,7 @@ import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOInvoiceDetails;
+import com.erp.mongo.model.SOReturnDetails;
 import com.erp.mongo.model.Vendor;
 
 import java.nio.file.Path;
@@ -35,5 +36,6 @@ public interface SalesDAL {
 	public List<Item> loadItem(String categoryCode);
 	public Item getUnitPrice(String productCode, String categoryCode);
 	public SOInvoiceDetails updateSales(SOInvoiceDetails purchase);
+	public SOReturnDetails insertReturn(SOReturnDetails soreturndetails);
 	 
 }

@@ -48,7 +48,8 @@ public class RandomNumberImpl implements RandomNumberDAL {
 		    query.addCriteria(Criteria.where("randomID").is(1));
 			logger.info("-----------  After addCriteria-----------");
 			radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
-			logger.info("Invoice number ----------->"+radomNumber.getPoinvoicenumber());
+			logger.info("PO Invoice number ----------->"+radomNumber.getPoinvoicenumber());
+			logger.info("SO Invoice number ----------->"+radomNumber.getSalesinvoicenumber());
 			return radomNumber;//mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -72,6 +73,18 @@ public class RandomNumberImpl implements RandomNumberDAL {
 		mongoTemplate.updateFirst(query, update, RandomNumber.class);//(query, RandamNumber.class);
 		return true;//mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
 	}
+	
+	@Override
+	public boolean updateSalesRandamNumber(RandomNumber rn) {
+		logger.info("current invoice number -->"+rn.getSalesinvoicenumber());		
+		Query query = new Query();
+	    query.addCriteria(Criteria.where("randomID").is(1));
+		Update update = new Update();
+		update.set("salesinvoicenumber", rn.getSalesinvoicenumber()+1);			
+		mongoTemplate.updateFirst(query, update, RandomNumber.class);
+		return true;
+	}
+	
 	
 	
 	//---- Vendor and customer RandomCade Getting ---
@@ -218,4 +231,48 @@ public class RandomNumberImpl implements RandomNumberDAL {
 			mongoTemplate.updateFirst(query, update, RandomNumber.class);//(query, RandamNumber.class);
 			return true;//mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
 		}
+		
+		@Override
+		public RandomNumber getReturnRandamNumber() {
+			RandomNumber radomNumber=null;
+			try {
+				logger.info("----------- Inside getReturnRandamNumber-----------");
+				Query query = new Query();
+				logger.info("---------  Before addCriteria ---------");
+			    query.addCriteria(Criteria.where("randomID").is(6));
+				logger.info("-----------  After addCriteria -----------");
+				radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
+				logger.info("PO Return Invoice number ----------->"+radomNumber.getPoreturninvoicenumber()); 
+				logger.info("SO Return Invoice number ----------->"+radomNumber.getSoreturninvoicenumber());
+				return radomNumber;
+			}catch(Exception e) {
+				e.printStackTrace();
+				return radomNumber;
+			}finally {
+				
+			}	
+		}
+		
+		@Override
+		public boolean updateReturnRandamNumber(RandomNumber rn) {
+			logger.info("current invoice number -->"+rn.getPoreturninvoicenumber());		
+			Query query = new Query();
+		    query.addCriteria(Criteria.where("randomID").is(6));
+			Update update = new Update();
+			update.set("poreturninvoicenumber", rn.getPoreturninvoicenumber()+1);			
+			mongoTemplate.updateFirst(query, update, RandomNumber.class);
+			return true;
+		}
+		
+		@Override
+		public boolean updateSalesReturnRandamNumber(RandomNumber rn) {
+			logger.info("current invoice number -->"+rn.getSoreturninvoicenumber());		
+			Query query = new Query();
+		    query.addCriteria(Criteria.where("randomID").is(6));
+			Update update = new Update();
+			update.set("soreturninvoicenumber", rn.getSoreturninvoicenumber()+1);			
+			mongoTemplate.updateFirst(query, update, RandomNumber.class);
+			return true;
+		}
+		
 }

@@ -9,7 +9,7 @@ db.randomNumber.insert({ "randomID" : 3,"categoryinvoicenumber" : 01,"categoryin
 db.randomNumber.insert({ "randomID" : 4,"employeeinvoicenumber" : 01,"employeeinvoicecode" : "EMP"})
 db.randomNumber.insert({ "randomID" : 5,"discountinvoicenumber" : 01,"discountinvoicecode" : "DIS"})
 
-
+db.randomNumber.insert({ "randomID" : 6,"poreturninvoicenumber" : 001,"poreturninvoicecode" : "INVPORET","soreturninvoicenumber" : 001,"soreturninvoicecode":"INVSORET"})
 
 
 
@@ -27,6 +27,16 @@ db.pOInvoice.find();
 db.pOInvoice.remove( { } )
 db.pOInvoiceDetails.find();
 db.pOInvoiceDetails.remove( { } )
+
+-- PurchaseReturn
+db.pOReturnDetails.find();
+db.pOReturnDetails.remove( { } )
+
+-- Sales
+db.sOInvoice.find();
+db.sOInvoice.remove( { } )
+db.sOInvoiceDetails.find();
+db.sOInvoiceDetails.remove( { } )
 
 -- employee
 db.employee.drop()
@@ -63,7 +73,5 @@ db.randomNumber.find();
 db.randomNumber.remove( { } )
 
 
-
-
-
-
+db.randomNumber.remove({"_id" :ObjectId("5e3a9992f0272fa0cc5d2bde") });
+db.randomNumber.update({"_id" :ObjectId("5e3a7ec0f0272fa0cc5d2bdc") },{$set : {"poinvoicenumber":'8'}})

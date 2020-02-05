@@ -39,6 +39,7 @@ import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
+import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.Vendor;
@@ -181,7 +182,7 @@ public class PurchaseImpl implements PurchaseDAL {
 	public POInvoiceDetails updatePurchase(POInvoiceDetails purchase) {
 		Update update = new Update();
 		Query query = new Query();
-		query.addCriteria(Criteria.where("vendorcode").is(purchase.getInvoicenumber()));
+		query.addCriteria(Criteria.where("invoicenumber").is(purchase.getInvoicenumber()));
 		
 		update.set("category", purchase.getCategory());
 		update.set("itemname", purchase.getItemname());
@@ -194,5 +195,14 @@ public class PurchaseImpl implements PurchaseDAL {
 		mongoTemplate.updateFirst(query, update, POInvoice.class);
 
 		return purchase;
+	}
+	
+	// Save PO Return details	
+	@Override
+	public POReturnDetails insertReturn(POReturnDetails purchasereturn) {
+		System.out.println("Before save PO Return details");
+		mongoTemplate.save(purchasereturn);
+		System.out.println("After save PO Return details");
+		return purchasereturn;
 	}
 }

@@ -43,6 +43,7 @@ import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOInvoiceDetails;
+import com.erp.mongo.model.SOReturnDetails;
 import com.erp.mongo.model.Vendor;
 import com.erp.util.Email;
 
@@ -61,7 +62,7 @@ public class SalesImpl implements SalesDAL {
 	 */
 
 	
-	// Save PO Invoice 
+	// Save SO Invoice 
 	public SOInvoice saveSOInvoice(SOInvoice soinvoice) {
 		System.out.println("Before save Invoice");
 		mongoTemplate.save(soinvoice);
@@ -70,7 +71,7 @@ public class SalesImpl implements SalesDAL {
 	
 	}
 
-	// Save PO Invoice details	
+	// Save SO Invoice details	
 	@Override
 	public SOInvoiceDetails saveSales(SOInvoiceDetails salesorder) {
 		System.out.println("Before save SO Invoice details");
@@ -79,14 +80,6 @@ public class SalesImpl implements SalesDAL {
 		return salesorder;
 	}
 	
-	
-	
-	/*
-	 * @Override public PurchaseOrder savePurchase(PurchaseOrder purchaseorder) {
-	 * //mongoTemplate.insert(customer);//(query, RandamNumber.class);
-	 * mongoTemplate.save(purchaseorder); //po.setStatus("success"); return
-	 * purchaseorder; }
-	 */
 	public List<Customer> loadCustomerList(List<Customer> list){
 		list =  mongoTemplate.findAll(Customer.class);//.find(query, OwnTree.class); return
 		return list;
@@ -113,7 +106,7 @@ public class SalesImpl implements SalesDAL {
 	public Customer getCustomerDetails(String customerCode) {
 		Customer customer;
 		Query query = new Query();
-		query.addCriteria(Criteria.where("customercode").is(customerCode));
+		query.addCriteria(Criteria.where("custcode").is(customerCode));
 		customer = mongoTemplate.findOne(query, Customer.class);
 		return customer;
 	}
@@ -124,8 +117,8 @@ public class SalesImpl implements SalesDAL {
 		String response= "failure";
 		Query query= new Query();
 		query.addCriteria(Criteria.where("invoicenumber").is(invoiceNumber));
-		mongoTemplate.remove(query,POInvoiceDetails.class);
-		mongoTemplate.remove(query,POInvoice.class);
+		mongoTemplate.remove(query,SOInvoiceDetails.class);
+		mongoTemplate.remove(query,SOInvoice.class);
 		response= "Success";
 		return response;
 	}
@@ -143,11 +136,11 @@ public class SalesImpl implements SalesDAL {
 		    )
 		);
 		if(temp == 1) {
-			mongoTemplate.remove(query,POInvoiceDetails.class);
-		}else if(temp == 2) {
-			mongoTemplate.remove(query,POInvoiceDetails.class);
+			mongoTemplate.remove(query,SOInvoiceDetails.class);
 			query2.addCriteria(Criteria.where("invoicenumber").is(invoiceNumber));
-			mongoTemplate.remove(query2,POInvoice.class);
+			mongoTemplate.remove(query2,SOInvoice.class);
+		}else if(temp == 2) {
+			mongoTemplate.remove(query,SOInvoiceDetails.class);
 		}
 		response= "Success";
 		return response;
@@ -182,13 +175,22 @@ public class SalesImpl implements SalesDAL {
 	public SOInvoiceDetails updateSales(SOInvoiceDetails sales) {
 		Update update = new Update();
 		Query query = new Query();
-		query.addCriteria(Criteria.where("vendorcode").is(sales.getInvoicenumber()));
+		query.addCriteria(Criteria.where("invoicenumber").is(sales.getInvoicenumber()));
 		update.set("itemname", sales.getItemname());
 		update.set("category", sales.getCategory());
 		update.set("qty", sales.getQty());
 		update.set("description", sales.getDescription());
 		update.set("subtotal", sales.getSubtotal());
-		mongoTemplate.updateFirst(query, update, POInvoiceDetails.class);
+		mongoTemplate.updateFirst(query, update, SOInvoiceDetails.class);
 		return sales;
+	}
+	
+	// Save SO Invoice details	
+	@Override
+	public SOReturnDetails insertReturn(SOReturnDetails salesreturn) {
+		System.out.println("Before save SO Return details");
+		mongoTemplate.save(salesreturn);
+		System.out.println("After save SO Return details");
+		return salesreturn;
 	}
 }

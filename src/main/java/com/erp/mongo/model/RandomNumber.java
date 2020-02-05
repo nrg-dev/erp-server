@@ -31,6 +31,12 @@ public class RandomNumber {
 	
 	private long discountinvoicenumber;
 	private String discountinvoicecode;
+	
+	private long poreturninvoicenumber;
+	private String poreturninvoicecode;
+	
+	private long soreturninvoicenumber;
+	private String soreturninvoicecode;	
 
 	public String getId() {
 		return id;
@@ -166,6 +172,38 @@ public class RandomNumber {
 
 	public void setDiscountinvoicecode(String discountinvoicecode) {
 		this.discountinvoicecode = discountinvoicecode;
+	}
+
+	public long getPoreturninvoicenumber() {
+		return poreturninvoicenumber;
+	}
+
+	public void setPoreturninvoicenumber(long poreturninvoicenumber) {
+		this.poreturninvoicenumber = poreturninvoicenumber;
+	}
+
+	public String getPoreturninvoicecode() {
+		return poreturninvoicecode;
+	}
+
+	public void setPoreturninvoicecode(String poreturninvoicecode) {
+		this.poreturninvoicecode = poreturninvoicecode;
+	}
+
+	public long getSoreturninvoicenumber() {
+		return soreturninvoicenumber;
+	}
+
+	public void setSoreturninvoicenumber(long soreturninvoicenumber) {
+		this.soreturninvoicenumber = soreturninvoicenumber;
+	}
+
+	public String getSoreturninvoicecode() {
+		return soreturninvoicecode;
+	}
+
+	public void setSoreturninvoicecode(String soreturninvoicecode) {
+		this.soreturninvoicecode = soreturninvoicecode;
 	}
 	
 	

@@ -10,7 +10,7 @@ public class SOInvoice {
 	private String id;
 	private String invoicedate;
 	private String invoicenumber;
-	private String vendorname;
+	private String customername;
 	private int totalqty;
 	private String deliveryprice;
 	private int totalprice;
@@ -41,12 +41,12 @@ public class SOInvoice {
 		this.invoicenumber = invoicenumber;
 	}
 
-	public String getVendorname() {
-		return vendorname;
+	public String getCustomername() {
+		return customername;
 	}
 
-	public void setVendorname(String vendorname) {
-		this.vendorname = vendorname;
+	public void setCustomername(String customername) {
+		this.customername = customername;
 	}
 
 	public int getTotalqty() {

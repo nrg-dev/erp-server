@@ -9,6 +9,7 @@ import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
+import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.Vendor;
@@ -33,5 +34,6 @@ public interface PurchaseDAL {
 	public List<Item> loadItem(String categoryCode);
 	public Item getUnitPrice(String productCode, String categoryCode);
 	public POInvoiceDetails updatePurchase(POInvoiceDetails purchase);
+	public POReturnDetails insertReturn(POReturnDetails poreturndetails); 
 	 
 }

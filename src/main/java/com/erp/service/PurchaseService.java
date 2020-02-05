@@ -42,6 +42,7 @@ import com.erp.mongo.model.Category;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
+import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.Vendor;
 import com.erp.util.Custom;
@@ -524,6 +525,113 @@ public class PurchaseService implements Filter {
 		return new ResponseEntity<POInvoiceDetails>(purchase, HttpStatus.CREATED);
 	}
 
-	
+	// SaveReturn
+	@CrossOrigin(origins = "http://localhost:4200")
+	@PostMapping(value = "/saveReturn")
+	public ResponseEntity<?> savePurchaseReturn(@RequestBody String myReturnArray) {
+		String temp = myReturnArray;
+		System.out.println("Mapped value -->" + temp);
+		System.out.println("--------save savePurchaseReturn-------------");
+		Purchase purchase = null;
+		POReturnDetails poreturndetails = null;
+		RandomNumber randomnumber = null;
+		List<POReturnDetails> potablist=new ArrayList<POReturnDetails>();
+
+		try {
+			purchase = new Purchase();
+			ObjectMapper mapper = new ObjectMapper();
+			System.out.println("Post Json -->" + myReturnArray);
+			randomnumber = randomnumberdal.getReturnRandamNumber();
+			System.out.println("PO Return random number-->" + randomnumber.getPoreturninvoicenumber());
+			System.out.println("PO Return random code-->" + randomnumber.getPoreturninvoicecode());
+			String invoice = randomnumber.getPoreturninvoicecode() + randomnumber.getPoreturninvoicenumber();
+			System.out.println("Return Invoice number -->" + invoice);
+			
+			JSONArray jsonArray = new JSONArray(myReturnArray);
+			ArrayList<String> list = new ArrayList<String>();
+			System.out.println("length ====="+jsonArray.length());
+			System.out.println("length ====="+jsonArray.length());
+			for(int i=0;i<jsonArray.length();i++){ 
+				list.add(jsonArray.getString(i));
+			   System.out.println("array list----"+jsonArray.getString(i)); 
+		    }
+			logger.info("List Size ---->"+list.size()); 
+			String[] names=null; 
+			for(int m=0;m<list.size();m++){
+				names=list.get(m).split(","); 
+				System.out.println("names -->"+names[0]);  
+				int c=0;
+				for (String name : names) {
+					 if(c!=6){
+				         c++;
+				      }else if(c==6){
+				         if(!name.equalsIgnoreCase("]"))
+				         { 
+				          int v=0;
+				          poreturndetails = new POReturnDetails();
+				          for(String value:names){
+				           if(v==0){
+				            v++;
+				            poreturndetails.setPoDate(value.replace("[", ""));
+				           }else if(v==1){
+				        	   poreturndetails.setItemname(value);
+					           v++;
+					       }else if(v==2){
+				        	   poreturndetails.setCategory(value);
+					           v++;
+					       }else if(v==3){
+					    	   poreturndetails.setVendorname(value);
+					           v++;
+					       }else if(v==4){
+					    	   poreturndetails.setQty(value);
+					           v++;
+					       }else if(v==5) {
+					    	   poreturndetails.setItemStatus(value);
+					           v++;
+					       }else if(v==6) {
+				        	   poreturndetails.setReturnStatus(value.replace("]", ""));
+					       }
+
+				          }
+					      potablist.add(poreturndetails);
+				       }
+				    }
+				}
+			}
+			for (int i = 0; i < potablist.size(); i++) {
+				poreturndetails.setPoDate(potablist.get(i).getPoDate());
+				poreturndetails.setItemname(potablist.get(i).getItemname());
+				poreturndetails.setCategory(potablist.get(i).getCategory()); 
+				poreturndetails.setVendorname(potablist.get(i).getVendorname());
+				poreturndetails.setQty(potablist.get(i).getQty());
+				poreturndetails.setItemStatus(potablist.get(i).getItemStatus()); 
+				poreturndetails.setReturnStatus(potablist.get(i).getReturnStatus());
+				poreturndetails.setInvoicenumber(invoice); 
+				logger.info("---- Before insert into Purchase Return -----"+i);
+				purchasedal.insertReturn(poreturndetails);
+				logger.info("---- After insert into Purchase Return -----"+i);
+			}
+			purchase.setStatus("success");
+			boolean status = randomnumberdal.updateReturnRandamNumber(randomnumber);
+			return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
+		}
+
+		catch (NullPointerException ne) {
+			purchase = new Purchase();
+			System.out.println("Inside null pointer exception ....");
+			purchase.setStatus("success");
+			boolean status = randomnumberdal.updateRandamNumber(randomnumber);
+			return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
+
+		} catch (Exception e) {
+			logger.info("Exception ------------->" + e.getMessage());
+			e.printStackTrace();
+		}
+
+		finally {
+
+		}
+		return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
+	}
 
 }
