@@ -41,7 +41,7 @@ public class ItemImpl implements ItemDAL {
 	//item load
 	public List<Item> loadItem(List<Item> itemlist,String category){
 		logger.info("DAO Category type-->"+category);
-		if(category.equalsIgnoreCase("all")) {
+		if(category.equalsIgnoreCase("all") || category.equalsIgnoreCase(null)){
 			logger.info("DAO item load all");
 			itemlist = mongoTemplate.findAll(Item.class);
 			logger.info("DAO item size -->"+itemlist.size());
