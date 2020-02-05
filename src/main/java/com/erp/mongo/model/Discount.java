@@ -14,7 +14,8 @@ public class Discount {
 	String qty ;
 	String freegift;
 	String others ;
-	String promotionperiod;
+	String fromdate_promotionperiod;
+	String todate_promotionperiod;
 	String status;
 	String categorycode;
 	public String getId() {
@@ -60,11 +61,18 @@ public class Discount {
 	public void setOthers(String others) {
 		this.others = others;
 	}
-	public String getPromotionperiod() {
-		return promotionperiod;
+	
+	public String getFromdate_promotionperiod() {
+		return fromdate_promotionperiod;
 	}
-	public void setPromotionperiod(String promotionperiod) {
-		this.promotionperiod = promotionperiod;
+	public void setFromdate_promotionperiod(String fromdate_promotionperiod) {
+		this.fromdate_promotionperiod = fromdate_promotionperiod;
+	}
+	public String getTodate_promotionperiod() {
+		return todate_promotionperiod;
+	}
+	public void setTodate_promotionperiod(String todate_promotionperiod) {
+		this.todate_promotionperiod = todate_promotionperiod;
 	}
 	public String getStatus() {
 		return status;

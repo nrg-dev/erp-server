@@ -128,7 +128,7 @@ public class ItemService implements Filter {
 		return new ResponseEntity<Item>(item, HttpStatus.CREATED);
 	}
 
-	//addpromotion save
+	//savepromotion
 	
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/addpromotionsave", method = RequestMethod.POST)
@@ -139,6 +139,8 @@ public class ItemService implements Filter {
 			randomnumber = randomnumberdal.getdiscountRandamNumber();
 			String invoice = randomnumber.getDiscountinvoicecode() + randomnumber.getDiscountinvoicenumber();
 			discount.setDiscountcode(invoice);
+			logger.info("Discount from date ------------->" + discount.getFromdate_promotionperiod());
+			logger.info("Discount To date ------------->" + discount.getTodate_promotionperiod());
 
 			discount = itemdal.saveDiscount(discount);
 			if (discount.getStatus().equalsIgnoreCase("success")) {

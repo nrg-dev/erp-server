@@ -99,7 +99,9 @@ public class ItemImpl implements ItemDAL {
 		update.set("productname", discount.getProductname());
 		update.set("discount", discount.getDiscount());
 		update.set("qty", discount.getQty());
-		update.set("promotionperiod", discount.getPromotionperiod());
+		update.set("fromdate_promotionperiod", discount.getFromdate_promotionperiod());
+		update.set("todate_promotionperiod", discount.getTodate_promotionperiod());
+
 		mongoTemplate.updateFirst(query, update, Discount.class);
 		return discount;
 		
