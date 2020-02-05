@@ -10,7 +10,7 @@ public interface ItemDAL {
 	public Item saveItem(Item product);
 	public Discount saveDiscount(Discount discount);
 	
-	public List<Item> loadItem(List<Item> itemlist);
+	public List<Item> loadItem(List<Item> itemlist,String category);
 	public List<Discount> loadDiscount(List<Discount> discountlist);
 	
 	public Item getItem(String itemid);

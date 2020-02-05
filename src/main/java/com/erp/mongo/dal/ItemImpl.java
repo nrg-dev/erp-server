@@ -39,10 +39,23 @@ public class ItemImpl implements ItemDAL {
 	}
 	
 	//item load
-	public List<Item> loadItem(List<Item> itemlist){
-		itemlist = mongoTemplate.findAll(Item.class);
+	public List<Item> loadItem(List<Item> itemlist,String category){
+		logger.info("DAO Category type-->"+category);
+		if(category.equalsIgnoreCase("all")) {
+			logger.info("DAO item load all");
+			itemlist = mongoTemplate.findAll(Item.class);
+			logger.info("DAO item size -->"+itemlist.size());
+
+		}
+		else {
+			Query query = new Query();
+			query.addCriteria(Criteria.where("categorycode").is(category));
+			itemlist = mongoTemplate.find(query,Item.class);
+
+		}
+
 		return itemlist;
-		
+
 	}
 	//Discount load
 		public List<Discount> loadDiscount(List<Discount> discountlist){

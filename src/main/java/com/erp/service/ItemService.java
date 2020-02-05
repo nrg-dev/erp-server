@@ -160,12 +160,13 @@ public class ItemService implements Filter {
 	// load
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/load", method = RequestMethod.GET)
-	public ResponseEntity<?> loadItem() {
+	public ResponseEntity<?> loadItem(String category) {
 		logger.info("------------- Inside ItemLoad-----------------");
+		logger.info("Category Code or Name-->"+category);
 		List<Item> itemlist = new ArrayList<Item>();
 		try {
 			logger.info("-----------Inside ItemLoad Called----------");
-			itemlist = itemdal.loadItem(itemlist);
+			itemlist = itemdal.loadItem(itemlist,category);
 			for (Item item : itemlist) {
 				System.out.println("product code -->" + item.getProdcode());
 
@@ -355,7 +356,7 @@ public class ItemService implements Filter {
 			}
 		
 	
-	// Load
+	// Load item name
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/loadItemName", method = RequestMethod.GET)
 	public ResponseEntity<?> loadItemName() {
@@ -364,7 +365,7 @@ public class ItemService implements Filter {
 		List<String> list = new ArrayList<String>();
 		try {
 			logger.info("-----------Inside loadItemName Called----------");
-			itemlist = itemdal.loadItem(itemlist);
+			itemlist = itemdal.loadItem(itemlist,"all");
 			for(Item item: itemlist) {
 				System.out.println("Product name-->"+item.getProductname());
 				list.add(item.getProductname()+"-"+item.getProdcode());
