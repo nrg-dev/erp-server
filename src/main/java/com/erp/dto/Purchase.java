@@ -26,6 +26,8 @@ public class Purchase {
 	  String vendorEmail;
 	  String vendorCity;
 	  String vendorCountry;
+	  String returnCategory;
+	  String invoiceNumber;
 
 	public String getProductName() {
 		return productName;
@@ -118,6 +120,18 @@ public class Purchase {
 	}
 	public void setDeliveryCost(String deliveryCost) {
 		this.deliveryCost = deliveryCost;
+	}
+	public String getReturnCategory() {
+		return returnCategory;
+	}
+	public void setReturnCategory(String returnCategory) {
+		this.returnCategory = returnCategory;
+	}
+	public String getInvoiceNumber() {
+		return invoiceNumber;
+	}
+	public void setInvoiceNumber(String invoiceNumber) {
+		this.invoiceNumber = invoiceNumber;
 	}
 	
 	

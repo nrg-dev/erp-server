@@ -191,6 +191,8 @@ public class SalesService implements Filter {
 								sodetails.setUnitprice(jObject.getString("unitPrice"));
 								sodetails.setQty(jObject.getString("quantity"));
 								sodetails.setSubtotal(jObject.getDouble("netAmount"));
+								sodetails.setSoDate(Custom.getCurrentInvoiceDate());
+								logger.info("POInvoice Date --->" + sodetails.getSoDate());
 								salesdal.saveSales(sodetails);
 								totalQty += jObject.getInt("quantity");
 								totalPrice += jObject.getDouble("netAmount");

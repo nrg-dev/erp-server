@@ -19,7 +19,7 @@ public class SOInvoiceDetails {
 	private String customername;
 	private String category;
 	private String status;
-	private String poDate;
+	private String soDate;
 
 	public String getId() {
 		return id;
@@ -117,12 +117,13 @@ public class SOInvoiceDetails {
 		this.category = category;
 	}
 
-	public String getPoDate() {
-		return poDate;
+	public String getSoDate() {
+		return soDate;
 	}
 
-	public void setPoDate(String poDate) {
-		this.poDate = poDate;
+	public void setSoDate(String soDate) {
+		this.soDate = soDate;
 	}
 
+	
 }

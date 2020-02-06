@@ -261,6 +261,8 @@ public class PurchaseService implements Filter {
 								podetails.setUnitprice(jObject.getString("unitPrice"));
 								podetails.setQty(jObject.getString("quantity"));
 								podetails.setSubtotal(jObject.getDouble("netAmount"));
+								podetails.setPoDate(Custom.getCurrentInvoiceDate());
+								logger.info("POInvoice Date --->" + podetails.getPoDate());
 								//podetails.setsNo(j+1); 
 								purchasedal.savePurchase(podetails);
 								totalQty += jObject.getInt("quantity");
