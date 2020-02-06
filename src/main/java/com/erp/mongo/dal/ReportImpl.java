@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
 import com.erp.mongo.model.Employee;
+import com.erp.mongo.model.POInvoice;
+import com.erp.mongo.model.SOInvoice;
 
 
 @Repository
@@ -22,12 +24,27 @@ public class ReportImpl implements ReportDAL {
 	
 	
 	
-	//load
+	//employee load
 	public List<Employee> employeeReport(List<Employee> employeelist){
 		employeelist = mongoTemplate.findAll(Employee.class);
 		return employeelist;
 		
 	}
 	
+	//purchase load
+	public List<POInvoice> purchaseReport(List<POInvoice> purchaselist){
+		purchaselist = mongoTemplate.findAll(POInvoice.class);
+		return purchaselist;
+		
+	}
+		
+	//sales load
+	public List<SOInvoice> salesReport(List<SOInvoice> saleslist){
+		logger.info("------------- Inside salesReport imp-----------------");
+		saleslist = mongoTemplate.findAll(SOInvoice.class);
+		return saleslist;
+		
+	}
+		
 	
 }

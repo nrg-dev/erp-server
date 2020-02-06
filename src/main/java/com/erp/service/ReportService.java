@@ -31,6 +31,8 @@ import com.erp.mongo.dal.CategoryDAL;
 import com.erp.mongo.dal.ReportDAL;
 import com.erp.mongo.model.Category;
 import com.erp.mongo.model.Employee;
+import com.erp.mongo.model.POInvoice;
+import com.erp.mongo.model.SOInvoice;
 
 @SpringBootApplication
 @RestController
@@ -66,6 +68,7 @@ public class ReportService implements Filter {
 	public void destroy() {
 	}
 
+	//employee report load
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/employeeReport", method = RequestMethod.GET)
 	public ResponseEntity<?> employeeReport() {
@@ -85,5 +88,47 @@ public class ReportService implements Filter {
 		return new ResponseEntity<List<Employee>>(employeelist, HttpStatus.CREATED);
 
 	}
+	
+	//purchase report load
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/purchaseReport", method = RequestMethod.GET)
+	public ResponseEntity<?> purchaseReport() {
+		logger.info("------------- Inside purchaseReport-----------------");
+		List<POInvoice> purchaselist = new ArrayList<POInvoice>();
+		try {
+			logger.info("-----------Inside purchaseReport Called----------");
+			purchaselist = reportdal.purchaseReport(purchaselist);
+			return new ResponseEntity<List<POInvoice>>(purchaselist, HttpStatus.CREATED);
+
+		} catch (Exception e) {
+			logger.info("purchaseReport Exception ------------->" + e.getMessage());
+			e.printStackTrace();
+		} finally {
+
+		}
+		return new ResponseEntity<List<POInvoice>>(purchaselist, HttpStatus.CREATED);
+
+	}
+	
+	//sales report load
+		@CrossOrigin(origins = "http://localhost:8080")
+		@RequestMapping(value = "/salesReport", method = RequestMethod.GET)
+		public ResponseEntity<?> salesReport() {
+			logger.info("------------- Inside salesReport-----------------");
+			List<SOInvoice> saleslist = new ArrayList<SOInvoice>();
+			try {
+				logger.info("-----------Inside salesReport Called----------");
+				saleslist = reportdal.salesReport(saleslist);
+				return new ResponseEntity<List<SOInvoice>>(saleslist, HttpStatus.CREATED);
+
+			} catch (Exception e) {
+				logger.info("salesReport Exception ------------->" + e.getMessage());
+				e.printStackTrace();
+			} finally {
+
+			}
+			return new ResponseEntity<List<SOInvoice>>(saleslist, HttpStatus.CREATED);
+
+		}
 
 }
