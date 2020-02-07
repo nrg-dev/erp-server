@@ -6,11 +6,15 @@ import com.erp.dto.Purchase;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.SOReturnDetails;
+import com.erp.mongo.model.StockDamage;
 
 public interface StockDAL {
 
-	List<POReturnDetails> loadPurchaseReturn(List<POReturnDetails> poList); 
-	List<SOReturnDetails> loadSalesReturn(List<SOReturnDetails> poList); 
+	public List<POReturnDetails> loadPurchaseReturn(List<POReturnDetails> poList); 
+	public List<SOReturnDetails> loadSalesReturn(List<SOReturnDetails> poList);
+	public StockDamage saveStockDamage(StockDamage stockdamage);
+	public List<StockDamage> loadStockDamage(List<StockDamage> damagelist);
+	public StockDamage updateDamage(StockDamage damage);    
 
 
 

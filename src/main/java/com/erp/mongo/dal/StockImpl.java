@@ -6,10 +6,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
+
+import com.erp.mongo.model.Category;
 import com.erp.mongo.model.Employee;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.SOReturnDetails;
+import com.erp.mongo.model.StockDamage;
 
 
 @Repository
@@ -32,6 +38,36 @@ public class StockImpl implements StockDAL {
 	public List<SOReturnDetails> loadSalesReturn(List<SOReturnDetails> solist){
 		solist = mongoTemplate.findAll(SOReturnDetails.class);
 		return solist;
+	}
+	
+	//save
+	public StockDamage saveStockDamage(StockDamage damage) {
+		mongoTemplate.save(damage);
+		damage.setStatus("success");
+		return damage;
+	}
+	
+	//load
+	public List<StockDamage> loadStockDamage(List<StockDamage> damagelist){
+		damagelist = mongoTemplate.findAll(StockDamage.class);
+		return damagelist;
+	}
+	
+	//update
+	@Override
+	public StockDamage updateDamage(StockDamage damage) {
+		Update update = new Update();
+		Query query = new Query();
+		query.addCriteria(Criteria.where("stockDamageCode").is(damage.getStockDamageCode()));
+		update.set("productName", damage.getProductName());
+		update.set("category", damage.getCategory());
+		update.set("quantity", damage.getQuantity());
+		update.set("stockDate", damage.getStockDate());
+		update.set("currentStatus", damage.getCurrentStatus());
+		mongoTemplate.updateFirst(query, update, StockDamage.class);
+		damage.setStatus("success");
+		return damage;
+		
 	}
 	
 	

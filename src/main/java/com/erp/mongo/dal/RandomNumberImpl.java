@@ -275,4 +275,37 @@ public class RandomNumberImpl implements RandomNumberDAL {
 			return true;
 		}
 		
+		//Category and product RandomNumber Getting
+		@Override
+		public RandomNumber getStockDamageRandomNumber() {
+			RandomNumber radomNumber=null;
+			try {
+				logger.info("----------- Inside getStockDamageRandomNumber -----------");
+				Query query = new Query();
+				logger.info("-----------  Before addCriteria-----------");
+			    query.addCriteria(Criteria.where("randomID").is(7));
+				logger.info("-----------  After addCriteria-----------");
+				radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
+				logger.info("StockDamage Invoice number ----------->"+radomNumber.getStockdamageinvoicenumber());
+				logger.info("StockDamage Invoice code ----------->"+radomNumber.getStockdamageinvoicecode());
+				return radomNumber;
+			}catch(Exception e) {
+				e.printStackTrace();
+				return radomNumber;
+			}finally {
+				
+			}	
+		}
+		
+		@Override
+		public boolean updateStockDamRandamNumber(RandomNumber rn) {
+			logger.info("current invoice number -->"+rn.getStockdamageinvoicenumber());		
+			Query query = new Query();
+		    query.addCriteria(Criteria.where("randomID").is(7));
+			Update update = new Update();
+			update.set("stockdamageinvoicenumber", rn.getStockdamageinvoicenumber()+1);			
+			mongoTemplate.updateFirst(query, update, RandomNumber.class);
+			return true;
+		}
+		
 }

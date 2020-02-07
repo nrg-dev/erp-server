@@ -25,17 +25,22 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.dto.Purchase;
 import com.erp.mongo.dal.PurchaseDAL;
+import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.dal.SalesDAL;
 import com.erp.mongo.dal.StockDAL;
+import com.erp.mongo.model.Category;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
+import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.SOReturnDetails;
+import com.erp.mongo.model.StockDamage;
 
 @SpringBootApplication
 @RestController
@@ -47,11 +52,13 @@ public class StockService implements Filter {
 	private final StockDAL stockdal;
 	private final PurchaseDAL purchasedal;
 	private final SalesDAL salesdal;
+	private final RandomNumberDAL randomnumberdal;
 
-	public StockService(StockDAL stockdal,PurchaseDAL purchasedal,SalesDAL salesdal) {
+	public StockService(StockDAL stockdal,PurchaseDAL purchasedal,SalesDAL salesdal,RandomNumberDAL randomnumberdal) {
 		this.stockdal = stockdal;
 		this.purchasedal = purchasedal;
 		this.salesdal = salesdal;
+		this.randomnumberdal = randomnumberdal;
 	}
 
 	@Override
@@ -81,35 +88,42 @@ public class StockService implements Filter {
 	@GetMapping(value = "/loadStockReturn", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> loadStockReturn() {
 		logger.info("------------- Inside loadStockReturn -----------------");
-		List<POReturnDetails> poList = null;
+		List<POReturnDetails> poList = new ArrayList<POReturnDetails>();
 		List<SOReturnDetails> soList = new ArrayList<SOReturnDetails>();
 		List<Purchase> list = new ArrayList<Purchase>();
-		Purchase purchase = new Purchase();
+		Purchase po = null;
+		Purchase so = null;
 		try {
 			poList = stockdal.loadPurchaseReturn(poList);
+			logger.info("PO List Size ---------->"+poList.size());
 			soList = stockdal.loadSalesReturn(soList);
+			logger.info("SO List Size ---------->"+soList.size());
 			for(int i=0; i<poList.size(); i++) {
-				 poList = new ArrayList<POReturnDetails>();
-				 purchase.setPoDate(poList.get(i).getPoDate());
-				 purchase.setReturnCategory("Purchase Return"+"  "+poList.get(i).getInvoicenumber());
-				 purchase.setCategory(poList.get(i).getCategory());
-				 purchase.setProductName(poList.get(i).getItemname());
-				 purchase.setQuantity(poList.get(i).getQty());
-				 purchase.setStatus(poList.get(i).getItemStatus());
-				 purchase.setInvoiceNumber(poList.get(i).getInvoicenumber());
-				 list.add(purchase);
+				 logger.info("---- PO Date -- >"+poList.get(i).getPoDate());
+				 po = new Purchase();
+				 po.setPoDate(poList.get(i).getPoDate());
+				 po.setReturnCategory("Purchase Return"+"  "+poList.get(i).getInvoicenumber());
+				 po.setCategory(poList.get(i).getCategory());
+				 po.setProductName(poList.get(i).getItemname());
+				 po.setQuantity(poList.get(i).getQty());
+				 po.setStatus(poList.get(i).getItemStatus());
+				 po.setInvoiceNumber(poList.get(i).getInvoicenumber());
+				 list.add(po);
 			}
+			logger.info("Add PO into List Value ----->"+list.get(0).getReturnCategory());
 			for(int j=0; j<soList.size(); j++) {
-				soList = new ArrayList<SOReturnDetails>();
-				 purchase.setPoDate(soList.get(j).getSoDate());
-				 purchase.setReturnCategory("Sales Return"+"  "+soList.get(j).getInvoicenumber());
-				 purchase.setCategory(soList.get(j).getCategory());
-				 purchase.setProductName(soList.get(j).getItemname());
-				 purchase.setQuantity(soList.get(j).getQty());
-				 purchase.setStatus(soList.get(j).getItemStatus());
-				 purchase.setInvoiceNumber(soList.get(j).getInvoicenumber());
-				 list.add(purchase);
-			}
+				 so = new Purchase();
+				 so.setPoDate(soList.get(j).getSoDate());
+				 so.setReturnCategory("Sales Return"+"  "+soList.get(j).getInvoicenumber());
+				 so.setCategory(soList.get(j).getCategory());
+				 so.setProductName(soList.get(j).getItemname());
+				 so.setQuantity(soList.get(j).getQty());
+				 so.setStatus(soList.get(j).getItemStatus());
+				 so.setInvoiceNumber(soList.get(j).getInvoicenumber());
+				 list.add(so);
+			}		
+			logger.info("Add SO into List Value ----->"+list.get(0).getReturnCategory());
+			return new ResponseEntity<List<Purchase>>(list, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.info("loadStockReturn Exception ------------->" + e.getMessage());
 			e.printStackTrace();
@@ -119,5 +133,69 @@ public class StockService implements Filter {
 		return new ResponseEntity<List<Purchase>>(list, HttpStatus.CREATED);
 	}
 	
+	// Save
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/save", method = RequestMethod.POST)
+	public ResponseEntity<?> saveStockDamage(@RequestBody StockDamage stockdamage) {
+		System.out.println("-------- Save Stock Damage -------------");
+		RandomNumber randomnumber = null;
+		try {
+			randomnumber = randomnumberdal.getStockDamageRandomNumber();
+			String invoice = randomnumber.getStockdamageinvoicecode() + randomnumber.getStockdamageinvoicenumber();
+			stockdamage.setStockDamageCode(invoice);
+			System.out.println("Product name -->" + stockdamage.getProductName());
+
+			stockdamage = stockdal.saveStockDamage(stockdamage);
+			if (stockdamage.getStatus().equalsIgnoreCase("success")) {
+				boolean status = randomnumberdal.updateStockDamRandamNumber(randomnumber);
+			}
+			return new ResponseEntity<StockDamage>(stockdamage, HttpStatus.CREATED);
+		} catch (Exception e) {
+			logger.info("Stockdamage Exception ------------->" + e.getMessage());
+			e.printStackTrace();
+		}
+
+		finally {
+
+		}
+		return new ResponseEntity<StockDamage>(stockdamage, HttpStatus.CREATED);
+	}
+	
+	// Load
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/loadStockDamage", method = RequestMethod.GET)
+	public ResponseEntity<?> loadStockDamage() {
+		logger.info("------------- Inside loadStockDamage-----------------");
+		List<StockDamage> damagelist = new ArrayList<StockDamage>();
+		try {
+			logger.info("-----------Inside loadStockDamage Called----------");
+			damagelist = stockdal.loadStockDamage(damagelist);
+			return new ResponseEntity<List<StockDamage>>(damagelist, HttpStatus.CREATED);
+		} catch (Exception e) {
+			logger.info("loadStockDamage Exception ------------->" + e.getMessage());
+			e.printStackTrace();
+		} finally {
+
+		}
+		return new ResponseEntity<List<StockDamage>>(damagelist, HttpStatus.CREATED);
+	}
+	
+	// update
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/update", method = RequestMethod.PUT)
+	public ResponseEntity<?> updateStockDamage(@RequestBody StockDamage damage) {
+		try {
+			System.out.println("Stock code inside try--->" + damage.getStockDamageCode());
+			damage = stockdal.updateDamage(damage);
+			return new ResponseEntity<StockDamage>(damage, HttpStatus.CREATED);
+		} catch (Exception e) {
+			damage.setStatus("failure");
+			logger.info("updateStockDamage Exception ------------->" + e.getMessage());
+			e.printStackTrace();
+		} finally {
+
+		}
+		return new ResponseEntity<StockDamage>(damage, HttpStatus.CREATED);
+	}
 
 }
