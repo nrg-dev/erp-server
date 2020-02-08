@@ -1,7 +1,7 @@
 mongo localhost/admin;
 use ErpDB;
 db.createCollection("test")
-db.createCollection("randomNumber")
+db.createCollection("randomNumber")                     
 
 db.randomNumber.insert({ "randomID" : 1,"poinvoicenumber" : 001,"poinvoicecode" : "INVPO","salesinvoicenumber" : 001,"salesinvoicecode":"INVSA"})
 db.randomNumber.insert({ "randomID" : 2,"vendorinvoicenumber" : 001,"vendorinvoicecode" : "VEN","customerinvoicenumber" : 001,"customerinvoicecode":"CUST"})
@@ -9,7 +9,7 @@ db.randomNumber.insert({ "randomID" : 3,"categoryinvoicenumber" : 01,"categoryin
 db.randomNumber.insert({ "randomID" : 4,"employeeinvoicenumber" : 01,"employeeinvoicecode" : "EMP"})
 db.randomNumber.insert({ "randomID" : 5,"discountinvoicenumber" : 01,"discountinvoicecode" : "DIS"})
 db.randomNumber.insert({ "randomID" : 6,"poreturninvoicenumber" : 001,"poreturninvoicecode" : "INVPORET","soreturninvoicenumber" : 001,"soreturninvoicecode":"INVSORET"})
-db.randomNumber.insert({ "randomID" : 7,"stockdamageinvoicenumber" : 001,"stockdamageinvoicecode" : "INVDAM"})
+db.randomNumber.insert({ "randomID" : 7,"stockreturninvoicenumber" : 001,"stockreturninvoicecode" : "INVRET","stockdamageinvoicenumber" : 001,"stockdamageinvoicecode" : "INVDAM"})
 
 
 
@@ -73,7 +73,7 @@ db.randomNumber.find();
 db.randomNumber.remove( { } )
 
 
-db.randomNumber.remove({"_id" :ObjectId("5e3a9992f0272fa0cc5d2bde") });
+db.randomNumber.remove({"_id" :ObjectId("5e3cfeefc6d00129efc8f204") });
 db.randomNumber.update({"_id" :ObjectId("5e3a7ec0f0272fa0cc5d2bdc") },{$set : {"soDate":'8'}})
 
 

@@ -16,6 +16,7 @@ import com.erp.mongo.model.Employee;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.SOReturnDetails;
 import com.erp.mongo.model.StockDamage;
+import com.erp.mongo.model.StockReturn;
 
 
 @Repository
@@ -54,7 +55,6 @@ public class StockImpl implements StockDAL {
 	}
 	
 	//update
-	@Override
 	public StockDamage updateDamage(StockDamage damage) {
 		Update update = new Update();
 		Query query = new Query();
@@ -66,8 +66,14 @@ public class StockImpl implements StockDAL {
 		update.set("currentStatus", damage.getCurrentStatus());
 		mongoTemplate.updateFirst(query, update, StockDamage.class);
 		damage.setStatus("success");
-		return damage;
-		
+		return damage;	
+	}
+	
+	//save
+	public StockReturn saveStockReturn(StockReturn stReturn) {
+		mongoTemplate.save(stReturn);
+		stReturn.setStatus("success");
+		return stReturn;
 	}
 	
 	
