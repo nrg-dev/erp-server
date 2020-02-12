@@ -35,21 +35,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.bo.ErpBo;
-import com.erp.dto.Purchase;
 import com.erp.dto.Sales;
 import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.dal.SalesDAL;
-import com.erp.mongo.model.Category;
 import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
-import com.erp.mongo.model.POInvoiceDetails;
-import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOInvoiceDetails;
 import com.erp.mongo.model.SOReturnDetails;
-import com.erp.mongo.model.Vendor;
 import com.erp.util.Custom;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -192,7 +187,7 @@ public class SalesService implements Filter {
 								sodetails.setQty(jObject.getString("quantity"));
 								sodetails.setSubtotal(jObject.getDouble("netAmount"));
 								sodetails.setSoDate(Custom.getCurrentInvoiceDate());
-								logger.info("POInvoice Date --->" + sodetails.getSoDate());
+								logger.info("SOInvoice Date --->" + sodetails.getSoDate());
 								salesdal.saveSales(sodetails);
 								totalQty += jObject.getInt("quantity");
 								totalPrice += jObject.getDouble("netAmount");
@@ -250,11 +245,37 @@ public class SalesService implements Filter {
 	public ResponseEntity<?> loadSales() {
 		logger.info("------------- Inside loadSales-----------------");
 		List<SOInvoice> response = new ArrayList<SOInvoice>();
+		List<SOInvoiceDetails> sodetail = new ArrayList<SOInvoiceDetails>();
 		List<Sales> responseList = new ArrayList<Sales>();
+		Sales sales =null;
+		String itemnameList = "";
+		String qtylist = "";
+		String totalAmountlist = "";
 		try {
 			logger.info("-----------Inside loadSales Called----------");
 			response = salesdal.loadSales(response);
-			return new ResponseEntity<List<SOInvoice>>(response, HttpStatus.CREATED);
+			for(SOInvoice res: response) {
+				sales = new Sales();
+				sodetail = salesdal.getSales(res.getInvoicenumber());
+				for(int i=0;i<sodetail.size();i++) {
+					logger.info("Product Name -->"+sodetail.get(i).getItemname()); 
+					itemnameList = itemnameList+sodetail.get(i).getItemname() + System.lineSeparator()+ System.lineSeparator();
+					logger.info("Qty -->"+sodetail.get(i).getQty()); 
+					qtylist = qtylist+sodetail.get(i).getItemname() + System.lineSeparator()+ System.lineSeparator();
+					logger.info("Total -->"+sodetail.get(i).getSubtotal()); 
+					totalAmountlist = totalAmountlist+sodetail.get(i).getSubtotal() + System.lineSeparator()+ System.lineSeparator(); 
+				}
+				 System.out.println("Particular invoice productList -->"+itemnameList);	
+				 sales.setInvoiceNumber(res.getInvoicenumber());
+				 sales.setSoDate(res.getInvoicedate());
+				 sales.setCustomerName(res.getCustomername());
+				 sales.setProductName(itemnameList); 
+				 sales.setQuantity(qtylist);
+				 sales.setNetAmount(totalAmountlist);
+				 sales.setStatus(res.getStatus()); 
+				 responseList.add(sales);
+			}
+			return new ResponseEntity<List<Sales>>(responseList, HttpStatus.CREATED);
 
 		} catch (Exception e) {
 			logger.info("loadSales Exception ------------->" + e.getMessage());
@@ -406,7 +427,7 @@ public class SalesService implements Filter {
 			logger.info("----------- Before Calling  remove Particular Sales ----------");
 			System.out.println("ObjectID -->" + id);
 			System.out.println("salesCode -->" + invoiceNumber);
-			// ---- Check List Size from POInvoiceDetails Table
+			// ---- Check List Size from SOInvoiceDetails Table
 			responseList = salesdal.getSales(invoiceNumber);
 			logger.info("List Size -->" + responseList.size());
 			if (responseList.size() == 0 || responseList.size() == 1 ) {
@@ -431,22 +452,93 @@ public class SalesService implements Filter {
 	}
 	
 	// Update
-	@CrossOrigin(origins = "http://localhost:8080")
-	@RequestMapping(value = "/update", method = RequestMethod.PUT)
-	public ResponseEntity<?> updateSales(@RequestBody SOInvoiceDetails sodetails) {
-		try {
-			logger.info("--- Inside Product Edit ---");
-			sodetails = salesdal.updateSales(sodetails);
-			return new ResponseEntity<SOInvoiceDetails>(sodetails, HttpStatus.CREATED);
+		@CrossOrigin(origins = "http://localhost:8080")
+		@RequestMapping(value = "/update", method = RequestMethod.PUT)
+		public ResponseEntity<?> updateSales(@RequestBody String saleseditarray) {
+			String temp = saleseditarray;
+			System.out.println("Edit Sales value -->" + temp);
+			System.out.println("-------- Update Sales -------------");
+			Sales sales = null;
+			SOInvoice soinvoice = null;
+			SOInvoiceDetails sodetails = null;
+			int totalQty = 0;
+			int totalPrice = 0;
+			int totalitem = 0;
+			try {
+				sales = new Sales();
+				ObjectMapper mapper = new ObjectMapper();
+				System.out.println("Get Sales Json -->" + saleseditarray);
+				ArrayList<String> list = new ArrayList<String>();
+				JSONArray jsonArr = new JSONArray(saleseditarray);
+				int len = jsonArr.length();
+				int remove = 0;
+				if (jsonArr != null) {
+					for (int i = 0; i < jsonArr.length(); i++) {
+						list.add(jsonArr.get(i).toString());
+						remove++;
+					}
+				}
+				int postion = remove - 1;
+				System.out.println("Position ---->" + postion);
+				list.remove(postion);
+				System.out.println("Edit Size -------->" + jsonArr.length());
+				int l = 1;
+				for (int i = 0; i < jsonArr.length(); i++) {
+					System.out.println("Loop 1....");
+					JSONArray arr2 = jsonArr.optJSONArray(i);
+					if (jsonArr.optJSONArray(i) != null) {
+						for (int j = 0; j < arr2.length(); j++) {
+							System.out.println("Loop 2....");
+							if (arr2.getJSONObject(j) != null) {
+								JSONObject jObject = arr2.getJSONObject(j);
+								System.out.println(jObject.getString("productName"));
+								System.out.println(jObject.getString("category"));
+								sodetails = new SOInvoiceDetails();
+								sodetails.setCategory(jObject.getString("category"));
+								sodetails.setItemname(jObject.getString("productName"));
+								sodetails.setDescription(jObject.getString("description"));
+								sodetails.setUnitprice(jObject.getString("price"));
+								sodetails.setQty(jObject.getString("quantity"));
+								sodetails.setSubtotal(jObject.getDouble("netAmount"));
+								sodetails.setLastUpdate(Custom.getCurrentInvoiceDate());
+								sodetails.setInvoicenumber(jObject.getString("invoiceNumber"));
+								sodetails.setSoDate(jObject.getString("soDate"));
+								sodetails.setId(jObject.getString("id"));
+								salesdal.updateSales(sodetails);
+								totalQty += jObject.getInt("quantity");
+								totalPrice += jObject.getDouble("netAmount");
+								totalitem = j+1;
+							} else {
+								System.out.println("Null....");
+							}
+						}
+					}else {
+						System.out.println("Outer Null....");
+					}
+					l++;
+				}
+				soinvoice = new SOInvoice(); 
+				soinvoice = salesdal.loadSOInvoice(sodetails.getInvoicenumber());
+				soinvoice.setInvoicenumber(sodetails.getInvoicenumber());
+				logger.info("Total Qty -->"+totalQty);
+				logger.info("Total Price -->"+totalPrice);
+				soinvoice.setTotalqty(totalQty);
+				soinvoice.setTotalprice(totalPrice);
+				logger.info("After soInvoice Total Qty -->"+soinvoice.getTotalqty());
+				logger.info("After soInvoice Total Price -->"+soinvoice.getTotalprice());
+				soinvoice.setTotalitem(totalitem); 
+				salesdal.updateSOInvoice(soinvoice);
+				sales.setStatus("success");
+				return new ResponseEntity<Sales>(sales, HttpStatus.CREATED);
 
-		} catch (Exception e) {
-			logger.info("updateSales Exception ------------->" + e.getMessage());
-			e.printStackTrace();
-		} finally {
+			} catch (Exception e) {
+				logger.info("Exception ------------->" + e.getMessage());
+				e.printStackTrace();
+			} finally {
 
+			}
+			return new ResponseEntity<Sales>(sales, HttpStatus.CREATED);
 		}
-		return new ResponseEntity<SOInvoiceDetails>(sodetails, HttpStatus.CREATED);
-	}
 	
 	// SaveReturn
 		@CrossOrigin(origins = "http://localhost:4200")

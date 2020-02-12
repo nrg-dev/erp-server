@@ -20,6 +20,7 @@ public class POInvoiceDetails {
 	private String category;
 	private String status;
 	private String poDate;
+	private String lastUpdate;
 
 	public String getId() {
 		return id;
@@ -124,5 +125,15 @@ public class POInvoiceDetails {
 	public void setPoDate(String poDate) {
 		this.poDate = poDate;
 	}
+
+	public String getLastUpdate() {
+		return lastUpdate;
+	}
+
+	public void setLastUpdate(String lastUpdate) {
+		this.lastUpdate = lastUpdate;
+	}
+	
+	
 
 }

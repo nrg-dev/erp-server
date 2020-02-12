@@ -170,19 +170,53 @@ public class SalesImpl implements SalesDAL {
 		return item;
 	}
 	
-	// update
+	//Update SoDetails
 	@Override
 	public SOInvoiceDetails updateSales(SOInvoiceDetails sales) {
 		Update update = new Update();
 		Query query = new Query();
-		query.addCriteria(Criteria.where("invoicenumber").is(sales.getInvoicenumber()));
-		update.set("itemname", sales.getItemname());
+		query.addCriteria(Criteria.where("id").is(sales.getId()));
+		
+		update.set("invoicenumber", sales.getInvoicenumber());
 		update.set("category", sales.getCategory());
+		update.set("itemname", sales.getItemname());
 		update.set("qty", sales.getQty());
 		update.set("description", sales.getDescription());
+		update.set("unitprice", sales.getUnitprice());
 		update.set("subtotal", sales.getSubtotal());
+		update.set("soDate", sales.getSoDate());
+		update.set("lastUpdate", sales.getLastUpdate());
 		mongoTemplate.updateFirst(query, update, SOInvoiceDetails.class);
 		return sales;
+	}
+	
+	@Override
+	public SOInvoice loadSOInvoice(String invoicenumber) {
+		SOInvoice soinvoice;
+		Query query = new Query();
+		query.addCriteria(Criteria.where("invoicenumber").is(invoicenumber));
+		soinvoice = mongoTemplate.findOne(query, SOInvoice.class);
+		return soinvoice;
+	}
+	
+	// update SOInvoice
+	@Override
+	public SOInvoice updateSOInvoice(SOInvoice purchase) {
+		Update update = new Update();
+		Query query = new Query();
+		query.addCriteria(Criteria.where("invoicenumber").is(purchase.getInvoicenumber()));
+		
+		update.set("invoicedate", purchase.getInvoicedate());
+		update.set("invoicenumber", purchase.getInvoicenumber());
+		update.set("customername", purchase.getCustomername());
+		update.set("deliveryprice", purchase.getDeliveryprice());
+		update.set("totalqty", purchase.getTotalqty());
+		update.set("totalprice", purchase.getTotalprice());
+		update.set("totalitem", purchase.getTotalitem());
+		update.set("status", purchase.getStatus());
+
+		mongoTemplate.updateFirst(query, update, SOInvoice.class);
+		return purchase;
 	}
 	
 	// Save SO Invoice details	

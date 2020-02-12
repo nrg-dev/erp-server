@@ -35,7 +35,9 @@ public interface SalesDAL {
 	public String removePartId(String id, String invoiceNumber, int temp);
 	public List<Item> loadItem(String categoryCode);
 	public Item getUnitPrice(String productCode, String categoryCode);
-	public SOInvoiceDetails updateSales(SOInvoiceDetails purchase);
+	public SOInvoiceDetails updateSales(SOInvoiceDetails sales);
 	public SOReturnDetails insertReturn(SOReturnDetails soreturndetails);
+	public SOInvoice updateSOInvoice(SOInvoice soinvoice);
+	public SOInvoice loadSOInvoice(String invoicenumber);  
 	 
 }

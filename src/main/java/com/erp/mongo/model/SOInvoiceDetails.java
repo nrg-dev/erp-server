@@ -20,6 +20,7 @@ public class SOInvoiceDetails {
 	private String category;
 	private String status;
 	private String soDate;
+	private String lastUpdate;
 
 	public String getId() {
 		return id;
@@ -123,6 +124,14 @@ public class SOInvoiceDetails {
 
 	public void setSoDate(String soDate) {
 		this.soDate = soDate;
+	}
+
+	public String getLastUpdate() {
+		return lastUpdate;
+	}
+
+	public void setLastUpdate(String lastUpdate) {
+		this.lastUpdate = lastUpdate;
 	}
 
 	

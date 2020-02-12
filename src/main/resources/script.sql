@@ -73,7 +73,7 @@ db.randomNumber.find();
 db.randomNumber.remove( { } )
 
 
-db.randomNumber.remove({"_id" :ObjectId("5e3cfeefc6d00129efc8f204") });
+db.randomNumber.remove({"_id" :ObjectId("5e439febb9bef8e8714468ca") });
 db.randomNumber.update({"_id" :ObjectId("5e3a7ec0f0272fa0cc5d2bdc") },{$set : {"soDate":'8'}})
 
 

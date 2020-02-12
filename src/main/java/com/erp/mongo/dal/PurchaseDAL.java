@@ -34,6 +34,8 @@ public interface PurchaseDAL {
 	public List<Item> loadItem(String categoryCode);
 	public Item getUnitPrice(String productCode, String categoryCode);
 	public POInvoiceDetails updatePurchase(POInvoiceDetails purchase);
-	public POReturnDetails insertReturn(POReturnDetails poreturndetails); 
+	public POReturnDetails insertReturn(POReturnDetails poreturndetails);
+	public POInvoice updatePOInvoice(POInvoice poinvoice);
+	public POInvoice loadPOInvoice(String invoicenumber);   
 	 
 }

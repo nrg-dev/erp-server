@@ -177,26 +177,55 @@ public class PurchaseImpl implements PurchaseDAL {
 		return item;
 	}
 	
-	// update
+	// update PoDetails
 	@Override
 	public POInvoiceDetails updatePurchase(POInvoiceDetails purchase) {
 		Update update = new Update();
 		Query query = new Query();
-		query.addCriteria(Criteria.where("invoicenumber").is(purchase.getInvoicenumber()));
+		query.addCriteria(Criteria.where("id").is(purchase.getId()));
 		
+		update.set("invoicenumber", purchase.getInvoicenumber());
 		update.set("category", purchase.getCategory());
 		update.set("itemname", purchase.getItemname());
 		update.set("qty", purchase.getQty());
 		update.set("description", purchase.getDescription());
+		update.set("unitprice", purchase.getUnitprice());
 		update.set("subtotal", purchase.getSubtotal());
+		update.set("poDate", purchase.getPoDate());
+		update.set("lastUpdate", purchase.getLastUpdate());
 		mongoTemplate.updateFirst(query, update, POInvoiceDetails.class);
-			
-		update.set("status", purchase.getStatus());
-		mongoTemplate.updateFirst(query, update, POInvoice.class);
-
 		return purchase;
 	}
 	
+	@Override
+	public POInvoice loadPOInvoice(String invoicenumber) {
+		POInvoice poinvoice;
+		Query query = new Query();
+		query.addCriteria(Criteria.where("invoicenumber").is(invoicenumber));
+		poinvoice = mongoTemplate.findOne(query, POInvoice.class);
+		return poinvoice;
+	}
+	
+	// update POInvoice
+	@Override
+	public POInvoice updatePOInvoice(POInvoice purchase) {
+		Update update = new Update();
+		Query query = new Query();
+		query.addCriteria(Criteria.where("invoicenumber").is(purchase.getInvoicenumber()));
+		
+		update.set("invoicedate", purchase.getInvoicedate());
+		update.set("invoicenumber", purchase.getInvoicenumber());
+		update.set("vendorname", purchase.getVendorname());
+		update.set("deliveryprice", purchase.getDeliveryprice());
+		update.set("totalqty", purchase.getTotalqty());
+		update.set("totalprice", purchase.getTotalprice());
+		update.set("totalitem", purchase.getTotalitem());
+		update.set("status", purchase.getStatus());
+
+		mongoTemplate.updateFirst(query, update, POInvoice.class);
+		return purchase;
+	}
+
 	// Save PO Return details	
 	@Override
 	public POReturnDetails insertReturn(POReturnDetails purchasereturn) {
