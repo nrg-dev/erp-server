@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.bo.ErpBo;
 import com.erp.dto.Purchase;
+import com.erp.dto.Sales;
 import com.erp.mongo.dal.PurchaseDAL;
 import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.model.Category;
@@ -44,6 +45,8 @@ import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.RandomNumber;
+import com.erp.mongo.model.SOInvoice;
+import com.erp.mongo.model.SOInvoiceDetails;
 import com.erp.mongo.model.Vendor;
 import com.erp.util.Custom;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -239,9 +242,9 @@ public class PurchaseService implements Filter {
 					System.out.println("Last Value");
 					JSONObject jObject = arr2.getJSONObject(0);
 					System.out.println("PO Date -->" + jObject.getString("podate"));
-					System.out.println("Vendor Name -->" + jObject.getString("vendorname"));
+					//System.out.println("Vendor Name -->" + jObject.getString("vendorname"));
 					System.out.println("Delivery Cost -->" + jObject.getString("deliveryCost"));
-					purchase.setVendorName(jObject.getString("vendorname"));
+					//purchase.setVendorName(jObject.getString("vendorname"));
 					purchase.setDeliveryCost(jObject.getString("deliveryCost"));
 
 				} else {
@@ -255,6 +258,7 @@ public class PurchaseService implements Filter {
 								System.out.println(jObject.getString("category"));
 								podetails = new POInvoiceDetails();
 								podetails.setInvoicenumber(invoice);// random table..
+								purchase.setVendorName(jObject.getString("vendorName"));
 								podetails.setCategory(jObject.getString("category"));
 								podetails.setItemname(jObject.getString("productName"));
 								podetails.setDescription(jObject.getString("description"));
@@ -322,18 +326,47 @@ public class PurchaseService implements Filter {
 		logger.info("------------- Inside loadPurchase-----------------");
 		List<POInvoice> response = new ArrayList<POInvoice>();
 		List<Purchase> responseList = new ArrayList<Purchase>();
+		List<POInvoiceDetails> podetail = new ArrayList<POInvoiceDetails>();
+		Purchase purchase =null;
+		String itemnameList = "";
+		String qtylist = "";
+		String totalAmountlist = "";
 		try {
 			logger.info("-----------Inside loadPurchase Called----------");
 			response = purchasedal.loadPurchase(response);
-			return new ResponseEntity<List<POInvoice>>(response, HttpStatus.CREATED);
+			for(POInvoice res: response) {
+				purchase = new Purchase();
+				podetail = purchasedal.getPurchase(res.getInvoicenumber());
+				for(int i=0;i<podetail.size();i++) {
+					logger.info("Product Name -->"+podetail.get(i).getItemname()); 
+					//itemnameList = itemnameList+podetail.get(i).getItemname() + System.lineSeparator()+ System.lineSeparator();
+					itemnameList = itemnameList+podetail.get(i).getItemname() + "\r\n";
+					logger.info("Qty -->"+podetail.get(i).getQty()); 
+					//qtylist = qtylist+podetail.get(i).getQty() + System.lineSeparator()+ System.lineSeparator();
+					qtylist = qtylist + podetail.get(i).getQty() + "\r\n";
+					logger.info("Total -->"+podetail.get(i).getSubtotal()); 
+					totalAmountlist = totalAmountlist+podetail.get(i).getSubtotal() + System.lineSeparator()+ System.lineSeparator(); 
+				}
+				 System.out.println("Particular invoice productList -->"+itemnameList);	
+				 purchase.setInvoiceNumber(res.getInvoicenumber());
+				 purchase.setPoDate(res.getInvoicedate());
+				 purchase.setVendorName(res.getVendorname());
+				 purchase.setProductName(itemnameList); 
+				 purchase.setQuantity(qtylist);
+				 purchase.setTotalAmount(res.getTotalprice());
+				 purchase.setDeliveryCost(res.getDeliveryprice());
+				 purchase.setUnitPrice(totalAmountlist);
+				 purchase.setStatus(res.getStatus()); 
+				 responseList.add(purchase);
+			}
+			return new ResponseEntity<List<Purchase>>(responseList, HttpStatus.CREATED);
 
 		} catch (Exception e) {
 			logger.info("loadPurchase Exception ------------->" + e.getMessage());
 			e.printStackTrace();
 		} finally {
 		}
-		//return new ResponseEntity<List<Purchase>>(responseList, HttpStatus.CREATED);
-		return new ResponseEntity<List<POInvoice>>(response, HttpStatus.CREATED);
+		return new ResponseEntity<List<Purchase>>(responseList, HttpStatus.CREATED);
 	}
 
 	// get

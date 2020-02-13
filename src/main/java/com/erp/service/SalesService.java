@@ -261,7 +261,7 @@ public class SalesService implements Filter {
 					logger.info("Product Name -->"+sodetail.get(i).getItemname()); 
 					itemnameList = itemnameList+sodetail.get(i).getItemname() + System.lineSeparator()+ System.lineSeparator();
 					logger.info("Qty -->"+sodetail.get(i).getQty()); 
-					qtylist = qtylist+sodetail.get(i).getItemname() + System.lineSeparator()+ System.lineSeparator();
+					qtylist = qtylist+sodetail.get(i).getQty() + System.lineSeparator()+ System.lineSeparator();
 					logger.info("Total -->"+sodetail.get(i).getSubtotal()); 
 					totalAmountlist = totalAmountlist+sodetail.get(i).getSubtotal() + System.lineSeparator()+ System.lineSeparator(); 
 				}
@@ -271,7 +271,9 @@ public class SalesService implements Filter {
 				 sales.setCustomerName(res.getCustomername());
 				 sales.setProductName(itemnameList); 
 				 sales.setQuantity(qtylist);
-				 sales.setNetAmount(totalAmountlist);
+				 sales.setTotalAmount(res.getTotalprice());
+				 sales.setDeliveryCost(res.getDeliveryprice());
+				 sales.setUnitPrice(totalAmountlist);
 				 sales.setStatus(res.getStatus()); 
 				 responseList.add(sales);
 			}
@@ -309,11 +311,9 @@ public class SalesService implements Filter {
 	public ResponseEntity<?> getCustomerDetails(String customername) {
 		logger.info("------------- Inside get getCustomerDetails -----------------");
 		Customer customer = null;
-		Sales sales = null;
 		try {
 			logger.info("Customer Name -->" + customername);
 			customer = new Customer();
-			sales = new Sales();
 			String[] res = customername.split("-");
 			String customerCode = res[1];
 			logger.info("After Split Customer Name -->" + customerCode);
