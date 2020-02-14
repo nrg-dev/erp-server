@@ -28,6 +28,7 @@ public class Sales {
 	  String customerCountry;
 	  String invoiceNumber;
 	  int totalAmount;
+	  int totalItem;
 
 	public String getProductName() {
 		return productName;
@@ -133,6 +134,12 @@ public class Sales {
 	}
 	public void setTotalAmount(int totalAmount) {
 		this.totalAmount = totalAmount;
+	}
+	public int getTotalItem() {
+		return totalItem;
+	}
+	public void setTotalItem(int totalItem) {
+		this.totalItem = totalItem;
 	}
 	
 	

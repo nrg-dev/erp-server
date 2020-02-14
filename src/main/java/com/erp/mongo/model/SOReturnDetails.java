@@ -17,6 +17,7 @@ public class SOReturnDetails {
 	private String itemStatus;
 	private String soDate;
 	private String status;
+	private int invid;
 
 	public String getId() {
 		return id;
@@ -96,6 +97,14 @@ public class SOReturnDetails {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public int getInvid() {
+		return invid;
+	}
+
+	public void setInvid(int invid) {
+		this.invid = invid;
 	}
 
 	
