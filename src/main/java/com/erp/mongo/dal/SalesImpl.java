@@ -1,5 +1,6 @@
 package com.erp.mongo.dal;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -226,5 +227,18 @@ public class SalesImpl implements SalesDAL {
 		mongoTemplate.save(salesreturn);
 		System.out.println("After save SO Return details");
 		return salesreturn;
+	}
+	
+	//load customer name & code
+	public ArrayList<String> loadCustomerName()
+	{
+		ArrayList<String> list = new ArrayList<String>();
+		List<Customer> customerlist = mongoTemplate.findAll(Customer.class);
+		for(Customer customer:customerlist) {
+			logger.info("Customer name-->"+customer.getCustomerName());
+			logger.info("Customer code-->"+customer.getCustcode());
+			list.add(customer.getCustomerName()+"-"+customer.getCustcode());			
+		}
+		return list;		
 	}
 }

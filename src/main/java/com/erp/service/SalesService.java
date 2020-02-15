@@ -629,4 +629,23 @@ public class SalesService implements Filter {
 			return new ResponseEntity<Sales>(sales, HttpStatus.CREATED);
 		}
 
+		// Load customer for populate for auto text box
+		@CrossOrigin(origins = "http://localhost:8080")
+		@RequestMapping(value = "/loadCustomerName", method = RequestMethod.GET)
+		public ResponseEntity<?> loadCustomerName() {
+			logger.info("------------- Inside loadCustomerName-----------------");
+			ArrayList<String> customerlist = null;
+			try {
+				logger.info("-----------Before Calling Load customer list----------");
+				customerlist = salesdal.loadCustomerName();
+				logger.info("-----------Successfully Called Load customer list------");
+
+			} catch (Exception e) {
+				logger.info("Exception ------------->" + e.getMessage());
+				e.printStackTrace();
+			} finally {
+
+			}
+			return new ResponseEntity<ArrayList<String>>(customerlist, HttpStatus.CREATED);
+		}
 }
