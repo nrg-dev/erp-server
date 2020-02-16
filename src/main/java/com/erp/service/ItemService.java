@@ -32,7 +32,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.erp.bo.ErpBo;
 import com.erp.mongo.dal.ItemDAL;
 import com.erp.mongo.dal.RandomNumberDAL;
-import com.erp.mongo.model.Category;
 import com.erp.mongo.model.Discount;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.RandomNumber;
@@ -128,7 +127,7 @@ public class ItemService implements Filter {
 		return new ResponseEntity<Item>(item, HttpStatus.CREATED);
 	}
 
-	//savepromotion
+	//save promotion
 	
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/addpromotionsave", method = RequestMethod.POST)
@@ -259,7 +258,7 @@ public class ItemService implements Filter {
 	// Update
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
-	public ResponseEntity<?> updateproduct(@RequestBody Item item) {
+	public ResponseEntity<?> updateItem(@RequestBody Item item) {
 		try {
 			logger.info("--- Inside item Edit ---");
 			logger.info("Before Category Name -->"+item.getCategoryname());

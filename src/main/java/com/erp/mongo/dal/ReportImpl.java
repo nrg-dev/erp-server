@@ -7,44 +7,39 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
+
 import com.erp.mongo.model.Employee;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.SOInvoice;
 
-
 @Repository
 public class ReportImpl implements ReportDAL {
-	
-	public static final Logger logger = LoggerFactory.getLogger(ReportImpl.class);
 
+	public static final Logger logger = LoggerFactory.getLogger(ReportImpl.class);
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
-	
-	
-	
-	//employee load
-	public List<Employee> employeeReport(List<Employee> employeelist){
+	// employee load
+	public List<Employee> employeeReport(List<Employee> employeelist) {
 		employeelist = mongoTemplate.findAll(Employee.class);
 		return employeelist;
-		
+
 	}
-	
-	//purchase load
-	public List<POInvoice> purchaseReport(List<POInvoice> purchaselist){
+
+	// purchase load
+	public List<POInvoice> purchaseReport(List<POInvoice> purchaselist) {
 		purchaselist = mongoTemplate.findAll(POInvoice.class);
 		return purchaselist;
-		
+
 	}
-		
-	//sales load
-	public List<SOInvoice> salesReport(List<SOInvoice> saleslist){
+
+	// sales load
+	public List<SOInvoice> salesReport(List<SOInvoice> saleslist) {
 		logger.info("------------- Inside salesReport imp-----------------");
 		saleslist = mongoTemplate.findAll(SOInvoice.class);
 		return saleslist;
-		
+
 	}
-		
-	
+
 }

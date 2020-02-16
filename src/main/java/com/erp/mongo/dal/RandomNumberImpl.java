@@ -1,20 +1,13 @@
 package com.erp.mongo.dal;
 
-
-
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.stereotype.Repository;
 import org.springframework.data.mongodb.core.query.Update;
-
-
-
-
+import org.springframework.stereotype.Repository;
 
 //import java.util.ArrayList;
 //import java.util.Collections;
@@ -22,12 +15,10 @@ import org.springframework.data.mongodb.core.query.Update;
 
 import com.erp.mongo.model.RandomNumber;
 
-
 @Repository
 public class RandomNumberImpl implements RandomNumberDAL {
-	
-	public static final Logger logger = LoggerFactory.getLogger(PurchaseImpl.class);
 
+	public static final Logger logger = LoggerFactory.getLogger(PurchaseImpl.class);
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
@@ -36,276 +27,266 @@ public class RandomNumberImpl implements RandomNumberDAL {
 	 * @Autowired ErpBo investmentBo1;
 	 */
 
-	
-	
 	@Override
 	public RandomNumber getRandamNumber() {
-		RandomNumber radomNumber=null;
+		RandomNumber radomNumber = null;
 		try {
 			logger.info("----------- Inside getRandamNumber-----------");
 			Query query = new Query();
 			logger.info("-----------  Before addCriteria-----------");
-		    query.addCriteria(Criteria.where("randomID").is(1));
+			query.addCriteria(Criteria.where("randomID").is(1));
 			logger.info("-----------  After addCriteria-----------");
 			radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
-			logger.info("PO Invoice number ----------->"+radomNumber.getPoinvoicenumber());
-			logger.info("SO Invoice number ----------->"+radomNumber.getSalesinvoicenumber());
-			return radomNumber;//mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
-		}catch(Exception e) {
+			logger.info("PO Invoice number ----------->" + radomNumber.getPoinvoicenumber());
+			logger.info("SO Invoice number ----------->" + radomNumber.getSalesinvoicenumber());
+			return radomNumber;// mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
+		} catch (Exception e) {
 			e.printStackTrace();
 			return radomNumber;
 
+		} finally {
 
-		}finally {
-			
 		}
-		
+
 	}
-	
-	
+
 	@Override
 	public boolean updateRandamNumber(RandomNumber rn) {
-		logger.info("current invoice number -->"+rn.getPoinvoicenumber());		
+		logger.info("current invoice number -->" + rn.getPoinvoicenumber());
 		Query query = new Query();
-	    query.addCriteria(Criteria.where("randomID").is(1));
+		query.addCriteria(Criteria.where("randomID").is(1));
 		Update update = new Update();
-		update.set("poinvoicenumber", rn.getPoinvoicenumber()+1);			
-		mongoTemplate.updateFirst(query, update, RandomNumber.class);//(query, RandamNumber.class);
-		return true;//mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
+		update.set("poinvoicenumber", rn.getPoinvoicenumber() + 1);
+		mongoTemplate.updateFirst(query, update, RandomNumber.class);// (query, RandamNumber.class);
+		return true;// mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
 	}
-	
+
 	@Override
 	public boolean updateSalesRandamNumber(RandomNumber rn) {
-		logger.info("current invoice number -->"+rn.getSalesinvoicenumber());		
+		logger.info("current invoice number -->" + rn.getSalesinvoicenumber());
 		Query query = new Query();
-	    query.addCriteria(Criteria.where("randomID").is(1));
+		query.addCriteria(Criteria.where("randomID").is(1));
 		Update update = new Update();
-		update.set("salesinvoicenumber", rn.getSalesinvoicenumber()+1);			
+		update.set("salesinvoicenumber", rn.getSalesinvoicenumber() + 1);
 		mongoTemplate.updateFirst(query, update, RandomNumber.class);
 		return true;
 	}
-	
-	
-	
-	//---- Vendor and customer RandomCade Getting ---
+
+	// ---- Vendor and customer RandomCade Getting ---
 	@Override
 	public RandomNumber getVendorRandamNumber() {
-		RandomNumber radomNumber=null;
+		RandomNumber radomNumber = null;
 		try {
 			logger.info("----------- Inside getVendorRandamNumber-----------");
 			Query query = new Query();
 			logger.info("-----------  Before addCriteria-----------");
-		    query.addCriteria(Criteria.where("randomID").is(2));
+			query.addCriteria(Criteria.where("randomID").is(2));
 			logger.info("-----------  After addCriteria-----------");
 			radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
-			logger.info("Vendor Invoice number ----------->"+radomNumber.getVendorinvoicenumber());
-			logger.info("Customer Invoice number ----------->"+radomNumber.getCustomerinvoicenumber());
+			logger.info("Vendor Invoice number ----------->" + radomNumber.getVendorinvoicenumber());
+			logger.info("Customer Invoice number ----------->" + radomNumber.getCustomerinvoicenumber());
 			return radomNumber;
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return radomNumber;
-		}finally {
-			
-		}	
-	}
-	
-	@Override
-	public boolean updateVendorRandamNumber(RandomNumber rn,int num) {
-		logger.info("current Vendor invoice number -->"+rn.getVendorinvoicenumber());	
-		logger.info("Number for Vendor/Customer -->"+num);
-		Query query = new Query();
-	    query.addCriteria(Criteria.where("randomID").is(2));
-		Update update = new Update();
-		if(num == 1) {
-			update.set("vendorinvoicenumber", rn.getVendorinvoicenumber()+1);			
-		}else if(num == 2) {
-			update.set("customerinvoicenumber", rn.getCustomerinvoicenumber()+1);			
-		}
-		mongoTemplate.updateFirst(query, update, RandomNumber.class);//(query, RandamNumber.class);
-		return true;//mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
-	}
-	
-	
+		} finally {
 
-	//---- Employee RandomCade Getting ---
+		}
+	}
+
+	@Override
+	public boolean updateVendorRandamNumber(RandomNumber rn, int num) {
+		logger.info("current Vendor invoice number -->" + rn.getVendorinvoicenumber());
+		logger.info("Number for Vendor/Customer -->" + num);
+		Query query = new Query();
+		query.addCriteria(Criteria.where("randomID").is(2));
+		Update update = new Update();
+		if (num == 1) {
+			update.set("vendorinvoicenumber", rn.getVendorinvoicenumber() + 1);
+		} else if (num == 2) {
+			update.set("customerinvoicenumber", rn.getCustomerinvoicenumber() + 1);
+		}
+		mongoTemplate.updateFirst(query, update, RandomNumber.class);// (query, RandamNumber.class);
+		return true;// mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
+	}
+
+	// ---- Employee RandomCade Getting ---
 	@Override
 	public RandomNumber getEmployeeRandamNumber() {
-		RandomNumber radomNumber=null;
+		RandomNumber radomNumber = null;
 		try {
 			logger.info("----------- Inside getEmployeeRandamNumber-----------");
 			Query query = new Query();
 			logger.info("-----------  Before addCriteria-----------");
-		    query.addCriteria(Criteria.where("randomID").is(4));
+			query.addCriteria(Criteria.where("randomID").is(4));
 			logger.info("-----------  After addCriteria-----------");
 			radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
-			logger.info("Employee Invoice number ----------->"+radomNumber.getEmployeeinvoicenumber());
+			logger.info("Employee Invoice number ----------->" + radomNumber.getEmployeeinvoicenumber());
 			return radomNumber;
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return radomNumber;
-		}finally {
-			
-		}	
+		} finally {
+
+		}
 	}
-	
+
 	@Override
 	public boolean updateEmployeeRandamNumber(RandomNumber rn) {
-		logger.info("current Employee invoice number -->"+rn.getEmployeeinvoicenumber());	
+		logger.info("current Employee invoice number -->" + rn.getEmployeeinvoicenumber());
 		Query query = new Query();
-	    query.addCriteria(Criteria.where("randomID").is(4));
+		query.addCriteria(Criteria.where("randomID").is(4));
 		Update update = new Update();
-		update.set("employeeinvoicenumber", rn.getEmployeeinvoicenumber()+1);			
-		mongoTemplate.updateFirst(query, update, RandomNumber.class);//(query, RandamNumber.class);
-		return true;//mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
+		update.set("employeeinvoicenumber", rn.getEmployeeinvoicenumber() + 1);
+		mongoTemplate.updateFirst(query, update, RandomNumber.class);// (query, RandamNumber.class);
+		return true;// mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
 	}
-	
-	
-	//Category and product RandomNumber Getting
+
+	// Category and product RandomNumber Getting
 	@Override
 	public RandomNumber getCategoryRandomNumber() {
-		RandomNumber radomNumber=null;
+		RandomNumber radomNumber = null;
 		try {
 			logger.info("----------- Inside getcategory and prod RandamNumber-----------");
 			Query query = new Query();
 			logger.info("-----------  Before addCriteria-----------");
-		    query.addCriteria(Criteria.where("randomID").is(3));
+			query.addCriteria(Criteria.where("randomID").is(3));
 			logger.info("-----------  After addCriteria-----------");
 			radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
-			logger.info("category and prod Invoice number ----------->"+radomNumber.getCategoryinvoicenumber());
-			logger.info("category and prod Invoice code ----------->"+radomNumber.getCategoryinvoicecode());
+			logger.info("category and prod Invoice number ----------->" + radomNumber.getCategoryinvoicenumber());
+			logger.info("category and prod Invoice code ----------->" + radomNumber.getCategoryinvoicecode());
 			return radomNumber;
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return radomNumber;
-		}finally {
-			
-		}	
+		} finally {
+
+		}
 	}
-	
+
 	@Override
-	public boolean updateCategoryRandamNumber(RandomNumber rn,int num) {
-		logger.info("current category and prod invoice number -->"+rn.getCategoryinvoicenumber());	
-		logger.info("Number for category -->"+num);
+	public boolean updateCategoryRandamNumber(RandomNumber rn, int num) {
+		logger.info("current category and prod invoice number -->" + rn.getCategoryinvoicenumber());
+		logger.info("Number for category -->" + num);
 		Query query = new Query();
-	    query.addCriteria(Criteria.where("randomID").is(3));
+		query.addCriteria(Criteria.where("randomID").is(3));
 		Update update = new Update();
-		if(num == 1) {
-			update.set("categoryinvoicenumber", rn.getCategoryinvoicenumber()+1);
-		}else if(num == 2) {
-			update.set("productinvoicenumber", rn.getProductinvoicenumber()+1);
+		if (num == 1) {
+			update.set("categoryinvoicenumber", rn.getCategoryinvoicenumber() + 1);
+		} else if (num == 2) {
+			update.set("productinvoicenumber", rn.getProductinvoicenumber() + 1);
 		}
-		mongoTemplate.updateFirst(query, update, RandomNumber.class);//(query, RandamNumber.class);
-		return true;//mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
+		mongoTemplate.updateFirst(query, update, RandomNumber.class);// (query, RandamNumber.class);
+		return true;// mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
 	}
-	
-	
-	//Discount RandomNumber Getting
-		@Override
-		public RandomNumber getdiscountRandamNumber() {
-			RandomNumber radomNumber=null;
-			try {
-				logger.info("----------- Inside discount RandamNumber-----------");
-				Query query = new Query();
-				logger.info("-----------  Before addCriteria-----------");
-			    query.addCriteria(Criteria.where("randomID").is(5));
-				logger.info("-----------  After addCriteria-----------");
-				radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
-				logger.info("Discount Invoice number ----------->"+radomNumber.getDiscountinvoicenumber());
-				logger.info("Discount Invoice code ----------->"+radomNumber.getDiscountinvoicecode());
-				return radomNumber;
-			}catch(Exception e) {
-				e.printStackTrace();
-				return radomNumber;
-			}finally {
-				
-			}	
-		}
-		
-		@Override
-		public boolean updatediscountRandamNumber(RandomNumber rn) {
-			logger.info("current Discount invoice number -->"+rn.getDiscountinvoicenumber());	
+
+	// Discount RandomNumber Getting
+	@Override
+	public RandomNumber getdiscountRandamNumber() {
+		RandomNumber radomNumber = null;
+		try {
+			logger.info("----------- Inside discount RandamNumber-----------");
 			Query query = new Query();
-		    query.addCriteria(Criteria.where("randomID").is(5));
-			Update update = new Update();
-			update.set("discountinvoicenumber", rn.getDiscountinvoicenumber()+1);
-			mongoTemplate.updateFirst(query, update, RandomNumber.class);//(query, RandamNumber.class);
-			return true;//mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
+			logger.info("-----------  Before addCriteria-----------");
+			query.addCriteria(Criteria.where("randomID").is(5));
+			logger.info("-----------  After addCriteria-----------");
+			radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
+			logger.info("Discount Invoice number ----------->" + radomNumber.getDiscountinvoicenumber());
+			logger.info("Discount Invoice code ----------->" + radomNumber.getDiscountinvoicecode());
+			return radomNumber;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return radomNumber;
+		} finally {
+
 		}
-		
-		@Override
-		public RandomNumber getReturnRandamNumber() {
-			RandomNumber radomNumber=null;
-			try {
-				logger.info("----------- Inside getReturnRandamNumber-----------");
-				Query query = new Query();
-				logger.info("---------  Before addCriteria ---------");
-			    query.addCriteria(Criteria.where("randomID").is(6));
-				logger.info("-----------  After addCriteria -----------");
-				radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
-				logger.info("PO Return Invoice number ----------->"+radomNumber.getPoreturninvoicenumber()); 
-				logger.info("SO Return Invoice number ----------->"+radomNumber.getSoreturninvoicenumber());
-				return radomNumber;
-			}catch(Exception e) {
-				e.printStackTrace();
-				return radomNumber;
-			}finally {
-				
-			}	
-		}
-		
-		@Override
-		public boolean updateReturnRandamNumber(RandomNumber rn) {
-			logger.info("current invoice number -->"+rn.getPoreturninvoicenumber());		
+	}
+
+	@Override
+	public boolean updatediscountRandamNumber(RandomNumber rn) {
+		logger.info("current Discount invoice number -->" + rn.getDiscountinvoicenumber());
+		Query query = new Query();
+		query.addCriteria(Criteria.where("randomID").is(5));
+		Update update = new Update();
+		update.set("discountinvoicenumber", rn.getDiscountinvoicenumber() + 1);
+		mongoTemplate.updateFirst(query, update, RandomNumber.class);// (query, RandamNumber.class);
+		return true;// mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
+	}
+
+	@Override
+	public RandomNumber getReturnRandamNumber() {
+		RandomNumber radomNumber = null;
+		try {
+			logger.info("----------- Inside getReturnRandamNumber-----------");
 			Query query = new Query();
-		    query.addCriteria(Criteria.where("randomID").is(6));
-			Update update = new Update();
-			update.set("poreturninvoicenumber", rn.getPoreturninvoicenumber()+1);			
-			mongoTemplate.updateFirst(query, update, RandomNumber.class);
-			return true;
+			logger.info("---------  Before addCriteria ---------");
+			query.addCriteria(Criteria.where("randomID").is(6));
+			logger.info("-----------  After addCriteria -----------");
+			radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
+			logger.info("PO Return Invoice number ----------->" + radomNumber.getPoreturninvoicenumber());
+			logger.info("SO Return Invoice number ----------->" + radomNumber.getSoreturninvoicenumber());
+			return radomNumber;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return radomNumber;
+		} finally {
+
 		}
-		
-		@Override
-		public boolean updateSalesReturnRandamNumber(RandomNumber rn) {
-			logger.info("current invoice number -->"+rn.getSoreturninvoicenumber());		
+	}
+
+	@Override
+	public boolean updateReturnRandamNumber(RandomNumber rn) {
+		logger.info("current invoice number -->" + rn.getPoreturninvoicenumber());
+		Query query = new Query();
+		query.addCriteria(Criteria.where("randomID").is(6));
+		Update update = new Update();
+		update.set("poreturninvoicenumber", rn.getPoreturninvoicenumber() + 1);
+		mongoTemplate.updateFirst(query, update, RandomNumber.class);
+		return true;
+	}
+
+	@Override
+	public boolean updateSalesReturnRandamNumber(RandomNumber rn) {
+		logger.info("current invoice number -->" + rn.getSoreturninvoicenumber());
+		Query query = new Query();
+		query.addCriteria(Criteria.where("randomID").is(6));
+		Update update = new Update();
+		update.set("soreturninvoicenumber", rn.getSoreturninvoicenumber() + 1);
+		mongoTemplate.updateFirst(query, update, RandomNumber.class);
+		return true;
+	}
+
+	// Category and product RandomNumber Getting
+	@Override
+	public RandomNumber getStockDamageRandomNumber() {
+		RandomNumber radomNumber = null;
+		try {
+			logger.info("----------- Inside getStockDamageRandomNumber -----------");
 			Query query = new Query();
-		    query.addCriteria(Criteria.where("randomID").is(6));
-			Update update = new Update();
-			update.set("soreturninvoicenumber", rn.getSoreturninvoicenumber()+1);			
-			mongoTemplate.updateFirst(query, update, RandomNumber.class);
-			return true;
+			logger.info("-----------  Before addCriteria-----------");
+			query.addCriteria(Criteria.where("randomID").is(7));
+			logger.info("-----------  After addCriteria-----------");
+			radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
+			logger.info("StockDamage Invoice number ----------->" + radomNumber.getStockdamageinvoicenumber());
+			logger.info("StockDamage Invoice code ----------->" + radomNumber.getStockdamageinvoicecode());
+			return radomNumber;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return radomNumber;
+		} finally {
+
 		}
-		
-		//Category and product RandomNumber Getting
-		@Override
-		public RandomNumber getStockDamageRandomNumber() {
-			RandomNumber radomNumber=null;
-			try {
-				logger.info("----------- Inside getStockDamageRandomNumber -----------");
-				Query query = new Query();
-				logger.info("-----------  Before addCriteria-----------");
-			    query.addCriteria(Criteria.where("randomID").is(7));
-				logger.info("-----------  After addCriteria-----------");
-				radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
-				logger.info("StockDamage Invoice number ----------->"+radomNumber.getStockdamageinvoicenumber());
-				logger.info("StockDamage Invoice code ----------->"+radomNumber.getStockdamageinvoicecode());
-				return radomNumber;
-			}catch(Exception e) {
-				e.printStackTrace();
-				return radomNumber;
-			}finally {
-				
-			}	
-		}
-		
-		@Override
-		public boolean updateStockDamRandamNumber(RandomNumber rn) {
-			logger.info("current invoice number -->"+rn.getStockdamageinvoicenumber());		
-			Query query = new Query();
-		    query.addCriteria(Criteria.where("randomID").is(7));
-			Update update = new Update();
-			update.set("stockdamageinvoicenumber", rn.getStockdamageinvoicenumber()+1);			
-			mongoTemplate.updateFirst(query, update, RandomNumber.class);
-			return true;
-		}
-		
+	}
+
+	@Override
+	public boolean updateStockDamRandamNumber(RandomNumber rn) {
+		logger.info("current invoice number -->" + rn.getStockdamageinvoicenumber());
+		Query query = new Query();
+		query.addCriteria(Criteria.where("randomID").is(7));
+		Update update = new Update();
+		update.set("stockdamageinvoicenumber", rn.getStockdamageinvoicenumber() + 1);
+		mongoTemplate.updateFirst(query, update, RandomNumber.class);
+		return true;
+	}
+
 }
