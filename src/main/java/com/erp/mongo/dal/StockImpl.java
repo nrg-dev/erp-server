@@ -11,44 +11,49 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import com.erp.mongo.model.Category;
+import com.erp.mongo.model.Employee;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.SOReturnDetails;
 import com.erp.mongo.model.StockDamage;
 
+
 @Repository
 public class StockImpl implements StockDAL {
-
+	
 	public static final Logger logger = LoggerFactory.getLogger(StockImpl.class);
+
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
-	// loadPurchae Return
-	public List<POReturnDetails> loadPurchaseReturn(List<POReturnDetails> polist) {
+	//loadPurchae Return
+	public List<POReturnDetails> loadPurchaseReturn(List<POReturnDetails> polist){
 		polist = mongoTemplate.findAll(POReturnDetails.class);
 		return polist;
 	}
-
-	// loadSales Return
-	public List<SOReturnDetails> loadSalesReturn(List<SOReturnDetails> solist) {
+	
+	
+	//loadSales Return
+	public List<SOReturnDetails> loadSalesReturn(List<SOReturnDetails> solist){
 		solist = mongoTemplate.findAll(SOReturnDetails.class);
 		return solist;
 	}
-
-	// save
+	
+	//save
 	public StockDamage saveStockDamage(StockDamage damage) {
 		mongoTemplate.save(damage);
 		damage.setStatus("success");
 		return damage;
 	}
-
-	// load
-	public List<StockDamage> loadStockDamage(List<StockDamage> damagelist) {
+	
+	//load
+	public List<StockDamage> loadStockDamage(List<StockDamage> damagelist){
 		damagelist = mongoTemplate.findAll(StockDamage.class);
 		return damagelist;
 	}
-
-	// update
+	
+	//update
 	@Override
 	public StockDamage updateDamage(StockDamage damage) {
 		Update update = new Update();
@@ -62,7 +67,8 @@ public class StockImpl implements StockDAL {
 		mongoTemplate.updateFirst(query, update, StockDamage.class);
 		damage.setStatus("success");
 		return damage;
-
+		
 	}
-
+	
+	
 }
