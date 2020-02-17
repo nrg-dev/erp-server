@@ -26,6 +26,9 @@ public class Sales {
 	  String customerEmail;
 	  String customerCity;
 	  String customerCountry;
+	  String invoiceNumber;
+	  int totalAmount;
+	  int totalItem;
 
 	public String getProductName() {
 		return productName;
@@ -119,6 +122,24 @@ public class Sales {
 	}
 	public void setCustomerCountry(String customerCountry) {
 		this.customerCountry = customerCountry;
+	}
+	public String getInvoiceNumber() {
+		return invoiceNumber;
+	}
+	public void setInvoiceNumber(String invoiceNumber) {
+		this.invoiceNumber = invoiceNumber;
+	}
+	public int getTotalAmount() {
+		return totalAmount;
+	}
+	public void setTotalAmount(int totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+	public int getTotalItem() {
+		return totalItem;
+	}
+	public void setTotalItem(int totalItem) {
+		this.totalItem = totalItem;
 	}
 	
 	

@@ -1,5 +1,6 @@
 package com.erp.mongo.dal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.erp.mongo.model.Customer;
@@ -29,8 +30,13 @@ public interface SalesDAL {
 
 	public Item getUnitPrice(String productCode, String categoryCode);
 
-	public SOInvoiceDetails updateSales(SOInvoiceDetails purchase);
+	public SOInvoiceDetails updateSales(SOInvoiceDetails sales);
 
 	public SOReturnDetails insertReturn(SOReturnDetails soreturndetails);
+	
+	public SOInvoice updateSOInvoice(SOInvoice soinvoice);
+	
+	public SOInvoice loadSOInvoice(String invoicenumber);
+	public ArrayList<String> loadCustomerName();   
 
 }

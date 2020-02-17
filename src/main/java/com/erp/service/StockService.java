@@ -41,6 +41,8 @@ import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.SOReturnDetails;
 import com.erp.mongo.model.StockDamage;
+import com.erp.mongo.model.StockReturn;
+import com.erp.util.Custom;
 
 @SpringBootApplication
 @RestController
@@ -107,6 +109,7 @@ public class StockService implements Filter {
 				 po.setProductName(poList.get(i).getItemname());
 				 po.setQuantity(poList.get(i).getQty());
 				 po.setStatus(poList.get(i).getItemStatus());
+				 po.setVendorName(poList.get(i).getVendorname());
 				 po.setInvoiceNumber(poList.get(i).getInvoicenumber());
 				 list.add(po);
 			}
@@ -119,6 +122,7 @@ public class StockService implements Filter {
 				 so.setProductName(soList.get(j).getItemname());
 				 so.setQuantity(soList.get(j).getQty());
 				 so.setStatus(soList.get(j).getItemStatus());
+				 so.setVendorName(soList.get(j).getCustomername()); 
 				 so.setInvoiceNumber(soList.get(j).getInvoicenumber());
 				 list.add(so);
 			}		
@@ -133,21 +137,54 @@ public class StockService implements Filter {
 		return new ResponseEntity<List<Purchase>>(list, HttpStatus.CREATED);
 	}
 	
-	// Save
+	// Save Stock Return
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/saveStockReturn", method = RequestMethod.POST)
+	public ResponseEntity<?> saveStockReturn(@RequestBody StockReturn stockreturn) {
+		System.out.println("-------- Save Stock Damage -------------");
+		RandomNumber randomnumber = null;
+		int temp = 1;
+		try {
+			randomnumber = randomnumberdal.getStockDamageRandomNumber();
+			String invoice = randomnumber.getStockreturninvoicecode() + randomnumber.getStockreturninvoicenumber();
+			stockreturn.setStockReturnCode(invoice);
+			System.out.println("Invoice Number -->" + stockreturn.getStockReturnCode());
+			
+			stockreturn.setAddedDate(Custom.getCurrentInvoiceDate());
+
+			stockreturn = stockdal.saveStockReturn(stockreturn);
+			if (stockreturn.getStatus().equalsIgnoreCase("success")) {
+				boolean status = randomnumberdal.updateStockDamRandamNumber(randomnumber,temp);
+			}
+			return new ResponseEntity<StockReturn>(stockreturn, HttpStatus.CREATED);
+		} catch (Exception e) {
+			logger.info("StockReturn Exception ------------->" + e.getMessage());
+			e.printStackTrace();
+		}
+
+		finally {
+
+		}
+		return new ResponseEntity<StockReturn>(stockreturn, HttpStatus.CREATED);
+	}
+	
+	// Save StockDamage 
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<?> saveStockDamage(@RequestBody StockDamage stockdamage) {
 		System.out.println("-------- Save Stock Damage -------------");
 		RandomNumber randomnumber = null;
+		int temp = 2;
 		try {
 			randomnumber = randomnumberdal.getStockDamageRandomNumber();
 			String invoice = randomnumber.getStockdamageinvoicecode() + randomnumber.getStockdamageinvoicenumber();
 			stockdamage.setStockDamageCode(invoice);
 			System.out.println("Product name -->" + stockdamage.getProductName());
-
+			System.out.println("Invoice Number -->" + stockdamage.getStockDamageCode());
+			stockdamage.setAddedDate(Custom.getCurrentInvoiceDate());
 			stockdamage = stockdal.saveStockDamage(stockdamage);
 			if (stockdamage.getStatus().equalsIgnoreCase("success")) {
-				boolean status = randomnumberdal.updateStockDamRandamNumber(randomnumber);
+				boolean status = randomnumberdal.updateStockDamRandamNumber(randomnumber,temp);
 			}
 			return new ResponseEntity<StockDamage>(stockdamage, HttpStatus.CREATED);
 		} catch (Exception e) {

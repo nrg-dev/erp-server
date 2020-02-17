@@ -28,6 +28,8 @@ public class Purchase {
 	  String vendorCountry;
 	  String returnCategory;
 	  String invoiceNumber;
+	  int totalAmount;
+	  int totalItem;
 
 	public String getProductName() {
 		return productName;
@@ -132,6 +134,18 @@ public class Purchase {
 	}
 	public void setInvoiceNumber(String invoiceNumber) {
 		this.invoiceNumber = invoiceNumber;
+	}
+	public int getTotalAmount() {
+		return totalAmount;
+	}
+	public void setTotalAmount(int totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+	public int getTotalItem() {
+		return totalItem;
+	}
+	public void setTotalItem(int totalItem) {
+		this.totalItem = totalItem;
 	}
 	
 	

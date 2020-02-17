@@ -1,5 +1,6 @@
 package com.erp.mongo.dal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -131,20 +132,54 @@ public class SalesImpl implements SalesDAL {
 		item = mongoTemplate.findOne(query, Item.class);
 		return item;
 	}
-
-	// update
+	
+	//Update SoDetails
 	@Override
 	public SOInvoiceDetails updateSales(SOInvoiceDetails sales) {
 		Update update = new Update();
 		Query query = new Query();
-		query.addCriteria(Criteria.where("invoicenumber").is(sales.getInvoicenumber()));
-		update.set("itemname", sales.getItemname());
+		query.addCriteria(Criteria.where("id").is(sales.getId()));
+		
+		update.set("invoicenumber", sales.getInvoicenumber());
 		update.set("category", sales.getCategory());
+		update.set("itemname", sales.getItemname());
 		update.set("qty", sales.getQty());
 		update.set("description", sales.getDescription());
+		update.set("unitprice", sales.getUnitprice());
 		update.set("subtotal", sales.getSubtotal());
+		update.set("soDate", sales.getSoDate());
+		update.set("lastUpdate", sales.getLastUpdate());
 		mongoTemplate.updateFirst(query, update, SOInvoiceDetails.class);
 		return sales;
+	}
+	
+	@Override
+	public SOInvoice loadSOInvoice(String invoicenumber) {
+		SOInvoice soinvoice;
+		Query query = new Query();
+		query.addCriteria(Criteria.where("invoicenumber").is(invoicenumber));
+		soinvoice = mongoTemplate.findOne(query, SOInvoice.class);
+		return soinvoice;
+	}
+	
+	// update SOInvoice
+	@Override
+	public SOInvoice updateSOInvoice(SOInvoice purchase) {
+		Update update = new Update();
+		Query query = new Query();
+		query.addCriteria(Criteria.where("invoicenumber").is(purchase.getInvoicenumber()));
+		
+		update.set("invoicedate", purchase.getInvoicedate());
+		update.set("invoicenumber", purchase.getInvoicenumber());
+		update.set("customername", purchase.getCustomername());
+		update.set("deliveryprice", purchase.getDeliveryprice());
+		update.set("totalqty", purchase.getTotalqty());
+		update.set("totalprice", purchase.getTotalprice());
+		update.set("totalitem", purchase.getTotalitem());
+		update.set("status", purchase.getStatus());
+
+		mongoTemplate.updateFirst(query, update, SOInvoice.class);
+		return purchase;
 	}
 
 	// Save SO Invoice details
@@ -154,5 +189,18 @@ public class SalesImpl implements SalesDAL {
 		mongoTemplate.save(salesreturn);
 		System.out.println("After save SO Return details");
 		return salesreturn;
+	}
+	
+	//load customer name & code
+	public ArrayList<String> loadCustomerName()
+	{
+		ArrayList<String> list = new ArrayList<String>();
+		List<Customer> customerlist = mongoTemplate.findAll(Customer.class);
+		for(Customer customer:customerlist) {
+			logger.info("Customer name-->"+customer.getCustomerName());
+			logger.info("Customer code-->"+customer.getCustcode());
+			list.add(customer.getCustomerName()+"-"+customer.getCustcode());			
+		}
+		return list;		
 	}
 }

@@ -32,5 +32,11 @@ public interface PurchaseDAL {
 	public POInvoiceDetails updatePurchase(POInvoiceDetails purchase);
 
 	public POReturnDetails insertReturn(POReturnDetails poreturndetails);
+	
+	public POInvoice updatePOInvoice(POInvoice poinvoice);
+	
+	public POInvoice loadPOInvoice(String invoicenumber);
+
+	public List<Item> loadVendorItem(List<Item> itemlist, String vendorCode);   
 
 }

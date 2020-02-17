@@ -38,6 +38,6 @@ public interface RandomNumberDAL {
 
 	public RandomNumber getStockDamageRandomNumber();
 
-	public boolean updateStockDamRandamNumber(RandomNumber rn);
+	public boolean updateStockDamRandamNumber(RandomNumber rn, int temp); 
 
 }

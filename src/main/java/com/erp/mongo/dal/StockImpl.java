@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.SOReturnDetails;
 import com.erp.mongo.model.StockDamage;
+import com.erp.mongo.model.StockReturn;
 
 @Repository
 public class StockImpl implements StockDAL {
@@ -62,7 +63,13 @@ public class StockImpl implements StockDAL {
 		mongoTemplate.updateFirst(query, update, StockDamage.class);
 		damage.setStatus("success");
 		return damage;
-
+	}
+	
+	//save
+	public StockReturn saveStockReturn(StockReturn stReturn) {
+		mongoTemplate.save(stReturn);
+		stReturn.setStatus("success");
+		return stReturn;
 	}
 
 }

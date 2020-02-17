@@ -4,19 +4,21 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class StockDamage {
+public class StockReturn {
 
 	@Id
 	private String id;
-	String stockDamageCode;
+	String stockReturnCode;
 	String productName;
 	String category;
 	String quantity;
 	String stockDate;
 	String status;
 	String currentStatus;
+	String vendorName;
+	String returncategory;
 	String addedDate;
-
+	
 	public String getId() {
 		return id;
 	}
@@ -33,12 +35,12 @@ public class StockDamage {
 		this.status = status;
 	}
 
-	public String getStockDamageCode() {
-		return stockDamageCode;
+	public String getStockReturnCode() {
+		return stockReturnCode;
 	}
 
-	public void setStockDamageCode(String stockDamageCode) {
-		this.stockDamageCode = stockDamageCode;
+	public void setStockReturnCode(String stockReturnCode) {
+		this.stockReturnCode = stockReturnCode;
 	}
 
 	public String getProductName() {
@@ -79,6 +81,22 @@ public class StockDamage {
 
 	public void setCurrentStatus(String currentStatus) {
 		this.currentStatus = currentStatus;
+	}
+
+	public String getVendorName() {
+		return vendorName;
+	}
+
+	public void setVendorName(String vendorName) {
+		this.vendorName = vendorName;
+	}
+
+	public String getReturncategory() {
+		return returncategory;
+	}
+
+	public void setReturncategory(String returncategory) {
+		this.returncategory = returncategory;
 	}
 
 	public String getAddedDate() {

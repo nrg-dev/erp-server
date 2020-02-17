@@ -35,23 +35,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.bo.ErpBo;
-import com.erp.dto.Purchase;
 import com.erp.dto.Sales;
 import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.dal.SalesDAL;
-import com.erp.mongo.model.Category;
 import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Item;
-import com.erp.mongo.model.POInvoice;
-import com.erp.mongo.model.POInvoiceDetails;
-import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOInvoiceDetails;
 import com.erp.mongo.model.SOReturnDetails;
-import com.erp.mongo.model.Vendor;
 import com.erp.util.Custom;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication
 @RestController
@@ -138,7 +131,6 @@ public class SalesService implements Filter {
 		int totalitem = 0;
 		try {
 			sales = new Sales();
-			ObjectMapper mapper = new ObjectMapper();
 			System.out.println("Post Json -->" + salesorderarray);
 			// logger.info("Vendor name --->"+vendorName);
 			// Store into parent table to show in first data table view
@@ -149,7 +141,6 @@ public class SalesService implements Filter {
 			System.out.println("Invoice number -->" + invoice);
 			ArrayList<String> list = new ArrayList<String>();
 			JSONArray jsonArr = new JSONArray(salesorderarray);
-			int len = jsonArr.length();
 			int remove = 0;
 			if (jsonArr != null) {
 				for (int i = 0; i < jsonArr.length(); i++) {
@@ -169,9 +160,9 @@ public class SalesService implements Filter {
 					System.out.println("Last Value");
 					JSONObject jObject = arr2.getJSONObject(0);
 					System.out.println("SO Date -->" + jObject.getString("sodate"));
-					System.out.println("Customer Name -->" + jObject.getString("customername"));
+					//System.out.println("Customer Name -->" + jObject.getString("customername"));
 					System.out.println("Delivery Cost -->" + jObject.getString("deliveryCost"));
-					sales.setCustomerName(jObject.getString("customername"));
+					//sales.setCustomerName(jObject.getString("customername"));
 					sales.setDeliveryCost(jObject.getString("deliveryCost"));
 
 				} else {
@@ -185,6 +176,7 @@ public class SalesService implements Filter {
 								System.out.println(jObject.getString("category"));
 								sodetails = new SOInvoiceDetails();
 								sodetails.setInvoicenumber(invoice);// random table..
+								sales.setCustomerName(jObject.getString("customerName"));
 								sodetails.setCategory(jObject.getString("category"));
 								sodetails.setItemname(jObject.getString("productName"));
 								sodetails.setDescription(jObject.getString("description"));
@@ -192,9 +184,9 @@ public class SalesService implements Filter {
 								sodetails.setQty(jObject.getString("quantity"));
 								sodetails.setSubtotal(jObject.getDouble("netAmount"));
 								sodetails.setSoDate(Custom.getCurrentInvoiceDate());
-								logger.info("POInvoice Date --->" + sodetails.getSoDate());
+								logger.info("SOInvoice Date --->" + sodetails.getSoDate());
 								salesdal.saveSales(sodetails);
-								totalQty += jObject.getInt("quantity");
+								//totalQty += jObject.getInt("quantity");
 								totalPrice += jObject.getDouble("netAmount");
 								totalitem = j+1;
 							} else {
@@ -224,14 +216,14 @@ public class SalesService implements Filter {
 			return new ResponseEntity<Sales>(sales, HttpStatus.CREATED);
 		}
 
-		catch (NullPointerException ne) {
+		/*catch (NullPointerException ne) {
 			sales = new Sales();
 			System.out.println("Inside null pointer exception ....");
 			sales.setStatus("success");
 			boolean status = randomnumberdal.updateRandamNumber(randomnumber);
 			return new ResponseEntity<Sales>(sales, HttpStatus.CREATED);
 
-		} catch (Exception e) {
+		}*/ catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
 			e.printStackTrace();
 		}
@@ -250,12 +242,44 @@ public class SalesService implements Filter {
 	public ResponseEntity<?> loadSales() {
 		logger.info("------------- Inside loadSales-----------------");
 		List<SOInvoice> response = new ArrayList<SOInvoice>();
+		List<SOInvoiceDetails> sodetail = new ArrayList<SOInvoiceDetails>();
 		List<Sales> responseList = new ArrayList<Sales>();
+		Sales sales =null;
 		try {
 			logger.info("-----------Inside loadSales Called----------");
 			response = salesdal.loadSales(response);
-			return new ResponseEntity<List<SOInvoice>>(response, HttpStatus.CREATED);
-
+			for(SOInvoice res: response) {
+				sales = new Sales();
+				String itemnameList = "";
+				String qtylist = "";
+				String totalAmountlist = "";
+				String prodList = "";
+				sodetail = salesdal.getSales(res.getInvoicenumber());
+				for(int i=0;i<sodetail.size();i++) {
+					logger.info("Product Name -->"+sodetail.get(i).getItemname()); 
+					itemnameList = itemnameList+sodetail.get(i).getItemname() + System.lineSeparator()+ System.lineSeparator();
+					prodList = prodList + sodetail.get(i).getItemname() + ","+ System.lineSeparator();
+					logger.info("Qty -->"+sodetail.get(i).getQty()); 
+					qtylist = qtylist+sodetail.get(i).getQty() + System.lineSeparator()+ System.lineSeparator();
+					logger.info("Total -->"+sodetail.get(i).getSubtotal()); 
+					totalAmountlist = totalAmountlist+sodetail.get(i).getSubtotal() + System.lineSeparator()+ System.lineSeparator(); 
+				}
+				 System.out.println("Particular invoice productList -->"+itemnameList);	
+				 sales.setInvoiceNumber(res.getInvoicenumber());
+				 sales.setSoDate(res.getInvoicedate());
+				 sales.setCustomerName(res.getCustomername());
+				 sales.setNetAmount(totalAmountlist);
+				 sales.setTotalAmount(res.getTotalprice());
+				 sales.setDeliveryCost(res.getDeliveryprice());
+				 sales.setStatus(res.getStatus());
+				 sales.setProductName(itemnameList); 
+				 sales.setQuantity(qtylist);
+				 sales.setUnitPrice(totalAmountlist);
+				 sales.setTotalItem(res.getTotalitem()); 
+				 sales.setDescription(prodList);
+				 responseList.add(sales);
+			}
+			return new ResponseEntity<List<Sales>>(responseList, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.info("loadSales Exception ------------->" + e.getMessage());
 			e.printStackTrace();
@@ -288,11 +312,9 @@ public class SalesService implements Filter {
 	public ResponseEntity<?> getCustomerDetails(String customername) {
 		logger.info("------------- Inside get getCustomerDetails -----------------");
 		Customer customer = null;
-		Sales sales = null;
 		try {
 			logger.info("Customer Name -->" + customername);
 			customer = new Customer();
-			sales = new Sales();
 			String[] res = customername.split("-");
 			String customerCode = res[1];
 			logger.info("After Split Customer Name -->" + customerCode);
@@ -406,7 +428,7 @@ public class SalesService implements Filter {
 			logger.info("----------- Before Calling  remove Particular Sales ----------");
 			System.out.println("ObjectID -->" + id);
 			System.out.println("salesCode -->" + invoiceNumber);
-			// ---- Check List Size from POInvoiceDetails Table
+			// ---- Check List Size from SOInvoiceDetails Table
 			responseList = salesdal.getSales(invoiceNumber);
 			logger.info("List Size -->" + responseList.size());
 			if (responseList.size() == 0 || responseList.size() == 1 ) {
@@ -433,128 +455,189 @@ public class SalesService implements Filter {
 	// Update
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
-	public ResponseEntity<?> updateSales(@RequestBody SOInvoiceDetails sodetails) {
+	public ResponseEntity<?> updateSales(@RequestBody String saleseditarray) {
+		String temp = saleseditarray;
+		System.out.println("Edit Sales value -->" + temp);
+		System.out.println("-------- Update Sales -------------");
+		Sales sales = null;
+		SOInvoice soinvoice = null;
+		SOInvoiceDetails sodetails = null;
+		int totalQty = 0;
+		int totalPrice = 0;
+		int totalitem = 0;
 		try {
-			logger.info("--- Inside Product Edit ---");
-			sodetails = salesdal.updateSales(sodetails);
-			return new ResponseEntity<SOInvoiceDetails>(sodetails, HttpStatus.CREATED);
-
+			sales = new Sales();
+			System.out.println("Get Sales Json -->" + saleseditarray);
+			ArrayList<String> list = new ArrayList<String>();
+			JSONArray jsonArr = new JSONArray(saleseditarray);
+			int remove = 0;
+			if (jsonArr != null) {
+				for (int i = 0; i < jsonArr.length(); i++) {
+					list.add(jsonArr.get(i).toString());
+					remove++;
+				}
+			}
+			int postion = remove - 1;
+			System.out.println("Position ---->" + postion);
+			list.remove(postion);
+			System.out.println("Edit Size -------->" + jsonArr.length());
+			int l = 1;
+			for (int i = 0; i < jsonArr.length(); i++) {
+				System.out.println("Loop 1....");
+				JSONArray arr2 = jsonArr.optJSONArray(i);
+				if (jsonArr.optJSONArray(i) != null) {
+					for (int j = 0; j < arr2.length(); j++) {
+						System.out.println("Loop 2....");
+						if (arr2.getJSONObject(j) != null) {
+							JSONObject jObject = arr2.getJSONObject(j);
+							System.out.println(jObject.getString("productName"));
+							System.out.println(jObject.getString("category"));
+							sodetails = new SOInvoiceDetails();
+							sodetails.setCategory(jObject.getString("category"));
+							sodetails.setItemname(jObject.getString("productName"));
+							sodetails.setDescription(jObject.getString("description"));
+							sodetails.setUnitprice(jObject.getString("price"));
+							sodetails.setQty(jObject.getString("quantity"));
+							sodetails.setSubtotal(jObject.getDouble("netAmount"));
+							sodetails.setLastUpdate(Custom.getCurrentInvoiceDate());
+							sodetails.setInvoicenumber(jObject.getString("invoiceNumber"));
+							sodetails.setSoDate(jObject.getString("soDate"));
+							sodetails.setId(jObject.getString("id"));
+							salesdal.updateSales(sodetails);
+							totalQty += jObject.getInt("quantity");
+							totalPrice += jObject.getDouble("netAmount");
+							totalitem = j+1;
+						} else {
+							System.out.println("Null....");
+						}
+					}
+				}else {
+					System.out.println("Outer Null....");
+				}
+				l++;
+			}
+			soinvoice = new SOInvoice(); 
+			soinvoice = salesdal.loadSOInvoice(sodetails.getInvoicenumber());
+			soinvoice.setInvoicenumber(sodetails.getInvoicenumber());
+			logger.info("Total Qty -->"+totalQty);
+			logger.info("Total Price -->"+totalPrice);
+			soinvoice.setTotalqty(totalQty);
+			soinvoice.setTotalprice(totalPrice);
+			logger.info("After soInvoice Total Qty -->"+soinvoice.getTotalqty());
+			logger.info("After soInvoice Total Price -->"+soinvoice.getTotalprice());
+			soinvoice.setTotalitem(totalitem); 
+			salesdal.updateSOInvoice(soinvoice);
+			sales.setStatus("success");
+			return new ResponseEntity<Sales>(sales, HttpStatus.CREATED);
 		} catch (Exception e) {
-			logger.info("updateSales Exception ------------->" + e.getMessage());
+			logger.info("Exception ------------->" + e.getMessage());
 			e.printStackTrace();
 		} finally {
 
 		}
-		return new ResponseEntity<SOInvoiceDetails>(sodetails, HttpStatus.CREATED);
+		return new ResponseEntity<Sales>(sales, HttpStatus.CREATED);
 	}
 	
 	// SaveReturn
-		@CrossOrigin(origins = "http://localhost:4200")
-		@PostMapping(value = "/saveReturn")
-		public ResponseEntity<?> saveSalesReturn(@RequestBody String myReturnArray) {
-			String temp = myReturnArray;
-			System.out.println("Mapped value -->" + temp);
-			System.out.println("--------save saveSalesReturn-------------");
-			Sales sales = null;
-			SOReturnDetails soreturndetails = null;
-			RandomNumber randomnumber = null;
-			List<SOReturnDetails> sotablist=new ArrayList<SOReturnDetails>();
+	@CrossOrigin(origins = "http://localhost:4200")
+	@PostMapping(value = "/saveReturn")
+	public ResponseEntity<?> saveSalesReturn(@RequestBody String returnarray) {
+		String temp = returnarray;
+		System.out.println("Mapped value -->" + temp);
+		System.out.println("--------save saveSalesReturn-------------");
+		Sales sales = null;
+		SOReturnDetails soreturndetails = null;
+		RandomNumber randomnumber = null;
 
-			try {
-				sales = new Sales();
-				ObjectMapper mapper = new ObjectMapper();
-				System.out.println("Post Json -->" + myReturnArray);
-				randomnumber = randomnumberdal.getReturnRandamNumber();
-				System.out.println("SO Return random number-->" + randomnumber.getSoreturninvoicenumber());
-				System.out.println("SO Return random code-->" + randomnumber.getSoreturninvoicecode());
-				String invoice = randomnumber.getSoreturninvoicecode() + randomnumber.getSoreturninvoicenumber();
-				System.out.println("Sales Return Invoice number -->" + invoice);
-				
-				JSONArray jsonArray = new JSONArray(myReturnArray);
-				ArrayList<String> list = new ArrayList<String>();
-				System.out.println("length ====="+jsonArray.length());
-				for(int i=0;i<jsonArray.length();i++){ 
-					list.add(jsonArray.getString(i));
-				   System.out.println("array list----"+jsonArray.getString(i)); 
-			    }
-				logger.info("List Size ---->"+list.size()); 
-				String[] names=null; 
-				for(int m=0;m<list.size();m++){
-					names=list.get(m).split(","); 
-					System.out.println("Sales names -->"+names[0]);  
-					int c=0;
-					for (String name : names) {
-						 if(c!=6){
-					         c++;
-					      }else if(c==6){
-					         if(!name.equalsIgnoreCase("]"))
-					         { 
-					          int v=0;
-					          soreturndetails = new SOReturnDetails();
-					          for(String value:names){
-					           if(v==0){
-					            v++;
-					            soreturndetails.setSoDate(value.replace("[", ""));
-					           }else if(v==1){
-					        	   soreturndetails.setItemname(value);
-						           v++;
-						       }else if(v==2){
-					        	   soreturndetails.setCategory(value);
-						           v++;
-						       }else if(v==3){
-						    	   soreturndetails.setCustomername(value);
-						           v++;
-						       }else if(v==4){
-						    	   soreturndetails.setQty(value);
-						           v++;
-						       }else if(v==5) {
-						    	   soreturndetails.setItemStatus(value);
-						           v++;
-						       }else if(v==6) {
-						    	   soreturndetails.setReturnStatus(value.replace("]", ""));
-						       }
-
-					          }
-						      sotablist.add(soreturndetails);
-					       }
-					    }
+		try {
+			sales = new Sales();
+			System.out.println("Post Json -->" + returnarray);
+			
+			JSONArray jsonArr = new JSONArray(returnarray);
+			ArrayList<String> list = new ArrayList<String>();
+			System.out.println("length ====="+jsonArr.length());
+			int remove = 0;
+			if (jsonArr != null) {
+				for (int i = 0; i < jsonArr.length(); i++) {
+					list.add(jsonArr.get(i).toString());
+					remove++;
+				}
+			}
+			
+			int postion = remove - 1;
+			System.out.println("Position-->" + postion);
+			list.remove(postion);
+			System.out.println("Size -------->" + jsonArr.length());
+			int l = 1;
+			for (int i = 0; i < jsonArr.length(); i++) {
+				JSONArray arr2 = jsonArr.optJSONArray(i);
+				if (jsonArr.optJSONArray(i) != null) {
+					for (int j = 0; j < arr2.length(); j++) {
+						randomnumber = randomnumberdal.getReturnRandamNumber();
+						System.out.println("SO Return random number-->" + randomnumber.getSoreturninvoicenumber());
+						System.out.println("SO Return random code-->" + randomnumber.getSoreturninvoicecode());
+						String invoice = randomnumber.getSoreturninvoicecode() + randomnumber.getSoreturninvoicenumber();
+						System.out.println("Sales Return Invoice number -->" + invoice);
+						if (arr2.getJSONObject(j) != null) {
+							JSONObject jObject = arr2.getJSONObject(j);
+							System.out.println(jObject.getString("productName"));
+							System.out.println(jObject.getString("category"));
+							soreturndetails = new SOReturnDetails();
+							soreturndetails.setInvoicenumber(invoice);// random table..
+							soreturndetails.setCustomername(jObject.getString("customerName"));
+							soreturndetails.setCategory(jObject.getString("category"));
+							soreturndetails.setItemname(jObject.getString("productName"));
+							soreturndetails.setQty(jObject.getString("quantity"));
+							soreturndetails.setItemStatus(jObject.getString("itemStatus"));
+							soreturndetails.setReturnStatus(jObject.getString("returnStatus"));
+							soreturndetails.setSoDate(Custom.getCurrentInvoiceDate());
+							soreturndetails.setInvid(j+1); 
+							logger.info("POInvoice Date --->" + soreturndetails.getSoDate());
+							salesdal.insertReturn(soreturndetails);
+							logger.info("Invoice Number --->"+randomnumber.getSoreturninvoicenumber());
+							boolean status = randomnumberdal.updateSalesReturnRandamNumber(randomnumber);
+							logger.info("After Increament Invoice Number --->"+randomnumber.getSoreturninvoicenumber());
+							
+						} else {
+							System.out.println("Null....");
+						}
+						l++;
 					}
+				} else {
+					System.out.println("Outer Null....");
 				}
-				for (int i = 0; i < sotablist.size(); i++) {
-					soreturndetails.setSoDate(sotablist.get(i).getSoDate());
-					soreturndetails.setItemname(sotablist.get(i).getItemname());
-					soreturndetails.setCategory(sotablist.get(i).getCategory()); 
-					soreturndetails.setCustomername(sotablist.get(i).getCustomername());
-					soreturndetails.setQty(sotablist.get(i).getQty());
-					soreturndetails.setItemStatus(sotablist.get(i).getItemStatus()); 
-					soreturndetails.setReturnStatus(sotablist.get(i).getReturnStatus());
-					soreturndetails.setInvoicenumber(invoice);
-					logger.info("Customer Name-------------->"+soreturndetails.getCustomername()); 
-					logger.info("---- Before insert into Sales Return -----"+i);
-					salesdal.insertReturn(soreturndetails);
-					logger.info("---- After insert into Sales Return -----"+i);
-				}
-				sales.setStatus("success");
-				boolean status = randomnumberdal.updateSalesReturnRandamNumber(randomnumber);
-				return new ResponseEntity<Sales>(sales, HttpStatus.CREATED);
 			}
-
-			catch (NullPointerException ne) {
-				sales = new Sales();
-				System.out.println("Inside null pointer exception ....");
-				sales.setStatus("success");
-				boolean status = randomnumberdal.updateRandamNumber(randomnumber);
-				return new ResponseEntity<Sales>(sales, HttpStatus.CREATED);
-
-			} catch (Exception e) {
-				logger.info("Exception ------------->" + e.getMessage());
-				e.printStackTrace();
-			}
-
-			finally {
-
-			}
+			sales.setStatus("success");
 			return new ResponseEntity<Sales>(sales, HttpStatus.CREATED);
+		} catch (Exception e) {
+			logger.info("Exception ------------->" + e.getMessage());
+			e.printStackTrace();
 		}
+
+		finally {
+
+		}
+		return new ResponseEntity<Sales>(sales, HttpStatus.CREATED);
+	}
+	
+	// Load customer for populate for auto text box
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/loadCustomerName", method = RequestMethod.GET)
+	public ResponseEntity<?> loadCustomerName() {
+		logger.info("------------- Inside loadCustomerName-----------------");
+		ArrayList<String> customerlist = null;
+		try {
+			logger.info("-----------Before Calling Load customer list----------");
+			customerlist = salesdal.loadCustomerName();
+			logger.info("-----------Successfully Called Load customer list------");
+
+		} catch (Exception e) {
+			logger.info("Exception ------------->" + e.getMessage());
+			e.printStackTrace();
+		} finally {
+
+		}
+		return new ResponseEntity<ArrayList<String>>(customerlist, HttpStatus.CREATED);
+	}
 
 }

@@ -267,8 +267,10 @@ public class RandomNumberImpl implements RandomNumberDAL {
 			query.addCriteria(Criteria.where("randomID").is(7));
 			logger.info("-----------  After addCriteria-----------");
 			radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
-			logger.info("StockDamage Invoice number ----------->" + radomNumber.getStockdamageinvoicenumber());
-			logger.info("StockDamage Invoice code ----------->" + radomNumber.getStockdamageinvoicecode());
+			logger.info("StockDamage Invoice number ----------->"+radomNumber.getStockdamageinvoicenumber()
+				+ "StockReturn InvoiceNumber" +radomNumber.getStockreturninvoicenumber());
+			logger.info("StockDamage Invoice code ----------->"+radomNumber.getStockdamageinvoicecode()
+				+ "StockReturn InvoiceCode" +radomNumber.getStockreturninvoicecode());
 			return radomNumber;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -279,12 +281,18 @@ public class RandomNumberImpl implements RandomNumberDAL {
 	}
 
 	@Override
-	public boolean updateStockDamRandamNumber(RandomNumber rn) {
+	public boolean updateStockDamRandamNumber(RandomNumber rn, int temp) {
 		logger.info("current invoice number -->" + rn.getStockdamageinvoicenumber());
 		Query query = new Query();
 		query.addCriteria(Criteria.where("randomID").is(7));
 		Update update = new Update();
-		update.set("stockdamageinvoicenumber", rn.getStockdamageinvoicenumber() + 1);
+		if(temp == 1) {
+			logger.info("current invoice number -->"+rn.getStockreturninvoicenumber());	
+			update.set("stockreturninvoicenumber", rn.getStockreturninvoicenumber()+1);			
+		}else if(temp == 2) {
+			logger.info("current invoice number -->"+rn.getStockdamageinvoicenumber());		
+			update.set("stockdamageinvoicenumber", rn.getStockdamageinvoicenumber()+1);			
+		}
 		mongoTemplate.updateFirst(query, update, RandomNumber.class);
 		return true;
 	}
