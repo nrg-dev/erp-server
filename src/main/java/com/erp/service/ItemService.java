@@ -131,7 +131,7 @@ public class ItemService implements Filter {
 	
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/addpromotionsave", method = RequestMethod.POST)
-	public ResponseEntity<?> saveCategory(@RequestBody Discount discount) {
+	public ResponseEntity<?> saveDiscount(@RequestBody Discount discount) {
 		System.out.println("-------- saveAddPromotion-------------");
 		RandomNumber randomnumber = null;
 		try {
@@ -212,14 +212,15 @@ public class ItemService implements Filter {
 	// Add Promotion load
 		@CrossOrigin(origins = "http://localhost:8080")
 		@RequestMapping(value = "/discountload", method = RequestMethod.GET)
-		public ResponseEntity<?> loadDiscount() {
-			logger.info("------------- Inside DiscountLoad-----------------");
+		public ResponseEntity<?> loadDiscount(String discountType) {
+			logger.info("------------- Inside Load Discount Free gift -----------------");
 			List<Discount> discountlist = new ArrayList<Discount>();
 			try {
-				logger.info("-----------Inside DiscountLoad Called----------");
-				discountlist = itemdal.loadDiscount(discountlist);
-				for (Discount discount : discountlist) {
-					System.out.println("discount code -->"+discount.getDiscountcode());
+				logger.info("-----------Before calling load discount dao----------");
+				discountlist = itemdal.loadDiscount(discountlist,discountType);
+				logger.info("-----------After calling load discount dao----------");
+				for (Discount disc : discountlist) {
+					System.out.println("discount code -->"+disc.getDiscountcode());
 
 				}
 				return new ResponseEntity<List<Discount>>(discountlist, HttpStatus.CREATED);

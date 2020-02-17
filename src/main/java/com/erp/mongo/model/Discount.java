@@ -10,6 +10,7 @@ public class Discount {
 	private String id;
 	String discountcode;
 	String productname;
+	String discountType;
 	String discount;
 	String qty ;
 	String freegift;
@@ -25,6 +26,12 @@ public class Discount {
 		this.id = id;
 	}
 	
+	public String getDiscountType() {
+		return discountType;
+	}
+	public void setDiscountType(String discountType) {
+		this.discountType = discountType;
+	}
 	public String getDiscountcode() {
 		return discountcode;
 	}

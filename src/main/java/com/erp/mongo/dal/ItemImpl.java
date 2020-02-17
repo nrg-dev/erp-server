@@ -54,8 +54,11 @@ public class ItemImpl implements ItemDAL {
 	}
 
 	// Discount load
-	public List<Discount> loadDiscount(List<Discount> discountlist) {
-		discountlist = mongoTemplate.findAll(Discount.class);
+	public List<Discount> loadDiscount(List<Discount> discountlist,String discount) {
+		System.out.println("Fetech Type -->"+discount);
+		Query query = new Query();
+		query.addCriteria(Criteria.where("discountType").is(discount));
+		discountlist = mongoTemplate.find(query,Discount.class);
 		return discountlist;
 
 	}

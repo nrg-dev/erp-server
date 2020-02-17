@@ -11,7 +11,7 @@ public interface ItemDAL {
 	public Discount saveDiscount(Discount discount);
 	
 	public List<Item> loadItem(List<Item> itemlist,String category);
-	public List<Discount> loadDiscount(List<Discount> discountlist);
+	public List<Discount> loadDiscount(List<Discount> discountlist,String discount);
 	
 	public Item getItem(String itemid);
 	
