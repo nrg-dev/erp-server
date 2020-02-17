@@ -8,41 +8,44 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
-
+import org.springframework.data.mongodb.core.query.Update;
 import com.erp.mongo.model.Category;
+import com.erp.mongo.model.Vendor;
+
 
 @Repository
 public class CategoryImpl implements CategoryDAL {
-
+	
 	public static final Logger logger = LoggerFactory.getLogger(CategoryImpl.class);
+
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
-	// save
+	
+	//save
 	public Category saveCategory(Category category) {
 		mongoTemplate.save(category);
 		category.setStatus("success");
 		return category;
 	}
-
-	// load
-	public List<Category> loadCategory(List<Category> categorylist) {
+	
+	//load
+	public List<Category> loadCategory(List<Category> categorylist){
 		categorylist = mongoTemplate.findAll(Category.class);
 		return categorylist;
-
+		
 	}
-
-	// get
+	
+	//get
 	public Category getCategory(String categoryid) {
-		Category category = null;
+		Category category=null;
 		return category;
-
+		
 	}
-
-	// update
+	
+	//update
 	@Override
 	public Category updateCategory(Category category) {
 		Update update = new Update();
@@ -52,15 +55,15 @@ public class CategoryImpl implements CategoryDAL {
 		update.set("description", category.getDescription());
 		mongoTemplate.updateFirst(query, update, Category.class);
 		return category;
-
+		
 	}
-
-	// remove
+	
+	//remove
 	public Category removeCategory(String categorycode) {
-		Category response = null;
-		Query query = new Query();
+		Category response=null;
+		Query query= new Query();
 		query.addCriteria(Criteria.where("categorycode").is(categorycode));
-		mongoTemplate.remove(query, Category.class);
+		mongoTemplate.remove(query,Category.class);
 		return response;
 	}
 }
