@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Item;
+import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOInvoiceDetails;
 import com.erp.mongo.model.SOReturnDetails;
@@ -202,5 +203,13 @@ public class SalesImpl implements SalesDAL {
 			list.add(customer.getCustomerName()+"-"+customer.getCustcode());			
 		}
 		return list;		
+	}
+	
+	//----- Load PurchaseInvoice Based on date --
+	public List<SOInvoice> loadfilterData(List<SOInvoice> list,String fromdate, String todate) {
+		list = mongoTemplate.find(
+                Query.query(Criteria.where("invoicedate").gte(fromdate).lt(todate)), 
+                SOInvoice.class);
+		return list;
 	}
 }

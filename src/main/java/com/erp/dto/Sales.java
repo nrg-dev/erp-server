@@ -29,6 +29,8 @@ public class Sales {
 	  String invoiceNumber;
 	  int totalAmount;
 	  int totalItem;
+	  String fromdate; 
+	  String todate; 
 
 	public String getProductName() {
 		return productName;
@@ -140,6 +142,18 @@ public class Sales {
 	}
 	public void setTotalItem(int totalItem) {
 		this.totalItem = totalItem;
+	}
+	public String getFromdate() {
+		return fromdate;
+	}
+	public void setFromdate(String fromdate) {
+		this.fromdate = fromdate;
+	}
+	public String getTodate() {
+		return todate;
+	}
+	public void setTodate(String todate) {
+		this.todate = todate;
 	}
 	
 	

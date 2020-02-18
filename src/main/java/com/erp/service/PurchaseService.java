@@ -1,7 +1,10 @@
 package com.erp.service;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.Filter;
@@ -731,4 +734,67 @@ public class PurchaseService implements Filter {
 		return new ResponseEntity<List<Item>>(itemlist, HttpStatus.CREATED);
 	}
 
+	//----- Filter Date Data ------
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/loadfilterData", method = RequestMethod.POST)
+	public ResponseEntity<?> loadfilterData(@RequestBody Purchase purchase) {
+		System.out.println("-------- loadfilterData ---------");
+		List<POInvoice> response = new ArrayList<POInvoice>();
+		List<Purchase> purlist = new ArrayList<Purchase>();
+		List<POInvoiceDetails> podetail = new ArrayList<POInvoiceDetails>();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat your_format = new SimpleDateFormat("dd/MM/yyyy");
+		try {
+			logger.info("-----------Inside loadfilterData Called----------");
+			
+			logger.info("From Date -->"+purchase.getFromdate());
+			Date dt1 = format.parse(purchase.getFromdate());
+			String fromdate = your_format.format(dt1);
+			System.out.println("dd/MM/yyyy date -->"+fromdate);
+			
+			logger.info("To Date -->"+purchase.getTodate());
+			Date dt2 = format.parse(purchase.getTodate());
+			String todate = your_format.format(dt2);
+			System.out.println("dd/MM/yyyy date -->"+todate);
+			
+			response = purchasedal.loadfilterData(response,fromdate,todate);
+			for(POInvoice res: response) {
+				purchase = new Purchase();
+				String itemnameList = "";
+				String qtylist = "";
+				String totalAmountlist = "";
+				String prodList = "";
+				podetail = purchasedal.getPurchase(res.getInvoicenumber());
+				for(int i=0;i<podetail.size();i++) {
+					logger.info("Product Name -->"+podetail.get(i).getItemname()); 
+					itemnameList = itemnameList+podetail.get(i).getItemname() + "\r\n";
+					prodList = prodList + podetail.get(i).getItemname() + ","+ System.lineSeparator();
+					logger.info("Qty -->"+podetail.get(i).getQty()); 
+					qtylist = qtylist + podetail.get(i).getQty() + "\r\n";
+					logger.info("Total -->"+podetail.get(i).getSubtotal()); 
+					totalAmountlist = totalAmountlist+podetail.get(i).getSubtotal() + System.lineSeparator()+ System.lineSeparator();
+				}
+				 System.out.println("Particular invoice productList -->"+itemnameList);	
+				 purchase.setInvoiceNumber(res.getInvoicenumber());
+				 purchase.setPoDate(res.getInvoicedate());
+				 purchase.setVendorName(res.getVendorname());
+				 purchase.setTotalAmount(res.getTotalprice());
+				 purchase.setDeliveryCost(res.getDeliveryprice());
+				 purchase.setStatus(res.getStatus()); 
+				 purchase.setProductName(itemnameList); 
+				 purchase.setQuantity(qtylist);
+				 purchase.setUnitPrice(totalAmountlist);
+				 purchase.setTotalItem(res.getTotalitem());
+				 purchase.setDescription(prodList);
+				 purlist.add(purchase);
+			}
+			return new ResponseEntity<List<Purchase>>(purlist, HttpStatus.CREATED);
+		} catch (Exception e) {
+			logger.info("loadfilterData Exception ------------->" + e.getMessage());
+			e.printStackTrace();
+		} finally {
+
+		}
+		return new ResponseEntity<List<Purchase>>(purlist, HttpStatus.CREATED);
+	}
 }

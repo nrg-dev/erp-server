@@ -2,6 +2,7 @@ package com.erp.mongo.dal;
 
 import java.util.List;
 
+import com.erp.dto.Purchase;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
@@ -37,6 +38,8 @@ public interface PurchaseDAL {
 	
 	public POInvoice loadPOInvoice(String invoicenumber);
 
-	public List<Item> loadVendorItem(List<Item> itemlist, String vendorCode);   
+	public List<Item> loadVendorItem(List<Item> itemlist, String vendorCode);
+
+	public List<POInvoice> loadfilterData(List<POInvoice> response,String fromdate, String todate);     
 
 }

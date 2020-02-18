@@ -1,7 +1,9 @@
 package com.erp.service;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.Filter;
@@ -35,11 +37,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.bo.ErpBo;
+import com.erp.dto.Purchase;
 import com.erp.dto.Sales;
 import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.dal.SalesDAL;
 import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Item;
+import com.erp.mongo.model.POInvoice;
+import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOInvoiceDetails;
@@ -639,5 +644,70 @@ public class SalesService implements Filter {
 		}
 		return new ResponseEntity<ArrayList<String>>(customerlist, HttpStatus.CREATED);
 	}
+	
+	//----- Filter Date Data ------
+		@CrossOrigin(origins = "http://localhost:8080")
+		@RequestMapping(value = "/loadfilterData", method = RequestMethod.POST)
+		public ResponseEntity<?> loadfilterData(@RequestBody Sales sales) {
+			System.out.println("-------- loadfilterData ---------");
+			List<SOInvoice> response = new ArrayList<SOInvoice>();
+			List<Sales> saleslist = new ArrayList<Sales>();
+			List<SOInvoiceDetails> sodetail = new ArrayList<SOInvoiceDetails>();
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat your_format = new SimpleDateFormat("dd/MM/yyyy");
+			try {
+				logger.info("-----------Inside loadfilterData Called----------");
+				
+				logger.info("From Date -->"+sales.getFromdate());
+				Date dt1 = format.parse(sales.getFromdate());
+				String fromdate = your_format.format(dt1);
+				System.out.println("dd/MM/yyyy date -->"+fromdate);
+				
+				logger.info("To Date -->"+sales.getTodate());
+				Date dt2 = format.parse(sales.getTodate());
+				String todate = your_format.format(dt2);
+				System.out.println("dd/MM/yyyy date -->"+todate);
+				
+				response = salesdal.loadfilterData(response,fromdate,todate);
+				for(SOInvoice res: response) {
+					sales = new Sales();
+					String itemnameList = "";
+					String qtylist = "";
+					String totalAmountlist = "";
+					String prodList = "";
+					sodetail = salesdal.getSales(res.getInvoicenumber());
+					for(int i=0;i<sodetail.size();i++) {
+						logger.info("Product Name -->"+sodetail.get(i).getItemname()); 
+						itemnameList = itemnameList+sodetail.get(i).getItemname() + System.lineSeparator()+ System.lineSeparator();
+						prodList = prodList + sodetail.get(i).getItemname() + ","+ System.lineSeparator();
+						logger.info("Qty -->"+sodetail.get(i).getQty()); 
+						qtylist = qtylist+sodetail.get(i).getQty() + System.lineSeparator()+ System.lineSeparator();
+						logger.info("Total -->"+sodetail.get(i).getSubtotal()); 
+						totalAmountlist = totalAmountlist+sodetail.get(i).getSubtotal() + System.lineSeparator()+ System.lineSeparator(); 
+					}
+					 System.out.println("Particular invoice productList -->"+itemnameList);	
+					 sales.setInvoiceNumber(res.getInvoicenumber());
+					 sales.setSoDate(res.getInvoicedate());
+					 sales.setCustomerName(res.getCustomername());
+					 sales.setNetAmount(totalAmountlist);
+					 sales.setTotalAmount(res.getTotalprice());
+					 sales.setDeliveryCost(res.getDeliveryprice());
+					 sales.setStatus(res.getStatus());
+					 sales.setProductName(itemnameList); 
+					 sales.setQuantity(qtylist);
+					 sales.setUnitPrice(totalAmountlist);
+					 sales.setTotalItem(res.getTotalitem()); 
+					 sales.setDescription(prodList);
+					 saleslist.add(sales);
+				}
+				return new ResponseEntity<List<Sales>>(saleslist, HttpStatus.CREATED);
+			} catch (Exception e) {
+				logger.info("loadfilterData Exception ------------->" + e.getMessage());
+				e.printStackTrace();
+			} finally {
+
+			}
+			return new ResponseEntity<List<Sales>>(saleslist, HttpStatus.CREATED);
+		}
 
 }

@@ -11,6 +11,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import com.erp.mongo.model.POInvoice;
+import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.SOReturnDetails;
 import com.erp.mongo.model.StockDamage;
@@ -70,6 +72,13 @@ public class StockImpl implements StockDAL {
 		mongoTemplate.save(stReturn);
 		stReturn.setStatus("success");
 		return stReturn;
+	}
+	
+
+	// load
+	public List<POInvoice> loadInvoice(List<POInvoice> polist) {
+		polist = mongoTemplate.findAll(POInvoice.class);
+		return polist;
 	}
 
 }

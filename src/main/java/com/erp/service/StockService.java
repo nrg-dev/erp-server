@@ -36,6 +36,8 @@ import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.dal.SalesDAL;
 import com.erp.mongo.dal.StockDAL;
 import com.erp.mongo.model.Category;
+import com.erp.mongo.model.Item;
+import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.RandomNumber;
@@ -233,6 +235,30 @@ public class StockService implements Filter {
 
 		}
 		return new ResponseEntity<StockDamage>(damage, HttpStatus.CREATED);
+	}
+	
+	//----- get Invoice List ----
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/loadInvoice", method = RequestMethod.GET)
+	public ResponseEntity<?> loadInvoice() {
+		logger.info("------------- Inside loadInvoice -----------------");
+		List<POInvoice> polist = new ArrayList<POInvoice>();
+		List<String> list = new ArrayList<String>();
+		try {
+			logger.info("-----------Inside loadInvoice Called ----------");
+			polist = stockdal.loadInvoice(polist);
+			for (POInvoice po : polist) {
+				System.out.println("Invoice Number -->" + po.getInvoicenumber());
+				list.add(po.getInvoicenumber());
+			}
+			return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
+		} catch (Exception e) {
+			logger.info("loadInvoice Exception ------------->" + e.getMessage());
+			e.printStackTrace();
+		} finally {
+
+		}
+		return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
 	}
 
 }

@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import com.erp.dto.Purchase;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
@@ -63,7 +64,6 @@ public class PurchaseImpl implements PurchaseDAL {
 		// List<PurchaseOrder>
 		list = mongoTemplate.findAll(POInvoice.class);// .find(query, OwnTree.class); return
 		return list;
-
 	}
 
 	// get Purchase on Impl
@@ -214,6 +214,12 @@ public class PurchaseImpl implements PurchaseDAL {
 		}
 
 		return itemlist;
-
+	}
+	
+	//----- Load PurchaseInvoice Based on date --
+	public List<POInvoice> loadfilterData(List<POInvoice> list,String fromdate, String todate) {
+		list = mongoTemplate.find(
+                Query.query(Criteria.where("invoicedate").gte(fromdate).lt(todate)),POInvoice.class);
+		return list;
 	}
 }
