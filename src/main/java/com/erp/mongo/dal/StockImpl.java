@@ -15,8 +15,11 @@ import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.SOReturnDetails;
+import com.erp.mongo.model.Stock;
 import com.erp.mongo.model.StockDamage;
+import com.erp.mongo.model.StockInDetails;
 import com.erp.mongo.model.StockReturn;
+import com.erp.mongo.model.Vendor;
 
 @Repository
 public class StockImpl implements StockDAL {
@@ -74,11 +77,43 @@ public class StockImpl implements StockDAL {
 		return stReturn;
 	}
 	
-
 	// load
 	public List<POInvoice> loadInvoice(List<POInvoice> polist) {
 		polist = mongoTemplate.findAll(POInvoice.class);
 		return polist;
 	}
+	
+	// Save StockInDetails
+	@Override
+	public StockInDetails saveStockIn(StockInDetails stockIndetails) {
+		System.out.println("Before save stockIn details");
+		mongoTemplate.save(stockIndetails);
+		System.out.println("After save stockIn details");
+		return stockIndetails;
+	}
+	
+	// Save Stock
+	public Stock saveStock(Stock stock) {
+		System.out.println("Before Save Stock");
+		mongoTemplate.save(stock);
+		System.out.println("After Save Stock");
+		return stock;
+	}
+	
+	@Override
+	public StockInDetails loadStockInTotal(String itemName) {
+		StockInDetails stockIn;
+		Query query = new Query();
+		query.addCriteria(Criteria.where("itemname").is(itemName));
+		stockIn = mongoTemplate.findOne(query, StockInDetails.class);
+		return stockIn;
+	}
+	
+	// load
+	public List<Stock> loadStockIn(List<Stock> stocklist) {
+		stocklist = mongoTemplate.findAll(Stock.class);
+		return stocklist;
+	}
+
 
 }

@@ -10,7 +10,7 @@ db.randomNumber.insert({ "randomID" : 4,"employeeinvoicenumber" : 01,"employeein
 db.randomNumber.insert({ "randomID" : 5,"discountinvoicenumber" : 01,"discountinvoicecode" : "DIS"})
 db.randomNumber.insert({ "randomID" : 6,"poreturninvoicenumber" : 001,"poreturninvoicecode" : "INVPORET","soreturninvoicenumber" : 001,"soreturninvoicecode":"INVSORET"})
 db.randomNumber.insert({ "randomID" : 7,"stockreturninvoicenumber" : 001,"stockreturninvoicecode" : "INVRET","stockdamageinvoicenumber" : 001,"stockdamageinvoicecode" : "INVDAM"})
-
+db.randomNumber.insert({ "randomID" : 8,"stockIninvoicenumber" : 001,"stockIninvoicecode" : "INVSTIN","stockOutinvoicenumber" : 001,"stockOutinvoicecode" : "INVSTOUT"})
 
 
 show collections
@@ -73,7 +73,7 @@ db.randomNumber.find();
 db.randomNumber.remove( { } )
 
 
-db.randomNumber.remove({"_id" :ObjectId("5e4a2dc8fb95c503377ec60a") });
+db.randomNumber.remove({"_id" :ObjectId("5e4d225d6f87e773d1d7b748") });
 db.randomNumber.update({"_id" :ObjectId("5e3a7ec0f0272fa0cc5d2bdc") },{$set : {"soDate":'8'}})
 
 

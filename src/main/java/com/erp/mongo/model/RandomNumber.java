@@ -43,6 +43,12 @@ public class RandomNumber {
 	
 	private long stockdamageinvoicenumber;
 	private String stockdamageinvoicecode;
+	
+	private long stockIninvoicenumber;
+	private String stockIninvoicecode;
+	
+	private long stockOutinvoicenumber;
+	private String stockOutinvoicecode;
 
 
 	public String getId() {
@@ -243,6 +249,38 @@ public class RandomNumber {
 
 	public void setStockdamageinvoicecode(String stockdamageinvoicecode) {
 		this.stockdamageinvoicecode = stockdamageinvoicecode;
+	}
+
+	public long getStockIninvoicenumber() {
+		return stockIninvoicenumber;
+	}
+
+	public void setStockIninvoicenumber(long stockIninvoicenumber) {
+		this.stockIninvoicenumber = stockIninvoicenumber;
+	}
+
+	public String getStockIninvoicecode() {
+		return stockIninvoicecode;
+	}
+
+	public void setStockIninvoicecode(String stockIninvoicecode) {
+		this.stockIninvoicecode = stockIninvoicecode;
+	}
+
+	public long getStockOutinvoicenumber() {
+		return stockOutinvoicenumber;
+	}
+
+	public void setStockOutinvoicenumber(long stockOutinvoicenumber) {
+		this.stockOutinvoicenumber = stockOutinvoicenumber;
+	}
+
+	public String getStockOutinvoicecode() {
+		return stockOutinvoicecode;
+	}
+
+	public void setStockOutinvoicecode(String stockOutinvoicecode) {
+		this.stockOutinvoicecode = stockOutinvoicecode;
 	}
 	
 	

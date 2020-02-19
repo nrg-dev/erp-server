@@ -12,6 +12,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +27,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -42,7 +45,9 @@ import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.SOReturnDetails;
+import com.erp.mongo.model.Stock;
 import com.erp.mongo.model.StockDamage;
+import com.erp.mongo.model.StockInDetails;
 import com.erp.mongo.model.StockReturn;
 import com.erp.util.Custom;
 
@@ -260,5 +265,123 @@ public class StockService implements Filter {
 		}
 		return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
 	}
+	
+	//-------- Save StockIn Details -----
+	@CrossOrigin(origins = "http://localhost:4200")
+	@PostMapping(value = "/saveStockIn")
+	public ResponseEntity<?> saveStockIn(@RequestBody String stockInarray) {
+		String temp = stockInarray;
+		System.out.println("-------- Save StockIn -------------");
+		Purchase purchase = null;
+		Stock stock = null;
+		StockInDetails stockIndetails = null;
+		List<POInvoiceDetails> podet = null;
+		RandomNumber randomnumber = null;
+		String totalQty = "";
+		String addedQty = "";
+		String itemnameList = "";
+		String categoryList = "";
+		int tempNo = 1;
+		try {
+			purchase = new Purchase();
+			System.out.println("Post Json -->" + stockInarray);
+			// Store into parent table to show in first data table view
+			randomnumber = randomnumberdal.getStockRandamNumber();
+			System.out.println("StockIn random number-->" + randomnumber.getStockIninvoicenumber());
+			System.out.println("StockIn random code-->" + randomnumber.getStockIninvoicecode());
+			String invoice = randomnumber.getStockIninvoicecode() + randomnumber.getStockIninvoicenumber();
+			System.out.println("Invoice number -->" + invoice);
+			ArrayList<String> list = new ArrayList<String>();
+			JSONArray jsonArr = new JSONArray(stockInarray);
+			int remove = 0;
+			if (jsonArr != null) {
+				for (int i = 0; i < jsonArr.length(); i++) {
+					list.add(jsonArr.get(i).toString());
+					remove++;
+				}
+			}
+			int postion = remove - 1;
+			System.out.println("Position-->" + postion);
+			list.remove(postion);
+			System.out.println("Size -------->" + jsonArr.length());
+			int l = 1;
+			for (int i = 0; i < jsonArr.length(); i++) {
+				JSONArray arr2 = jsonArr.optJSONArray(i);
+				if (jsonArr.optJSONArray(i) != null) {
+					for (int j = 0; j < arr2.length(); j++) {
+						if (arr2.getJSONObject(j) != null) {
+							JSONObject jObject = arr2.getJSONObject(j);
+							System.out.println(jObject.getString("productName"));
+							System.out.println(jObject.getString("category"));
+							stockIndetails = new StockInDetails();
+							podet = new ArrayList<POInvoiceDetails>();
+							stockIndetails.setStockInNumber(invoice);
+							stockIndetails.setInvoicenumber(jObject.getString("invoiceNumber"));
+							stockIndetails.setCategory(jObject.getString("category"));
+							stockIndetails.setItemname(jObject.getString("productName"));
+							stockIndetails.setDescription(jObject.getString("description"));
+							stockIndetails.setQty(jObject.getString("quantity"));
+							stockIndetails.setSubtotal(jObject.getDouble("netAmount"));
+							stockIndetails.setPoDate(Custom.getCurrentInvoiceDate());
+							logger.info("StockIn Date --->" + stockIndetails.getPoDate());
+							stockdal.saveStockIn(stockIndetails);
+							addedQty = addedQty+stockIndetails.getQty() + ",";
+							StockInDetails stockIn = stockdal.loadStockInTotal(stockIndetails.getItemname());
+							totalQty = totalQty+stockIn.getQty() + ",";
+							itemnameList = itemnameList+stockIndetails.getItemname() + ",";
+							categoryList = categoryList+stockIndetails.getCategory() + ",";
+						} else {
+							System.out.println("Null....");
+						}
+					}
+				} else {
+					System.out.println("Outer Null....");
+				}
+				l++;
+			}
+			stock = new Stock(); 
+			stock.setInvoicedate(Custom.getCurrentInvoiceDate());
+			logger.info("Invoice Date --->" + stock.getInvoicedate());
+			stock.setStockInCategory("Purchase "+stockIndetails.getInvoicenumber());
+			stock.setItemname(itemnameList);
+			stock.setCategory(categoryList); 
+			stock.setAddedqty(addedQty);
+			stock.setRecentStock(totalQty);
+			stock.setStatus("StockIn"); 
+			stockdal.saveStock(stock);
+			System.out.println("Service call start.....");
+			purchase.setStatus("success");
+			boolean status = randomnumberdal.updateStockRandamNumber(randomnumber,tempNo);
+			return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
+		}catch (Exception e) {
+			logger.info("saveStockIn Exception ------------->" + e.getMessage());
+			e.printStackTrace();
+		}
+
+		finally {
+
+		}
+		return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
+	}
+
+	// Load StockInDetails
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/loadStockIn", method = RequestMethod.GET)
+	public ResponseEntity<?> loadStockIn() {
+		logger.info("------------- Inside loadStockIn-----------------");
+		List<Stock> stocklist = new ArrayList<Stock>();
+		try {
+			logger.info("-----------Inside loadStockIn Called----------");
+			stocklist = stockdal.loadStockIn(stocklist);
+			return new ResponseEntity<List<Stock>>(stocklist, HttpStatus.CREATED);
+		} catch (Exception e) {
+			logger.info("loadStockIn Exception ------------->" + e.getMessage());
+			e.printStackTrace();
+		} finally {
+
+		}
+		return new ResponseEntity<List<Stock>>(stocklist, HttpStatus.CREATED);
+	}
+	
 
 }

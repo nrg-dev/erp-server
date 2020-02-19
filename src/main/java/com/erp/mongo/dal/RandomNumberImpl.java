@@ -296,5 +296,43 @@ public class RandomNumberImpl implements RandomNumberDAL {
 		mongoTemplate.updateFirst(query, update, RandomNumber.class);
 		return true;
 	}
+	
+	
+	@Override
+	public RandomNumber getStockRandamNumber() {
+		RandomNumber radomNumber = null;
+		try {
+			logger.info("----------- Inside getStockRandamNumber -----------");
+			Query query = new Query();
+			query.addCriteria(Criteria.where("randomID").is(8));
+			logger.info("-----------  After addCriteria-----------");
+			radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
+			logger.info("StockIn InvoiceNumber ----------->" + radomNumber.getStockIninvoicenumber());
+			logger.info("StockOut InvoiceNumber ----------->" + radomNumber.getStockOutinvoicenumber());
+			return radomNumber;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return radomNumber;
+		} finally {
+
+		}
+	}
+	
+	@Override
+	public boolean updateStockRandamNumber(RandomNumber rn, int temp) {
+		logger.info("current invoice number -->" + rn.getStockIninvoicenumber());
+		Query query = new Query();
+		query.addCriteria(Criteria.where("randomID").is(8));
+		Update update = new Update();
+		if(temp == 1) {
+			logger.info("current invoice number -->"+rn.getStockIninvoicenumber());	
+			update.set("StockIn Invoicenumber", rn.getStockIninvoicenumber()+1);			
+		}else if(temp == 2) {
+			logger.info("current invoice number -->"+rn.getStockOutinvoicenumber());		
+			update.set("StockOut Invoicenumber", rn.getStockOutinvoicenumber()+1);			
+		}
+		mongoTemplate.updateFirst(query, update, RandomNumber.class);
+		return true;
+	}
 
 }

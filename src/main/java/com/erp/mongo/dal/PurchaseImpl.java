@@ -36,7 +36,6 @@ public class PurchaseImpl implements PurchaseDAL {
 		mongoTemplate.save(poinvoice);
 		System.out.println("After save Invoice");
 		return poinvoice;
-
 	}
 
 	// Save PO Invoice details
