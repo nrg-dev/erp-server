@@ -134,4 +134,5 @@ public class POInvoiceDetails {
 		this.lastUpdate = lastUpdate;
 	}
 
+
 }

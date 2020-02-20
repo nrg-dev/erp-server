@@ -191,7 +191,9 @@ public class SalesService implements Filter {
 								sodetails.setSoDate(Custom.getCurrentInvoiceDate());
 								logger.info("SOInvoice Date --->" + sodetails.getSoDate());
 								salesdal.saveSales(sodetails);
-								//totalQty += jObject.getInt("quantity");
+								String str = jObject.getString("quantity");
+								str = str.replaceAll("\\D", "");
+								totalQty += Integer.valueOf(str);
 								totalPrice += jObject.getDouble("netAmount");
 								totalitem = j+1;
 							} else {
@@ -509,7 +511,9 @@ public class SalesService implements Filter {
 							sodetails.setSoDate(jObject.getString("soDate"));
 							sodetails.setId(jObject.getString("id"));
 							salesdal.updateSales(sodetails);
-							totalQty += jObject.getInt("quantity");
+							String str = jObject.getString("quantity");
+							str = str.replaceAll("\\D", "");
+							totalQty += Integer.valueOf(str);
 							totalPrice += jObject.getDouble("netAmount");
 							totalitem = j+1;
 						} else {

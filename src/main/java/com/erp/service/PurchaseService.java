@@ -47,6 +47,7 @@ import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.Vendor;
+import com.erp.util.AdditionOfString;
 import com.erp.util.Custom;
 
 @SpringBootApplication
@@ -264,7 +265,9 @@ public class PurchaseService implements Filter {
 								podetails.setPoDate(Custom.getCurrentInvoiceDate());
 								logger.info("POInvoice Date --->" + podetails.getPoDate());
 								purchasedal.savePurchase(podetails);
-								//totalQty += Integer.valueOf(jObject.getString("quantity"));
+								String str = jObject.getString("quantity");
+								str = str.replaceAll("\\D", "");
+								totalQty += Integer.valueOf(str);
 								totalPrice += jObject.getDouble("netAmount");
 								totalitem = j+1;
 							} else {
@@ -283,6 +286,8 @@ public class PurchaseService implements Filter {
 			poinvoice.setVendorname(purchase.getVendorName());
 			poinvoice.setInvoicenumber(invoice);
 			poinvoice.setStatus("Pending");
+			poinvoice.setPaymentStatus("Not Paid");
+			poinvoice.setRemainingAmount("0"); 
 			poinvoice.setTotalqty(totalQty);
 			poinvoice.setTotalprice(totalPrice);
 			poinvoice.setTotalitem(totalitem); 
@@ -585,7 +590,9 @@ public class PurchaseService implements Filter {
 							podetails.setPoDate(jObject.getString("poDate"));
 							podetails.setId(jObject.getString("id"));
 							purchasedal.updatePurchase(podetails);
-							totalQty += jObject.getInt("quantity");
+							String str = jObject.getString("quantity");
+							str = str.replaceAll("\\D", "");
+							totalQty += Integer.valueOf(str);
 							totalPrice += jObject.getDouble("netAmount");
 							totalitem = j+1;
 						} else {
@@ -606,7 +613,9 @@ public class PurchaseService implements Filter {
 			poinvoice.setTotalprice(totalPrice);
 			logger.info("After PoInvoice Total Qty -->"+poinvoice.getTotalqty());
 			logger.info("After PoInvoice Total Price -->"+poinvoice.getTotalprice());
-			poinvoice.setTotalitem(totalitem); 
+			poinvoice.setTotalitem(totalitem); ;
+			poinvoice.setPaymentStatus("Not Paid");
+			poinvoice.setRemainingAmount("0"); 
 			purchasedal.updatePOInvoice(poinvoice);
 			purchase.setStatus("success");
 			return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);

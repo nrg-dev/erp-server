@@ -326,10 +326,10 @@ public class RandomNumberImpl implements RandomNumberDAL {
 		Update update = new Update();
 		if(temp == 1) {
 			logger.info("current invoice number -->"+rn.getStockIninvoicenumber());	
-			update.set("StockIn Invoicenumber", rn.getStockIninvoicenumber()+1);			
+			update.set("stockIninvoicenumber", rn.getStockIninvoicenumber()+1);			
 		}else if(temp == 2) {
 			logger.info("current invoice number -->"+rn.getStockOutinvoicenumber());		
-			update.set("StockOut Invoicenumber", rn.getStockOutinvoicenumber()+1);			
+			update.set("stockOutinvoicenumber", rn.getStockOutinvoicenumber()+1);			
 		}
 		mongoTemplate.updateFirst(query, update, RandomNumber.class);
 		return true;

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
+import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOReturnDetails;
 import com.erp.mongo.model.Stock;
 import com.erp.mongo.model.StockDamage;
@@ -78,8 +79,19 @@ public class StockImpl implements StockDAL {
 	}
 	
 	// load
-	public List<POInvoice> loadInvoice(List<POInvoice> polist) {
-		polist = mongoTemplate.findAll(POInvoice.class);
+	public List<POInvoice> loadInvoice(List<POInvoice> polist, String paymentOption) {
+		Query query = new Query();
+		logger.info("PaymentOption --->"+paymentOption);
+		/*if(paymentOption.equalsIgnoreCase("FullStockIn")) {
+			query.addCriteria( new Criteria().orOperator(
+					Criteria.where("paymentStatus").is(""),
+					Criteria.where("paymentStatus").is("Not Paid") ));
+		}else if(paymentOption.equalsIgnoreCase("PartialStockIn")) {*/
+			query.addCriteria( new Criteria().orOperator(
+					Criteria.where("paymentStatus").is("Not Paid"),Criteria.where("paymentStatus").is(""),
+					Criteria.where("paymentStatus").is("PartialStockIn") ) );
+		//}
+		polist = mongoTemplate.find(query,POInvoice.class);
 		return polist;
 	}
 	
@@ -101,11 +113,11 @@ public class StockImpl implements StockDAL {
 	}
 	
 	@Override
-	public StockInDetails loadStockInTotal(String itemName) {
-		StockInDetails stockIn;
+	public List<POInvoiceDetails> loadStockInTotal(String itemName) {
+		List<POInvoiceDetails> stockIn;
 		Query query = new Query();
 		query.addCriteria(Criteria.where("itemname").is(itemName));
-		stockIn = mongoTemplate.findOne(query, StockInDetails.class);
+		stockIn = mongoTemplate.find(query, POInvoiceDetails.class);
 		return stockIn;
 	}
 	
@@ -113,6 +125,31 @@ public class StockImpl implements StockDAL {
 	public List<Stock> loadStockIn(List<Stock> stocklist) {
 		stocklist = mongoTemplate.findAll(Stock.class);
 		return stocklist;
+	}
+	
+	
+	public void updatePOInvoice(POInvoice poinvoice,int temp) {
+		Update update = new Update();
+		Query query = new Query();
+		query.addCriteria(Criteria.where("invoicenumber").is(poinvoice.getInvoicenumber()));
+		logger.info("Temp Value --->"+temp); 
+		
+		update.set("invoicedate", poinvoice.getInvoicedate());
+		update.set("invoicenumber", poinvoice.getInvoicenumber());
+		update.set("vendorname", poinvoice.getVendorname());
+		update.set("deliveryprice", poinvoice.getDeliveryprice());
+		update.set("totalqty", poinvoice.getTotalqty());
+		update.set("totalprice", poinvoice.getTotalprice());
+		update.set("totalitem", poinvoice.getTotalitem());
+		update.set("status", poinvoice.getStatus());
+		if(temp == 1) {
+			update.set("paymentStatus", "FullStockIn");
+			update.set("remainingAmount", 0);
+		}else if(temp == 2) {
+			update.set("paymentStatus", "PartialStockIn");
+			update.set("remainingAmount", 0);
+		}
+		mongoTemplate.updateFirst(query, update, POInvoice.class);
 	}
 
 

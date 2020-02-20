@@ -245,13 +245,13 @@ public class StockService implements Filter {
 	//----- get Invoice List ----
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/loadInvoice", method = RequestMethod.GET)
-	public ResponseEntity<?> loadInvoice() {
+	public ResponseEntity<?> loadInvoice(String paymentOption) {
 		logger.info("------------- Inside loadInvoice -----------------");
 		List<POInvoice> polist = new ArrayList<POInvoice>();
 		List<String> list = new ArrayList<String>();
 		try {
 			logger.info("-----------Inside loadInvoice Called ----------");
-			polist = stockdal.loadInvoice(polist);
+			polist = stockdal.loadInvoice(polist,paymentOption);
 			for (POInvoice po : polist) {
 				System.out.println("Invoice Number -->" + po.getInvoicenumber());
 				list.add(po.getInvoicenumber());
@@ -277,11 +277,12 @@ public class StockService implements Filter {
 		StockInDetails stockIndetails = null;
 		List<POInvoiceDetails> podet = null;
 		RandomNumber randomnumber = null;
-		String totalQty = "";
 		String addedQty = "";
+		String recentStockList = "";
 		String itemnameList = "";
 		String categoryList = "";
 		int tempNo = 1;
+		int addtotalQty = 0;
 		try {
 			purchase = new Purchase();
 			System.out.println("Post Json -->" + stockInarray);
@@ -307,35 +308,52 @@ public class StockService implements Filter {
 			int l = 1;
 			for (int i = 0; i < jsonArr.length(); i++) {
 				JSONArray arr2 = jsonArr.optJSONArray(i);
-				if (jsonArr.optJSONArray(i) != null) {
-					for (int j = 0; j < arr2.length(); j++) {
-						if (arr2.getJSONObject(j) != null) {
-							JSONObject jObject = arr2.getJSONObject(j);
-							System.out.println(jObject.getString("productName"));
-							System.out.println(jObject.getString("category"));
-							stockIndetails = new StockInDetails();
-							podet = new ArrayList<POInvoiceDetails>();
-							stockIndetails.setStockInNumber(invoice);
-							stockIndetails.setInvoicenumber(jObject.getString("invoiceNumber"));
-							stockIndetails.setCategory(jObject.getString("category"));
-							stockIndetails.setItemname(jObject.getString("productName"));
-							stockIndetails.setDescription(jObject.getString("description"));
-							stockIndetails.setQty(jObject.getString("quantity"));
-							stockIndetails.setSubtotal(jObject.getDouble("netAmount"));
-							stockIndetails.setPoDate(Custom.getCurrentInvoiceDate());
-							logger.info("StockIn Date --->" + stockIndetails.getPoDate());
-							stockdal.saveStockIn(stockIndetails);
-							addedQty = addedQty+stockIndetails.getQty() + ",";
-							StockInDetails stockIn = stockdal.loadStockInTotal(stockIndetails.getItemname());
-							totalQty = totalQty+stockIn.getQty() + ",";
-							itemnameList = itemnameList+stockIndetails.getItemname() + ",";
-							categoryList = categoryList+stockIndetails.getCategory() + ",";
-						} else {
-							System.out.println("Null....");
-						}
-					}
+				if (l == jsonArr.length()) {
+					System.out.println("Last Value");
+					JSONObject jObject = arr2.getJSONObject(0);
+					System.out.println("StockIn Status -->" + jObject.getString("stockStatus"));
+					purchase.setDeliveryCost(jObject.getString("stockStatus"));
+
 				} else {
-					System.out.println("Outer Null....");
+					if (jsonArr.optJSONArray(i) != null) {
+						for (int j = 0; j < arr2.length(); j++) {
+							int totalQty = 0;
+							if (arr2.getJSONObject(j) != null) {
+								JSONObject jObject = arr2.getJSONObject(j);
+								System.out.println(jObject.getString("productName"));
+								System.out.println(jObject.getString("category"));
+								stockIndetails = new StockInDetails();
+								podet = new ArrayList<POInvoiceDetails>();
+								stockIndetails.setStockInNumber(invoice);
+								stockIndetails.setInvoicenumber(jObject.getString("invoiceNumber"));
+								stockIndetails.setCategory(jObject.getString("category"));
+								stockIndetails.setItemname(jObject.getString("productName"));
+								stockIndetails.setDescription(jObject.getString("description"));
+								stockIndetails.setQty(jObject.getString("quantity"));
+								stockIndetails.setSubtotal(jObject.getDouble("netAmount"));
+								stockIndetails.setPoDate(Custom.getCurrentInvoiceDate());
+								logger.info("StockIn Date --->" + stockIndetails.getPoDate());
+								stockdal.saveStockIn(stockIndetails);
+								addedQty = addedQty+stockIndetails.getQty() + ",";
+								List<POInvoiceDetails> stockIn = stockdal.loadStockInTotal(stockIndetails.getItemname());
+								for(int n=0; n<stockIn.size(); n++) {
+									logger.info("Size -->"+stockIn.size()+"---"+n+"th TotalQty ====>"+stockIn.get(n).getQty());
+									String str = stockIn.get(n).getQty();
+									str = str.replaceAll("\\D", "");
+									totalQty += Integer.valueOf(str);
+									logger.info(n+"th Stock RecentStock Total ====>"+totalQty);
+								}
+								recentStockList = recentStockList+totalQty + ",";
+								addtotalQty = addtotalQty+totalQty;
+								itemnameList = itemnameList+stockIndetails.getItemname() + ",";
+								categoryList = categoryList+stockIndetails.getCategory() + ",";
+							} else {
+								System.out.println("Null....");
+							}
+						}
+					} else {
+						System.out.println("Outer Null....");
+					}
 				}
 				l++;
 			}
@@ -346,10 +364,21 @@ public class StockService implements Filter {
 			stock.setItemname(itemnameList);
 			stock.setCategory(categoryList); 
 			stock.setAddedqty(addedQty);
-			stock.setRecentStock(totalQty);
+			stock.setRecentStock(recentStockList);
 			stock.setStatus("StockIn"); 
 			stockdal.saveStock(stock);
 			System.out.println("Service call start.....");
+			POInvoice poinvoice = new POInvoice(); 
+			poinvoice = purchasedal.loadPOInvoice(stockIndetails.getInvoicenumber());
+			logger.info("PO InvoiceNumber ---->"+poinvoice.getInvoicenumber());
+			int remaining = poinvoice.getTotalqty()-addtotalQty;
+			logger.info("Remaining Qty --->"+remaining); 
+			purchase.setQuantity(String.valueOf(remaining));
+			if(purchase.getDeliveryCost().equalsIgnoreCase("FullStockIn")) {
+				stockdal.updatePOInvoice(poinvoice,1);
+			}else if(purchase.getDeliveryCost().equalsIgnoreCase("PartialStockIn")) {
+				stockdal.updatePOInvoice(poinvoice,2);
+			}
 			purchase.setStatus("success");
 			boolean status = randomnumberdal.updateStockRandamNumber(randomnumber,tempNo);
 			return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);

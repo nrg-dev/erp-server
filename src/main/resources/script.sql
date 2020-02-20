@@ -73,8 +73,12 @@ db.randomNumber.find();
 db.randomNumber.remove( { } )
 
 
-db.randomNumber.remove({"_id" :ObjectId("5e4d225d6f87e773d1d7b748") });
-db.randomNumber.update({"_id" :ObjectId("5e3a7ec0f0272fa0cc5d2bdc") },{$set : {"soDate":'8'}})
+db.pOInvoiceDetails.find({"itemname" :"Jeans Pant-PROD4"});
+db.pOInvoiceDetails.find({"itemname" :"Computer-PROD2"});
+db.pOInvoiceDetails.find({"itemname" :"Heals-PROD6"});
+
+db.randomNumber.remove({"_id" :ObjectId("5e4e482242284a7282c973ef") });
+db.pOInvoice.update({"_id" :ObjectId("5e4a8585b184022c0cb950ae") },{$set : {"paymentStatus":'Not Paid'}})
 
 
 APIServerUrl
