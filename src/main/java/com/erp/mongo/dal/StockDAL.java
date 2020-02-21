@@ -24,15 +24,24 @@ public interface StockDAL {
 	
 	public StockReturn saveStockReturn(StockReturn stockreturn);
 
-	public List<POInvoice> loadInvoice(List<POInvoice> polist, String paymentOption);
+	public List<POInvoiceDetails> loadInvoice(List<POInvoiceDetails> polist, String paymentOption);
 
 	public StockInDetails saveStockIn(StockInDetails stockIndetails);
 
-	public Stock saveStock(Stock stock);
+	public Stock saveStock(Stock stock); 
 
-	public List<POInvoiceDetails> loadStockInTotal(String itemName);
+	public POInvoiceDetails loadStockInTotal(StockInDetails stockIndetails);
+
+	public POInvoiceDetails updatePurchase(POInvoiceDetails podetails);
+
+	public Stock updateStock(Stock stockIn, String id);
+
 	public List<Stock> loadStockIn(List<Stock> stocklist);
 
-	public void updatePOInvoice(POInvoice poinvoice, int i);   
+	public Stock loadStockInvoice(String stockInCategory); 
+
+	public POInvoiceDetails updateFullPurchase(StockInDetails stockIndetails, POInvoiceDetails podetails);
+
+	public Stock saveStockOut(Stock stock);    
 
 }

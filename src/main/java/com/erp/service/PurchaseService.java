@@ -263,6 +263,8 @@ public class PurchaseService implements Filter {
 								podetails.setQty(jObject.getString("quantity"));
 								podetails.setSubtotal(jObject.getDouble("netAmount"));
 								podetails.setPoDate(Custom.getCurrentInvoiceDate());
+								podetails.setPaymentStatus("Not Paid");
+								podetails.setRemainingQty(0); 
 								logger.info("POInvoice Date --->" + podetails.getPoDate());
 								purchasedal.savePurchase(podetails);
 								String str = jObject.getString("quantity");
@@ -286,8 +288,6 @@ public class PurchaseService implements Filter {
 			poinvoice.setVendorname(purchase.getVendorName());
 			poinvoice.setInvoicenumber(invoice);
 			poinvoice.setStatus("Pending");
-			poinvoice.setPaymentStatus("Not Paid");
-			poinvoice.setRemainingAmount("0"); 
 			poinvoice.setTotalqty(totalQty);
 			poinvoice.setTotalprice(totalPrice);
 			poinvoice.setTotalitem(totalitem); 
@@ -589,6 +589,8 @@ public class PurchaseService implements Filter {
 							podetails.setInvoicenumber(jObject.getString("invoiceNumber"));
 							podetails.setPoDate(jObject.getString("poDate"));
 							podetails.setId(jObject.getString("id"));
+							podetails.setPaymentStatus("Not Paid");
+							podetails.setRemainingQty(0); 
 							purchasedal.updatePurchase(podetails);
 							String str = jObject.getString("quantity");
 							str = str.replaceAll("\\D", "");
@@ -613,9 +615,7 @@ public class PurchaseService implements Filter {
 			poinvoice.setTotalprice(totalPrice);
 			logger.info("After PoInvoice Total Qty -->"+poinvoice.getTotalqty());
 			logger.info("After PoInvoice Total Price -->"+poinvoice.getTotalprice());
-			poinvoice.setTotalitem(totalitem); ;
-			poinvoice.setPaymentStatus("Not Paid");
-			poinvoice.setRemainingAmount("0"); 
+			poinvoice.setTotalitem(totalitem); 
 			purchasedal.updatePOInvoice(poinvoice);
 			purchase.setStatus("success");
 			return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);

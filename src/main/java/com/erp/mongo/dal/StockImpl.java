@@ -79,19 +79,19 @@ public class StockImpl implements StockDAL {
 	}
 	
 	// load
-	public List<POInvoice> loadInvoice(List<POInvoice> polist, String paymentOption) {
+	public List<POInvoiceDetails> loadInvoice(List<POInvoiceDetails> polist, String paymentOption) {
 		Query query = new Query();
 		logger.info("PaymentOption --->"+paymentOption);
-		/*if(paymentOption.equalsIgnoreCase("FullStockIn")) {
+		if(paymentOption.equalsIgnoreCase("FullStockIn")) {
 			query.addCriteria( new Criteria().orOperator(
 					Criteria.where("paymentStatus").is(""),
 					Criteria.where("paymentStatus").is("Not Paid") ));
-		}else if(paymentOption.equalsIgnoreCase("PartialStockIn")) {*/
+		}else if(paymentOption.equalsIgnoreCase("PartialStockIn")) {
 			query.addCriteria( new Criteria().orOperator(
 					Criteria.where("paymentStatus").is("Not Paid"),Criteria.where("paymentStatus").is(""),
 					Criteria.where("paymentStatus").is("PartialStockIn") ) );
-		//}
-		polist = mongoTemplate.find(query,POInvoice.class);
+		}
+		polist = mongoTemplate.find(query,POInvoiceDetails.class);
 		return polist;
 	}
 	
@@ -113,11 +113,13 @@ public class StockImpl implements StockDAL {
 	}
 	
 	@Override
-	public List<POInvoiceDetails> loadStockInTotal(String itemName) {
-		List<POInvoiceDetails> stockIn;
+	public POInvoiceDetails loadStockInTotal(StockInDetails stockIndetails) {
+		POInvoiceDetails stockIn;
 		Query query = new Query();
-		query.addCriteria(Criteria.where("itemname").is(itemName));
-		stockIn = mongoTemplate.find(query, POInvoiceDetails.class);
+		query.addCriteria( new Criteria().andOperator(
+				Criteria.where("invoicenumber").is(stockIndetails.getInvoicenumber()),
+				Criteria.where("itemname").is(stockIndetails.getItemname()) ) );
+		stockIn = mongoTemplate.findOne(query, POInvoiceDetails.class);
 		return stockIn;
 	}
 	
@@ -127,30 +129,93 @@ public class StockImpl implements StockDAL {
 		return stocklist;
 	}
 	
+	//--- Get ID Based on Invoice
+	public Stock loadStockInvoice(String StockInCategory) {
+		Stock res=null;
+		try {
+			Query query = new Query();
+			query.addCriteria(Criteria.where("stockInCategory").is(StockInCategory));
+			res = mongoTemplate.findOne(query, Stock.class);
+			if(res != null) {
+				System.out.println("------ StockId Match ------");
+			}else {
+				System.out.println("------ StockId Not Match---------------");
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
 	
-	public void updatePOInvoice(POInvoice poinvoice,int temp) {
+	// update FullPoDetails
+	public POInvoiceDetails updateFullPurchase(StockInDetails stockIndetails,POInvoiceDetails podetails) {
 		Update update = new Update();
 		Query query = new Query();
-		query.addCriteria(Criteria.where("invoicenumber").is(poinvoice.getInvoicenumber()));
-		logger.info("Temp Value --->"+temp); 
+		query.addCriteria(Criteria.where("id").is(stockIndetails.getId()));
 		
-		update.set("invoicedate", poinvoice.getInvoicedate());
-		update.set("invoicenumber", poinvoice.getInvoicenumber());
-		update.set("vendorname", poinvoice.getVendorname());
-		update.set("deliveryprice", poinvoice.getDeliveryprice());
-		update.set("totalqty", poinvoice.getTotalqty());
-		update.set("totalprice", poinvoice.getTotalprice());
-		update.set("totalitem", poinvoice.getTotalitem());
-		update.set("status", poinvoice.getStatus());
-		if(temp == 1) {
-			update.set("paymentStatus", "FullStockIn");
-			update.set("remainingAmount", 0);
-		}else if(temp == 2) {
-			update.set("paymentStatus", "PartialStockIn");
-			update.set("remainingAmount", 0);
-		}
-		mongoTemplate.updateFirst(query, update, POInvoice.class);
+		update.set("invoicenumber", stockIndetails.getInvoicenumber());
+		update.set("category", stockIndetails.getCategory());
+		update.set("itemname", stockIndetails.getItemname());
+		update.set("qty", stockIndetails.getQty());
+		update.set("description", stockIndetails.getDescription());
+		update.set("unitprice", stockIndetails.getUnitprice());
+		update.set("subtotal", stockIndetails.getSubtotal());
+		update.set("poDate", stockIndetails.getPoDate());
+		update.set("lastUpdate", podetails.getLastUpdate());
+		update.set("paymentStatus", podetails.getPaymentStatus());
+		update.set("remainingAmount", podetails.getRemainingQty());
+		mongoTemplate.updateFirst(query, update, POInvoiceDetails.class);
+
+		return podetails;
 	}
 
+	//----- Update PartialPoDetails---
+	@Override
+	public POInvoiceDetails updatePurchase(POInvoiceDetails podetails) {
+		Update update = new Update();
+		Query query = new Query();
+		query.addCriteria(Criteria.where("id").is(podetails.getId()));
+		
+		update.set("invoicenumber", podetails.getInvoicenumber());
+		update.set("category", podetails.getCategory());
+		update.set("itemname", podetails.getItemname());
+		update.set("qty", podetails.getQty());
+		update.set("description", podetails.getDescription());
+		update.set("unitprice", podetails.getUnitprice());
+		update.set("subtotal", podetails.getSubtotal());
+		update.set("poDate", podetails.getPoDate());
+		update.set("lastUpdate", podetails.getLastUpdate());
+		update.set("paymentStatus", podetails.getPaymentStatus());
+		update.set("remainingAmount", podetails.getRemainingQty());
+		mongoTemplate.updateFirst(query, update, POInvoiceDetails.class);
+
+		return podetails;
+	}
+	
+	// update PoDetails
+	@Override
+	public Stock updateStock(Stock stock, String id) {
+		Update update = new Update();
+		Query query = new Query();
+		query.addCriteria(Criteria.where("id").is(id));
+		
+		update.set("invoicedate", stock.getInvoicedate());
+		update.set("stockInCategory", stock.getStockInCategory());
+		update.set("itemname", stock.getItemname());
+		update.set("category", stock.getCategory());
+		update.set("recentStock", stock.getRecentStock());
+		update.set("addedqty", stock.getAddedqty());
+		update.set("status", stock.getStatus());
+		mongoTemplate.updateFirst(query, update, Stock.class);
+		return stock;
+	}
+	
+	@Override
+	public Stock saveStockOut(Stock stock) {
+		mongoTemplate.save(stock);
+		stock.setStatus("success");
+		return stock;
+	}
+	
 
 }

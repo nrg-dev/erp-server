@@ -77,8 +77,8 @@ db.pOInvoiceDetails.find({"itemname" :"Jeans Pant-PROD4"});
 db.pOInvoiceDetails.find({"itemname" :"Computer-PROD2"});
 db.pOInvoiceDetails.find({"itemname" :"Heals-PROD6"});
 
-db.randomNumber.remove({"_id" :ObjectId("5e4e482242284a7282c973ef") });
-db.pOInvoice.update({"_id" :ObjectId("5e4a8585b184022c0cb950ae") },{$set : {"paymentStatus":'Not Paid'}})
+db.randomNumber.remove({"_id" :ObjectId("5e4f8d7587a94ea98989b9f1") });
+db.pOInvoiceDetails.update({"_id" :ObjectId("5e4f8e3cb184021bb0c9e7d5") },{$set : {"paymentStatus":'Not Paid'}})
 
 
 APIServerUrl

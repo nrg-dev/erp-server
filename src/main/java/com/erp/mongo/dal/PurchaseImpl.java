@@ -154,6 +154,9 @@ public class PurchaseImpl implements PurchaseDAL {
 		update.set("subtotal", purchase.getSubtotal());
 		update.set("poDate", purchase.getPoDate());
 		update.set("lastUpdate", purchase.getLastUpdate());
+		update.set("paymentStatus", purchase.getPaymentStatus());
+		update.set("remainingAmount", purchase.getRemainingQty());
+		
 		mongoTemplate.updateFirst(query, update, POInvoiceDetails.class);
 
 		return purchase;
@@ -183,9 +186,6 @@ public class PurchaseImpl implements PurchaseDAL {
 		update.set("totalprice", purchase.getTotalprice());
 		update.set("totalitem", purchase.getTotalitem());
 		update.set("status", purchase.getStatus());
-		update.set("paymentStatus", purchase.getPaymentStatus());
-		update.set("remainingAmount", 0);
-		
 		mongoTemplate.updateFirst(query, update, POInvoice.class);
 		return purchase;
 	}

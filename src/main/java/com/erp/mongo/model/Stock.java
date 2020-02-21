@@ -16,7 +16,8 @@ public class Stock {
 	private String recentStock;
 	private String addedqty;
 	private String status;
-
+	private String stockOutCategory;
+	
 	public String getId() {
 		return id;
 	}
@@ -87,6 +88,14 @@ public class Stock {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getStockOutCategory() {
+		return stockOutCategory;
+	}
+
+	public void setStockOutCategory(String stockOutCategory) {
+		this.stockOutCategory = stockOutCategory;
 	}
 
 

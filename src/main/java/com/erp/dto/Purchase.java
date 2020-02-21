@@ -32,6 +32,7 @@ public class Purchase {
 	  int totalItem;
 	  String fromdate; 
 	  String todate; 
+	  String paymentStatus;
 	  
 	public String getProductName() {
 		return productName;
@@ -161,8 +162,14 @@ public class Purchase {
 	public void setTodate(String todate) {
 		this.todate = todate;
 	}
+	public String getPaymentStatus() {
+		return paymentStatus;
+	}
+	public void setPaymentStatus(String paymentStatus) {
+		this.paymentStatus = paymentStatus;
+	}
 	
-	
+	 
 	
 	
 }

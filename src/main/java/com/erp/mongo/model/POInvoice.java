@@ -16,8 +16,6 @@ public class POInvoice {
 	private int totalprice;
 	private String status;
 	private int totalitem;
-	private String paymentStatus;
-	private String remainingAmount;
 
 	public String getId() {
 		return id;
@@ -89,22 +87,6 @@ public class POInvoice {
 
 	public void setTotalitem(int totalitem) {
 		this.totalitem = totalitem;
-	}
-
-	public String getPaymentStatus() {
-		return paymentStatus;
-	}
-
-	public void setPaymentStatus(String paymentStatus) {
-		this.paymentStatus = paymentStatus;
-	}
-
-	public String getRemainingAmount() {
-		return remainingAmount;
-	}
-
-	public void setRemainingAmount(String remainingAmount) {
-		this.remainingAmount = remainingAmount;
 	}
 
 	 

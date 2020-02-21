@@ -21,6 +21,8 @@ public class POInvoiceDetails {
 	private String status;
 	private String poDate;
 	private String lastUpdate;
+	private String paymentStatus;
+	private int remainingQty;
 
 	public String getId() {
 		return id;
@@ -133,6 +135,24 @@ public class POInvoiceDetails {
 	public void setLastUpdate(String lastUpdate) {
 		this.lastUpdate = lastUpdate;
 	}
+
+	public String getPaymentStatus() {
+		return paymentStatus;
+	}
+
+	public void setPaymentStatus(String paymentStatus) {
+		this.paymentStatus = paymentStatus;
+	}
+
+	public int getRemainingQty() {
+		return remainingQty;
+	}
+
+	public void setRemainingQty(int remainingQty) {
+		this.remainingQty = remainingQty;
+	}
+
+	
 
 
 }
