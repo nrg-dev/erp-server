@@ -10,7 +10,7 @@ public class Stock {
 	private String id;
 	private String invoicedate;
 	private String invoicenumber;
-	private String stockInCategory;
+	private String stockCategory;
 	private String itemname;
 	private String category;
 	private String recentStock;
@@ -42,12 +42,12 @@ public class Stock {
 		this.invoicenumber = invoicenumber;
 	}
 
-	public String getStockInCategory() {
-		return stockInCategory;
+	public String getStockCategory() {
+		return stockCategory;
 	}
 
-	public void setStockInCategory(String stockInCategory) {
-		this.stockInCategory = stockInCategory;
+	public void setStockCategory(String stockCategory) {
+		this.stockCategory = stockCategory;
 	}
 
 	public String getItemname() {

@@ -124,8 +124,14 @@ public class StockImpl implements StockDAL {
 	}
 	
 	// load
-	public List<Stock> loadStockIn(List<Stock> stocklist) {
-		stocklist = mongoTemplate.findAll(Stock.class);
+	public List<Stock> loadStock(List<Stock> stocklist, String status) {
+		Query query = new Query();
+		if(status.equalsIgnoreCase("StockIn")) {
+			query.addCriteria(Criteria.where("status").is("StockIn"));
+		}else if(status.equalsIgnoreCase("StockOut")) {
+			query.addCriteria(Criteria.where("status").is("StockOut"));
+		}
+		stocklist = mongoTemplate.find(query, Stock.class);
 		return stocklist;
 	}
 	
@@ -134,7 +140,7 @@ public class StockImpl implements StockDAL {
 		Stock res=null;
 		try {
 			Query query = new Query();
-			query.addCriteria(Criteria.where("stockInCategory").is(StockInCategory));
+			query.addCriteria(Criteria.where("stockCategory").is(StockInCategory));
 			res = mongoTemplate.findOne(query, Stock.class);
 			if(res != null) {
 				System.out.println("------ StockId Match ------");
@@ -200,7 +206,7 @@ public class StockImpl implements StockDAL {
 		query.addCriteria(Criteria.where("id").is(id));
 		
 		update.set("invoicedate", stock.getInvoicedate());
-		update.set("stockInCategory", stock.getStockInCategory());
+		update.set("stockInCategory", stock.getStockCategory());
 		update.set("itemname", stock.getItemname());
 		update.set("category", stock.getCategory());
 		update.set("recentStock", stock.getRecentStock());

@@ -36,7 +36,7 @@ public interface StockDAL {
 
 	public Stock updateStock(Stock stockIn, String id);
 
-	public List<Stock> loadStockIn(List<Stock> stocklist);
+	public List<Stock> loadStock(List<Stock> stocklist, String status); 
 
 	public Stock loadStockInvoice(String stockInCategory); 
 

@@ -358,7 +358,7 @@ public class StockService implements Filter {
 			stock = new Stock(); 
 			stock.setInvoicedate(Custom.getCurrentInvoiceDate());
 			logger.info("Invoice Date --->" + stock.getInvoicedate());
-			stock.setStockInCategory("Purchase "+stockIndetails.getInvoicenumber());
+			stock.setStockCategory("Purchase "+stockIndetails.getInvoicenumber());
 			stock.setItemname(itemnameList);
 			stock.setCategory(categoryList); 
 			stock.setAddedqty(addedQty);
@@ -440,7 +440,6 @@ public class StockService implements Filter {
 							
 							addedQty = addedQty+stockIndetails.getQty() + ",";
 							POInvoiceDetails podetails = new POInvoiceDetails();
-							podetails.setPaymentStatus("PartialStockIn");
 							podetails = stockdal.loadStockInTotal(stockIndetails);
 							int totalQty = 0;
 							//for(int n=0; n<stockIn.size(); n++) {
@@ -456,6 +455,13 @@ public class StockService implements Filter {
 							str1 = str1.replaceAll("\\D", "");
 							int stocktotalQty = Integer.valueOf(str1);
 							podetails.setRemainingQty(totalQty-Integer.valueOf(stocktotalQty));
+							logger.info("Remaining Qty --------->"+podetails.getRemainingQty());
+							if(podetails.getPaymentStatus().equalsIgnoreCase("PartialStockIn") && 
+									podetails.getRemainingQty() == 0) {
+								podetails.setPaymentStatus("FullStockIn");
+							}else {
+								podetails.setPaymentStatus("PartialStockIn");
+							}
 							podetails = stockdal.updatePurchase(podetails);
 							itemnameList = itemnameList+stockIndetails.getItemname() + ",";
 							categoryList = categoryList+stockIndetails.getCategory() + ",";
@@ -473,17 +479,17 @@ public class StockService implements Filter {
 			stock = new Stock(); 
 			stock.setInvoicedate(Custom.getCurrentInvoiceDate());
 			logger.info("Invoice Date --->" + stock.getInvoicedate());
-			stock.setStockInCategory("Purchase "+stockIndetails.getInvoicenumber());
+			stock.setStockCategory("Purchase "+stockIndetails.getInvoicenumber());
 			stock.setItemname(itemnameList);
 			stock.setCategory(categoryList); 
 			stock.setAddedqty(addedQty);
 			stock.setRecentStock(recentStockList);
 			stock.setStatus("StockIn"); 
 			Stock st = new Stock();
-			st = stockdal.loadStockInvoice(stock.getStockInCategory());
+			st = stockdal.loadStockInvoice(stock.getStockCategory());
 			if(st != null) {
 				logger.info("----------- Stock Category match--------"+st.getId());
-				logger.info("StockInCategory  --->"+stock.getStockInCategory());
+				logger.info("StockInCategory  --->"+stock.getStockCategory());
 				logger.info("Itemname  --->"+stock.getItemname());
 				logger.info("Category  --->"+stock.getCategory());
 				logger.info("Addedqty  --->"+stock.getAddedqty());
@@ -512,16 +518,16 @@ public class StockService implements Filter {
 
 	// Load StockInDetails
 	@CrossOrigin(origins = "http://localhost:8080")
-	@RequestMapping(value = "/loadStockIn", method = RequestMethod.GET)
-	public ResponseEntity<?> loadStockIn() {
-		logger.info("------------- Inside loadStockIn-----------------");
+	@RequestMapping(value = "/loadStock", method = RequestMethod.GET)
+	public ResponseEntity<?> loadStock(String status) {
+		logger.info("------------- Inside loadStock-----------------");
 		List<Stock> stocklist = new ArrayList<Stock>();
 		try {
-			logger.info("-----------Inside loadStockIn Called----------");
-			stocklist = stockdal.loadStockIn(stocklist);
+			logger.info("-----------Inside loadStock Called----------");
+			stocklist = stockdal.loadStock(stocklist,status);
 			return new ResponseEntity<List<Stock>>(stocklist, HttpStatus.CREATED);
 		} catch (Exception e) {
-			logger.info("loadStockIn Exception ------------->" + e.getMessage());
+			logger.info("loadStock Exception ------------->" + e.getMessage());
 			e.printStackTrace();
 		} finally {
 
@@ -537,14 +543,15 @@ public class StockService implements Filter {
 		RandomNumber randomnumber = null;
 		try {
 			randomnumber = randomnumberdal.getStockRandamNumber();
-			System.out.println("Vendor Invoice random number-->" + randomnumber.getStockOutinvoicenumber());
-			System.out.println("Vendor Invoice random code-->" + randomnumber.getStockOutinvoicecode());
+			System.out.println("StockOut Invoice random number-->" + randomnumber.getStockOutinvoicenumber());
+			System.out.println("StockOut Invoice random code-->" + randomnumber.getStockOutinvoicecode());
 			String invoice = randomnumber.getStockOutinvoicecode() + randomnumber.getStockOutinvoicenumber();
 			System.out.println("Invoice number -->" + invoice);
 
 			stock.setInvoicedate(Custom.getCurrentInvoiceDate());
 			stock.setInvoicenumber(invoice);
-			stock.setStockInCategory(stock.getStockOutCategory());
+			stock.setStockCategory(stock.getStockOutCategory());
+			stock.setRecentStock(stock.getAddedqty()); 
 			stock.setStatus("StockOut"); 
 			stock = stockdal.saveStockOut(stock);
 			if (stock.getStatus().equalsIgnoreCase("success")) {

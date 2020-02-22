@@ -73,11 +73,13 @@ db.randomNumber.find();
 db.randomNumber.remove( { } )
 
 
-db.pOInvoiceDetails.find({"itemname" :"Jeans Pant-PROD4"});
-db.pOInvoiceDetails.find({"itemname" :"Computer-PROD2"});
+db.stock.find({"_id" :ObjectId("5e4fb74ab1840225ec539395") });
+db.pOInvoiceDetails.find({"paymentStatus" :"Not Paid"});
 db.pOInvoiceDetails.find({"itemname" :"Heals-PROD6"});
 
-db.randomNumber.remove({"_id" :ObjectId("5e4f8d7587a94ea98989b9f1") });
+db.stock.remove({"status" :"StockOut" });
+
+db.randomNumber.remove({"_id" :ObjectId("5e4fbb4987a94ea98989b9f4") });
 db.pOInvoiceDetails.update({"_id" :ObjectId("5e4f8e3cb184021bb0c9e7d5") },{$set : {"paymentStatus":'Not Paid'}})
 
 
