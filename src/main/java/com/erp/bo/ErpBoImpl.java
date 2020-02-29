@@ -35,10 +35,16 @@ import com.erp.model.IndustryDetail;
 import com.erp.model.UserDetail;
 import com.erp.model.UserLogin;
 import com.erp.mongo.dal.CustomerDAL;
+import com.erp.mongo.dal.LoginDAL;
+import com.erp.mongo.dal.PurchaseDAL;
+import com.erp.mongo.dal.RandomNumberDAL;
+import com.erp.mongo.dal.SalesDAL;
+import com.erp.mongo.dal.StockDAL;
 import com.erp.util.Custom;
 import com.erp.util.Email;
 import com.erp.util.ErpException;
 import com.erp.mongo.model.Customer;
+import com.erp.mongo.model.Login;
 
 
 @Service("bo")
@@ -46,31 +52,50 @@ public class ErpBoImpl implements ErpBo{
 	
 	public static final Logger logger = LoggerFactory.getLogger(ErpBoImpl.class);
 
-	
-	/*
-	 * @Value("${memeber.silver}") private String silver;
-	 * 
-	 * @Value("${memeber.gold}") private String gold;
-	 * 
-	 * @Value("${memeber.platinum}") private String platinum;
-	 */
 	 
-	@Autowired
-	ErpDao dao;
+	private final LoginDAL logindal;
+	private final RandomNumberDAL randomnumberdal;
 	
-	/*
-	 * @Autowired CustomerDAL customerdal;
-	 */
-	/*
-	 * private final CustomerDAL customerdal;
-	 * 
-	 * public ErpBoImpl(CustomerDAL customerdal) { //this.randamNumberDAL =
-	 * randamNumberDAL; this.customerdal = customerdal; }
-	 */
-	/*
-	 * public Customer saveCustomer(Customer customer) { return
-	 * customerdal.saveCustomer(customer); }
-	 */
+	public ErpBoImpl(LoginDAL logindal,RandomNumberDAL randomnumberdal) {
+		this.logindal = logindal;
+		this.randomnumberdal = randomnumberdal;
+	}
 	
+	@Override
+	public User userLogin(User user){
+		logger.info("-------- Inside UserLogin Method Calling in BOImpl  ---------");
+		List<Login> result=null;
+		try {
+			user.setId(1);
+			result = logindal.userLogin(user,result);
+			if(result.size() > 0) {
+				result=null;
+				user.setId(2);
+				result = logindal.userLogin(user,result);
+				if(result.size() > 0) {
+					if(result.get(0).getStatus().equalsIgnoreCase("Active")){
+						user.setStatus("success");
+					}
+					if(result.get(0).getStatus().equalsIgnoreCase("De-Active")){
+						user.setStatus("Your Account was De-Active");
+					}
+				}
+				else {
+					user.setStatus("Invalid Pass word Please try again");
+				}
+			}else {
+			user.setStatus("Invalid User Name Please try again");
+		}
+		
+		}catch(Exception e){
+			logger.info("BO Exception -->"+e.getMessage());
+			user.setStatus("Network Error Please try again");
+
+		}
+		finally{
+			result=null;
+		}
+		return user;
+	}
 	
 }

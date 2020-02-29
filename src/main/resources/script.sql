@@ -91,3 +91,7 @@ APIServerUrl
 APILocalUrl
 ===========
 { "apiurl": "http://localhost:8095/erp/" } 
+
+
+
+db.login.insertOne({ "invnumber":"INVLO002","username":"alex","password":"alex","status":"Active","userOtp":""});

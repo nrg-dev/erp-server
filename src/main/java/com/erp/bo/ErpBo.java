@@ -1,9 +1,9 @@
 package com.erp.bo;
 
-import com.erp.mongo.model.Customer;
+import com.erp.dto.User;
 
 public interface ErpBo {
+
+	public User userLogin(User user);
 	
-	
-	/* public Customer saveCustomer(Customer customer); */
 }
