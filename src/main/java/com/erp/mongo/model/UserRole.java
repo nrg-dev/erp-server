@@ -11,6 +11,8 @@ public class UserRole {
 	private String invnumber;
 	private String username;
 	private String userRole;
+	private String menuItem;
+	private String subMenuItem;
 	
 	public String getId() {
 		return id;
@@ -37,9 +39,18 @@ public class UserRole {
 	public void setUserRole(String userRole) {
 		this.userRole = userRole;
 	}
-	
-
-	
-	
+	public String getMenuItem() {
+		return menuItem;
+	}
+	public void setMenuItem(String menuItem) {
+		this.menuItem = menuItem;
+	}
+	public String getSubMenuItem() {
+		return subMenuItem;
+	}
+	public void setSubMenuItem(String subMenuItem) {
+		this.subMenuItem = subMenuItem;
+	}
+		
 	 
 }

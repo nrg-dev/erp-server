@@ -81,12 +81,11 @@ public class ErpBoImpl implements ErpBo{
 					}
 				}
 				else {
-					user.setStatus("Invalid Pass word Please try again");
+					user.setStatus("Invalid Password");
 				}
 			}else {
-			user.setStatus("Invalid User Name Please try again");
-		}
-		
+				user.setStatus("Invalid User Name.");
+			}
 		}catch(Exception e){
 			logger.info("BO Exception -->"+e.getMessage());
 			user.setStatus("Network Error Please try again");
@@ -95,6 +94,21 @@ public class ErpBoImpl implements ErpBo{
 		finally{
 			result=null;
 		}
+		return user;
+	}
+	
+	// ---------------- forget Password use check ------------------------------
+	public User Checkuser(User user,int temp){
+		if(temp ==1 ){
+			user = logindal.Checkuser(user);
+			logger.info("[Checkuser 1] User status ------>"+user.getStatus());
+		}
+		
+		if(temp == 2) {
+			user = logindal.resetPassword(user);	 		
+			logger.info("User status ------>"+user.getStatus());
+		}
+		
 		return user;
 	}
 	

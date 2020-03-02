@@ -29,18 +29,19 @@ public class LoginImpl implements LoginDAL {
 
 	@Override
 	public List<Login> userLogin(User user, List<Login> result) {
-		Query query=null;
+		Query query = new Query();
 		logger.info("-------- Inside UserLogin Method Calling in Impl ---------");
 		try {
 			if(user.getId()==1) {
-				query = new Query();
+				logger.info("--- User Name Validation ---");
 				query.addCriteria( new Criteria().andOperator(
 						Criteria.where("username").is(user.getUsername()),
 						Criteria.where("status").is("Active") ) );
 				result = mongoTemplate.find(query, Login.class);
 			}
 			if(user.getId()==2){
-				query.addCriteria( new Criteria().orOperator(
+				logger.info("--- User Name and Password Validation ---");
+				query.addCriteria( new Criteria().andOperator(
 						Criteria.where("username").is(user.getUsername()),Criteria.where("status").is("Active"),
 						Criteria.where("password").is(user.getPassword()) ) );
 				
@@ -56,10 +57,51 @@ public class LoginImpl implements LoginDAL {
 		return result;
 	}
 
-	
+	@Override
+	public User Checkuser(User user){
+		Query query = new Query();
+		try {
+			query.addCriteria( new Criteria().andOperator(
+					Criteria.where("username").is(user.getUsername()),
+					Criteria.where("status").is("Active") ) );
+			mongoTemplate.findOne(query, Login.class);
+			user.setStatus("success");
+		}catch(Exception e) {
+			logger.error("Exception -->"+e.getMessage());
+			user.setStatus("failure");
+		}finally {
+			
+		}
+		return user;
+	}
 
-	
-
-
+	@Override
+	public User resetPassword(User user) {
+		Query query = new Query();
+		Update update = new Update();
+		Login login = new Login();
+		try {
+			query.addCriteria( new Criteria().andOperator(
+					Criteria.where("username").is(user.getUsername()),
+					Criteria.where("status").is("Active") ) );
+			login = mongoTemplate.findOne(query, Login.class);
+			
+			query.addCriteria(Criteria.where("id").is(login.getId()));
+			update.set("invnumber", login.getInvnumber());
+			update.set("username", user.getUsername());
+			update.set("password", user.getPassword());
+			update.set("status", "Active");
+			update.set("userOtp", "");
+			mongoTemplate.updateFirst(query, update, Login.class);
+			
+			user.setStatus("success");
+		}catch(Exception e) {
+			logger.error("Exception -->"+e.getMessage());
+			user.setStatus("failure");
+		}finally {
+			
+		}
+		return user;
+	}
 
 }

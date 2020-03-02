@@ -7,7 +7,11 @@ import com.erp.mongo.model.Login;
 
 public interface LoginDAL {
 
-	List<Login> userLogin(User user, List<Login> result); 
+	public List<Login> userLogin(User user, List<Login> result);
+
+	public User Checkuser(User user);
+
+	public User resetPassword(User user); 
 
 	
 
