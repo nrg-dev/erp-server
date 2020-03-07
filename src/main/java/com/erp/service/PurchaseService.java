@@ -264,12 +264,13 @@ public class PurchaseService implements Filter {
 								podetails.setSubtotal(jObject.getDouble("netAmount"));
 								podetails.setPoDate(Custom.getCurrentInvoiceDate());
 								podetails.setPaymentStatus("Not Paid");
-								podetails.setRemainingQty(0); 
-								logger.info("POInvoice Date --->" + podetails.getPoDate());
-								purchasedal.savePurchase(podetails);
 								String str = jObject.getString("quantity");
 								str = str.replaceAll("\\D", "");
+								podetails.setRemainingQty(Integer.valueOf(str)); 
 								totalQty += Integer.valueOf(str);
+								logger.info("POInvoice Date --->" + podetails.getPoDate());
+								purchasedal.savePurchase(podetails);
+								
 								totalPrice += jObject.getDouble("netAmount");
 								totalitem = j+1;
 							} else {
@@ -589,12 +590,12 @@ public class PurchaseService implements Filter {
 							podetails.setInvoicenumber(jObject.getString("invoiceNumber"));
 							podetails.setPoDate(jObject.getString("poDate"));
 							podetails.setId(jObject.getString("id"));
-							podetails.setPaymentStatus("Not Paid");
-							podetails.setRemainingQty(0); 
-							purchasedal.updatePurchase(podetails);
 							String str = jObject.getString("quantity");
 							str = str.replaceAll("\\D", "");
 							totalQty += Integer.valueOf(str);
+							podetails.setPaymentStatus("Not Paid");
+							podetails.setRemainingQty(Integer.valueOf(str)); 
+							purchasedal.updatePurchase(podetails);
 							totalPrice += jObject.getDouble("netAmount");
 							totalitem = j+1;
 						} else {
