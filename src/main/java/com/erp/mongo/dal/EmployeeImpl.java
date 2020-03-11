@@ -42,7 +42,7 @@ public class EmployeeImpl implements EmployeeDAL {
 	public List<Employee> get(String id) {
 		List<Employee> list;
 		Query query = new Query();
-		query.addCriteria(Criteria.where("_id").is(id));		
+		query.addCriteria(Criteria.where("employeecode").is(id));		
 		list = mongoTemplate.find(query, Employee.class);
 		return list;
 	}
