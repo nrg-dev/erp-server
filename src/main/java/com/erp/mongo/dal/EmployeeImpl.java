@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Employee;
 
 @Repository
@@ -39,7 +40,10 @@ public class EmployeeImpl implements EmployeeDAL {
 
 	// get
 	public List<Employee> get(String id) {
-		List<Employee> list = null;
+		List<Employee> list;
+		Query query = new Query();
+		query.addCriteria(Criteria.where("_id").is(id));		
+		list = mongoTemplate.find(query, Employee.class);
 		return list;
 	}
 
