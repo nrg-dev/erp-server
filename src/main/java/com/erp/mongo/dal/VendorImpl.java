@@ -51,7 +51,6 @@ public class VendorImpl implements VendorDAL {
 		query.addCriteria(Criteria.where("_id").is(primaryKey));
 		list = mongoTemplate.find(query, Vendor.class);
 		return list;
-		// return mongoTemplate.find(query, Publictree.class);
 	}
 
 	// update
@@ -75,7 +74,7 @@ public class VendorImpl implements VendorDAL {
 	public Vendor removeVendor(String vendorcode) {
 		Vendor response = null;
 		Query query = new Query();
-		query.addCriteria(Criteria.where("vendorcode").is(vendorcode));
+		query.addCriteria(Criteria.where("_id").is(vendorcode));
 		mongoTemplate.remove(query, Vendor.class);
 		return response;
 	}
