@@ -78,7 +78,8 @@ public class ItemImpl implements ItemDAL {
 		logger.info("[ItemImpl] Vendor Name -->"+item.getVendorname());
 		logger.info("[ItemImpl] Vendor Code -->"+item.getVendorcode());
 		logger.info("[ItemImpl] Item Name -->"+item.getProductname());
-		logger.info("[ItemImpl] Description Name -->"+item.getDescription());
+		logger.info("[ItemImpl] Description -->"+item.getDescription());
+		logger.info("[ItemImpl] Selling Price -->"+item.getSellingprice());
 		Update update = new Update();
 		Query query = new Query();
 		query.addCriteria(Criteria.where("prodcode").is(item.getProdcode()));
