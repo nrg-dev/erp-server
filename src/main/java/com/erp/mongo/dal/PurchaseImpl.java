@@ -152,10 +152,10 @@ public class PurchaseImpl implements PurchaseDAL {
 		update.set("description", purchase.getDescription());
 		update.set("unitprice", purchase.getUnitprice());
 		update.set("subtotal", purchase.getSubtotal());
-		update.set("poDate", purchase.getPoDate());
-		update.set("lastUpdate", purchase.getLastUpdate());
-		update.set("paymentStatus", purchase.getPaymentStatus());
-		update.set("remainingAmount", purchase.getRemainingQty());
+		update.set("poDate", purchase.getPodate());
+		update.set("lastUpdate", purchase.getLastupdate());
+		update.set("paymentStatus", purchase.getPaymentstatus());
+		update.set("remainingAmount", purchase.getRemainingqty());
 		
 		mongoTemplate.updateFirst(query, update, POInvoiceDetails.class);
 

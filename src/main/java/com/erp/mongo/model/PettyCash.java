@@ -9,11 +9,11 @@ public class PettyCash {
 	@Id
 	private String id;
 	private String description;
-	private String addedDate;
-	private String type;;
-	private String fromPerson;
-	private String toPerson;
-	private int totalAmount;
+	private String addeddate;
+	private String type;
+	private String fromperson;
+	private String toperson;
+	private int totalamount;
 	private String status;
 
 
@@ -33,12 +33,12 @@ public class PettyCash {
 		this.description = description;
 	}
 
-	public String getAddedDate() {
-		return addedDate;
+	public String getAddeddate() {
+		return addeddate;
 	}
 
-	public void setAddedDate(String addedDate) {
-		this.addedDate = addedDate;
+	public void setAddeddate(String addeddate) {
+		this.addeddate = addeddate;
 	}
 
 	public String getType() {
@@ -49,28 +49,28 @@ public class PettyCash {
 		this.type = type;
 	}
 
-	public String getFromPerson() {
-		return fromPerson;
+	public String getFromperson() {
+		return fromperson;
 	}
 
-	public void setFromPerson(String fromPerson) {
-		this.fromPerson = fromPerson;
+	public void setFromperson(String fromperson) {
+		this.fromperson = fromperson;
 	}
 
-	public String getToPerson() {
-		return toPerson;
+	public String getToperson() {
+		return toperson;
 	}
 
-	public void setToPerson(String toPerson) {
-		this.toPerson = toPerson;
+	public void setToperson(String toperson) {
+		this.toperson = toperson;
 	}
 
-	public int getTotalAmount() {
-		return totalAmount;
+	public int getTotalamount() {
+		return totalamount;
 	}
 
-	public void setTotalAmount(int totalAmount) {
-		this.totalAmount = totalAmount;
+	public void setTotalamount(int totalamount) {
+		this.totalamount = totalamount;
 	}
 
 	public String getStatus() {

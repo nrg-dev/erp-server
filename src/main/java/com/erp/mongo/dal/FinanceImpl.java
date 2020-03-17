@@ -30,14 +30,14 @@ public class FinanceImpl implements FinanceDAL {
 		List<Customer> customerlist = mongoTemplate.findAll(Customer.class);
 		List<Vendor> vendorlist = mongoTemplate.findAll(Vendor.class);
 		for (Customer customer : customerlist) {
-			logger.info("Customer name-->" + customer.getCustomerName());
+			logger.info("Customer name-->" + customer.getCustomername());
 			logger.info("Customer code-->" + customer.getCustcode());
-			list.add(customer.getCustomerName() + "-" + customer.getCustcode());
+			list.add(customer.getCustomername() + "-" + customer.getCustcode());
 		}
 		for (Vendor vendor : vendorlist) {
-			logger.info("Vendor name-->" + vendor.getVendorName());
+			logger.info("Vendor name-->" + vendor.getVendorname());
 			logger.info("Vendor code-->" + vendor.getVendorcode());
-			list.add(vendor.getVendorName() + "-" + vendor.getVendorcode());
+			list.add(vendor.getVendorname() + "-" + vendor.getVendorcode());
 		}
 		return list;
 	}
@@ -59,11 +59,11 @@ public class FinanceImpl implements FinanceDAL {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("id").is(pettycash.getId()));
 		update.set("description", pettycash.getDescription());
-		update.set("addedDate", pettycash.getAddedDate());
+		update.set("addedDate", pettycash.getAddeddate());
 		update.set("type", pettycash.getType());
-		update.set("fromPerson", pettycash.getFromPerson());
-		update.set("toPerson", pettycash.getToPerson());
-		update.set("totalAmount", pettycash.getTotalAmount());
+		update.set("fromPerson", pettycash.getFromperson());
+		update.set("toPerson", pettycash.getToperson());
+		update.set("totalAmount", pettycash.getTotalamount());
 		mongoTemplate.updateFirst(query, update, PettyCash.class);
 		return pettycash;
 	}

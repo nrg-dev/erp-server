@@ -60,12 +60,12 @@ public class StockImpl implements StockDAL {
 	public StockDamage updateDamage(StockDamage damage) {
 		Update update = new Update();
 		Query query = new Query();
-		query.addCriteria(Criteria.where("stockDamageCode").is(damage.getStockDamageCode()));
-		update.set("productName", damage.getProductName());
+		query.addCriteria(Criteria.where("stockDamageCode").is(damage.getStockdamagecode()));
+		update.set("productName", damage.getProductname());
 		update.set("category", damage.getCategory());
 		update.set("quantity", damage.getQuantity());
-		update.set("stockDate", damage.getStockDate());
-		update.set("currentStatus", damage.getCurrentStatus());
+		update.set("stockDate", damage.getStockdate());
+		update.set("currentStatus", damage.getCurrentstatus());
 		mongoTemplate.updateFirst(query, update, StockDamage.class);
 		damage.setStatus("success");
 		return damage;
@@ -166,10 +166,10 @@ public class StockImpl implements StockDAL {
 		update.set("description", stockIndetails.getDescription());
 		update.set("unitprice", stockIndetails.getUnitprice());
 		update.set("subtotal", stockIndetails.getSubtotal());
-		update.set("poDate", stockIndetails.getPoDate());
-		update.set("lastUpdate", podetails.getLastUpdate());
-		update.set("paymentStatus", podetails.getPaymentStatus());
-		update.set("remainingAmount", podetails.getRemainingQty());
+		update.set("poDate", stockIndetails.getPodate());
+		update.set("lastUpdate", podetails.getLastupdate());
+		update.set("paymentStatus", podetails.getPaymentstatus());
+		update.set("remainingAmount", podetails.getRemainingqty());
 		mongoTemplate.updateFirst(query, update, POInvoiceDetails.class);
 
 		return podetails;
@@ -189,10 +189,10 @@ public class StockImpl implements StockDAL {
 		update.set("description", podetails.getDescription());
 		update.set("unitprice", podetails.getUnitprice());
 		update.set("subtotal", podetails.getSubtotal());
-		update.set("poDate", podetails.getPoDate());
-		update.set("lastUpdate", podetails.getLastUpdate());
-		update.set("paymentStatus", podetails.getPaymentStatus());
-		update.set("remainingAmount", podetails.getRemainingQty());
+		update.set("poDate", podetails.getPodate());
+		update.set("lastUpdate", podetails.getLastupdate());
+		update.set("paymentStatus", podetails.getPaymentstatus());
+		update.set("remainingAmount", podetails.getRemainingqty());
 		mongoTemplate.updateFirst(query, update, POInvoiceDetails.class);
 
 		return podetails;
@@ -206,10 +206,10 @@ public class StockImpl implements StockDAL {
 		query.addCriteria(Criteria.where("id").is(id));
 		
 		update.set("invoicedate", stock.getInvoicedate());
-		update.set("stockInCategory", stock.getStockCategory());
+		update.set("stockInCategory", stock.getStockcategory());
 		update.set("itemname", stock.getItemname());
 		update.set("category", stock.getCategory());
-		update.set("recentStock", stock.getRecentStock());
+		update.set("recentStock", stock.getRecentstock());
 		update.set("addedqty", stock.getAddedqty());
 		update.set("status", stock.getStatus());
 		mongoTemplate.updateFirst(query, update, Stock.class);

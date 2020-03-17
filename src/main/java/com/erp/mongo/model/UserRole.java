@@ -10,9 +10,9 @@ public class UserRole {
 	private String id;
 	private String invnumber;
 	private String username;
-	private String userRole;
-	private String menuItem;
-	private String subMenuItem;
+	private String userrole;
+	private String menuitem;
+	private String submenuitem;
 	
 	public String getId() {
 		return id;
@@ -32,25 +32,23 @@ public class UserRole {
 	public void setUsername(String username) {
 		this.username = username;
 	}
+	public String getUserrole() {
+		return userrole;
+	}
+	public void setUserrole(String userrole) {
+		this.userrole = userrole;
+	}
+	public String getMenuitem() {
+		return menuitem;
+	}
+	public void setMenuitem(String menuitem) {
+		this.menuitem = menuitem;
+	}
+	public String getSubmenuitem() {
+		return submenuitem;
+	}
+	public void setSubmenuitem(String submenuitem) {
+		this.submenuitem = submenuitem;
+	}
 	
-	public String getUserRole() {
-		return userRole;
-	}
-	public void setUserRole(String userRole) {
-		this.userRole = userRole;
-	}
-	public String getMenuItem() {
-		return menuItem;
-	}
-	public void setMenuItem(String menuItem) {
-		this.menuItem = menuItem;
-	}
-	public String getSubMenuItem() {
-		return subMenuItem;
-	}
-	public void setSubMenuItem(String subMenuItem) {
-		this.subMenuItem = subMenuItem;
-	}
-		
-	 
 }

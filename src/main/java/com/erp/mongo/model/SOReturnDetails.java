@@ -9,13 +9,13 @@ public class SOReturnDetails {
 	@Id
 	private String id;
 	private String invoicenumber;
-	private String returnStatus;
+	private String returnstatus;
 	private String itemname;
 	private String qty;
 	private String customername;
 	private String category;
-	private String itemStatus;
-	private String soDate;
+	private String itemstatus;
+	private String sodate;
 	private String status;
 	private int invid;
 
@@ -67,28 +67,28 @@ public class SOReturnDetails {
 		this.category = category;
 	}
 
-	public String getSoDate() {
-		return soDate;
+	public String getReturnstatus() {
+		return returnstatus;
 	}
 
-	public void setSoDate(String soDate) {
-		this.soDate = soDate;
+	public void setReturnstatus(String returnstatus) {
+		this.returnstatus = returnstatus;
 	}
 
-	public String getItemStatus() {
-		return itemStatus;
+	public String getItemstatus() {
+		return itemstatus;
 	}
 
-	public void setItemStatus(String itemStatus) {
-		this.itemStatus = itemStatus;
+	public void setItemstatus(String itemstatus) {
+		this.itemstatus = itemstatus;
 	}
 
-	public String getReturnStatus() {
-		return returnStatus;
+	public String getSodate() {
+		return sodate;
 	}
 
-	public void setReturnStatus(String returnStatus) {
-		this.returnStatus = returnStatus;
+	public void setSodate(String sodate) {
+		this.sodate = sodate;
 	}
 
 	public String getStatus() {

@@ -11,7 +11,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import com.erp.bo.ErpBo;
 import com.erp.mongo.model.Customer;
 
 @Repository
@@ -21,12 +20,8 @@ public class CustomerImpl implements CustomerDAL {
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
-
-	@Autowired
-	ErpBo investmentBo1;
-
+	
 	// save
-
 	@Override
 	public Customer saveCustomer(Customer customer) {
 		System.out.println("Save Customer");
@@ -55,9 +50,9 @@ public class CustomerImpl implements CustomerDAL {
 		Update update = new Update();
 		Query query = new Query();
 		query.addCriteria(Criteria.where("custcode").is(customer.getCustcode()));
-		update.set("customerName", customer.getCustomerName());
-		update.set("phoneNumber", customer.getPhoneNumber());
-		update.set("mobileNumber", customer.getMobileNumber());
+		update.set("customerName", customer.getCustomername());
+		update.set("phoneNumber", customer.getPhonenumber());
+		update.set("mobileNumber", customer.getMobilenumber());
 		update.set("country", customer.getCountry());
 		update.set("email", customer.getEmail());
 		update.set("city", customer.getCity());

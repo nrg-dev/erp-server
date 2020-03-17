@@ -19,7 +19,7 @@ public class Employee {
 	 String npwp;
 	 String bpjs;
 	 String monthlysalary;
-	 String workHour;
+	 String workhour;
 	 String annualLeave;
 	 String status 		;
 	 private String addeddate;
@@ -112,12 +112,12 @@ public class Employee {
 		this.monthlysalary = monthlysalary;
 	}
 
-	public String getWorkHour() {
-		return workHour;
+	public String getWorkhour() {
+		return workhour;
 	}
 
-	public void setWorkHour(String workHour) {
-		this.workHour = workHour;
+	public void setWorkhour(String workhour) {
+		this.workhour = workhour;
 	}
 
 	public String getAnnualLeave() {
