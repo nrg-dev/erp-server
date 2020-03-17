@@ -4,14 +4,14 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class ContractList {
+public class contractlist {
 
 	@Id
 	private String id;
-	private String empCode;
-	private String fileType;
+	private String empcode;
+	private String filetype;
 	private String base64;
-	private String contractNumber;
+	private String contractnumber;
 	private String date;
 
 	public String getId() {
@@ -22,20 +22,20 @@ public class ContractList {
 		this.id = id;
 	}
 
-	public String getEmpCode() {
-		return empCode;
+	public String getEmpcode() {
+		return empcode;
 	}
 
-	public void setEmpCode(String empCode) {
-		this.empCode = empCode;
+	public void setEmpcode(String empcode) {
+		this.empcode = empcode;
 	}
 
-	public String getFileType() {
-		return fileType;
+	public String getFiletype() {
+		return filetype;
 	}
 
-	public void setFileType(String fileType) {
-		this.fileType = fileType;
+	public void setFiletype(String filetype) {
+		this.filetype = filetype;
 	}
 
 	public String getBase64() {
@@ -46,12 +46,12 @@ public class ContractList {
 		this.base64 = base64;
 	}
 
-	public String getContractNumber() {
-		return contractNumber;
+	public String getContractnumber() {
+		return contractnumber;
 	}
 
-	public void setContractNumber(String contractNumber) {
-		this.contractNumber = contractNumber;
+	public void setContractnumber(String contractnumber) {
+		this.contractnumber = contractnumber;
 	}
 
 	public String getDate() {
@@ -61,7 +61,6 @@ public class ContractList {
 	public void setDate(String date) {
 		this.date = date;
 	}
-	
-	
 
+	
 }
