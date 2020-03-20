@@ -161,7 +161,7 @@ public class VendorService implements Filter {
 		logger.info("------------- Inside get Vendor -----------------");
 		List<Vendor> responseList = null;
 		try {
-			logger.info("-----------Inside get Vendor Called----------");
+			logger.info("Id ---------->"+id);
 			responseList = vendordal.getVendor(id);
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
@@ -182,6 +182,7 @@ public class VendorService implements Filter {
 			return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);
 
 		} catch (Exception e) {
+			vendor.setStatus("failure");
 			logger.info("Exception ------------->" + e.getMessage());
 			e.printStackTrace();
 		} finally {

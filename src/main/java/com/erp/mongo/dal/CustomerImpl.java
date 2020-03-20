@@ -63,6 +63,7 @@ public class CustomerImpl implements CustomerDAL {
 		update.set("city", customer.getCity());
 		update.set("address", customer.getAddress());
 		mongoTemplate.updateFirst(query, update, Customer.class);
+		customer.setStatus("success");
 		return customer;
 	}
 

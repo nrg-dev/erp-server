@@ -162,6 +162,7 @@ public class CustomerService implements Filter {
 			return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
 
 		} catch (Exception e) {
+			customer.setStatus("failure");
 			logger.info("Exception ------------->" + e.getMessage());
 			e.printStackTrace();
 		} finally {
