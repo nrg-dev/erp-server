@@ -139,8 +139,8 @@ public class VendorService implements Filter {
 			logger.info("-----------Inside loadvendornamecode Called----------");
 			vendorlist = vendordal.loadVendor(vendorlist);
 			for (Vendor vendor : vendorlist) {
-				System.out.println("vendor name-->" + vendor.getVendorName());
-				list.add(vendor.getVendorName() + "-" + vendor.getVendorcode());
+				System.out.println("vendor name-->" + vendor.getVendorname());
+				list.add(vendor.getVendorname() + "-" + vendor.getVendorcode());
 			}
 
 			return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);

@@ -9,9 +9,9 @@ public class Customer {
 	@Id
 	private String id;
 	String custcode;
-	String customerName;
-	String phoneNumber;
-	String mobileNumber;
+	String customername;
+	String phonenumber;
+	String mobilenumber;
 	String address;
 	String country;
 	String city;
@@ -36,28 +36,28 @@ public class Customer {
 		this.custcode = custcode;
 	}
 
-	public String getCustomerName() {
-		return customerName;
+	public String getCustomername() {
+		return customername;
 	}
 
-	public void setCustomerName(String customerName) {
-		this.customerName = customerName;
+	public void setCustomername(String customername) {
+		this.customername = customername;
 	}
 
-	public String getPhoneNumber() {
-		return phoneNumber;
+	public String getPhonenumber() {
+		return phonenumber;
 	}
 
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+	public void setPhonenumber(String phonenumber) {
+		this.phonenumber = phonenumber;
 	}
 
-	public String getMobileNumber() {
-		return mobileNumber;
+	public String getMobilenumber() {
+		return mobilenumber;
 	}
 
-	public void setMobileNumber(String mobileNumber) {
-		this.mobileNumber = mobileNumber;
+	public void setMobilenumber(String mobilenumber) {
+		this.mobilenumber = mobilenumber;
 	}
 
 	public String getAddress() {

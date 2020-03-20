@@ -8,16 +8,16 @@ public class StockReturn {
 
 	@Id
 	private String id;
-	String stockReturnCode;
-	String productName;
+	String stockreturncode;
+	String productname;
 	String category;
 	String quantity;
-	String stockDate;
+	String stockdate;
 	String status;
-	String currentStatus;
-	String vendorName;
+	String currentstatus;
+	String vendorname;
 	String returncategory;
-	String addedDate;
+	String addeddate;
 	
 	public String getId() {
 		return id;
@@ -35,20 +35,20 @@ public class StockReturn {
 		this.status = status;
 	}
 
-	public String getStockReturnCode() {
-		return stockReturnCode;
+	public String getStockreturncode() {
+		return stockreturncode;
 	}
 
-	public void setStockReturnCode(String stockReturnCode) {
-		this.stockReturnCode = stockReturnCode;
+	public void setStockreturncode(String stockreturncode) {
+		this.stockreturncode = stockreturncode;
 	}
 
-	public String getProductName() {
-		return productName;
+	public String getProductname() {
+		return productname;
 	}
 
-	public void setProductName(String productName) {
-		this.productName = productName;
+	public void setProductname(String productname) {
+		this.productname = productname;
 	}
 
 	public String getCategory() {
@@ -67,28 +67,28 @@ public class StockReturn {
 		this.quantity = quantity;
 	}
 
-	public String getStockDate() {
-		return stockDate;
+	public String getStockdate() {
+		return stockdate;
 	}
 
-	public void setStockDate(String stockDate) {
-		this.stockDate = stockDate;
+	public void setStockdate(String stockdate) {
+		this.stockdate = stockdate;
 	}
 
-	public String getCurrentStatus() {
-		return currentStatus;
+	public String getCurrentstatus() {
+		return currentstatus;
 	}
 
-	public void setCurrentStatus(String currentStatus) {
-		this.currentStatus = currentStatus;
+	public void setCurrentstatus(String currentstatus) {
+		this.currentstatus = currentstatus;
 	}
 
-	public String getVendorName() {
-		return vendorName;
+	public String getVendorname() {
+		return vendorname;
 	}
 
-	public void setVendorName(String vendorName) {
-		this.vendorName = vendorName;
+	public void setVendorname(String vendorname) {
+		this.vendorname = vendorname;
 	}
 
 	public String getReturncategory() {
@@ -99,12 +99,12 @@ public class StockReturn {
 		this.returncategory = returncategory;
 	}
 
-	public String getAddedDate() {
-		return addedDate;
+	public String getAddeddate() {
+		return addeddate;
 	}
 
-	public void setAddedDate(String addedDate) {
-		this.addedDate = addedDate;
+	public void setAddeddate(String addeddate) {
+		this.addeddate = addeddate;
 	}
 
 	

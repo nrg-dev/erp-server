@@ -9,13 +9,13 @@ public class POReturnDetails {
 	@Id
 	private String id;
 	private String invoicenumber;
-	private String returnStatus;
+	private String returnstatus;
 	private String itemname;
 	private String qty;
 	private String vendorname;
 	private String category;
-	private String itemStatus;
-	private String poDate;
+	private String itemstatus;
+	private String podate;
 	private String status;
 	private int invid;
 
@@ -68,28 +68,28 @@ public class POReturnDetails {
 		this.category = category;
 	}
 
-	public String getPoDate() {
-		return poDate;
+	public String getReturnstatus() {
+		return returnstatus;
 	}
 
-	public void setPoDate(String poDate) {
-		this.poDate = poDate;
+	public void setReturnstatus(String returnstatus) {
+		this.returnstatus = returnstatus;
 	}
 
-	public String getItemStatus() {
-		return itemStatus;
+	public String getItemstatus() {
+		return itemstatus;
 	}
 
-	public void setItemStatus(String itemStatus) {
-		this.itemStatus = itemStatus;
+	public void setItemstatus(String itemstatus) {
+		this.itemstatus = itemstatus;
 	}
 
-	public String getReturnStatus() {
-		return returnStatus;
+	public String getPodate() {
+		return podate;
 	}
 
-	public void setReturnStatus(String returnStatus) {
-		this.returnStatus = returnStatus;
+	public void setPodate(String podate) {
+		this.podate = podate;
 	}
 
 	public String getStatus() {

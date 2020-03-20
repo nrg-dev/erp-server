@@ -9,9 +9,7 @@ public class absentlist {
 	@Id
 	private String id;
 	private String empcode;
-	private String checkin;
 	private String checkintime;
-	private String checkout;
 	private String checkouttime;
 	private String absent;
 	private String reason;
@@ -33,28 +31,12 @@ public class absentlist {
 		this.empcode = empcode;
 	}
 
-	public String getCheckin() {
-		return checkin;
-	}
-
-	public void setCheckin(String checkin) {
-		this.checkin = checkin;
-	}
-
 	public String getCheckintime() {
 		return checkintime;
 	}
 
 	public void setCheckintime(String checkintime) {
 		this.checkintime = checkintime;
-	}
-
-	public String getCheckout() {
-		return checkout;
-	}
-
-	public void setCheckout(String checkout) {
-		this.checkout = checkout;
 	}
 
 	public String getCheckouttime() {

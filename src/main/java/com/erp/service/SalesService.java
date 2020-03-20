@@ -107,7 +107,7 @@ public class SalesService implements Filter {
 			response = salesdal.loadCustomerList(response);
 			for (Customer customerlist : response) {
 				sales = new Sales();
-				sales.setCustomerName(customerlist.getCustomerName() + "-" + customerlist.getCustcode());
+				sales.setCustomerName(customerlist.getCustomername() + "-" + customerlist.getCustcode());
 				responseList.add(sales);
 			}
 		} catch (Exception e) {
@@ -188,8 +188,8 @@ public class SalesService implements Filter {
 								sodetails.setUnitprice(jObject.getString("unitPrice"));
 								sodetails.setQty(jObject.getString("quantity"));
 								sodetails.setSubtotal(jObject.getDouble("netAmount"));
-								sodetails.setSoDate(Custom.getCurrentInvoiceDate());
-								logger.info("SOInvoice Date --->" + sodetails.getSoDate());
+								sodetails.setSodate(Custom.getCurrentInvoiceDate());
+								logger.info("SOInvoice Date --->" + sodetails.getSodate());
 								salesdal.saveSales(sodetails);
 								String str = jObject.getString("quantity");
 								str = str.replaceAll("\\D", "");
@@ -326,10 +326,10 @@ public class SalesService implements Filter {
 			String customerCode = res[1];
 			logger.info("After Split Customer Name -->" + customerCode);
 			customer = salesdal.getCustomerDetails(customerCode);
-			customer.setCustomerName(customer.getCustomerName());
+			customer.setCustomername(customer.getCustomername());
 			customer.setCity(customer.getCity());
 			customer.setCountry(customer.getCountry());
-			customer.setPhoneNumber(customer.getPhoneNumber());
+			customer.setPhonenumber(customer.getPhonenumber());
 			customer.setEmail(customer.getEmail());
 		} catch (Exception e) {
 			logger.info("getCustomerDetails Exception ------------->" + e.getMessage());
@@ -506,9 +506,9 @@ public class SalesService implements Filter {
 							sodetails.setUnitprice(jObject.getString("price"));
 							sodetails.setQty(jObject.getString("quantity"));
 							sodetails.setSubtotal(jObject.getDouble("netAmount"));
-							sodetails.setLastUpdate(Custom.getCurrentInvoiceDate());
+							sodetails.setLastupdate(Custom.getCurrentInvoiceDate());
 							sodetails.setInvoicenumber(jObject.getString("invoiceNumber"));
-							sodetails.setSoDate(jObject.getString("soDate"));
+							sodetails.setSodate(jObject.getString("soDate"));
 							sodetails.setId(jObject.getString("id"));
 							salesdal.updateSales(sodetails);
 							String str = jObject.getString("quantity");
@@ -597,11 +597,11 @@ public class SalesService implements Filter {
 							soreturndetails.setCategory(jObject.getString("category"));
 							soreturndetails.setItemname(jObject.getString("productName"));
 							soreturndetails.setQty(jObject.getString("quantity"));
-							soreturndetails.setItemStatus(jObject.getString("itemStatus"));
-							soreturndetails.setReturnStatus(jObject.getString("returnStatus"));
-							soreturndetails.setSoDate(Custom.getCurrentInvoiceDate());
+							soreturndetails.setItemstatus(jObject.getString("itemStatus"));
+							soreturndetails.setReturnstatus(jObject.getString("returnStatus"));
+							soreturndetails.setSodate(Custom.getCurrentInvoiceDate());
 							soreturndetails.setInvid(j+1); 
-							logger.info("POInvoice Date --->" + soreturndetails.getSoDate());
+							logger.info("POInvoice Date --->" + soreturndetails.getSodate());
 							salesdal.insertReturn(soreturndetails);
 							logger.info("Invoice Number --->"+randomnumber.getSoreturninvoicenumber());
 							boolean status = randomnumberdal.updateSalesReturnRandamNumber(randomnumber);

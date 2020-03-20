@@ -10,13 +10,13 @@ public class Stock {
 	private String id;
 	private String invoicedate;
 	private String invoicenumber;
-	private String stockCategory;
+	private String stockcategory;
 	private String itemname;
 	private String category;
-	private String recentStock;
+	private String recentstock;
 	private String addedqty;
 	private String status;
-	private String stockOutCategory;
+	private String stockoutcategory;
 	
 	public String getId() {
 		return id;
@@ -42,12 +42,12 @@ public class Stock {
 		this.invoicenumber = invoicenumber;
 	}
 
-	public String getStockCategory() {
-		return stockCategory;
+	public String getStockcategory() {
+		return stockcategory;
 	}
 
-	public void setStockCategory(String stockCategory) {
-		this.stockCategory = stockCategory;
+	public void setStockcategory(String stockcategory) {
+		this.stockcategory = stockcategory;
 	}
 
 	public String getItemname() {
@@ -66,12 +66,12 @@ public class Stock {
 		this.category = category;
 	}
 
-	public String getRecentStock() {
-		return recentStock;
+	public String getRecentstock() {
+		return recentstock;
 	}
 
-	public void setRecentStock(String recentStock) {
-		this.recentStock = recentStock;
+	public void setRecentstock(String recentstock) {
+		this.recentstock = recentstock;
 	}
 
 	public String getAddedqty() {
@@ -90,14 +90,12 @@ public class Stock {
 		this.status = status;
 	}
 
-	public String getStockOutCategory() {
-		return stockOutCategory;
+	public String getStockoutcategory() {
+		return stockoutcategory;
 	}
 
-	public void setStockOutCategory(String stockOutCategory) {
-		this.stockOutCategory = stockOutCategory;
+	public void setStockoutcategory(String stockoutcategory) {
+		this.stockoutcategory = stockoutcategory;
 	}
-
-
 	 
 }
