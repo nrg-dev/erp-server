@@ -106,7 +106,7 @@ public class PurchaseService implements Filter {
 			response = purchasedal.loadVendorList(response);
 			for (Vendor venList : response) {
 				purhase = new Purchase();
-				purhase.setVendorName(venList.getVendorname() + "-" + venList.getVendorcode());
+				purhase.setVendorName(venList.getVendorName() + "-" + venList.getVendorcode());
 				responseList.add(purhase);
 			}
 		} catch (Exception e) {
@@ -262,13 +262,13 @@ public class PurchaseService implements Filter {
 								podetails.setUnitprice(jObject.getString("unitPrice"));
 								podetails.setQty(jObject.getString("quantity"));
 								podetails.setSubtotal(jObject.getDouble("netAmount"));
-								podetails.setPodate(Custom.getCurrentInvoiceDate());
-								podetails.setPaymentstatus("Not Paid");
+								podetails.setPoDate(Custom.getCurrentInvoiceDate());
+								podetails.setPaymentStatus("Not Paid");
 								String str = jObject.getString("quantity");
 								str = str.replaceAll("\\D", "");
-								podetails.setRemainingqty(Integer.valueOf(str)); 
+								podetails.setRemainingQty(Integer.valueOf(str)); 
 								totalQty += Integer.valueOf(str);
-								logger.info("POInvoice Date --->" + podetails.getPodate());
+								logger.info("POInvoice Date --->" + podetails.getPoDate());
 								purchasedal.savePurchase(podetails);
 								
 								totalPrice += jObject.getDouble("netAmount");
@@ -405,10 +405,10 @@ public class PurchaseService implements Filter {
 			String vendorCode = res[1];
 			logger.info("After Split Vendor Name -->" + vendorCode);
 			vendor = purchasedal.getVendorDetails(vendorCode);
-			purchase.setVendorName(vendor.getVendorname());
+			purchase.setVendorName(vendor.getVendorName());
 			purchase.setVendorCity(vendor.getCity());
 			purchase.setVendorCountry(vendor.getCountry());
-			purchase.setVendorPhone(vendor.getPhonenumber());
+			purchase.setVendorPhone(vendor.getPhoneNumber());
 			purchase.setVendorEmail(vendor.getEmail());
 		} catch (Exception e) {
 			logger.info("getVendorDetails Exception ------------->" + e.getMessage());
@@ -586,15 +586,15 @@ public class PurchaseService implements Filter {
 							podetails.setUnitprice(jObject.getString("price"));
 							podetails.setQty(jObject.getString("quantity"));
 							podetails.setSubtotal(jObject.getDouble("netAmount"));
-							podetails.setLastupdate(Custom.getCurrentInvoiceDate());
+							podetails.setLastUpdate(Custom.getCurrentInvoiceDate());
 							podetails.setInvoicenumber(jObject.getString("invoiceNumber"));
-							podetails.setPodate(jObject.getString("poDate"));
+							podetails.setPoDate(jObject.getString("poDate"));
 							podetails.setId(jObject.getString("id"));
 							String str = jObject.getString("quantity");
 							str = str.replaceAll("\\D", "");
 							totalQty += Integer.valueOf(str);
-							podetails.setPaymentstatus("Not Paid");
-							podetails.setRemainingqty(Integer.valueOf(str)); 
+							podetails.setPaymentStatus("Not Paid");
+							podetails.setRemainingQty(Integer.valueOf(str)); 
 							purchasedal.updatePurchase(podetails);
 							totalPrice += jObject.getDouble("netAmount");
 							totalitem = j+1;
@@ -678,11 +678,11 @@ public class PurchaseService implements Filter {
 							poreturndetails.setCategory(jObject.getString("category"));
 							poreturndetails.setItemname(jObject.getString("productName"));
 							poreturndetails.setQty(jObject.getString("quantity"));
-							poreturndetails.setItemstatus(jObject.getString("itemStatus"));
-							poreturndetails.setReturnstatus(jObject.getString("returnStatus"));
-							poreturndetails.setPodate(Custom.getCurrentInvoiceDate());
+							poreturndetails.setItemStatus(jObject.getString("itemStatus"));
+							poreturndetails.setReturnStatus(jObject.getString("returnStatus"));
+							poreturndetails.setPoDate(Custom.getCurrentInvoiceDate());
 							poreturndetails.setInvid(j+1); 
-							logger.info("POInvoice Date --->" + poreturndetails.getPodate());
+							logger.info("POInvoice Date --->" + poreturndetails.getPoDate());
 							purchasedal.insertReturn(poreturndetails);
 							logger.info("Invoice Number --->"+randomnumber.getPoreturninvoicenumber());
 							boolean status = randomnumberdal.updateReturnRandamNumber(randomnumber);

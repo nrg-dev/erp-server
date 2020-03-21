@@ -12,7 +12,7 @@ public class Login {
 	private String username;
 	private String password;
 	private String status;
-	private String userotp;
+	private String userOtp;
 	
 	public String getId() {
 		return id;
@@ -44,13 +44,12 @@ public class Login {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public String getUserotp() {
-		return userotp;
+	public String getUserOtp() {
+		return userOtp;
 	}
-	public void setUserotp(String userotp) {
-		this.userotp = userotp;
+	public void setUserOtp(String userOtp) {
+		this.userOtp = userOtp;
 	}
-	
 	
 	 
 }

@@ -64,7 +64,7 @@ public class EmployeeImpl implements EmployeeDAL {
 		update.set("npwp", employee.getNpwp());
 		update.set("bpjs", employee.getBpjs());
 		update.set("monthlysalary", employee.getMonthlysalary());
-		update.set("workHour", employee.getWorkhour());
+		update.set("workHour", employee.getWorkHour());
 		update.set("annualLeave", employee.getAnnualLeave());
 		mongoTemplate.updateFirst(query, update, Employee.class);
 		return employee;

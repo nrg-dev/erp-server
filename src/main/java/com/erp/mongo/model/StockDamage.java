@@ -8,14 +8,14 @@ public class StockDamage {
 
 	@Id
 	private String id;
-	String stockdamagecode;
-	String productname;
+	String stockDamageCode;
+	String productName;
 	String category;
 	String quantity;
-	String stockdate;
+	String stockDate;
 	String status;
-	String currentstatus;
-	String addeddate;
+	String currentStatus;
+	String addedDate;
 
 	public String getId() {
 		return id;
@@ -33,20 +33,20 @@ public class StockDamage {
 		this.status = status;
 	}
 
-	public String getStockdamagecode() {
-		return stockdamagecode;
+	public String getStockDamageCode() {
+		return stockDamageCode;
 	}
 
-	public void setStockdamagecode(String stockdamagecode) {
-		this.stockdamagecode = stockdamagecode;
+	public void setStockDamageCode(String stockDamageCode) {
+		this.stockDamageCode = stockDamageCode;
 	}
 
-	public String getProductname() {
-		return productname;
+	public String getProductName() {
+		return productName;
 	}
 
-	public void setProductname(String productname) {
-		this.productname = productname;
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 
 	public String getCategory() {
@@ -65,27 +65,28 @@ public class StockDamage {
 		this.quantity = quantity;
 	}
 
-	public String getStockdate() {
-		return stockdate;
+	public String getStockDate() {
+		return stockDate;
 	}
 
-	public void setStockdate(String stockdate) {
-		this.stockdate = stockdate;
+	public void setStockDate(String stockDate) {
+		this.stockDate = stockDate;
 	}
 
-	public String getCurrentstatus() {
-		return currentstatus;
+	public String getCurrentStatus() {
+		return currentStatus;
 	}
 
-	public void setCurrentstatus(String currentstatus) {
-		this.currentstatus = currentstatus;
+	public void setCurrentStatus(String currentStatus) {
+		this.currentStatus = currentStatus;
 	}
 
-	public String getAddeddate() {
-		return addeddate;
+	public String getAddedDate() {
+		return addedDate;
 	}
 
-	public void setAddeddate(String addeddate) {
-		this.addeddate = addeddate;
+	public void setAddedDate(String addedDate) {
+		this.addedDate = addedDate;
 	}
+	
 }

@@ -8,7 +8,7 @@ public class StockInDetails {
 
 	@Id
 	private String id;
-	private String stockinnumber;
+	private String stockInNumber;
 	private String invoicenumber;
 	private String itemid;
 	private String itemname;
@@ -20,7 +20,7 @@ public class StockInDetails {
 	private String vendorname;
 	private String category;
 	private String status;
-	private String podate;
+	private String poDate;
 
 	public String getId() {
 		return id;
@@ -29,13 +29,13 @@ public class StockInDetails {
 	public void setId(String id) {
 		this.id = id;
 	}
-	
-	public String getStockinnumber() {
-		return stockinnumber;
+
+	public String getStockInNumber() {
+		return stockInNumber;
 	}
 
-	public void setStockinnumber(String stockinnumber) {
-		this.stockinnumber = stockinnumber;
+	public void setStockInNumber(String stockInNumber) {
+		this.stockInNumber = stockInNumber;
 	}
 
 	public String getInvoicenumber() {
@@ -126,12 +126,11 @@ public class StockInDetails {
 		this.category = category;
 	}
 
-	public String getPodate() {
-		return podate;
+	public String getPoDate() {
+		return poDate;
 	}
 
-	public void setPodate(String podate) {
-		this.podate = podate;
+	public void setPoDate(String poDate) {
+		this.poDate = poDate;
 	}
-
 }

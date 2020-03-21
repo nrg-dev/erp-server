@@ -148,8 +148,8 @@ public class SalesImpl implements SalesDAL {
 		update.set("description", sales.getDescription());
 		update.set("unitprice", sales.getUnitprice());
 		update.set("subtotal", sales.getSubtotal());
-		update.set("soDate", sales.getSodate());
-		update.set("lastUpdate", sales.getLastupdate());
+		update.set("soDate", sales.getSoDate());
+		update.set("lastUpdate", sales.getLastUpdate());
 		mongoTemplate.updateFirst(query, update, SOInvoiceDetails.class);
 		return sales;
 	}
@@ -198,9 +198,9 @@ public class SalesImpl implements SalesDAL {
 		ArrayList<String> list = new ArrayList<String>();
 		List<Customer> customerlist = mongoTemplate.findAll(Customer.class);
 		for(Customer customer:customerlist) {
-			logger.info("Customer name-->"+customer.getCustomername());
+			logger.info("Customer name-->"+customer.getCustomerName());
 			logger.info("Customer code-->"+customer.getCustcode());
-			list.add(customer.getCustomername()+"-"+customer.getCustcode());			
+			list.add(customer.getCustomerName()+"-"+customer.getCustcode());			
 		}
 		return list;		
 	}

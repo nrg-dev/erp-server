@@ -19,8 +19,8 @@ public class SOInvoiceDetails {
 	private String customername;
 	private String category;
 	private String status;
-	private String sodate;
-	private String lastupdate;
+	private String soDate;
+	private String lastUpdate;
 
 	public String getId() {
 		return id;
@@ -118,21 +118,20 @@ public class SOInvoiceDetails {
 		this.category = category;
 	}
 
-	public String getSodate() {
-		return sodate;
+	public String getSoDate() {
+		return soDate;
 	}
 
-	public void setSodate(String sodate) {
-		this.sodate = sodate;
+	public void setSoDate(String soDate) {
+		this.soDate = soDate;
 	}
 
-	public String getLastupdate() {
-		return lastupdate;
+	public String getLastUpdate() {
+		return lastUpdate;
 	}
 
-	public void setLastupdate(String lastupdate) {
-		this.lastupdate = lastupdate;
+	public void setLastUpdate(String lastUpdate) {
+		this.lastUpdate = lastUpdate;
 	}
-
 	
 }

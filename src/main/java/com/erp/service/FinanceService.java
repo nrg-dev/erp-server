@@ -96,7 +96,7 @@ public class FinanceService implements Filter {
 	public ResponseEntity<?> savePettycash(@RequestBody PettyCash finance) {
 		logger.info("------------- Inside savePettycash-----------------");
 		try {
-			finance.setAddeddate(Custom.getCurrentInvoiceDate());
+			finance.setAddedDate(Custom.getCurrentInvoiceDate());
 			System.out.println("Current Date --->" + Custom.getCurrentDate());
 			finance = financedal.save(finance);
 			finance.setStatus("success");

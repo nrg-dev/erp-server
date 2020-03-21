@@ -60,9 +60,9 @@ public class VendorImpl implements VendorDAL {
 		Update update = new Update();
 		Query query = new Query();
 		query.addCriteria(Criteria.where("vendorcode").is(vendor.getVendorcode()));
-		update.set("vendorName", vendor.getVendorname());
-		update.set("phoneNumber", vendor.getPhonenumber());
-		update.set("mobileNumber", vendor.getMobilenumber());
+		update.set("vendorName", vendor.getVendorName());
+		update.set("phoneNumber", vendor.getPhoneNumber());
+		update.set("mobileNumber", vendor.getMobileNumber());
 		update.set("country", vendor.getCountry());
 		update.set("email", vendor.getEmail());
 		update.set("city", vendor.getCity());

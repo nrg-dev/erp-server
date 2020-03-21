@@ -19,10 +19,10 @@ public class POInvoiceDetails {
 	private String vendorname;
 	private String category;
 	private String status;
-	private String podate;
-	private String lastupdate;
-	private String paymentstatus;
-	private int remainingqty;
+	private String poDate;
+	private String lastUpdate;
+	private String paymentStatus;
+	private int remainingQty;
 
 	public String getId() {
 		return id;
@@ -120,36 +120,36 @@ public class POInvoiceDetails {
 		this.category = category;
 	}
 
-	public String getPodate() {
-		return podate;
+	public String getPoDate() {
+		return poDate;
 	}
 
-	public void setPodate(String podate) {
-		this.podate = podate;
+	public void setPoDate(String poDate) {
+		this.poDate = poDate;
 	}
 
-	public String getLastupdate() {
-		return lastupdate;
+	public String getLastUpdate() {
+		return lastUpdate;
 	}
 
-	public void setLastupdate(String lastupdate) {
-		this.lastupdate = lastupdate;
+	public void setLastUpdate(String lastUpdate) {
+		this.lastUpdate = lastUpdate;
 	}
 
-	public String getPaymentstatus() {
-		return paymentstatus;
+	public String getPaymentStatus() {
+		return paymentStatus;
 	}
 
-	public void setPaymentstatus(String paymentstatus) {
-		this.paymentstatus = paymentstatus;
+	public void setPaymentStatus(String paymentStatus) {
+		this.paymentStatus = paymentStatus;
 	}
 
-	public int getRemainingqty() {
-		return remainingqty;
+	public int getRemainingQty() {
+		return remainingQty;
 	}
 
-	public void setRemainingqty(int remainingqty) {
-		this.remainingqty = remainingqty;
+	public void setRemainingQty(int remainingQty) {
+		this.remainingQty = remainingQty;
 	}
 	
 }

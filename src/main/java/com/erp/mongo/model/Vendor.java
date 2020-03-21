@@ -11,9 +11,9 @@ public class Vendor {
 	  @Id
 	  private String id;
 	  String vendorcode 	;
-      String vendorname 	;
-      String phonenumber 	;
-      String mobilenumber 	;
+      String vendorName 	;
+      String phoneNumber 	;
+      String mobileNumber 	;
       String address 		;
       String country 		;
       String city 			;
@@ -34,23 +34,23 @@ public class Vendor {
 	public void setVendorcode(String vendorcode) {
 		this.vendorcode = vendorcode;
 	}
-	public String getVendorname() {
-		return vendorname;
+	public String getVendorName() {
+		return vendorName;
 	}
-	public void setVendorname(String vendorname) {
-		this.vendorname = vendorname;
+	public void setVendorName(String vendorName) {
+		this.vendorName = vendorName;
 	}
-	public String getPhonenumber() {
-		return phonenumber;
+	public String getPhoneNumber() {
+		return phoneNumber;
 	}
-	public void setPhonenumber(String phonenumber) {
-		this.phonenumber = phonenumber;
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
-	public String getMobilenumber() {
-		return mobilenumber;
+	public String getMobileNumber() {
+		return mobileNumber;
 	}
-	public void setMobilenumber(String mobilenumber) {
-		this.mobilenumber = mobilenumber;
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
 	}
 	public String getAddress() {
 		return address;
