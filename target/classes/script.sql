@@ -7,9 +7,10 @@ db.randomNumber.insert({ "randomID" : 1,"poinvoicenumber" : 001,"poinvoicecode" 
 db.randomNumber.insert({ "randomID" : 2,"vendorinvoicenumber" : 001,"vendorinvoicecode" : "VEN","customerinvoicenumber" : 001,"customerinvoicecode":"CUST"})
 db.randomNumber.insert({ "randomID" : 3,"categoryinvoicenumber" : 01,"categoryinvoicecode" : "CAT","productinvoicenumber" : 01,"productinvoicecode":"PROD"})
 db.randomNumber.insert({ "randomID" : 4,"employeeinvoicenumber" : 01,"employeeinvoicecode" : "EMP"})
-
-
-
+db.randomNumber.insert({ "randomID" : 5,"discountinvoicenumber" : 01,"discountinvoicecode" : "DIS"})
+db.randomNumber.insert({ "randomID" : 6,"poreturninvoicenumber" : 001,"poreturninvoicecode" : "INVPORET","soreturninvoicenumber" : 001,"soreturninvoicecode":"INVSORET"})
+db.randomNumber.insert({ "randomID" : 7,"stockreturninvoicenumber" : 001,"stockreturninvoicecode" : "INVRET","stockdamageinvoicenumber" : 001,"stockdamageinvoicecode" : "INVDAM"})
+db.randomNumber.insert({ "randomID" : 8,"stockIninvoicenumber" : 001,"stockIninvoicecode" : "INVSTIN","stockOutinvoicenumber" : 001,"stockOutinvoicecode" : "INVSTOUT"})
 
 
 show collections
@@ -27,6 +28,16 @@ db.pOInvoice.remove( { } )
 db.pOInvoiceDetails.find();
 db.pOInvoiceDetails.remove( { } )
 
+-- PurchaseReturn
+db.pOReturnDetails.find();
+db.pOReturnDetails.remove( { } )
+
+-- Sales
+db.sOInvoice.find();
+db.sOInvoice.remove( { } )
+db.sOInvoiceDetails.find();
+db.sOInvoiceDetails.remove( { } )
+
 -- employee
 db.employee.drop()
 db.employee.find();
@@ -34,36 +45,62 @@ db.employee.remove( { } )
 
 -- Customer
 db.customer.find();
+db.customer.drop()
 db.customer.remove( { } )
-db.vendor.drop()
 
 -- Venodr
 db.vendor.find();
-db.vendor.remove( { } )
 db.vendor.drop()
+db.vendor.remove( { } )
 
 -- category
 db.category.find();
-db.category.remove( { } )
 db.category.drop()
+db.category.remove( { } )
 -- Item or Product
 db.item.drop()
 db.item.find();
 db.item.remove( { } )
+
+-- Discount
+db.discount.drop()
+db.discount.find();
+db.discount.remove( { } )
 
 -- Random Number
 db.randomNumber.drop()
 db.randomNumber.find();
 db.randomNumber.remove( { } )
 
--- Petty Cash
-db.pettyCash.drop()
-db.pettyCash.find();
-db.pettyCash.remove( { } )
+
+db.stock.find({"_id" :ObjectId("5e4fb74ab1840225ec539395") });
+db.pOInvoiceDetails.find({"paymentStatus" :"Not Paid"});
+db.pOInvoiceDetails.find({"itemname" :"Heals-PROD6"});
+
+db.stock.remove({"status" :"StockOut" });
+
+db.randomNumber.remove({"_id" :ObjectId("5e4fbb4987a94ea98989b9f4") });
+db.pOInvoiceDetails.update({"_id" :ObjectId("5e4f8e3cb184021bb0c9e7d5") },{$set : {"paymentStatus":'Not Paid'}})
 
 
+APIServerUrl
+============
+{ "apiurl": "http://34.214.60.154:8095/erp/" }   
 
 
+APILocalUrl
+===========
+{ "apiurl": "http://localhost:8095/erp/" } 
 
 
-
+Login Insert Query
+===================
+db.login.insertOne({ "invnumber":"INVLO001","username":"admin","password":"admin","status":"Active","userOtp":""});
+db.login.insertOne({ "invnumber":"INVLO002","username":"josni","password":"josni","status":"Active","userOtp":""});
+db.login.insertOne({ "invnumber":"INVLO003","username":"alex","password":"alex","status":"Active","userOtp":""});
+UserRole Insert Query
+=====================
+db.userRole.insertOne({ "invnumber":"INVUS001","userRole":"HRD","menuItem":"Employment,Vendor & Customer,Category & Product,Purchase,Sales,Finance,Stock,Report","subMenuItem":"","status":"Active"});
+db.userRole.insertOne({ "invnumber":"INVUS002","userRole":"SALES MANAGER","menuItem":"Employment,Vendor & Customer,Category & Product,Purchase,Sales,Finance","subMenuItem":"","status":"Active"});
+db.userRole.insertOne({ "invnumber":"INVUS003","userRole":"ADMINISTRATOR","menuItem":"Employment,Vendor & Customer,Category & Product,Purchase,Sales,Stock","subMenuItem":"","status":"Active"});
+db.userRole.insertOne({ "invnumber":"INVUS004","userRole":"WAREHOUSE CHIEF","menuItem":"Employment,Vendor & Customer,Category & Product,Stock,Report","subMenuItem":"","status":"Active"});
