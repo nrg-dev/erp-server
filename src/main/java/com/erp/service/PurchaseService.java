@@ -108,12 +108,12 @@ public class PurchaseService implements Filter {
 				purhase.setVendorName(venList.getVendorName() + "-" + venList.getVendorcode());
 				responseList.add(purhase);
 			}
+			return new ResponseEntity<List<Purchase>>(responseList, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.info("loadVendor Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
 		} finally {
 		}
-		return new ResponseEntity<List<Purchase>>(responseList, HttpStatus.CREATED);
 
 	}
 	
@@ -220,27 +220,23 @@ public class PurchaseService implements Filter {
 			poinvoice.setDeliveryprice(purchase.getDeliveryCost()); 
 			purchasedal.savePOInvoice(poinvoice);
 			System.out.println("Service call start.....");
-			purchase.setStatus("success");
+			//purchase.setStatus("success");
 			randomnumberdal.updateRandamNumber(randomnumber);
-			return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
+			return new ResponseEntity<>(HttpStatus.OK); 
 		}
 
-		/*catch (NullPointerException ne) {
-			purchase = new Purchase();
-			System.out.println("Inside null pointer exception ....");
-			purchase.setStatus("success");
-			boolean status = randomnumberdal.updateRandamNumber(randomnumber);
-			return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
-
-		}*/ catch (Exception e) {
+		 catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
 		}
 
 		finally {
-
+			poinvoice=null;
+			purchase = null;
+			poinvoice = null;
+			podetails = null;
+			randomnumber = null;
 		}
-		return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
 	}
 
 	// load
@@ -292,10 +288,9 @@ public class PurchaseService implements Filter {
 			return new ResponseEntity<List<Purchase>>(responseList, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.info("loadPurchase Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
 		} finally {
 		}
-		return new ResponseEntity<List<Purchase>>(responseList, HttpStatus.CREATED);
 	}
 
 	// get
@@ -309,7 +304,7 @@ public class PurchaseService implements Filter {
 			responseList = purchasedal.getPurchase(id);
 		} catch (Exception e) {
 			logger.info("getPurchase Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
 		} finally {
 
 		}
@@ -337,7 +332,7 @@ public class PurchaseService implements Filter {
 			purchase.setVendorEmail(vendor.getEmail());
 		} catch (Exception e) {
 			logger.info("getVendorDetails Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
 		} finally {
 
 		}
@@ -360,7 +355,7 @@ public class PurchaseService implements Filter {
 		} catch (Exception e) {
 			logger.info("RemovePurchase Exception ------------->" + e.getMessage());
 			purchase.setStatus("failure");
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
 		} finally {
 
 		}
@@ -384,18 +379,18 @@ public class PurchaseService implements Filter {
 			logger.info("After Split productCode -->" + productCode);
 			String[] response = category.split("-");
 			String categoryCode = response[1];
-			logger.info("After Split categoryCode -->" + categoryCode);
-			
+			logger.info("After Split categoryCode -->" + categoryCode);			
 			item = purchasedal.getUnitPrice(productCode, categoryCode);
 			logger.info("Unit Price ----------"+item.getSellingprice());
+			return new ResponseEntity<Item>(item, HttpStatus.CREATED);
 
 		} catch (Exception e) {
 			logger.info("getUnitPrice Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
 		} finally {
 
 		}
-		return new ResponseEntity<Item>(item, HttpStatus.CREATED);
+		//return new ResponseEntity<Item>(item, HttpStatus.CREATED);
 	}
 	
 	//------- Load Item --
@@ -419,13 +414,14 @@ public class PurchaseService implements Filter {
 				responseList.add(purchase);
 			}
 			logger.info("-- list Size --->"+responseList.size());
+			return new ResponseEntity<List<Purchase>>(responseList, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.info("loadItem Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
 		} finally {
 
 		}
-		return new ResponseEntity<List<Purchase>>(responseList, HttpStatus.CREATED);
+		//return new ResponseEntity<List<Purchase>>(responseList, HttpStatus.CREATED);
 	}
 	
 		 //------- Load Purchase Order --
@@ -451,13 +447,15 @@ public class PurchaseService implements Filter {
 			List<PurchaseOrder> polist =null;// new ArrayList<PurchaseOrder>();
 			try {
 				polist = purchasedal.loadPO();
+				return new ResponseEntity<List<PurchaseOrder>>(polist, HttpStatus.CREATED);
+
 			} catch (Exception e) {
 				logger.info("loadPO Exception ------------->" + e.getMessage());
-				e.printStackTrace();
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			} finally {
 
 			}
-			return new ResponseEntity<List<PurchaseOrder>>(polist, HttpStatus.CREATED);
+			//return new ResponseEntity<List<PurchaseOrder>>(polist, HttpStatus.CREATED);
 		}
 		
 
@@ -465,11 +463,10 @@ public class PurchaseService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/removePartId", method = RequestMethod.DELETE)
 	public ResponseEntity<?> removePartId(String id, String invoiceNumber) {
-		Purchase purchase = null;
 		List<POInvoiceDetails> responseList = null;
 		int temp = 0; 
 		try {
-			purchase = new Purchase();
+			//purchase = new Purchase();
 			logger.info("----------- Before Calling remove Particular Purchase ----------");
 			System.out.println("ObjectID -->" + id);
 			System.out.println("purchaseCode -->" + invoiceNumber);
@@ -483,17 +480,19 @@ public class PurchaseService implements Filter {
 			}
 
 			String status = purchasedal.removePartId(id, invoiceNumber, temp);
-			purchase.setStatus(status);
+			//purchase.setStatus(status);
 			logger.info("-----------Successfully Called  removePurchase ----------");
 
 		} catch (Exception e) {
 			logger.info("RemovePurchase Exception ------------->" + e.getMessage());
-			purchase.setStatus("failure");
-			e.printStackTrace();
+			//purchase.setStatus("failure");
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			//e.printStackTrace();
 		} finally {
 
 		}
-		return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
+		//return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
+		return new ResponseEntity<>(HttpStatus.OK); 
 
 	}
 	
@@ -577,15 +576,18 @@ public class PurchaseService implements Filter {
 			poinvoice.setTotalitem(totalitem); 
 			purchasedal.updatePOInvoice(poinvoice);
 			purchase.setStatus("success");
-			return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
+			//return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
+			return new ResponseEntity<>(HttpStatus.OK);
 
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			//e.printStackTrace();
 		} finally {
 
 		}
-		return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
+		//return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
+		//return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	// SaveReturn
@@ -656,7 +658,9 @@ public class PurchaseService implements Filter {
 				}
 			}
 			purchase.setStatus("success");
-			return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
+			//return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
+			return new ResponseEntity<>(HttpStatus.OK); 
+
 		}
 
 		catch (NullPointerException ne) {
@@ -664,17 +668,17 @@ public class PurchaseService implements Filter {
 			System.out.println("Inside null pointer exception ....");
 			purchase.setStatus("success");
 			randomnumberdal.updateRandamNumber(randomnumber);
-			return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
-
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			//return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
 		finally {
 
 		}
-		return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
+
 	}
 	
 	// Load item name
@@ -695,11 +699,11 @@ public class PurchaseService implements Filter {
 			return new ResponseEntity<List<Item>>(itemlist, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.info("loadVendorItem Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<List<Item>>(itemlist, HttpStatus.CREATED);
+		//return new ResponseEntity<List<Item>>(itemlist, HttpStatus.CREATED);
 	}
 
 	//----- Filter Date Data ------
@@ -756,13 +760,16 @@ public class PurchaseService implements Filter {
 				 purchase.setDescription(prodList);
 				 purlist.add(purchase);
 			}
-			return new ResponseEntity<List<Purchase>>(purlist, HttpStatus.CREATED);
+			return new ResponseEntity<List<Purchase>>(purlist, HttpStatus.OK);
+			//return new ResponseEntity<>(HttpStatus.OK); 
+
 		} catch (Exception e) {
 			logger.info("loadfilterData Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			//e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<List<Purchase>>(purlist, HttpStatus.CREATED);
+		//return new ResponseEntity<List<Purchase>>(purlist, HttpStatus.CREATED);
 	}
 }
