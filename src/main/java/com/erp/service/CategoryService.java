@@ -86,17 +86,16 @@ public class CategoryService implements Filter {
 			if (category.getStatus().equalsIgnoreCase("success")) {
 				randomnumberdal.updateCategoryRandamNumber(randomnumber, 1);
 			}
-			return new ResponseEntity<Category>(category, HttpStatus.CREATED);
+			return new ResponseEntity<>(HttpStatus.OK); 
 
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
 		finally {
 
 		}
-		return new ResponseEntity<Category>(category, HttpStatus.CREATED);
 	}
 
 	// Load

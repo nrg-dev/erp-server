@@ -9,9 +9,13 @@ public class PurchaseOrder {
 	@Id
 	private String id;
 	private String categoryname;
+	private String categorycode;
 	private String productname;
+	private String productcode;
 	private String vendorname;
-	private int totalqty;
+	private String vendorcode;
+	private int qty;
+	private int subtotal;
 	private String date;
 	private String description;
 	private String status;
@@ -38,12 +42,38 @@ public class PurchaseOrder {
 	}
 	public void setVendorname(String vendorname) {
 		this.vendorname = vendorname;
+	}	
+	
+	public String getProductcode() {
+		return productcode;
 	}
-	public int getTotalqty() {
-		return totalqty;
+	public void setProductcode(String productcode) {
+		this.productcode = productcode;
 	}
-	public void setTotalqty(int totalqty) {
-		this.totalqty = totalqty;
+	public String getVendorcode() {
+		return vendorcode;
+	}
+	public void setVendorcode(String vendorcode) {
+		this.vendorcode = vendorcode;
+	}
+	
+	public String getCategorycode() {
+		return categorycode;
+	}
+	public void setCategorycode(String categorycode) {
+		this.categorycode = categorycode;
+	}
+	public int getQty() {
+		return qty;
+	}
+	public void setQty(int qty) {
+		this.qty = qty;
+	}
+	public int getSubtotal() {
+		return subtotal;
+	}
+	public void setSubtotal(int subtotal) {
+		this.subtotal = subtotal;
 	}
 	public String getDate() {
 		return date;
