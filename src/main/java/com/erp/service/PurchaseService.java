@@ -431,17 +431,16 @@ public class PurchaseService implements Filter {
 		 //------- Load Purchase Order --
 		@CrossOrigin(origins = "http://localhost:8080")
 		@RequestMapping(value = "/savePO", method = RequestMethod.POST)
-		public ResponseEntity<?> savePO(PurchaseOrder purchaseorder) {
+		public ResponseEntity<?> savePO(@RequestBody PurchaseOrder purchaseorder) {
 			logger.info("------------- Inside loadPO -----------------");
 			try {
 				purchaseorder = purchasedal.savePO(purchaseorder);
 			} catch (Exception e) {
-				logger.info("savePO Exception ------------->" + e.getMessage());
-				e.printStackTrace();
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
 			} finally {
 	
 			}
-			return new ResponseEntity<PurchaseOrder>(purchaseorder, HttpStatus.CREATED);
+			return new ResponseEntity<>(HttpStatus.OK); // 200
 		}
 	
 	    //------- Load Purchase Order --
