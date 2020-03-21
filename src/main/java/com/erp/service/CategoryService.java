@@ -84,7 +84,7 @@ public class CategoryService implements Filter {
 
 			category = categorydal.saveCategory(category);
 			if (category.getStatus().equalsIgnoreCase("success")) {
-				boolean status = randomnumberdal.updateCategoryRandamNumber(randomnumber, 1);
+				randomnumberdal.updateCategoryRandamNumber(randomnumber, 1);
 			}
 			return new ResponseEntity<Category>(category, HttpStatus.CREATED);
 

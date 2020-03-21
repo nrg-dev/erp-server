@@ -33,7 +33,6 @@ import com.erp.mongo.dal.EmployeeDAL;
 import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.model.Employee;
 import com.erp.mongo.model.RandomNumber;
-import com.erp.mongo.model.Vendor;
 import com.erp.util.Custom;
 
 @SpringBootApplication
@@ -95,7 +94,7 @@ public class EmployeeService implements Filter {
 			employee.setAddeddate(Custom.getCurrentInvoiceDate());
 			System.out.println("Current Date --->" + Custom.getCurrentDate());
 			employee = employeedal.save(employee);
-			boolean status = randomnumberdal.updateEmployeeRandamNumber(randomnumber);
+			randomnumberdal.updateEmployeeRandamNumber(randomnumber);
 			return new ResponseEntity<Employee>(employee, HttpStatus.CREATED);
 
 		} catch (Exception e) {

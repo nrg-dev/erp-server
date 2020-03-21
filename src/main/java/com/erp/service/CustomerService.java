@@ -97,7 +97,7 @@ public class CustomerService implements Filter {
 			customer.setAddeddate(Custom.getCurrentInvoiceDate());
 			customer = customerdal.saveCustomer(customer);
 			if (customer.getStatus().equalsIgnoreCase("success")) {
-				boolean status = randomnumberdal.updateVendorRandamNumber(randomnumber, 2);
+				randomnumberdal.updateVendorRandamNumber(randomnumber, 2);
 			}
 			return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
 
