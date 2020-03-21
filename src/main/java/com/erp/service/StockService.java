@@ -2,7 +2,6 @@ package com.erp.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -161,7 +160,7 @@ public class StockService implements Filter {
 
 			stockreturn = stockdal.saveStockReturn(stockreturn);
 			if (stockreturn.getStatus().equalsIgnoreCase("success")) {
-				boolean status = randomnumberdal.updateStockDamRandamNumber(randomnumber,temp);
+				randomnumberdal.updateStockDamRandamNumber(randomnumber,temp);
 			}
 			return new ResponseEntity<StockReturn>(stockreturn, HttpStatus.CREATED);
 		} catch (Exception e) {
@@ -191,7 +190,7 @@ public class StockService implements Filter {
 			stockdamage.setAddedDate(Custom.getCurrentInvoiceDate());
 			stockdamage = stockdal.saveStockDamage(stockdamage);
 			if (stockdamage.getStatus().equalsIgnoreCase("success")) {
-				boolean status = randomnumberdal.updateStockDamRandamNumber(randomnumber,temp);
+				randomnumberdal.updateStockDamRandamNumber(randomnumber,temp);
 			}
 			return new ResponseEntity<StockDamage>(stockdamage, HttpStatus.CREATED);
 		} catch (Exception e) {
@@ -289,8 +288,7 @@ public class StockService implements Filter {
 		try {
 			purchase = new Purchase();
 			System.out.println("Post Json -->" + stockInarray);
-			// Store into parent table to show in first data table view
-			
+			// Store into parent table to show in first data table view			
 			ArrayList<String> list = new ArrayList<String>();
 			JSONArray jsonArr = new JSONArray(stockInarray);
 			int remove = 0;
@@ -304,7 +302,7 @@ public class StockService implements Filter {
 			System.out.println("Position-->" + postion);
 			list.remove(postion);
 			System.out.println("Size -------->" + jsonArr.length());
-			int l = 1;
+			//int l = 1;
 			for (int i = 0; i < jsonArr.length(); i++) {
 				JSONArray arr2 = jsonArr.optJSONArray(i);
 				if (jsonArr.optJSONArray(i) != null) {
@@ -330,8 +328,7 @@ public class StockService implements Filter {
 							stockIndetails.setPoDate(jObject.getString("poDate"));
 							stockIndetails.setSubtotal(jObject.getDouble("netAmount"));
 							logger.info("StockIn Date --->" + stockIndetails.getPoDate());
-							stockdal.saveStockIn(stockIndetails);
-							
+							stockdal.saveStockIn(stockIndetails);							
 							addedQty = addedQty+stockIndetails.getQty() + ",";
 							POInvoiceDetails podetails = new POInvoiceDetails();
 							podetails.setLastUpdate(Custom.getCurrentInvoiceDate());
@@ -340,9 +337,8 @@ public class StockService implements Filter {
 							recentStockList = recentStockList+stockIndetails.getQty() + ",";
 							podetails = stockdal.updateFullPurchase(stockIndetails,podetails);
 							itemnameList = itemnameList+stockIndetails.getItemname() + ",";
-							categoryList = categoryList+stockIndetails.getCategory() + ",";
-							
-							boolean status = randomnumberdal.updateStockRandamNumber(randomnumber,tempNo);
+							categoryList = categoryList+stockIndetails.getCategory() + ",";							
+							randomnumberdal.updateStockRandamNumber(randomnumber,tempNo);
 						} else {
 							System.out.println("Null....");
 						}
@@ -350,7 +346,7 @@ public class StockService implements Filter {
 				} else {
 					System.out.println("Outer Null....");
 				}
-				l++;
+				//l++;
 			}
 			stock = new Stock(); 
 			stock.setInvoicedate(Custom.getCurrentInvoiceDate());
@@ -407,7 +403,7 @@ public class StockService implements Filter {
 			System.out.println("Position-->" + postion);
 			list.remove(postion);
 			System.out.println("Size -------->" + jsonArr.length());
-			int l = 1;
+			//int l = 1;
 			for (int i = 0; i < jsonArr.length(); i++) {
 				JSONArray arr2 = jsonArr.optJSONArray(i);
 				if (jsonArr.optJSONArray(i) != null) {
@@ -433,8 +429,7 @@ public class StockService implements Filter {
 							stockIndetails.setPoDate(jObject.getString("poDate"));
 							stockIndetails.setSubtotal(jObject.getDouble("netAmount"));
 							logger.info("StockIn Date --->" + stockIndetails.getPoDate());
-							stockdal.saveStockIn(stockIndetails);
-							
+							stockdal.saveStockIn(stockIndetails);							
 							addedQty = addedQty+stockIndetails.getQty() + ",";
 							POInvoiceDetails podetails = new POInvoiceDetails();
 							podetails = stockdal.loadStockInTotal(stockIndetails);
@@ -446,8 +441,7 @@ public class StockService implements Filter {
 								totalQty += Integer.valueOf(str);
 								logger.info("Stock RecentStock Total ====>"+totalQty);
 							//}
-							recentStockList = recentStockList+totalQty + ",";
-							
+							recentStockList = recentStockList+totalQty + ",";							
 							String str1 = stockIndetails.getQty();
 							str1 = str1.replaceAll("\\D", "");
 							int stocktotalQty = Integer.valueOf(str1);
@@ -461,9 +455,8 @@ public class StockService implements Filter {
 							}
 							podetails = stockdal.updatePurchase(podetails);
 							itemnameList = itemnameList+stockIndetails.getItemname() + ",";
-							categoryList = categoryList+stockIndetails.getCategory() + ",";
-							
-							boolean status = randomnumberdal.updateStockRandamNumber(randomnumber,tempNo);
+							categoryList = categoryList+stockIndetails.getCategory() + ",";							
+							randomnumberdal.updateStockRandamNumber(randomnumber,tempNo);
 						} else {
 							System.out.println("Null....");
 						}
@@ -471,7 +464,7 @@ public class StockService implements Filter {
 				} else {
 					System.out.println("Outer Null....");
 				}
-				l++;
+				//l++;
 			}
 			stock = new Stock(); 
 			stock.setInvoicedate(Custom.getCurrentInvoiceDate());
@@ -544,7 +537,6 @@ public class StockService implements Filter {
 			System.out.println("StockOut Invoice random code-->" + randomnumber.getStockOutinvoicecode());
 			String invoice = randomnumber.getStockOutinvoicecode() + randomnumber.getStockOutinvoicenumber();
 			System.out.println("Invoice number -->" + invoice);
-
 			stock.setInvoicedate(Custom.getCurrentInvoiceDate());
 			stock.setInvoicenumber(invoice);
 			stock.setStockCategory(stock.getStockOutCategory());
@@ -552,7 +544,7 @@ public class StockService implements Filter {
 			stock.setStatus("StockOut"); 
 			stock = stockdal.saveStockOut(stock);
 			if (stock.getStatus().equalsIgnoreCase("success")) {
-				boolean status = randomnumberdal.updateStockRandamNumber(randomnumber, 2);
+				randomnumberdal.updateStockRandamNumber(randomnumber, 2);
 			}
 			return new ResponseEntity<Stock>(stock, HttpStatus.CREATED);
 		} catch (Exception e) {

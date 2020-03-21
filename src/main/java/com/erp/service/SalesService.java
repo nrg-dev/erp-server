@@ -37,14 +37,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.bo.ErpBo;
-import com.erp.dto.Purchase;
 import com.erp.dto.Sales;
 import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.dal.SalesDAL;
 import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Item;
-import com.erp.mongo.model.POInvoice;
-import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOInvoiceDetails;
@@ -219,7 +216,7 @@ public class SalesService implements Filter {
 			salesdal.saveSOInvoice(soinvoice);
 			System.out.println("Service call start.....");
 			sales.setStatus("success");
-			boolean status = randomnumberdal.updateSalesRandamNumber(randomnumber);
+			randomnumberdal.updateSalesRandamNumber(randomnumber);
 			return new ResponseEntity<Sales>(sales, HttpStatus.CREATED);
 		}
 
@@ -488,7 +485,7 @@ public class SalesService implements Filter {
 			System.out.println("Position ---->" + postion);
 			list.remove(postion);
 			System.out.println("Edit Size -------->" + jsonArr.length());
-			int l = 1;
+			//int l = 1;
 			for (int i = 0; i < jsonArr.length(); i++) {
 				System.out.println("Loop 1....");
 				JSONArray arr2 = jsonArr.optJSONArray(i);
@@ -523,7 +520,7 @@ public class SalesService implements Filter {
 				}else {
 					System.out.println("Outer Null....");
 				}
-				l++;
+				//l++;
 			}
 			soinvoice = new SOInvoice(); 
 			soinvoice = salesdal.loadSOInvoice(sodetails.getInvoicenumber());
@@ -577,7 +574,7 @@ public class SalesService implements Filter {
 			System.out.println("Position-->" + postion);
 			list.remove(postion);
 			System.out.println("Size -------->" + jsonArr.length());
-			int l = 1;
+			//int l = 1;
 			for (int i = 0; i < jsonArr.length(); i++) {
 				JSONArray arr2 = jsonArr.optJSONArray(i);
 				if (jsonArr.optJSONArray(i) != null) {
@@ -604,13 +601,13 @@ public class SalesService implements Filter {
 							logger.info("POInvoice Date --->" + soreturndetails.getSoDate());
 							salesdal.insertReturn(soreturndetails);
 							logger.info("Invoice Number --->"+randomnumber.getSoreturninvoicenumber());
-							boolean status = randomnumberdal.updateSalesReturnRandamNumber(randomnumber);
+							randomnumberdal.updateSalesReturnRandamNumber(randomnumber);
 							logger.info("After Increament Invoice Number --->"+randomnumber.getSoreturninvoicenumber());
 							
 						} else {
 							System.out.println("Null....");
 						}
-						l++;
+						//l++;
 					}
 				} else {
 					System.out.println("Outer Null....");
