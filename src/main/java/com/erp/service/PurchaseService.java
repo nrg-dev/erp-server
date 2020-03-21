@@ -1,7 +1,6 @@
 package com.erp.service;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,7 +46,6 @@ import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.Vendor;
-import com.erp.util.AdditionOfString;
 import com.erp.util.Custom;
 
 @SpringBootApplication
@@ -296,7 +294,7 @@ public class PurchaseService implements Filter {
 			purchasedal.savePOInvoice(poinvoice);
 			System.out.println("Service call start.....");
 			purchase.setStatus("success");
-			boolean status = randomnumberdal.updateRandamNumber(randomnumber);
+			randomnumberdal.updateRandamNumber(randomnumber);
 			return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
 		}
 
@@ -568,7 +566,7 @@ public class PurchaseService implements Filter {
 			System.out.println("Edit Position-->" + postion);
 			list.remove(postion);
 			System.out.println("Edit Size -------->" + jsonArr.length());
-			int l = 1;
+			//int l = 1;
 			for (int i = 0; i < jsonArr.length(); i++) {
 				System.out.println("Loop 1....");
 				JSONArray arr2 = jsonArr.optJSONArray(i);
@@ -605,7 +603,7 @@ public class PurchaseService implements Filter {
 				}else {
 					System.out.println("Outer Null....");
 				}
-				l++;
+				//l++;
 			}
 			poinvoice = new POInvoice(); 
 			poinvoice = purchasedal.loadPOInvoice(podetails.getInvoicenumber());
@@ -658,7 +656,7 @@ public class PurchaseService implements Filter {
 			System.out.println("Position-->" + postion);
 			list.remove(postion);
 			System.out.println("Size -------->" + jsonArr.length());
-			int l = 1;
+			//int l = 1;
 			for (int i = 0; i < jsonArr.length(); i++) {
 				JSONArray arr2 = jsonArr.optJSONArray(i);
 				if (jsonArr.optJSONArray(i) != null) {
@@ -685,13 +683,13 @@ public class PurchaseService implements Filter {
 							logger.info("POInvoice Date --->" + poreturndetails.getPoDate());
 							purchasedal.insertReturn(poreturndetails);
 							logger.info("Invoice Number --->"+randomnumber.getPoreturninvoicenumber());
-							boolean status = randomnumberdal.updateReturnRandamNumber(randomnumber);
+							randomnumberdal.updateReturnRandamNumber(randomnumber);
 							logger.info("After Increament Invoice Number --->"+randomnumber.getPoreturninvoicenumber());
 							
 						} else {
 							System.out.println("Null....");
 						}
-						l++;
+						//l++;
 					}
 				} else {
 					System.out.println("Outer Null....");
@@ -705,7 +703,7 @@ public class PurchaseService implements Filter {
 			purchase = new Purchase();
 			System.out.println("Inside null pointer exception ....");
 			purchase.setStatus("success");
-			boolean status = randomnumberdal.updateRandamNumber(randomnumber);
+			randomnumberdal.updateRandamNumber(randomnumber);
 			return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
 
 		} catch (Exception e) {

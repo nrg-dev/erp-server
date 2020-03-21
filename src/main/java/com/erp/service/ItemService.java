@@ -110,8 +110,7 @@ public class ItemService implements Filter {
 			item.setProdcode(invoice);
 			item = itemdal.saveItem(item);
 			if (item.getStatus().equalsIgnoreCase("success")) {
-				boolean status = randomnumberdal.updateCategoryRandamNumber(randomnumber, 2);
-
+				randomnumberdal.updateCategoryRandamNumber(randomnumber, 2);
 			}
 			return new ResponseEntity<Item>(item, HttpStatus.CREATED);
 
@@ -143,7 +142,7 @@ public class ItemService implements Filter {
 
 			discount = itemdal.saveDiscount(discount);
 			if (discount.getStatus().equalsIgnoreCase("success")) {
-				boolean status = randomnumberdal.updatediscountRandamNumber(randomnumber);
+				randomnumberdal.updatediscountRandamNumber(randomnumber);
 			}
 			return new ResponseEntity<Discount>(discount, HttpStatus.CREATED);
 

@@ -1,8 +1,7 @@
 package com.erp.service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -24,7 +23,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,12 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.bo.ErpBo;
 import com.erp.dto.User;
-import com.erp.mongo.dal.RandomNumberDAL;
-import com.erp.mongo.dal.VendorDAL;
-import com.erp.mongo.model.Category;
-import com.erp.mongo.model.RandomNumber;
-import com.erp.mongo.model.Vendor;
-import com.erp.util.Custom;
 
 @SpringBootApplication
 @RestController
@@ -49,11 +41,7 @@ public class LoginService implements Filter {
 	@Autowired
 	ErpBo bo;
 	
-	private final RandomNumberDAL randomnumberdal;
 
-	public LoginService( RandomNumberDAL randomnumberdal) {
-		this.randomnumberdal = randomnumberdal;
-	}
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
