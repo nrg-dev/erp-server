@@ -3,14 +3,18 @@ package com.erp.mongo.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+
 @Document
-public class PurchaseOrder {
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
+public class SalesOrder {
 
 	@Id
 	private String id;
 	private String categoryname;
 	private String productname;
-	private String vendorname;
+	private String customername;
 	private int totalqty;
 	private String date;
 	private String description;
@@ -33,11 +37,12 @@ public class PurchaseOrder {
 	public void setProductname(String productname) {
 		this.productname = productname;
 	}
-	public String getVendorname() {
-		return vendorname;
+	
+	public String getCustomername() {
+		return customername;
 	}
-	public void setVendorname(String vendorname) {
-		this.vendorname = vendorname;
+	public void setCustomername(String customername) {
+		this.customername = customername;
 	}
 	public int getTotalqty() {
 		return totalqty;

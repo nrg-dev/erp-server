@@ -7,6 +7,7 @@ import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
+import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.Vendor;
 
 public interface PurchaseDAL {
@@ -40,6 +41,13 @@ public interface PurchaseDAL {
 
 	public List<Item> loadVendorItem(List<Item> itemlist, String vendorCode);
 
-	public List<POInvoice> loadfilterData(List<POInvoice> response,String fromdate, String todate);     
+	public List<POInvoice> loadfilterData(List<POInvoice> response,String fromdate, String todate); 
+	
+	public List<PurchaseOrder> loadPO();
+	
+	public PurchaseOrder savePO(PurchaseOrder purchaseorder);
+
+	
+
 
 }

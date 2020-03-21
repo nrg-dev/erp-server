@@ -16,6 +16,7 @@ import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
+import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.Vendor;
 
 @Repository
@@ -222,5 +223,17 @@ public class PurchaseImpl implements PurchaseDAL {
 		list = mongoTemplate.find(
                 Query.query(Criteria.where("invoicedate").gte(fromdate).lt(todate)),POInvoice.class);
 		return list;
+	}
+	
+	public List<PurchaseOrder> loadPO(){
+		List<PurchaseOrder> list=null;
+		logger.info("DAO Vendor item load all");
+		list = mongoTemplate.findAll(PurchaseOrder.class);
+		return list;
+	}
+	
+	public PurchaseOrder savePO(PurchaseOrder purchaseorder) {
+		mongoTemplate.save(purchaseorder);
+		return purchaseorder;
 	}
 }

@@ -1,7 +1,5 @@
 package com.erp.dto;
 
-import org.codehaus.jettison.json.JSONObject;
-
 public class Purchase {
 	
 	
