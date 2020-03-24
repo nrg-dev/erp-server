@@ -97,7 +97,7 @@ public class VendorService implements Filter {
 			if (vendor.getStatus().equalsIgnoreCase("success")) {
 				randomnumberdal.updateVendorRandamNumber(randomnumber, 1);
 			}
-			return new ResponseEntity<>(HttpStatus.OK); 
+			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -177,7 +177,7 @@ public class VendorService implements Filter {
 		try {
 			System.out.println("vendor update inside try--->" + vendor.getVendorcode());
 			vendor = vendordal.updateVendor(vendor);
-			return new ResponseEntity<>(HttpStatus.OK); 
+			return new ResponseEntity<>(HttpStatus.OK);
 
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
@@ -198,7 +198,7 @@ public class VendorService implements Filter {
 			vendordal.removeVendor(vendorcode);
 			vendor.setStatus("Success");
 			logger.info("-----------Successfully Called  removeCustomer ----------");
-			return new ResponseEntity<>(HttpStatus.OK); 
+			return new ResponseEntity<>(HttpStatus.OK);
 
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());

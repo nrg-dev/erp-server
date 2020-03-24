@@ -683,7 +683,6 @@ public class PurchaseService implements Filter {
 			itemlist = purchasedal.loadVendorItem(itemlist, vendorCode);
 			for (Item item : itemlist) {
 				logger.info("product code -->" + item.getProdcode());
-
 			}
 			return new ResponseEntity<List<Item>>(itemlist, HttpStatus.CREATED);
 		} catch (Exception e) {
