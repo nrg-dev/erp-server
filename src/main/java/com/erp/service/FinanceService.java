@@ -66,7 +66,6 @@ public class FinanceService implements Filter {
 	public void destroy() {
 	}
 
-	
 	// Load customer / vendor name for populate for auto text box
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/loadCustomerVendorName", method = RequestMethod.GET)
@@ -77,16 +76,17 @@ public class FinanceService implements Filter {
 			logger.info("-----------Before Calling Load customer & vendor name list----------");
 			customervendorlist = financedal.loadCustomerVendorName();
 			logger.info("-----------Successfully Called Load customer & vendor name list------");
+			return new ResponseEntity<ArrayList<String>>(customervendorlist, HttpStatus.CREATED);
 
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<ArrayList<String>>(customervendorlist, HttpStatus.CREATED);
 	}
-	//save petty cash	
+
+	// save petty cash
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<?> savePettycash(@RequestBody PettyCash finance) {
@@ -96,17 +96,15 @@ public class FinanceService implements Filter {
 			System.out.println("Current Date --->" + Custom.getCurrentDate());
 			finance = financedal.save(finance);
 			finance.setStatus("success");
-			return new ResponseEntity<PettyCash>(finance, HttpStatus.CREATED);
-
+			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			logger.info("savePettycash Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<PettyCash>(finance, HttpStatus.CREATED);
 	}
-	
+
 	// Load petty cash data
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/load", method = RequestMethod.GET)
@@ -117,51 +115,53 @@ public class FinanceService implements Filter {
 			logger.info("-----------Before Calling load pettycash list----------");
 			pettycashlist = financedal.load();
 			logger.info("-----------Successfully Called load pettycash list----------");
+			return new ResponseEntity<List<PettyCash>>(pettycashlist, HttpStatus.CREATED);
 
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<List<PettyCash>>(pettycashlist, HttpStatus.CREATED);
 	}
-	
-		// update
-		@CrossOrigin(origins = "http://localhost:8080")
-		@RequestMapping(value = "/update", method = RequestMethod.PUT)
-		public ResponseEntity<?> updateCustomer(@RequestBody PettyCash pettycash) {
-			try {
-				pettycash = financedal.updatePettyCash(pettycash);
-				return new ResponseEntity<PettyCash>(pettycash, HttpStatus.CREATED);
-			} catch (Exception e) {
-				logger.info("Exception ------------->" + e.getMessage());
-			} finally {
 
-			}
-			return new ResponseEntity<PettyCash>(pettycash, HttpStatus.CREATED);
-		}
+	// update
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/update", method = RequestMethod.PUT)
+	public ResponseEntity<?> updateCustomer(@RequestBody PettyCash pettycash) {
+		try {
+			pettycash = financedal.updatePettyCash(pettycash);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			logger.info("Exception ------------->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-		
-		// Remove
-		@CrossOrigin(origins = "http://localhost:8080")
-		@RequestMapping(value = "/remove", method = RequestMethod.DELETE)
-		public ResponseEntity<?> removePettyCash(String id) {
-			try {
-				System.out.println("Remove cust code is---->" + id);
-				pettycash = new PettyCash();
-				logger.info("-----------Before Calling  removeCustomer ----------");
-				financedal.removePettyCash(id);
-				pettycash.setStatus("success");
-				logger.info("-----------Successfully Called  removeCustomer ----------");
-
-			} catch (Exception e) {
-				pettycash.setStatus("failure");
-				logger.info("Exception ------------->"+ e.getMessage());
-			} finally {
-
-			}
-			return new ResponseEntity<PettyCash>(pettycash, HttpStatus.CREATED);
+		} finally {
 
 		}
+	}
+
+	// Remove
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/remove", method = RequestMethod.DELETE)
+	public ResponseEntity<?> removePettyCash(String id) {
+		try {
+			System.out.println("Remove cust code is---->" + id);
+			pettycash = new PettyCash();
+			logger.info("-----------Before Calling  removeCustomer ----------");
+			financedal.removePettyCash(id);
+			pettycash.setStatus("success");
+			logger.info("-----------Successfully Called  removeCustomer ----------");
+			return new ResponseEntity<>(HttpStatus.OK);
+
+		} catch (Exception e) {
+			pettycash.setStatus("failure");
+			logger.info("Exception ------------->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+		} finally {
+
+		}
+
+	}
 }

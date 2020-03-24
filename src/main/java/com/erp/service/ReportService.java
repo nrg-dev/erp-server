@@ -79,11 +79,10 @@ public class ReportService implements Filter {
 
 		} catch (Exception e) {
 			logger.info("employeeReport Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<List<Employee>>(employeelist, HttpStatus.CREATED);
 
 	}
 	
@@ -100,11 +99,10 @@ public class ReportService implements Filter {
 
 		} catch (Exception e) {
 			logger.info("purchaseReport Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<List<POInvoice>>(purchaselist, HttpStatus.CREATED);
 
 	}
 	
@@ -121,11 +119,10 @@ public class ReportService implements Filter {
 
 			} catch (Exception e) {
 				logger.info("salesReport Exception ------------->" + e.getMessage());
-				e.printStackTrace();
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			} finally {
 
 			}
-			return new ResponseEntity<List<SOInvoice>>(saleslist, HttpStatus.CREATED);
 
 		}
 

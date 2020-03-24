@@ -89,8 +89,6 @@ public class SalesService implements Filter {
 	public void destroy() {
 	}
 
-	
-
 	// ------- Load Vendor ----
 	@CrossOrigin(origins = "http://localhost:8080")
 	@GetMapping(value = "/loadCustomer", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -107,15 +105,14 @@ public class SalesService implements Filter {
 				sales.setCustomerName(customerlist.getCustomerName() + "-" + customerlist.getCustcode());
 				responseList.add(sales);
 			}
+			return new ResponseEntity<List<Sales>>(responseList, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.info("loadCustomer Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 		}
-		return new ResponseEntity<List<Sales>>(responseList, HttpStatus.CREATED);
 
 	}
-	
 
 	// Save
 	@CrossOrigin(origins = "http://localhost:4200")
@@ -162,9 +159,9 @@ public class SalesService implements Filter {
 					System.out.println("Last Value");
 					JSONObject jObject = arr2.getJSONObject(0);
 					System.out.println("SO Date -->" + jObject.getString("sodate"));
-					//System.out.println("Customer Name -->" + jObject.getString("customername"));
+					// System.out.println("Customer Name -->" + jObject.getString("customername"));
 					System.out.println("Delivery Cost -->" + jObject.getString("deliveryCost"));
-					//sales.setCustomerName(jObject.getString("customername"));
+					// sales.setCustomerName(jObject.getString("customername"));
 					sales.setDeliveryCost(jObject.getString("deliveryCost"));
 
 				} else {
@@ -192,7 +189,7 @@ public class SalesService implements Filter {
 								str = str.replaceAll("\\D", "");
 								totalQty += Integer.valueOf(str);
 								totalPrice += jObject.getDouble("netAmount");
-								totalitem = j+1;
+								totalitem = j + 1;
 							} else {
 								System.out.println("Null....");
 							}
@@ -203,7 +200,7 @@ public class SalesService implements Filter {
 				}
 				l++;
 			}
-			soinvoice = new SOInvoice(); 
+			soinvoice = new SOInvoice();
 			soinvoice.setInvoicedate(Custom.getCurrentInvoiceDate());
 			logger.info("Invoice Date --->" + soinvoice.getInvoicedate());
 			soinvoice.setCustomername(sales.getCustomerName());
@@ -211,31 +208,31 @@ public class SalesService implements Filter {
 			soinvoice.setStatus("Pending");
 			soinvoice.setTotalqty(totalQty);
 			soinvoice.setTotalprice(totalPrice);
-			soinvoice.setTotalitem(totalitem); 
-			soinvoice.setDeliveryprice(sales.getDeliveryCost()); 
+			soinvoice.setTotalitem(totalitem);
+			soinvoice.setDeliveryprice(sales.getDeliveryCost());
 			salesdal.saveSOInvoice(soinvoice);
 			System.out.println("Service call start.....");
 			sales.setStatus("success");
 			randomnumberdal.updateSalesRandamNumber(randomnumber);
-			return new ResponseEntity<Sales>(sales, HttpStatus.CREATED);
+			return new ResponseEntity<>(HttpStatus.OK);
 		}
 
-		/*catch (NullPointerException ne) {
-			sales = new Sales();
-			System.out.println("Inside null pointer exception ....");
-			sales.setStatus("success");
-			boolean status = randomnumberdal.updateRandamNumber(randomnumber);
-			return new ResponseEntity<Sales>(sales, HttpStatus.CREATED);
-
-		}*/ catch (Exception e) {
+		/*
+		 * catch (NullPointerException ne) { sales = new Sales();
+		 * System.out.println("Inside null pointer exception ....");
+		 * sales.setStatus("success"); boolean status =
+		 * randomnumberdal.updateRandamNumber(randomnumber); return new
+		 * ResponseEntity<Sales>(sales, HttpStatus.CREATED);
+		 * 
+		 * }
+		 */ catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
 		finally {
 
 		}
-		return new ResponseEntity<Sales>(sales, HttpStatus.CREATED);
 	}
 
 	// load
@@ -248,48 +245,49 @@ public class SalesService implements Filter {
 		List<SOInvoice> response = new ArrayList<SOInvoice>();
 		List<SOInvoiceDetails> sodetail = new ArrayList<SOInvoiceDetails>();
 		List<Sales> responseList = new ArrayList<Sales>();
-		Sales sales =null;
+		Sales sales = null;
 		try {
 			logger.info("-----------Inside loadSales Called----------");
 			response = salesdal.loadSales(response);
-			for(SOInvoice res: response) {
+			for (SOInvoice res : response) {
 				sales = new Sales();
 				String itemnameList = "";
 				String qtylist = "";
 				String totalAmountlist = "";
 				String prodList = "";
 				sodetail = salesdal.getSales(res.getInvoicenumber());
-				for(int i=0;i<sodetail.size();i++) {
-					logger.info("Product Name -->"+sodetail.get(i).getItemname()); 
-					itemnameList = itemnameList+sodetail.get(i).getItemname() + System.lineSeparator()+ System.lineSeparator();
-					prodList = prodList + sodetail.get(i).getItemname() + ","+ System.lineSeparator();
-					logger.info("Qty -->"+sodetail.get(i).getQty()); 
-					qtylist = qtylist+sodetail.get(i).getQty() + System.lineSeparator()+ System.lineSeparator();
-					logger.info("Total -->"+sodetail.get(i).getSubtotal()); 
-					totalAmountlist = totalAmountlist+sodetail.get(i).getSubtotal() + System.lineSeparator()+ System.lineSeparator(); 
+				for (int i = 0; i < sodetail.size(); i++) {
+					logger.info("Product Name -->" + sodetail.get(i).getItemname());
+					itemnameList = itemnameList + sodetail.get(i).getItemname() + System.lineSeparator()
+							+ System.lineSeparator();
+					prodList = prodList + sodetail.get(i).getItemname() + "," + System.lineSeparator();
+					logger.info("Qty -->" + sodetail.get(i).getQty());
+					qtylist = qtylist + sodetail.get(i).getQty() + System.lineSeparator() + System.lineSeparator();
+					logger.info("Total -->" + sodetail.get(i).getSubtotal());
+					totalAmountlist = totalAmountlist + sodetail.get(i).getSubtotal() + System.lineSeparator()
+							+ System.lineSeparator();
 				}
-				 System.out.println("Particular invoice productList -->"+itemnameList);	
-				 sales.setInvoiceNumber(res.getInvoicenumber());
-				 sales.setSoDate(res.getInvoicedate());
-				 sales.setCustomerName(res.getCustomername());
-				 sales.setNetAmount(totalAmountlist);
-				 sales.setTotalAmount(res.getTotalprice());
-				 sales.setDeliveryCost(res.getDeliveryprice());
-				 sales.setStatus(res.getStatus());
-				 sales.setProductName(itemnameList); 
-				 sales.setQuantity(qtylist);
-				 sales.setUnitPrice(totalAmountlist);
-				 sales.setTotalItem(res.getTotalitem()); 
-				 sales.setDescription(prodList);
-				 responseList.add(sales);
+				System.out.println("Particular invoice productList -->" + itemnameList);
+				sales.setInvoiceNumber(res.getInvoicenumber());
+				sales.setSoDate(res.getInvoicedate());
+				sales.setCustomerName(res.getCustomername());
+				sales.setNetAmount(totalAmountlist);
+				sales.setTotalAmount(res.getTotalprice());
+				sales.setDeliveryCost(res.getDeliveryprice());
+				sales.setStatus(res.getStatus());
+				sales.setProductName(itemnameList);
+				sales.setQuantity(qtylist);
+				sales.setUnitPrice(totalAmountlist);
+				sales.setTotalItem(res.getTotalitem());
+				sales.setDescription(prodList);
+				responseList.add(sales);
 			}
 			return new ResponseEntity<List<Sales>>(responseList, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.info("loadSales Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 		}
-		return new ResponseEntity<List<Sales>>(responseList, HttpStatus.CREATED);
 
 	}
 
@@ -302,13 +300,14 @@ public class SalesService implements Filter {
 		try {
 			logger.info("Id ---------->" + id);
 			responseList = salesdal.getSales(id);
+			return new ResponseEntity<List<SOInvoiceDetails>>(responseList, HttpStatus.CREATED);
+
 		} catch (Exception e) {
 			logger.info("getSales Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<List<SOInvoiceDetails>>(responseList, HttpStatus.CREATED);
 	}
 
 	@CrossOrigin(origins = "http://localhost:8080")
@@ -328,13 +327,13 @@ public class SalesService implements Filter {
 			customer.setCountry(customer.getCountry());
 			customer.setPhoneNumber(customer.getPhoneNumber());
 			customer.setEmail(customer.getEmail());
+			return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.info("getCustomerDetails Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
 	}
 
 	// Remove
@@ -349,15 +348,15 @@ public class SalesService implements Filter {
 			String status = salesdal.removeSales(invoiceNumber);
 			sales.setStatus(status);
 			logger.info("-----------Successfully Called  removeSales ----------");
+			return new ResponseEntity<>(HttpStatus.OK);
 
 		} catch (Exception e) {
 			logger.info("removeSales Exception ------------->" + e.getMessage());
 			sales.setStatus("failure");
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<Sales>(sales, HttpStatus.CREATED);
 
 	}
 
@@ -371,31 +370,30 @@ public class SalesService implements Filter {
 			logger.info("----------- Before Calling  getUnitPrice Sales ----------");
 			System.out.println("Product Name -->" + productName);
 			System.out.println("category -->" + category);
-			
+
 			String[] res = productName.split("-");
 			String productCode = res[1];
 			logger.info("After Split productCode -->" + productCode);
 			String[] response = category.split("-");
 			String categoryCode = response[1];
-			logger.info("After Split categoryCode -->" + categoryCode);			
+			logger.info("After Split categoryCode -->" + categoryCode);
 			item = salesdal.getUnitPrice(productCode, categoryCode);
-			logger.info("Unit Price ----------"+item.getPrice());
-
+			logger.info("Unit Price ----------" + item.getPrice());
+			return new ResponseEntity<Item>(item, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.info("getUnitPrice Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<Item>(item, HttpStatus.CREATED);
 	}
-	
-	//------- Load Item --
+
+	// ------- Load Item --
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/loadItem", method = RequestMethod.GET)
 	public ResponseEntity<?> loadItem(String category) {
 		logger.info("------------- Inside loadItem -----------------");
-		List<Item> item = null; 
+		List<Item> item = null;
 		Sales sales;
 		List<Sales> responseList = new ArrayList<Sales>();
 		try {
@@ -410,14 +408,14 @@ public class SalesService implements Filter {
 				sales.setProductName(itemList.getProductname() + "-" + itemList.getProdcode());
 				responseList.add(sales);
 			}
-			logger.info("-- list Size --->"+responseList.size());
+			logger.info("-- list Size --->" + responseList.size());
+			return new ResponseEntity<List<Sales>>(responseList, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.info("loadItem Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<List<Sales>>(responseList, HttpStatus.CREATED);
 	}
 
 	// Remove
@@ -435,7 +433,7 @@ public class SalesService implements Filter {
 			// ---- Check List Size from SOInvoiceDetails Table
 			responseList = salesdal.getSales(invoiceNumber);
 			logger.info("List Size -->" + responseList.size());
-			if (responseList.size() == 0 || responseList.size() == 1 ) {
+			if (responseList.size() == 0 || responseList.size() == 1) {
 				temp = 1;
 			} else {
 				temp = 2;
@@ -444,18 +442,17 @@ public class SalesService implements Filter {
 			String status = salesdal.removePartId(id, invoiceNumber, temp);
 			sales.setStatus(status);
 			logger.info("-----------Successfully Called  removeSales  ----------");
+			return new ResponseEntity<>(HttpStatus.OK);
 
 		} catch (Exception e) {
 			logger.info("removeSales Exception ------------->" + e.getMessage());
 			sales.setStatus("failure");
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<Sales>(sales, HttpStatus.CREATED);
-
 	}
-	
+
 	// Update
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
@@ -485,7 +482,7 @@ public class SalesService implements Filter {
 			System.out.println("Position ---->" + postion);
 			list.remove(postion);
 			System.out.println("Edit Size -------->" + jsonArr.length());
-			//int l = 1;
+			// int l = 1;
 			for (int i = 0; i < jsonArr.length(); i++) {
 				System.out.println("Loop 1....");
 				JSONArray arr2 = jsonArr.optJSONArray(i);
@@ -512,38 +509,37 @@ public class SalesService implements Filter {
 							str = str.replaceAll("\\D", "");
 							totalQty += Integer.valueOf(str);
 							totalPrice += jObject.getDouble("netAmount");
-							totalitem = j+1;
+							totalitem = j + 1;
 						} else {
 							System.out.println("Null....");
 						}
 					}
-				}else {
+				} else {
 					System.out.println("Outer Null....");
 				}
-				//l++;
+				// l++;
 			}
-			soinvoice = new SOInvoice(); 
+			soinvoice = new SOInvoice();
 			soinvoice = salesdal.loadSOInvoice(sodetails.getInvoicenumber());
 			soinvoice.setInvoicenumber(sodetails.getInvoicenumber());
-			logger.info("Total Qty -->"+totalQty);
-			logger.info("Total Price -->"+totalPrice);
+			logger.info("Total Qty -->" + totalQty);
+			logger.info("Total Price -->" + totalPrice);
 			soinvoice.setTotalqty(totalQty);
 			soinvoice.setTotalprice(totalPrice);
-			logger.info("After soInvoice Total Qty -->"+soinvoice.getTotalqty());
-			logger.info("After soInvoice Total Price -->"+soinvoice.getTotalprice());
-			soinvoice.setTotalitem(totalitem); 
+			logger.info("After soInvoice Total Qty -->" + soinvoice.getTotalqty());
+			logger.info("After soInvoice Total Price -->" + soinvoice.getTotalprice());
+			soinvoice.setTotalitem(totalitem);
 			salesdal.updateSOInvoice(soinvoice);
 			sales.setStatus("success");
-			return new ResponseEntity<Sales>(sales, HttpStatus.CREATED);
+			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<Sales>(sales, HttpStatus.CREATED);
 	}
-	
+
 	// SaveReturn
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(value = "/saveReturn")
@@ -558,10 +554,10 @@ public class SalesService implements Filter {
 		try {
 			sales = new Sales();
 			System.out.println("Post Json -->" + returnarray);
-			
+
 			JSONArray jsonArr = new JSONArray(returnarray);
 			ArrayList<String> list = new ArrayList<String>();
-			System.out.println("length ====="+jsonArr.length());
+			System.out.println("length =====" + jsonArr.length());
 			int remove = 0;
 			if (jsonArr != null) {
 				for (int i = 0; i < jsonArr.length(); i++) {
@@ -569,12 +565,12 @@ public class SalesService implements Filter {
 					remove++;
 				}
 			}
-			
+
 			int postion = remove - 1;
 			System.out.println("Position-->" + postion);
 			list.remove(postion);
 			System.out.println("Size -------->" + jsonArr.length());
-			//int l = 1;
+			// int l = 1;
 			for (int i = 0; i < jsonArr.length(); i++) {
 				JSONArray arr2 = jsonArr.optJSONArray(i);
 				if (jsonArr.optJSONArray(i) != null) {
@@ -582,7 +578,8 @@ public class SalesService implements Filter {
 						randomnumber = randomnumberdal.getReturnRandamNumber();
 						System.out.println("SO Return random number-->" + randomnumber.getSoreturninvoicenumber());
 						System.out.println("SO Return random code-->" + randomnumber.getSoreturninvoicecode());
-						String invoice = randomnumber.getSoreturninvoicecode() + randomnumber.getSoreturninvoicenumber();
+						String invoice = randomnumber.getSoreturninvoicecode()
+								+ randomnumber.getSoreturninvoicenumber();
 						System.out.println("Sales Return Invoice number -->" + invoice);
 						if (arr2.getJSONObject(j) != null) {
 							JSONObject jObject = arr2.getJSONObject(j);
@@ -597,35 +594,35 @@ public class SalesService implements Filter {
 							soreturndetails.setItemStatus(jObject.getString("itemStatus"));
 							soreturndetails.setReturnStatus(jObject.getString("returnStatus"));
 							soreturndetails.setSoDate(Custom.getCurrentInvoiceDate());
-							soreturndetails.setInvid(j+1); 
+							soreturndetails.setInvid(j + 1);
 							logger.info("POInvoice Date --->" + soreturndetails.getSoDate());
 							salesdal.insertReturn(soreturndetails);
-							logger.info("Invoice Number --->"+randomnumber.getSoreturninvoicenumber());
+							logger.info("Invoice Number --->" + randomnumber.getSoreturninvoicenumber());
 							randomnumberdal.updateSalesReturnRandamNumber(randomnumber);
-							logger.info("After Increament Invoice Number --->"+randomnumber.getSoreturninvoicenumber());
-							
+							logger.info(
+									"After Increament Invoice Number --->" + randomnumber.getSoreturninvoicenumber());
+
 						} else {
 							System.out.println("Null....");
 						}
-						//l++;
+						// l++;
 					}
 				} else {
 					System.out.println("Outer Null....");
 				}
 			}
 			sales.setStatus("success");
-			return new ResponseEntity<Sales>(sales, HttpStatus.CREATED);
+			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
 		finally {
 
 		}
-		return new ResponseEntity<Sales>(sales, HttpStatus.CREATED);
 	}
-	
+
 	// Load customer for populate for auto text box
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/loadCustomerName", method = RequestMethod.GET)
@@ -636,79 +633,79 @@ public class SalesService implements Filter {
 			logger.info("-----------Before Calling Load customer list----------");
 			customerlist = salesdal.loadCustomerName();
 			logger.info("-----------Successfully Called Load customer list------");
-
+			return new ResponseEntity<ArrayList<String>>(customerlist, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<ArrayList<String>>(customerlist, HttpStatus.CREATED);
 	}
-	
-	//----- Filter Date Data ------
-		@CrossOrigin(origins = "http://localhost:8080")
-		@RequestMapping(value = "/loadfilterData", method = RequestMethod.POST)
-		public ResponseEntity<?> loadfilterData(@RequestBody Sales sales) {
-			System.out.println("-------- loadfilterData ---------");
-			List<SOInvoice> response = new ArrayList<SOInvoice>();
-			List<Sales> saleslist = new ArrayList<Sales>();
-			List<SOInvoiceDetails> sodetail = new ArrayList<SOInvoiceDetails>();
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-			SimpleDateFormat your_format = new SimpleDateFormat("dd/MM/yyyy");
-			try {
-				logger.info("-----------Inside loadfilterData Called----------");
-				
-				logger.info("From Date -->"+sales.getFromdate());
-				Date dt1 = format.parse(sales.getFromdate());
-				String fromdate = your_format.format(dt1);
-				System.out.println("dd/MM/yyyy date -->"+fromdate);
-				
-				logger.info("To Date -->"+sales.getTodate());
-				Date dt2 = format.parse(sales.getTodate());
-				String todate = your_format.format(dt2);
-				System.out.println("dd/MM/yyyy date -->"+todate);
-				
-				response = salesdal.loadfilterData(response,fromdate,todate);
-				for(SOInvoice res: response) {
-					sales = new Sales();
-					String itemnameList = "";
-					String qtylist = "";
-					String totalAmountlist = "";
-					String prodList = "";
-					sodetail = salesdal.getSales(res.getInvoicenumber());
-					for(int i=0;i<sodetail.size();i++) {
-						logger.info("Product Name -->"+sodetail.get(i).getItemname()); 
-						itemnameList = itemnameList+sodetail.get(i).getItemname() + System.lineSeparator()+ System.lineSeparator();
-						prodList = prodList + sodetail.get(i).getItemname() + ","+ System.lineSeparator();
-						logger.info("Qty -->"+sodetail.get(i).getQty()); 
-						qtylist = qtylist+sodetail.get(i).getQty() + System.lineSeparator()+ System.lineSeparator();
-						logger.info("Total -->"+sodetail.get(i).getSubtotal()); 
-						totalAmountlist = totalAmountlist+sodetail.get(i).getSubtotal() + System.lineSeparator()+ System.lineSeparator(); 
-					}
-					 System.out.println("Particular invoice productList -->"+itemnameList);	
-					 sales.setInvoiceNumber(res.getInvoicenumber());
-					 sales.setSoDate(res.getInvoicedate());
-					 sales.setCustomerName(res.getCustomername());
-					 sales.setNetAmount(totalAmountlist);
-					 sales.setTotalAmount(res.getTotalprice());
-					 sales.setDeliveryCost(res.getDeliveryprice());
-					 sales.setStatus(res.getStatus());
-					 sales.setProductName(itemnameList); 
-					 sales.setQuantity(qtylist);
-					 sales.setUnitPrice(totalAmountlist);
-					 sales.setTotalItem(res.getTotalitem()); 
-					 sales.setDescription(prodList);
-					 saleslist.add(sales);
-				}
-				return new ResponseEntity<List<Sales>>(saleslist, HttpStatus.CREATED);
-			} catch (Exception e) {
-				logger.info("loadfilterData Exception ------------->" + e.getMessage());
-				e.printStackTrace();
-			} finally {
 
+	// ----- Filter Date Data ------
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/loadfilterData", method = RequestMethod.POST)
+	public ResponseEntity<?> loadfilterData(@RequestBody Sales sales) {
+		System.out.println("-------- loadfilterData ---------");
+		List<SOInvoice> response = new ArrayList<SOInvoice>();
+		List<Sales> saleslist = new ArrayList<Sales>();
+		List<SOInvoiceDetails> sodetail = new ArrayList<SOInvoiceDetails>();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat your_format = new SimpleDateFormat("dd/MM/yyyy");
+		try {
+			logger.info("-----------Inside loadfilterData Called----------");
+
+			logger.info("From Date -->" + sales.getFromdate());
+			Date dt1 = format.parse(sales.getFromdate());
+			String fromdate = your_format.format(dt1);
+			System.out.println("dd/MM/yyyy date -->" + fromdate);
+
+			logger.info("To Date -->" + sales.getTodate());
+			Date dt2 = format.parse(sales.getTodate());
+			String todate = your_format.format(dt2);
+			System.out.println("dd/MM/yyyy date -->" + todate);
+
+			response = salesdal.loadfilterData(response, fromdate, todate);
+			for (SOInvoice res : response) {
+				sales = new Sales();
+				String itemnameList = "";
+				String qtylist = "";
+				String totalAmountlist = "";
+				String prodList = "";
+				sodetail = salesdal.getSales(res.getInvoicenumber());
+				for (int i = 0; i < sodetail.size(); i++) {
+					logger.info("Product Name -->" + sodetail.get(i).getItemname());
+					itemnameList = itemnameList + sodetail.get(i).getItemname() + System.lineSeparator()
+							+ System.lineSeparator();
+					prodList = prodList + sodetail.get(i).getItemname() + "," + System.lineSeparator();
+					logger.info("Qty -->" + sodetail.get(i).getQty());
+					qtylist = qtylist + sodetail.get(i).getQty() + System.lineSeparator() + System.lineSeparator();
+					logger.info("Total -->" + sodetail.get(i).getSubtotal());
+					totalAmountlist = totalAmountlist + sodetail.get(i).getSubtotal() + System.lineSeparator()
+							+ System.lineSeparator();
+				}
+				System.out.println("Particular invoice productList -->" + itemnameList);
+				sales.setInvoiceNumber(res.getInvoicenumber());
+				sales.setSoDate(res.getInvoicedate());
+				sales.setCustomerName(res.getCustomername());
+				sales.setNetAmount(totalAmountlist);
+				sales.setTotalAmount(res.getTotalprice());
+				sales.setDeliveryCost(res.getDeliveryprice());
+				sales.setStatus(res.getStatus());
+				sales.setProductName(itemnameList);
+				sales.setQuantity(qtylist);
+				sales.setUnitPrice(totalAmountlist);
+				sales.setTotalItem(res.getTotalitem());
+				sales.setDescription(prodList);
+				saleslist.add(sales);
 			}
 			return new ResponseEntity<List<Sales>>(saleslist, HttpStatus.CREATED);
+		} catch (Exception e) {
+			logger.info("loadfilterData Exception ------------->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} finally {
+
 		}
+	}
 
 }

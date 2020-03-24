@@ -15,6 +15,8 @@ public class PurchaseOrder {
 	private String vendorname;
 	private String vendorcode;
 	private int qty;
+	private String unit;
+	private int unitprice;
 	private int subtotal;
 	private String date;
 	private String description;
@@ -57,6 +59,18 @@ public class PurchaseOrder {
 		this.vendorcode = vendorcode;
 	}
 	
+	public String getUnit() {
+		return unit;
+	}
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+	public int getUnitprice() {
+		return unitprice;
+	}
+	public void setUnitprice(int unitprice) {
+		this.unitprice = unitprice;
+	}
 	public String getCategorycode() {
 		return categorycode;
 	}

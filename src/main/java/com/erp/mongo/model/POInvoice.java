@@ -11,11 +11,11 @@ public class POInvoice {
 	private String invoicedate;
 	private String invoicenumber;
 	private String vendorname;
-	private int totalqty;
+	private int    totalqty;
 	private String deliveryprice;
-	private int totalprice;
+	private int    totalprice;
 	private String status;
-	private int totalitem;
+	private int    totalitem;
 
 	public String getId() {
 		return id;

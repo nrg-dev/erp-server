@@ -48,8 +48,8 @@ public class ItemService implements Filter {
 
 	private final ItemDAL itemdal;
 	private final RandomNumberDAL randomnumberdal;
-	Item item=null;
-	Discount discount=null;
+	Item item = null;
+	Discount discount = null;
 
 	public ItemService(ItemDAL itemdal, RandomNumberDAL randomnumberdal) {
 		this.itemdal = itemdal;
@@ -112,22 +112,21 @@ public class ItemService implements Filter {
 			if (item.getStatus().equalsIgnoreCase("success")) {
 				randomnumberdal.updateCategoryRandamNumber(randomnumber, 2);
 			}
-			return new ResponseEntity<Item>(item, HttpStatus.CREATED);
+			return new ResponseEntity<>(HttpStatus.OK);
 
 		} catch (Exception e) {
 			item.setStatus("failure");
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
 		finally {
 
 		}
-		return new ResponseEntity<Item>(item, HttpStatus.CREATED);
 	}
 
-	//save promotion
-	
+	// save promotion
+
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/addpromotionsave", method = RequestMethod.POST)
 	public ResponseEntity<?> saveDiscount(@RequestBody Discount discount) {
@@ -144,45 +143,41 @@ public class ItemService implements Filter {
 			if (discount.getStatus().equalsIgnoreCase("success")) {
 				randomnumberdal.updatediscountRandamNumber(randomnumber);
 			}
-			return new ResponseEntity<Discount>(discount, HttpStatus.CREATED);
+			return new ResponseEntity<>(HttpStatus.OK);
 
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
 		finally {
 
 		}
-		return new ResponseEntity<Discount>(discount, HttpStatus.CREATED);
 	}
-	
+
 	// load
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/load", method = RequestMethod.GET)
 	public ResponseEntity<?> loadItem(String category) {
 		logger.info("------------- Inside ItemLoad-----------------");
-		logger.info("Category Code or Name-->"+category);
+		logger.info("Category Code or Name-->" + category);
 		List<Item> itemlist = new ArrayList<Item>();
 		try {
 			logger.info("-----------Inside ItemLoad Called----------");
-			itemlist = itemdal.loadItem(itemlist,category);
+			itemlist = itemdal.loadItem(itemlist, category);
 			for (Item item : itemlist) {
 				System.out.println("product code -->" + item.getProdcode());
-
 			}
 			return new ResponseEntity<List<Item>>(itemlist, HttpStatus.CREATED);
 
 		} catch (Exception e) {
 			logger.info("loadPurchase Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<List<Item>>(itemlist, HttpStatus.CREATED);
-
 	}
-	
+
 	/*
 	 * // Load only item name for auto text box search for promotion add // load
 	 * 
@@ -202,38 +197,37 @@ public class ItemService implements Filter {
 	 * } return new ResponseEntity<List<String>>(itemnamecode, HttpStatus.CREATED);
 	 * 
 	 * } catch (Exception e) { logger.info("loadItemName Exception ------------->" +
-	 * e.getMessage()); e.printStackTrace(); } finally {
+	 * e.getMessage()); return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+	 * finally {
 	 * 
 	 * } return new ResponseEntity<List<String>>(itemnamecode, HttpStatus.CREATED);
 	 * 
 	 * }
 	 */
 	// Add Promotion load
-		@CrossOrigin(origins = "http://localhost:8080")
-		@RequestMapping(value = "/discountload", method = RequestMethod.GET)
-		public ResponseEntity<?> loadDiscount(String discountType) {
-			logger.info("------------- Inside Load Discount Free gift -----------------");
-			List<Discount> discountlist = new ArrayList<Discount>();
-			try {
-				logger.info("-----------Before calling load discount dao----------");
-				discountlist = itemdal.loadDiscount(discountlist,discountType);
-				logger.info("-----------After calling load discount dao----------");
-				for (Discount disc : discountlist) {
-					System.out.println("discount code -->"+disc.getDiscountcode());
-
-				}
-				return new ResponseEntity<List<Discount>>(discountlist, HttpStatus.CREATED);
-
-			} catch (Exception e) {
-				logger.info("loadPurchase Exception ------------->" + e.getMessage());
-				e.printStackTrace();
-			} finally {
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/discountload", method = RequestMethod.GET)
+	public ResponseEntity<?> loadDiscount(String discountType) {
+		logger.info("------------- Inside Load Discount Free gift -----------------");
+		List<Discount> discountlist = new ArrayList<Discount>();
+		try {
+			logger.info("-----------Before calling load discount dao----------");
+			discountlist = itemdal.loadDiscount(discountlist, discountType);
+			logger.info("-----------After calling load discount dao----------");
+			for (Discount disc : discountlist) {
+				System.out.println("discount code -->" + disc.getDiscountcode());
 
 			}
 			return new ResponseEntity<List<Discount>>(discountlist, HttpStatus.CREATED);
 
+		} catch (Exception e) {
+			logger.info("loadPurchase Exception ------------->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} finally {
+
 		}
 
+	}
 
 	// get
 	@CrossOrigin(origins = "http://localhost:8080")
@@ -244,14 +238,13 @@ public class ItemService implements Filter {
 		try {
 			logger.info("-----------Inside getTempPublicTree Called----------");
 			item = itemdal.getItem(id);
-
+			return new ResponseEntity<Item>(item, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<Item>(item, HttpStatus.CREATED);
 
 	}
 
@@ -261,8 +254,8 @@ public class ItemService implements Filter {
 	public ResponseEntity<?> updateItem(@RequestBody Item item) {
 		try {
 			logger.info("--- Inside item Edit ---");
-			logger.info("Before Category Name -->"+item.getCategoryname());
-			logger.info("Before Category Code -->"+item.getCategorycode());
+			logger.info("Before Category Name -->" + item.getCategoryname());
+			logger.info("Before Category Code -->" + item.getCategorycode());
 			if (item.getCategorycode() != null) {
 				String[] categorynamecode = item.getCategorycode().split("-");
 				String catname = categorynamecode[0];
@@ -270,8 +263,8 @@ public class ItemService implements Filter {
 				item.setCategoryname(catname);
 				item.setCategorycode(catcode);
 			}
-			logger.info("After Set Category Name -->"+item.getCategoryname());
-			logger.info("After Set Category Code -->"+item.getCategorycode());
+			logger.info("After Set Category Name -->" + item.getCategoryname());
+			logger.info("After Set Category Code -->" + item.getCategorycode());
 			if (item.getVendorcode() != null) {
 				String[] vendornamecode = item.getVendorcode().split("-");
 				String vendorname = vendornamecode[0];
@@ -279,39 +272,36 @@ public class ItemService implements Filter {
 				item.setVendorname(vendorname);
 				item.setVendorcode(vendorcode);
 			}
-			logger.info("After Set Vendor Name -->"+item.getVendorname());
-			logger.info("After Set Vendor Code -->"+item.getVendorcode());
+			logger.info("After Set Vendor Name -->" + item.getVendorname());
+			logger.info("After Set Vendor Code -->" + item.getVendorcode());
 			item = itemdal.updateItem(item);
-			return new ResponseEntity<Item>(item, HttpStatus.CREATED);
+			return new ResponseEntity<>(HttpStatus.OK);
 
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<Item>(item, HttpStatus.CREATED);
 	}
 
-	//Discount Update
-		@CrossOrigin(origins = "http://localhost:8080")
-		@RequestMapping(value = "/discountupdate", method = RequestMethod.PUT)
-		public ResponseEntity<?> updatediscount(@RequestBody Discount discount) {
-			try {
-				logger.info("--- Inside Discount Edit ---");
-				System.out.println("---Discountcode---"+discount.getDiscountcode());
-				discount = itemdal.updateDiscount(discount);
-				return new ResponseEntity<Discount>(discount, HttpStatus.CREATED);
+	// Discount Update
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/discountupdate", method = RequestMethod.PUT)
+	public ResponseEntity<?> updatediscount(@RequestBody Discount discount) {
+		try {
+			logger.info("--- Inside Discount Edit ---");
+			System.out.println("---Discountcode---" + discount.getDiscountcode());
+			discount = itemdal.updateDiscount(discount);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			logger.info("Exception ------------->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} finally {
 
-			} catch (Exception e) {
-				logger.info("Exception ------------->" + e.getMessage());
-				e.printStackTrace();
-			} finally {
-
-			}
-			return new ResponseEntity<Discount>(discount, HttpStatus.CREATED);
 		}
-	
+	}
+
 	// Remove
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/remove", method = RequestMethod.DELETE)
@@ -323,40 +313,39 @@ public class ItemService implements Filter {
 			itemdal.removeItem(prodcode);
 			item.setStatus("Success");
 			logger.info("-----------Successfully Called  removeCategory ----------");
+			return new ResponseEntity<>(HttpStatus.OK);
 
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
 			item.setStatus("failure");
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<Item>(item, HttpStatus.CREATED);
 	}
-	
-	//Discount Remove
-			@CrossOrigin(origins = "http://localhost:8080")
-			@RequestMapping(value = "/discountremove", method = RequestMethod.DELETE)
-			public ResponseEntity<?> discountremove(String discountcode) {
-				try {
-					discount = new Discount();
-					logger.info("-----------Before Calling  removeDiscount ----------");
-					System.out.println("Remove Discount code" + discountcode);
-					itemdal.removeDiscount(discountcode);
-					discount.setStatus("Success");
-					logger.info("-----------Successfully Called  removeDiscount----------");
 
-				} catch (Exception e) {
-					logger.info("Exception ------------->" + e.getMessage());
-					discount.setStatus("failure");
-					e.printStackTrace();
-				} finally {
+	// Discount Remove
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/discountremove", method = RequestMethod.DELETE)
+	public ResponseEntity<?> discountremove(String discountcode) {
+		try {
+			discount = new Discount();
+			logger.info("-----------Before Calling  removeDiscount ----------");
+			System.out.println("Remove Discount code" + discountcode);
+			itemdal.removeDiscount(discountcode);
+			discount.setStatus("Success");
+			logger.info("-----------Successfully Called  removeDiscount----------");
+			return new ResponseEntity<>(HttpStatus.OK);
 
-				}
-				return new ResponseEntity<Discount>(discount, HttpStatus.CREATED);
-			}
-		
-	
+		} catch (Exception e) {
+			logger.info("Exception ------------->" + e.getMessage());
+			discount.setStatus("failure");
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} finally {
+
+		}
+	}
+
 	// Load item name
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/loadItemName", method = RequestMethod.GET)
@@ -366,21 +355,20 @@ public class ItemService implements Filter {
 		List<String> list = new ArrayList<String>();
 		try {
 			logger.info("-----------Inside loadItemName Called----------");
-			itemlist = itemdal.loadItem(itemlist,"all");
-			for(Item item: itemlist) {
-				System.out.println("Product name-->"+item.getProductname());
-				list.add(item.getProductname()+"-"+item.getProdcode());
+			itemlist = itemdal.loadItem(itemlist, "all");
+			for (Item item : itemlist) {
+				System.out.println("Product name-->" + item.getProductname());
+				list.add(item.getProductname() + "-" + item.getProdcode());
 			}
-	
+
 			return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
 
 		} catch (Exception e) {
 			logger.info("loadItemName Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
 	}
 
 }

@@ -91,7 +91,6 @@ public class CustomerService implements Filter {
 			System.out.println("Customer  random code-->" + randomnumber.getCustomerinvoicecode());
 			String invoice = randomnumber.getCustomerinvoicecode() + randomnumber.getCustomerinvoicenumber();
 			System.out.println("custome code -->" + invoice);
-
 			customer.setCustcode(invoice);
 			customer.setLastedit(Custom.getCurrentInvoiceDate());
 			customer.setAddeddate(Custom.getCurrentInvoiceDate());
@@ -99,16 +98,16 @@ public class CustomerService implements Filter {
 			if (customer.getStatus().equalsIgnoreCase("success")) {
 				randomnumberdal.updateVendorRandamNumber(randomnumber, 2);
 			}
-			return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
+			return new ResponseEntity<>(HttpStatus.OK);
 
 		} catch (Exception e) {
 			customer.setStatus("failure");
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
-
+			randomnumber=null;
+			customer=null;
 		}
-		return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
 	}
 	
 		// load
@@ -120,14 +119,14 @@ public class CustomerService implements Filter {
 			try {
 				logger.info("-----------Inside load customer Called----------");
 				responseList = customerdal.loadCustomer(responseList);
+				return new ResponseEntity<List<Customer>>(responseList, HttpStatus.CREATED);
 
 			} catch (Exception e) {
 				logger.info("Exception ------------->" + e.getMessage());
-				e.printStackTrace();
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			} finally {
 
 			}
-			return new ResponseEntity<List<Customer>>(responseList, HttpStatus.CREATED);
 
 		}
 
@@ -141,14 +140,15 @@ public class CustomerService implements Filter {
 		try {
 			logger.info("-----------Inside getTempPublicTree Called----------");
 			responseList = customerdal.getCustomer(id);
+			return new ResponseEntity<List<Customer>>(responseList, HttpStatus.CREATED);
 
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<List<Customer>>(responseList, HttpStatus.CREATED);
+		//return new ResponseEntity<List<Customer>>(responseList, HttpStatus.CREATED);
 
 	}
 
@@ -159,15 +159,13 @@ public class CustomerService implements Filter {
 		try {
 			customer.setLastedit(Custom.getCurrentInvoiceDate());
 			customer = customerdal.updateCustomer(customer);
-			return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
-
+			return new ResponseEntity<>(HttpStatus.OK); 
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
 	}
 
 	
@@ -175,7 +173,6 @@ public class CustomerService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/remove", method = RequestMethod.DELETE)
 	public ResponseEntity<?> removeCustomer(String custcode) {
-
 		try {
 			System.out.println("Remove cust code is---->" + custcode);
 			customer = new Customer();
@@ -183,17 +180,14 @@ public class CustomerService implements Filter {
 			customerdal.removeCustomer(custcode);
 			customer.setStatus("Success");
 			logger.info("-----------Successfully Called  removeCustomer ----------");
-
+			return new ResponseEntity<>(HttpStatus.OK); 
 		} catch (Exception e) {
 			customer.setStatus("failure");
-
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
-
 	}
 
 }

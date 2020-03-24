@@ -89,21 +89,19 @@ public class EmployeeService implements Filter {
 			System.out.println("Employee Invoice random code-->" + randomnumber.getEmployeeinvoicecode());
 			String invoice = randomnumber.getEmployeeinvoicecode() + randomnumber.getEmployeeinvoicenumber();
 			System.out.println("Invoice number -->" + invoice);
-
 			employee.setEmployeecode(invoice);
 			employee.setAddeddate(Custom.getCurrentInvoiceDate());
 			System.out.println("Current Date --->" + Custom.getCurrentDate());
 			employee = employeedal.save(employee);
 			randomnumberdal.updateEmployeeRandamNumber(randomnumber);
-			return new ResponseEntity<Employee>(employee, HttpStatus.CREATED);
+			return new ResponseEntity<>(HttpStatus.OK); 
 
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<Employee>(employee, HttpStatus.CREATED);
 	}
 
 	// load
@@ -115,15 +113,14 @@ public class EmployeeService implements Filter {
 		try {
 			logger.info("-----------Inside Emplist Load Called----------");
 			responseList = employeedal.load(responseList);
+			return new ResponseEntity<List<Employee>>(responseList, HttpStatus.CREATED);
 
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<List<Employee>>(responseList, HttpStatus.CREATED);
-
 	}
 
 	// get
@@ -135,15 +132,15 @@ public class EmployeeService implements Filter {
 		try {
 			logger.info("-----------Inside get employee ----------");
 			responseList = employeedal.get(id);
+			return new ResponseEntity<List<Employee>>(responseList, HttpStatus.CREATED);
 
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
 		} finally {
 
 		}
-		return new ResponseEntity<List<Employee>>(responseList, HttpStatus.CREATED);
-
 	}
 
 	// update
@@ -153,15 +150,14 @@ public class EmployeeService implements Filter {
 		try {
 			System.out.println("Employee update inside try--->" + employee.getEmployeecode());
 			employee = employeedal.update(employee);
-			return new ResponseEntity<Employee>(employee, HttpStatus.CREATED);
+			return new ResponseEntity<>(HttpStatus.OK); 
 
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<Employee>(employee, HttpStatus.CREATED);
 	}
 
 	// Remove
@@ -176,15 +172,15 @@ public class EmployeeService implements Filter {
 			employeedal.remove(employeecode);
 			employee.setStatus("Success");
 			logger.info("-----------Successfully Called  remo employee ----------");
+			return new ResponseEntity<>(HttpStatus.OK); 
 
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
 			employee.setStatus("failure");
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<Employee>(employee, HttpStatus.CREATED);
 
 	}
 

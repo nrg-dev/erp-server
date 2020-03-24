@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.dal.VendorDAL;
-import com.erp.mongo.model.Category;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.Vendor;
 import com.erp.util.Custom;
@@ -96,16 +95,15 @@ public class VendorService implements Filter {
 			System.out.println("Current Date --->" + Custom.getCurrentDate());
 			vendor = vendordal.saveVendor(vendor);
 			if (vendor.getStatus().equalsIgnoreCase("success")) {
-				boolean status = randomnumberdal.updateVendorRandamNumber(randomnumber, 1);
+				randomnumberdal.updateVendorRandamNumber(randomnumber, 1);
 			}
-			return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);
+			return new ResponseEntity<>(HttpStatus.OK); 
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);
 	}
 
 	// load
@@ -117,14 +115,14 @@ public class VendorService implements Filter {
 		try {
 			logger.info("-----------Inside load vendor Called----------");
 			responseList = vendordal.loadVendor(responseList);
+			return new ResponseEntity<List<Vendor>>(responseList, HttpStatus.CREATED);
 
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<List<Vendor>>(responseList, HttpStatus.CREATED);
 
 	}
 
@@ -147,11 +145,10 @@ public class VendorService implements Filter {
 
 		} catch (Exception e) {
 			logger.info("loadvendornamecode Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
 	}
 
 	// get
@@ -163,13 +160,14 @@ public class VendorService implements Filter {
 		try {
 			logger.info("-----------Inside get Vendor Called----------");
 			responseList = vendordal.getVendor(id);
+			return new ResponseEntity<List<Vendor>>(responseList, HttpStatus.CREATED);
+
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<List<Vendor>>(responseList, HttpStatus.CREATED);
 	}
 
 	// update
@@ -179,15 +177,14 @@ public class VendorService implements Filter {
 		try {
 			System.out.println("vendor update inside try--->" + vendor.getVendorcode());
 			vendor = vendordal.updateVendor(vendor);
-			return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);
+			return new ResponseEntity<>(HttpStatus.OK); 
 
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);
 	}
 
 	// Remove
@@ -201,16 +198,16 @@ public class VendorService implements Filter {
 			vendordal.removeVendor(vendorcode);
 			vendor.setStatus("Success");
 			logger.info("-----------Successfully Called  removeCustomer ----------");
+			return new ResponseEntity<>(HttpStatus.OK); 
 
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
 			vendor.setStatus("failure");
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
 		} finally {
 
 		}
-		return new ResponseEntity<Vendor>(vendor, HttpStatus.CREATED);
 
 	}
 

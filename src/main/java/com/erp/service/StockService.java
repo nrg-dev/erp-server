@@ -36,9 +36,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.dto.Purchase;
-import com.erp.mongo.dal.PurchaseDAL;
 import com.erp.mongo.dal.RandomNumberDAL;
-import com.erp.mongo.dal.SalesDAL;
 import com.erp.mongo.dal.StockDAL;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
@@ -58,14 +56,15 @@ public class StockService implements Filter {
 	public static final Logger logger = LoggerFactory.getLogger(StockService.class);
 
 	private final StockDAL stockdal;
-	private final PurchaseDAL purchasedal;
-	private final SalesDAL salesdal;
+	//private final PurchaseDAL purchasedal;
+	//private final SalesDAL salesdal;
 	private final RandomNumberDAL randomnumberdal;
 
-	public StockService(StockDAL stockdal,PurchaseDAL purchasedal,SalesDAL salesdal,RandomNumberDAL randomnumberdal) {
+	public StockService(StockDAL stockdal, 
+			RandomNumberDAL randomnumberdal) {
 		this.stockdal = stockdal;
-		this.purchasedal = purchasedal;
-		this.salesdal = salesdal;
+		//this.purchasedal = purchasedal;
+		//this.salesdal = salesdal;
 		this.randomnumberdal = randomnumberdal;
 	}
 
@@ -90,8 +89,7 @@ public class StockService implements Filter {
 	public void destroy() {
 	}
 
-	
-	// load Stock Return Details 
+	// load Stock Return Details
 	@CrossOrigin(origins = "http://localhost:8080")
 	@GetMapping(value = "/loadStockReturn", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> loadStockReturn() {
@@ -103,46 +101,46 @@ public class StockService implements Filter {
 		Purchase so = null;
 		try {
 			poList = stockdal.loadPurchaseReturn(poList);
-			logger.info("PO List Size ---------->"+poList.size());
+			logger.info("PO List Size ---------->" + poList.size());
 			soList = stockdal.loadSalesReturn(soList);
-			logger.info("SO List Size ---------->"+soList.size());
-			for(int i=0; i<poList.size(); i++) {
-				 logger.info("---- PO Date -- >"+poList.get(i).getPoDate());
-				 po = new Purchase();
-				 po.setPoDate(poList.get(i).getPoDate());
-				 po.setReturnCategory("Purchase Return"+"  "+poList.get(i).getInvoicenumber());
-				 po.setCategory(poList.get(i).getCategory());
-				 po.setProductName(poList.get(i).getItemname());
-				 po.setQuantity(poList.get(i).getQty());
-				 po.setStatus(poList.get(i).getItemStatus());
-				 po.setVendorName(poList.get(i).getVendorname());
-				 po.setInvoiceNumber(poList.get(i).getInvoicenumber());
-				 list.add(po);
+			logger.info("SO List Size ---------->" + soList.size());
+			for (int i = 0; i < poList.size(); i++) {
+				logger.info("---- PO Date -- >" + poList.get(i).getPoDate());
+				po = new Purchase();
+				po.setPoDate(poList.get(i).getPoDate());
+				po.setReturnCategory("Purchase Return" + "  " + poList.get(i).getInvoicenumber());
+				po.setCategory(poList.get(i).getCategory());
+				po.setProductName(poList.get(i).getItemname());
+				po.setQuantity(poList.get(i).getQty());
+				po.setStatus(poList.get(i).getItemStatus());
+				po.setVendorName(poList.get(i).getVendorname());
+				po.setInvoiceNumber(poList.get(i).getInvoicenumber());
+				list.add(po);
 			}
-			logger.info("Add PO into List Value ----->"+list.get(0).getReturnCategory());
-			for(int j=0; j<soList.size(); j++) {
-				 so = new Purchase();
-				 so.setPoDate(soList.get(j).getSoDate());
-				 so.setReturnCategory("Sales Return"+"  "+soList.get(j).getInvoicenumber());
-				 so.setCategory(soList.get(j).getCategory());
-				 so.setProductName(soList.get(j).getItemname());
-				 so.setQuantity(soList.get(j).getQty());
-				 so.setStatus(soList.get(j).getItemStatus());
-				 so.setVendorName(soList.get(j).getCustomername()); 
-				 so.setInvoiceNumber(soList.get(j).getInvoicenumber());
-				 list.add(so);
-			}		
-			logger.info("Add SO into List Value ----->"+list.get(0).getReturnCategory());
+			logger.info("Add PO into List Value ----->" + list.get(0).getReturnCategory());
+			for (int j = 0; j < soList.size(); j++) {
+				so = new Purchase();
+				so.setPoDate(soList.get(j).getSoDate());
+				so.setReturnCategory("Sales Return" + "  " + soList.get(j).getInvoicenumber());
+				so.setCategory(soList.get(j).getCategory());
+				so.setProductName(soList.get(j).getItemname());
+				so.setQuantity(soList.get(j).getQty());
+				so.setStatus(soList.get(j).getItemStatus());
+				so.setVendorName(soList.get(j).getCustomername());
+				so.setInvoiceNumber(soList.get(j).getInvoicenumber());
+				list.add(so);
+			}
+			logger.info("Add SO into List Value ----->" + list.get(0).getReturnCategory());
 			return new ResponseEntity<List<Purchase>>(list, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.info("loadStockReturn Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<List<Purchase>>(list, HttpStatus.CREATED);
+		// return new ResponseEntity<List<Purchase>>(list, HttpStatus.CREATED);
 	}
-	
+
 	// Save Stock Return
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/saveStockReturn", method = RequestMethod.POST)
@@ -155,26 +153,26 @@ public class StockService implements Filter {
 			String invoice = randomnumber.getStockreturninvoicecode() + randomnumber.getStockreturninvoicenumber();
 			stockreturn.setStockReturnCode(invoice);
 			System.out.println("Invoice Number -->" + stockreturn.getStockReturnCode());
-			
+
 			stockreturn.setAddedDate(Custom.getCurrentInvoiceDate());
 
 			stockreturn = stockdal.saveStockReturn(stockreturn);
 			if (stockreturn.getStatus().equalsIgnoreCase("success")) {
-				randomnumberdal.updateStockDamRandamNumber(randomnumber,temp);
+				randomnumberdal.updateStockDamRandamNumber(randomnumber, temp);
 			}
-			return new ResponseEntity<StockReturn>(stockreturn, HttpStatus.CREATED);
+			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			logger.info("StockReturn Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
 		finally {
 
 		}
-		return new ResponseEntity<StockReturn>(stockreturn, HttpStatus.CREATED);
+		// return new ResponseEntity<StockReturn>(stockreturn, HttpStatus.CREATED);
 	}
-	
-	// Save StockDamage 
+
+	// Save StockDamage
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<?> saveStockDamage(@RequestBody StockDamage stockdamage) {
@@ -190,20 +188,20 @@ public class StockService implements Filter {
 			stockdamage.setAddedDate(Custom.getCurrentInvoiceDate());
 			stockdamage = stockdal.saveStockDamage(stockdamage);
 			if (stockdamage.getStatus().equalsIgnoreCase("success")) {
-				randomnumberdal.updateStockDamRandamNumber(randomnumber,temp);
+				randomnumberdal.updateStockDamRandamNumber(randomnumber, temp);
 			}
-			return new ResponseEntity<StockDamage>(stockdamage, HttpStatus.CREATED);
+			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			logger.info("Stockdamage Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
 		finally {
 
 		}
-		return new ResponseEntity<StockDamage>(stockdamage, HttpStatus.CREATED);
+		// return new ResponseEntity<StockDamage>(stockdamage, HttpStatus.CREATED);
 	}
-	
+
 	// Load
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/loadStockDamage", method = RequestMethod.GET)
@@ -216,13 +214,13 @@ public class StockService implements Filter {
 			return new ResponseEntity<List<StockDamage>>(damagelist, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.info("loadStockDamage Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<List<StockDamage>>(damagelist, HttpStatus.CREATED);
+		// return new ResponseEntity<List<StockDamage>>(damagelist, HttpStatus.CREATED);
 	}
-	
+
 	// update
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
@@ -230,18 +228,18 @@ public class StockService implements Filter {
 		try {
 			System.out.println("Stock code inside try--->" + damage.getStockDamageCode());
 			damage = stockdal.updateDamage(damage);
-			return new ResponseEntity<StockDamage>(damage, HttpStatus.CREATED);
+			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			damage.setStatus("failure");
 			logger.info("updateStockDamage Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<StockDamage>(damage, HttpStatus.CREATED);
+		// return new ResponseEntity<StockDamage>(damage, HttpStatus.CREATED);
 	}
-	
-	//----- get Invoice List ----
+
+	// ----- get Invoice List ----
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/loadInvoice", method = RequestMethod.GET)
 	public ResponseEntity<?> loadInvoice(String paymentOption) {
@@ -250,25 +248,25 @@ public class StockService implements Filter {
 		List<String> list = new ArrayList<String>();
 		try {
 			logger.info("-----------Inside loadInvoice Called ----------");
-			polist = stockdal.loadInvoice(polist,paymentOption);
-			for(POInvoiceDetails po : polist) {
+			polist = stockdal.loadInvoice(polist, paymentOption);
+			for (POInvoiceDetails po : polist) {
 				list.add(po.getInvoicenumber());
 			}
-			Set<String> set = new LinkedHashSet<>(); 
-	        set.addAll(list); 
-	        list.clear(); 
-	        list.addAll(set); 
+			Set<String> set = new LinkedHashSet<>();
+			set.addAll(list);
+			list.clear();
+			list.addAll(set);
 			return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.info("loadInvoice Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
+		// return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
 	}
-	
-	//-------- Save FullStockIn Details -----
+
+	// -------- Save FullStockIn Details -----
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(value = "/saveFullStockIn")
 	public ResponseEntity<?> saveFullStockIn(@RequestBody String stockInarray) {
@@ -288,7 +286,7 @@ public class StockService implements Filter {
 		try {
 			purchase = new Purchase();
 			System.out.println("Post Json -->" + stockInarray);
-			// Store into parent table to show in first data table view			
+			// Store into parent table to show in first data table view
 			ArrayList<String> list = new ArrayList<String>();
 			JSONArray jsonArr = new JSONArray(stockInarray);
 			int remove = 0;
@@ -302,7 +300,7 @@ public class StockService implements Filter {
 			System.out.println("Position-->" + postion);
 			list.remove(postion);
 			System.out.println("Size -------->" + jsonArr.length());
-			//int l = 1;
+			// int l = 1;
 			for (int i = 0; i < jsonArr.length(); i++) {
 				JSONArray arr2 = jsonArr.optJSONArray(i);
 				if (jsonArr.optJSONArray(i) != null) {
@@ -328,17 +326,17 @@ public class StockService implements Filter {
 							stockIndetails.setPoDate(jObject.getString("poDate"));
 							stockIndetails.setSubtotal(jObject.getDouble("netAmount"));
 							logger.info("StockIn Date --->" + stockIndetails.getPoDate());
-							stockdal.saveStockIn(stockIndetails);							
-							addedQty = addedQty+stockIndetails.getQty() + ",";
+							stockdal.saveStockIn(stockIndetails);
+							addedQty = addedQty + stockIndetails.getQty() + ",";
 							POInvoiceDetails podetails = new POInvoiceDetails();
 							podetails.setLastUpdate(Custom.getCurrentInvoiceDate());
 							podetails.setPaymentStatus("FullStockIn");
 							podetails.setRemainingQty(0);
-							recentStockList = recentStockList+stockIndetails.getQty() + ",";
-							podetails = stockdal.updateFullPurchase(stockIndetails,podetails);
-							itemnameList = itemnameList+stockIndetails.getItemname() + ",";
-							categoryList = categoryList+stockIndetails.getCategory() + ",";							
-							randomnumberdal.updateStockRandamNumber(randomnumber,tempNo);
+							recentStockList = recentStockList + stockIndetails.getQty() + ",";
+							podetails = stockdal.updateFullPurchase(stockIndetails, podetails);
+							itemnameList = itemnameList + stockIndetails.getItemname() + ",";
+							categoryList = categoryList + stockIndetails.getCategory() + ",";
+							randomnumberdal.updateStockRandamNumber(randomnumber, tempNo);
 						} else {
 							System.out.println("Null....");
 						}
@@ -346,34 +344,34 @@ public class StockService implements Filter {
 				} else {
 					System.out.println("Outer Null....");
 				}
-				//l++;
+				// l++;
 			}
-			stock = new Stock(); 
+			stock = new Stock();
 			stock.setInvoicedate(Custom.getCurrentInvoiceDate());
 			logger.info("Invoice Date --->" + stock.getInvoicedate());
-			stock.setStockCategory("Purchase "+stockIndetails.getInvoicenumber());
+			stock.setStockCategory("Purchase " + stockIndetails.getInvoicenumber());
 			stock.setItemname(itemnameList);
-			stock.setCategory(categoryList); 
+			stock.setCategory(categoryList);
 			stock.setAddedqty(addedQty);
 			stock.setRecentStock(recentStockList);
-			stock.setStatus("StockIn"); 
+			stock.setStatus("StockIn");
 			stockdal.saveStock(stock);
 			System.out.println("Service call start.....");
-			
+
 			purchase.setStatus("success");
-			return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
-		}catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
 			logger.info("saveStockIn Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
 		finally {
 
 		}
-		return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
+		// return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
 	}
-		
-	//-------- Save FullStockIn Details -----
+
+	// -------- Save FullStockIn Details -----
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(value = "/savePartialStockIn")
 	public ResponseEntity<?> savePartialStockIn(@RequestBody String stockInarray) {
@@ -389,7 +387,7 @@ public class StockService implements Filter {
 		int tempNo = 1;
 		try {
 			purchase = new Purchase();
-			System.out.println("Post Json -->" + stockInarray);			
+			System.out.println("Post Json -->" + stockInarray);
 			ArrayList<String> list = new ArrayList<String>();
 			JSONArray jsonArr = new JSONArray(stockInarray);
 			int remove = 0;
@@ -403,7 +401,7 @@ public class StockService implements Filter {
 			System.out.println("Position-->" + postion);
 			list.remove(postion);
 			System.out.println("Size -------->" + jsonArr.length());
-			//int l = 1;
+			// int l = 1;
 			for (int i = 0; i < jsonArr.length(); i++) {
 				JSONArray arr2 = jsonArr.optJSONArray(i);
 				if (jsonArr.optJSONArray(i) != null) {
@@ -429,34 +427,35 @@ public class StockService implements Filter {
 							stockIndetails.setPoDate(jObject.getString("poDate"));
 							stockIndetails.setSubtotal(jObject.getDouble("netAmount"));
 							logger.info("StockIn Date --->" + stockIndetails.getPoDate());
-							stockdal.saveStockIn(stockIndetails);							
-							addedQty = addedQty+stockIndetails.getQty() + ",";
+							stockdal.saveStockIn(stockIndetails);
+							addedQty = addedQty + stockIndetails.getQty() + ",";
 							POInvoiceDetails podetails = new POInvoiceDetails();
 							podetails = stockdal.loadStockInTotal(stockIndetails);
 							int totalQty = 0;
-							//for(int n=0; n<stockIn.size(); n++) {
-								//logger.info("Size -->"+stockIn.size()+"---"+n+"th TotalQty ====>"+stockIn.get(n).getQty());
-								String str = podetails.getQty();
-								str = str.replaceAll("\\D", "");
-								totalQty += Integer.valueOf(str);
-								logger.info("Stock RecentStock Total ====>"+totalQty);
-							//}
-							recentStockList = recentStockList+totalQty + ",";							
+							// for(int n=0; n<stockIn.size(); n++) {
+							// logger.info("Size -->"+stockIn.size()+"---"+n+"th TotalQty
+							// ====>"+stockIn.get(n).getQty());
+							String str = podetails.getQty();
+							str = str.replaceAll("\\D", "");
+							totalQty += Integer.valueOf(str);
+							logger.info("Stock RecentStock Total ====>" + totalQty);
+							// }
+							recentStockList = recentStockList + totalQty + ",";
 							String str1 = stockIndetails.getQty();
 							str1 = str1.replaceAll("\\D", "");
 							int stocktotalQty = Integer.valueOf(str1);
-							podetails.setRemainingQty(totalQty-Integer.valueOf(stocktotalQty));
-							logger.info("Remaining Qty --------->"+podetails.getRemainingQty());
-							if(podetails.getPaymentStatus().equalsIgnoreCase("PartialStockIn") && 
-									podetails.getRemainingQty() == 0) {
+							podetails.setRemainingQty(totalQty - Integer.valueOf(stocktotalQty));
+							logger.info("Remaining Qty --------->" + podetails.getRemainingQty());
+							if (podetails.getPaymentStatus().equalsIgnoreCase("PartialStockIn")
+									&& podetails.getRemainingQty() == 0) {
 								podetails.setPaymentStatus("FullStockIn");
-							}else {
+							} else {
 								podetails.setPaymentStatus("PartialStockIn");
 							}
 							podetails = stockdal.updatePurchase(podetails);
-							itemnameList = itemnameList+stockIndetails.getItemname() + ",";
-							categoryList = categoryList+stockIndetails.getCategory() + ",";							
-							randomnumberdal.updateStockRandamNumber(randomnumber,tempNo);
+							itemnameList = itemnameList + stockIndetails.getItemname() + ",";
+							categoryList = categoryList + stockIndetails.getCategory() + ",";
+							randomnumberdal.updateStockRandamNumber(randomnumber, tempNo);
 						} else {
 							System.out.println("Null....");
 						}
@@ -464,46 +463,46 @@ public class StockService implements Filter {
 				} else {
 					System.out.println("Outer Null....");
 				}
-				//l++;
+				// l++;
 			}
-			stock = new Stock(); 
+			stock = new Stock();
 			stock.setInvoicedate(Custom.getCurrentInvoiceDate());
 			logger.info("Invoice Date --->" + stock.getInvoicedate());
-			stock.setStockCategory("Purchase "+stockIndetails.getInvoicenumber());
+			stock.setStockCategory("Purchase " + stockIndetails.getInvoicenumber());
 			stock.setItemname(itemnameList);
-			stock.setCategory(categoryList); 
+			stock.setCategory(categoryList);
 			stock.setAddedqty(addedQty);
 			stock.setRecentStock(recentStockList);
-			stock.setStatus("StockIn"); 
+			stock.setStatus("StockIn");
 			Stock st = new Stock();
 			st = stockdal.loadStockInvoice(stock.getStockCategory());
-			if(st != null) {
-				logger.info("----------- Stock Category match--------"+st.getId());
-				logger.info("StockInCategory  --->"+stock.getStockCategory());
-				logger.info("Itemname  --->"+stock.getItemname());
-				logger.info("Category  --->"+stock.getCategory());
-				logger.info("Addedqty  --->"+stock.getAddedqty());
-				logger.info("RecentStock  --->"+stock.getRecentStock());
-				logger.info("Status  --->"+stock.getStatus());
-				stockdal.updateStock(stock,st.getId());
-			}else {
+			if (st != null) {
+				logger.info("----------- Stock Category match--------" + st.getId());
+				logger.info("StockInCategory  --->" + stock.getStockCategory());
+				logger.info("Itemname  --->" + stock.getItemname());
+				logger.info("Category  --->" + stock.getCategory());
+				logger.info("Addedqty  --->" + stock.getAddedqty());
+				logger.info("RecentStock  --->" + stock.getRecentStock());
+				logger.info("Status  --->" + stock.getStatus());
+				stockdal.updateStock(stock, st.getId());
+			} else {
 				logger.info("----------- Stock Category not match--------");
 				stockdal.saveStock(stock);
-			}		
-			
+			}
+
 			System.out.println("Service call start.....");
-			
+
 			purchase.setStatus("success");
-			return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
-		}catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
 			logger.info("saveStockIn Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
 		finally {
 
 		}
-		return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
+		// return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
 	}
 
 	// Load StockInDetails
@@ -514,17 +513,17 @@ public class StockService implements Filter {
 		List<Stock> stocklist = new ArrayList<Stock>();
 		try {
 			logger.info("-----------Inside loadStock Called----------");
-			stocklist = stockdal.loadStock(stocklist,status);
+			stocklist = stockdal.loadStock(stocklist, status);
 			return new ResponseEntity<List<Stock>>(stocklist, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.info("loadStock Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<List<Stock>>(stocklist, HttpStatus.CREATED);
+		// return new ResponseEntity<List<Stock>>(stocklist, HttpStatus.CREATED);
 	}
-	
+
 	// Save StockOut
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/saveStockOut", method = RequestMethod.POST)
@@ -540,20 +539,19 @@ public class StockService implements Filter {
 			stock.setInvoicedate(Custom.getCurrentInvoiceDate());
 			stock.setInvoicenumber(invoice);
 			stock.setStockCategory(stock.getStockOutCategory());
-			stock.setRecentStock(stock.getAddedqty()); 
-			stock.setStatus("StockOut"); 
+			stock.setRecentStock(stock.getAddedqty());
+			stock.setStatus("StockOut");
 			stock = stockdal.saveStockOut(stock);
 			if (stock.getStatus().equalsIgnoreCase("success")) {
 				randomnumberdal.updateStockRandamNumber(randomnumber, 2);
 			}
-			return new ResponseEntity<Stock>(stock, HttpStatus.CREATED);
+			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<Stock>(stock, HttpStatus.CREATED);
 	}
-	
+
 }

@@ -111,11 +111,11 @@ public class CategoryService implements Filter {
 
 		} catch (Exception e) {
 			logger.info("loadCategory Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<List<Category>>(categorylist, HttpStatus.CREATED);
+		//return new ResponseEntity<List<Category>>(categorylist, HttpStatus.CREATED);
 
 	}
 
@@ -171,15 +171,15 @@ public class CategoryService implements Filter {
 		try {
 			System.out.println("vendor code inside try--->" + category.getCategorycode());
 			category = categorydal.updateCategory(category);
-			return new ResponseEntity<Category>(category, HttpStatus.CREATED);
+			return new ResponseEntity<>(HttpStatus.OK);
 
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<Category>(category, HttpStatus.CREATED);
+		//return new ResponseEntity<Category>(category, HttpStatus.CREATED);
 	}
 
 	// Remove
@@ -194,17 +194,16 @@ public class CategoryService implements Filter {
 			categorydal.removeCategory(categorycode);
 			category.setStatus("Success");
 			logger.info("-----------Successfully Called  removeCategory ----------");
+			return new ResponseEntity<>(HttpStatus.OK);
 
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());
 			category.setStatus("failure");
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
 		} finally {
 
 		}
-		return new ResponseEntity<Category>(category, HttpStatus.CREATED);
-
 	}
 
 	
@@ -227,10 +226,10 @@ public class CategoryService implements Filter {
 
 		} catch (Exception e) {
 			logger.info("loadCategoryName Exception ------------->" + e.getMessage());
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
+		//return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
 	}
 }
