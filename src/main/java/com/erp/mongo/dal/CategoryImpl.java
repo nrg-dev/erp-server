@@ -45,9 +45,10 @@ public class CategoryImpl implements CategoryDAL {
 	// update
 	@Override
 	public Category updateCategory(Category category) {
+		logger.info("Category Code -->"+category.getCategorycode());
 		Update update = new Update();
 		Query query = new Query();
-		query.addCriteria(Criteria.where("vendorcode").is(category.getCategorycode()));
+		query.addCriteria(Criteria.where("categorycode").is(category.getCategorycode()));
 		update.set("name", category.getName());
 		update.set("description", category.getDescription());
 		mongoTemplate.updateFirst(query, update, Category.class);

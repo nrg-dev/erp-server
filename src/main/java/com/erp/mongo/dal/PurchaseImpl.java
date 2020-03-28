@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import com.erp.dto.Purchase;
+import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
@@ -236,4 +237,40 @@ public class PurchaseImpl implements PurchaseDAL {
 		mongoTemplate.save(purchaseorder);
 		return purchaseorder;
 	}
+	
+	// Update PO order
+	public boolean updatePurchaseOrder(PurchaseOrder purchaseorder) {
+		Update update = new Update();
+		Query query = new Query();
+		query.addCriteria(Criteria.where("_id").is(purchaseorder.getId()));
+		update.set("categoryname", purchaseorder.getCategoryname());
+		update.set("categorycode", purchaseorder.getCategorycode());
+		update.set("productname", purchaseorder.getProductname());
+		update.set("productcode", purchaseorder.getProductcode());
+		update.set("vendorname", purchaseorder.getVendorname());
+		update.set("vendorcode", purchaseorder.getVendorcode());
+		update.set("qty", purchaseorder.getQty());
+		update.set("unit", purchaseorder.getUnit());
+		update.set("unitprice", purchaseorder.getUnitprice());
+		update.set("subtotal", purchaseorder.getSubtotal());
+		update.set("date", purchaseorder.getDate());
+		update.set("description", purchaseorder.getDescription());
+		mongoTemplate.updateFirst(query, update, PurchaseOrder.class);
+		return true;
+		}
+			
+
+	// Remove
+		public boolean removePO(String id) {
+			logger.info("PO delete Id-->"+id);
+			logger.info("PO delete start");
+			Query query = new Query();
+			query.addCriteria(Criteria.where("_id").is(id));
+			mongoTemplate.remove(query, PurchaseOrder.class);
+			logger.info("PO deleted"+id);
+
+			return true;
+		}
+		
+		
 }

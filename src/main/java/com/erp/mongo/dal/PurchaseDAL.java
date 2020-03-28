@@ -46,6 +46,12 @@ public interface PurchaseDAL {
 	public List<PurchaseOrder> loadPO();
 	
 	public PurchaseOrder savePO(PurchaseOrder purchaseorder);
+	public boolean removePO(String id);
+	public boolean updatePurchaseOrder(PurchaseOrder purchaseorder);
+
+	
+
+	
 
 	
 

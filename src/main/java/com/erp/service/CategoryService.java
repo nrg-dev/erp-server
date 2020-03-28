@@ -74,13 +74,13 @@ public class CategoryService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<?> saveCategory(@RequestBody Category category) {
-		System.out.println("-------- saveCategory-------------");
+		logger.info("-------- saveCategory-------------");
 		RandomNumber randomnumber = null;
 		try {
 			randomnumber = randomnumberdal.getCategoryRandomNumber();
 			String invoice = randomnumber.getCategoryinvoicecode() + randomnumber.getCategoryinvoicenumber();
 			category.setCategorycode(invoice);
-			System.out.println("Category name -->" + category.getName());
+			logger.info("Category name -->" + category.getName());
 
 			category = categorydal.saveCategory(category);
 			if (category.getStatus().equalsIgnoreCase("success")) {
@@ -169,7 +169,7 @@ public class CategoryService implements Filter {
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateCategory(@RequestBody Category category) {
 		try {
-			System.out.println("vendor code inside try--->" + category.getCategorycode());
+			logger.info("Category code --->" + category.getCategorycode());
 			category = categorydal.updateCategory(category);
 			return new ResponseEntity<>(HttpStatus.OK);
 
@@ -190,7 +190,7 @@ public class CategoryService implements Filter {
 		try {
 			category = new Category();
 			logger.info("-----------Before Calling  removeCategory ----------");
-			System.out.println("Remove Category code" + categorycode);
+			logger.info("Remove Category code" + categorycode);
 			categorydal.removeCategory(categorycode);
 			category.setStatus("Success");
 			logger.info("-----------Successfully Called  removeCategory ----------");
@@ -218,7 +218,7 @@ public class CategoryService implements Filter {
 			logger.info("-----------Inside loadCategoryName Called----------");
 			categorylist = categorydal.loadCategory(categorylist);
 			for(Category cat: categorylist) {
-				System.out.println("category name-->"+cat.getName());
+				logger.info("category name-->"+cat.getName());
 				list.add(cat.getName()+"-"+cat.getCategorycode());
 			}
 	

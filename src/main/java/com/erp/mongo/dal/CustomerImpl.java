@@ -30,7 +30,6 @@ public class CustomerImpl implements CustomerDAL {
 	@Override
 	public Customer saveCustomer(Customer customer) {
 		System.out.println("Save Customer");
-		// mongoTemplate.insert(customer);//(query, RandamNumber.class);
 		mongoTemplate.save(customer);
 		customer.setStatus("success");
 		return customer;

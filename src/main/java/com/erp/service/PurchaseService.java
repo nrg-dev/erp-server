@@ -456,7 +456,39 @@ public class PurchaseService implements Filter {
 
 		}
 	}
+	
+		// Remove PO Order
+		@CrossOrigin(origins = "http://localhost:8080")
+		@RequestMapping(value = "/removePO", method = RequestMethod.DELETE)
+		public ResponseEntity<?> removePO(String id) {
+			logger.info("Service PO delete Id-->"+id);
+			try {
+				boolean stauts = purchasedal.removePO(id);
+				return new ResponseEntity<>(HttpStatus.OK); 
+			} catch (Exception e) {
+				logger.info("RemovePurchase Exception ------------->" + e.getMessage());
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			} finally {
 
+			}
+		}
+
+		// Update PO
+		@CrossOrigin(origins = "http://localhost:8080")
+		@RequestMapping(value = "/updatePurchaseOrder", method = RequestMethod.PUT)
+		public ResponseEntity<?> updatePurchaseOrder(@RequestBody PurchaseOrder purchaseorder) {
+			try {
+				boolean stauts = purchasedal.updatePurchaseOrder(purchaseorder);
+				return new ResponseEntity<>(HttpStatus.OK); 
+			} catch (Exception e) {
+				logger.info("RemovePurchase Exception ------------->" + e.getMessage());
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			} finally {
+
+			}
+		
+		}
+	
 	// Remove
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/removePartId", method = RequestMethod.DELETE)
