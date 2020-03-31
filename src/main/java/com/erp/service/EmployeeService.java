@@ -26,11 +26,14 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.bo.ErpBo;
+import com.erp.dto.EmployeeDto;
 import com.erp.mongo.dal.EmployeeDAL;
 import com.erp.mongo.dal.RandomNumberDAL;
+import com.erp.mongo.model.DailyReport;
 import com.erp.mongo.model.Employee;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.util.Custom;
@@ -143,6 +146,28 @@ public class EmployeeService implements Filter {
 		}
 	}
 
+	
+		@CrossOrigin(origins = "http://localhost:8080")
+		@RequestMapping(value = "/loadDailyReport", method = RequestMethod.GET)
+		public ResponseEntity<?> loadDailyReport(String id) {
+			logger.info("loadDailyReport");
+			logger.info("EmployeeService Id-->"+id);
+			List<DailyReport> responseList = null;
+			try {
+				logger.info("Inside try loadDailyReport");
+				responseList = employeedal.loadDailyReport(id);
+				logger.info("List Size-->"+responseList.size());
+				return new ResponseEntity<List<DailyReport>>(responseList, HttpStatus.OK);
+
+			} catch (Exception e) {
+				logger.info("Exception -->" + e.getMessage());
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+			} finally {
+
+			}
+		}
+		
 	// update
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
@@ -183,5 +208,26 @@ public class EmployeeService implements Filter {
 		}
 
 	}
+	
+	    // Save Daily Report
+		@CrossOrigin(origins = "http://localhost:8080")
+		@RequestMapping(value = "/saveUpdateDailyReport", method = RequestMethod.POST)
+		public ResponseEntity<?> saveUpdateDailyReport(@RequestBody EmployeeDto employeeDto) {
+			logger.info("saveDailyReport");
+			try {
+				boolean status = employeedal.saveUpdateDailyReport(employeeDto);
+				if(status) {
+					return new ResponseEntity<>(HttpStatus.OK); 
+				} else {
+					return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+				}
+
+			} catch (Exception e) {
+				logger.info("Exception ------------->" + e.getMessage());
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 500
+			} finally {
+
+			}
+		}
 
 }

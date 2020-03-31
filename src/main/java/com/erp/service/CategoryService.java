@@ -74,14 +74,13 @@ public class CategoryService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<?> saveCategory(@RequestBody Category category) {
-		logger.info("-------- saveCategory-------------");
+		logger.info("saveCategory");
 		RandomNumber randomnumber = null;
 		try {
 			randomnumber = randomnumberdal.getCategoryRandomNumber();
 			String invoice = randomnumber.getCategoryinvoicecode() + randomnumber.getCategoryinvoicenumber();
 			category.setCategorycode(invoice);
 			logger.info("Category name -->" + category.getName());
-
 			category = categorydal.saveCategory(category);
 			if (category.getStatus().equalsIgnoreCase("success")) {
 				randomnumberdal.updateCategoryRandamNumber(randomnumber, 1);
@@ -102,72 +101,33 @@ public class CategoryService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/load", method = RequestMethod.GET)
 	public ResponseEntity<?> loadCategory() {
-		logger.info("------------- Inside loadCategory-----------------");
+		logger.info("loadCategory");
 		List<Category> categorylist = new ArrayList<Category>();
 		try {
-			logger.info("-----------Inside loadCategory Called----------");
+			logger.info("loadCategory");
 			categorylist = categorydal.loadCategory(categorylist);
-			return new ResponseEntity<List<Category>>(categorylist, HttpStatus.CREATED);
+			logger.info("loadCategory");
+			if(categorylist.size()>0) {
+				return new ResponseEntity<List<Category>>(categorylist, HttpStatus.OK);
+			}
+			else {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT); // No data
+
+			}
 
 		} catch (Exception e) {
-			logger.info("loadCategory Exception ------------->" + e.getMessage());
+			logger.info("loadCategory Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
-		//return new ResponseEntity<List<Category>>(categorylist, HttpStatus.CREATED);
-
 	}
-
-	// load allcategorylist
-	/*
-	 * @CrossOrigin(origins = "http://localhost:8080")
-	 * 
-	 * @RequestMapping(value="/loadAllCategory",method=RequestMethod.GET) public
-	 * ResponseEntity<?> loadAllCategory() {
-	 * logger.info("------------- Inside loadAllCategory-----------------");
-	 * List<Category> categorylist= new ArrayList<Category>(); List<Category>
-	 * allCategorylist= new ArrayList<Category>(); Category cat = new Category();
-	 * try { logger.info("-----------Inside loadAllCategory Called----------");
-	 * categorylist=categorydal.loadCategory(categorylist); for( int i=0;
-	 * i<categorylist.size(); i++) { cat.setName((categorylist.get(i).getName()));
-	 * allCategorylist.add(cat); } return new
-	 * ResponseEntity<List<Category>>(allCategorylist, HttpStatus.CREATED);
-	 * 
-	 * }catch(Exception e) {
-	 * logger.info("loadAllCategory Exception ------------->"+e.getMessage());
-	 * e.printStackTrace(); }finally{
-	 * 
-	 * } return new
-	 * ResponseEntity<List<Category>>(allCategorylist,HttpStatus.CREATED);
-	 * 
-	 * }
-	 */
-
-	// get
-	/*
-	 * @CrossOrigin(origins = "http://localhost:8080")
-	 * 
-	 * @RequestMapping(value="/get",method=RequestMethod.GET) public
-	 * ResponseEntity<?> geCustomer(String id) {
-	 * logger.info("------------- Inside getTempPublicTree-----------------");
-	 * List<Customer> responseList=null; try {
-	 * logger.info("-----------Inside getTempPublicTree Called----------");
-	 * responseList=customerdal.getCustomer(id);
-	 * 
-	 * }catch(Exception e){ logger.info("Exception ------------->"+e.getMessage());
-	 * e.printStackTrace(); }finally{
-	 * 
-	 * } return new ResponseEntity<List<Customer>>(responseList,
-	 * HttpStatus.CREATED);
-	 * 
-	 * }
-	 */
 
 	// update
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateCategory(@RequestBody Category category) {
+		logger.info("updateCategory");
 		try {
 			logger.info("Category code --->" + category.getCategorycode());
 			category = categorydal.updateCategory(category);

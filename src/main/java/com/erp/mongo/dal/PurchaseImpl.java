@@ -86,7 +86,7 @@ public class PurchaseImpl implements PurchaseDAL {
 		return vendor;
 	}
 
-	// revmoe
+	// remove
 	@Override
 	public String removePurchase(String invoiceNumber) {
 		String response = "failure";
@@ -98,7 +98,7 @@ public class PurchaseImpl implements PurchaseDAL {
 		return response;
 	}
 
-	// revmoe
+	// remove
 	@Override
 	public String removePartId(String id, String invoiceNumber, int temp) {
 		String response = "failure";
@@ -157,8 +157,7 @@ public class PurchaseImpl implements PurchaseDAL {
 		update.set("poDate", purchase.getPoDate());
 		update.set("lastUpdate", purchase.getLastUpdate());
 		update.set("paymentStatus", purchase.getPaymentStatus());
-		update.set("remainingAmount", purchase.getRemainingQty());
-		
+		update.set("remainingAmount", purchase.getRemainingQty());		
 		mongoTemplate.updateFirst(query, update, POInvoiceDetails.class);
 
 		return purchase;

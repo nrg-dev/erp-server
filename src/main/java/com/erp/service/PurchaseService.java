@@ -464,6 +464,9 @@ public class PurchaseService implements Filter {
 			logger.info("Service PO delete Id-->"+id);
 			try {
 				boolean stauts = purchasedal.removePO(id);
+				if(stauts) {
+					return new ResponseEntity<>(HttpStatus.OK); 
+				}
 				return new ResponseEntity<>(HttpStatus.OK); 
 			} catch (Exception e) {
 				logger.info("RemovePurchase Exception ------------->" + e.getMessage());
@@ -479,7 +482,13 @@ public class PurchaseService implements Filter {
 		public ResponseEntity<?> updatePurchaseOrder(@RequestBody PurchaseOrder purchaseorder) {
 			try {
 				boolean stauts = purchasedal.updatePurchaseOrder(purchaseorder);
-				return new ResponseEntity<>(HttpStatus.OK); 
+				if(stauts) {
+					return new ResponseEntity<>(HttpStatus.OK); 
+				}
+				else {
+					return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);// 500 Internal Server error
+
+				}
 			} catch (Exception e) {
 				logger.info("RemovePurchase Exception ------------->" + e.getMessage());
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
