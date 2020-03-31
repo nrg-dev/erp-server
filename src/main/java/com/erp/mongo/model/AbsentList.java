@@ -9,9 +9,9 @@ public class AbsentList {
 	@Id
 	private String id;
 	 String employeecode 	;
-	 String checkin;
+	 String checkinreason;
 	 String checkintime;
-	 String checkout;
+	 String checkoutreason;
 	 String checkouttime;
 	 String absent;
 	 String reason;
@@ -28,24 +28,14 @@ public class AbsentList {
 	public void setEmployeecode(String employeecode) {
 		this.employeecode = employeecode;
 	}
-	public String getCheckin() {
-		return checkin;
-	}
-	public void setCheckin(String checkin) {
-		this.checkin = checkin;
-	}
+	
 	public String getCheckintime() {
 		return checkintime;
 	}
 	public void setCheckintime(String checkintime) {
 		this.checkintime = checkintime;
 	}
-	public String getCheckout() {
-		return checkout;
-	}
-	public void setCheckout(String checkout) {
-		this.checkout = checkout;
-	}
+	
 	public String getCheckouttime() {
 		return checkouttime;
 	}
