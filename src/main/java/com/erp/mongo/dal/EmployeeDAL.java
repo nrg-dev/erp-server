@@ -16,7 +16,11 @@ public interface EmployeeDAL {
 
 	public List<Employee> get(String id);
 	
-	public List<DailyReport> loadDailyReport(String id);	
+	public List<DailyReport> loadDailyReport(String id);
+	
+	public List<AbsentList> loadAbsentList(String employeecode,String date,String type);	
+
+	public List<ContractList> loadContractList(String employeecode);	
 
 	public Employee update(Employee employee);
 
@@ -24,9 +28,13 @@ public interface EmployeeDAL {
 	
 	public boolean saveUpdateDailyReport(EmployeeDto employeeDto);
 
-	public boolean saveUpdateAbsentList(AbsentList absentList);
+	public boolean saveAbsentList(AbsentList absentList);
 
-	public boolean saveUpdateContractList(ContractList contractList);
+	public boolean saveContractList(ContractList contractList);
+
+	public boolean updateAbsentList(AbsentList absentList);
+	
+	public boolean updateContractList(ContractList contractList);
 
 	
 

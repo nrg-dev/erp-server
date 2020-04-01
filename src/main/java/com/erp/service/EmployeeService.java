@@ -32,6 +32,8 @@ import com.erp.bo.ErpBo;
 import com.erp.dto.EmployeeDto;
 import com.erp.mongo.dal.EmployeeDAL;
 import com.erp.mongo.dal.RandomNumberDAL;
+import com.erp.mongo.model.AbsentList;
+import com.erp.mongo.model.ContractList;
 import com.erp.mongo.model.DailyReport;
 import com.erp.mongo.model.Employee;
 import com.erp.mongo.model.RandomNumber;
@@ -141,17 +143,59 @@ public class EmployeeService implements Filter {
 		}
 	}
 
+	// get & load daily report
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/loadDailyReport", method = RequestMethod.GET)
+	public ResponseEntity<?> loadDailyReport(String id) {
+		logger.info("loadDailyReport");
+		logger.info("EmployeeService Id-->"+id);
+		List<DailyReport> responseList = null;
+		try {
+			responseList = employeedal.loadDailyReport(id);
+			logger.info("List Size-->"+responseList.size());
+			return new ResponseEntity<List<DailyReport>>(responseList, HttpStatus.OK);
+
+		} catch (Exception e) {
+			logger.info("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+		} finally {
+
+		}
+	}
 	
+		// get & load AbsentList
 		@CrossOrigin(origins = "http://localhost:8080")
-		@RequestMapping(value = "/loadDailyReport", method = RequestMethod.GET)
-		public ResponseEntity<?> loadDailyReport(String id) {
+		@RequestMapping(value = "/loadAbsentList", method = RequestMethod.GET)
+		public ResponseEntity<?> loadAbsentList(String employeecode,String date,String type) {
 			logger.info("loadDailyReport");
-			logger.info("EmployeeService Id-->"+id);
-			List<DailyReport> responseList = null;
+			logger.info("EmployeeService Code-->"+employeecode);
+			List<AbsentList> responseList = null;
 			try {
-				responseList = employeedal.loadDailyReport(id);
+				responseList = employeedal.loadAbsentList(employeecode,date,type);
 				logger.info("List Size-->"+responseList.size());
-				return new ResponseEntity<List<DailyReport>>(responseList, HttpStatus.OK);
+				return new ResponseEntity<List<AbsentList>>(responseList, HttpStatus.OK);
+
+			} catch (Exception e) {
+				logger.info("Exception-->" + e.getMessage());
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+			} finally {
+
+			}
+		}
+		
+		// get & load ContractList
+		@CrossOrigin(origins = "http://localhost:8080")
+		@RequestMapping(value = "/loadContractList", method = RequestMethod.GET)
+		public ResponseEntity<?> loadContractList(String employeecode) {
+			logger.info("loadDailyReport");
+			logger.info("EmployeeService Id-->"+employeecode);
+			List<ContractList> responseList = null;
+			try {
+				responseList = employeedal.loadContractList(employeecode);
+				logger.info("List Size-->"+responseList.size());
+				return new ResponseEntity<List<ContractList>>(responseList, HttpStatus.OK);
 
 			} catch (Exception e) {
 				logger.info("Exception-->" + e.getMessage());
@@ -221,5 +265,90 @@ public class EmployeeService implements Filter {
 
 			}
 		}
+		
+		// Save Absent
+		@CrossOrigin(origins = "http://localhost:8080")
+		@RequestMapping(value = "/saveAbsent", method = RequestMethod.POST)
+		public ResponseEntity<?> saveAbsent(@RequestBody AbsentList absentList) {
+			logger.info("saveAbsent");
+			try {
+				boolean status = employeedal.saveAbsentList(absentList);
+				if(status) {
+					return new ResponseEntity<>(HttpStatus.OK); 
+				} else {
+					return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+				}
+
+			} catch (Exception e) {
+				logger.info("Exception-->" + e.getMessage());
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 500
+			} finally {
+
+			}
+		}
+		
+		// Update Absent
+		@CrossOrigin(origins = "http://localhost:8080")
+		@RequestMapping(value = "/updateAbsent", method = RequestMethod.PUT)
+		public ResponseEntity<?> updateAbsent(@RequestBody AbsentList absentList) {
+			logger.info("updateAbsent");
+			try {
+				boolean status = employeedal.updateAbsentList(absentList);
+				if(status) {
+					return new ResponseEntity<>(HttpStatus.OK); 
+				} else {
+					return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+				}
+
+			} catch (Exception e) {
+				logger.info("Exception-->" + e.getMessage());
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 500
+			} finally {
+
+			}
+		}
+		
+		// Save Contract
+		@CrossOrigin(origins = "http://localhost:8080")
+		@RequestMapping(value = "/saveContract", method = RequestMethod.POST)
+		public ResponseEntity<?> saveContract(@RequestBody ContractList contractList) {
+			logger.info("saveContract");
+			try {
+				boolean status = employeedal.saveContractList(contractList);
+				if(status) {
+					return new ResponseEntity<>(HttpStatus.OK); 
+				} else {
+					return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+				}
+
+			} catch (Exception e) {
+				logger.info("Exception-->" + e.getMessage());
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 500
+			} finally {
+
+			}
+		}
+				
+		// Update Contract
+		@CrossOrigin(origins = "http://localhost:8080")
+		@RequestMapping(value = "/updateContract", method = RequestMethod.PUT)
+		public ResponseEntity<?> updateContract(@RequestBody ContractList contractList) {
+			logger.info("updateContract");
+			try {
+				boolean status = employeedal.updateContractList(contractList);
+				if(status) {
+					return new ResponseEntity<>(HttpStatus.OK); 
+				} else {
+					return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+				}
+
+			} catch (Exception e) {
+				logger.info("Exception-->" + e.getMessage());
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 500
+			} finally {
+
+			}
+		}
+				
 
 }

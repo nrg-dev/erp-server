@@ -60,6 +60,18 @@ public class AbsentList {
 	public void setDate(String date) {
 		this.date = date;
 	}
+	public String getCheckinreason() {
+		return checkinreason;
+	}
+	public void setCheckinreason(String checkinreason) {
+		this.checkinreason = checkinreason;
+	}
+	public String getCheckoutreason() {
+		return checkoutreason;
+	}
+	public void setCheckoutreason(String checkoutreason) {
+		this.checkoutreason = checkoutreason;
+	}
 
 	
 	

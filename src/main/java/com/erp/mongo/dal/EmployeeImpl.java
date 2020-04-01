@@ -65,7 +65,7 @@ public class EmployeeImpl implements EmployeeDAL {
 		}
 	}
 
-	public boolean saveUpdateAbsentList(AbsentList absentList) {
+	public boolean saveAbsentList(AbsentList absentList) {
 		boolean status;
 		try {
 			mongoTemplate.save(absentList);
@@ -78,10 +78,53 @@ public class EmployeeImpl implements EmployeeDAL {
 		}
 	}
 
-	public boolean saveUpdateContractList(ContractList contractList) {
+	public boolean saveContractList(ContractList contractList) {
 		boolean status;
 		try {
 			mongoTemplate.save(contractList);
+			status=true;
+			return status;
+		}catch(Exception e) {
+			logger.error("EmployeeImpl saveContractList error"+e.getMessage());
+			status=false;
+			return status;
+		}
+	}
+	
+	public boolean updateAbsentList(AbsentList absentList) {
+		boolean status;
+		try {
+			Update update = new Update();
+			Query query = new Query();
+			query.addCriteria(Criteria.where("employeecode").is(absentList.getEmployeecode()));
+			update.set("checkinreason", absentList.getCheckinreason());
+			update.set("checkintime", absentList.getCheckintime());
+			update.set("checkoutreason", absentList.getCheckoutreason());
+			update.set("checkouttime", absentList.getCheckouttime());
+			update.set("absent", absentList.getAbsent());
+			update.set("reason", absentList.getReason());
+			update.set("date", absentList.getDate());
+			mongoTemplate.updateFirst(query, update, AbsentList.class);
+			status=true;
+			return status;
+		}catch(Exception e) {
+			logger.error("EmployeeImpl saveAbsentList error"+e.getMessage());
+			status=false;
+			return status;
+		}
+	}
+
+	public boolean updateContractList(ContractList contractList) {
+		boolean status;
+		try {
+			Update update = new Update();
+			Query query = new Query();
+			query.addCriteria(Criteria.where("employeecode").is(contractList.getEmployeecode()));
+			update.set("filetype", contractList.getFiletype());
+			update.set("base64", contractList.getBase64());
+			update.set("contractnumber", contractList.getContractnumber());
+			update.set("date", contractList.getDate());
+			mongoTemplate.updateFirst(query, update, ContractList.class);
 			status=true;
 			return status;
 		}catch(Exception e) {
@@ -98,6 +141,47 @@ public class EmployeeImpl implements EmployeeDAL {
 		return list;
 	}
 
+	public List<AbsentList> loadAbsentList(String employeecode,String date,String type){
+		List<AbsentList> list =null;
+		if(type.equalsIgnoreCase("A")) {
+			list = mongoTemplate.findAll(AbsentList.class);	
+			logger.info("EmployeeImpl All loadAbsentList-->"+list.size());
+		}
+		if(type.equalsIgnoreCase("D")) {
+			Query query = new Query();
+			query.addCriteria(Criteria.where("employeecode").is(employeecode));
+			query.addCriteria(Criteria.where("date").is(employeecode));
+			list = mongoTemplate.find(query,AbsentList.class);
+			logger.info("EmployeeImpl Single loadAbsentList-->"+list.size());
+		}
+		if(type.equalsIgnoreCase("M")) {
+			Query query = new Query();
+			query.addCriteria(Criteria.where("employeecode").is(employeecode));
+			list = mongoTemplate.find(query,AbsentList.class);
+			logger.info("EmployeeImpl Month loadAbsentList-->"+list.size());
+		}
+		else {
+			logger.info("EmployeeImpl No Type found");
+		}
+		return list;
+	}
+	
+	public List<ContractList> loadContractList(String employeecode){
+		List<ContractList> list =null;
+		if(employeecode!=null) {
+			list = mongoTemplate.findAll(ContractList.class);	
+			logger.info("EmployeeImpl All loadContractList-->"+list.size());
+		}
+		else {
+			Query query = new Query();
+			query.addCriteria(Criteria.where("employeecode").is(employeecode));
+			list = mongoTemplate.find(query,ContractList.class);
+			logger.info("EmployeeImpl Single loadContractList-->"+list.size());
+		}
+		return list;
+	}
+
+	
 	public List<DailyReport> loadDailyReport(String id) {
 		logger.info("EmployeeImpl loadDailyReport");
 		logger.info("Id-->"+id);
