@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.bo.ErpBo;
@@ -84,23 +83,23 @@ public class EmployeeService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<?> save(@RequestBody Employee employee) {
-		System.out.println("--------save employee-------------");
+		logger.info("save employee");
 		RandomNumber randomnumber = null;
 		try {
 			randomnumber = randomnumberdal.getEmployeeRandamNumber();
 			//System.out.println("Employee Invoice random number-->" + randomnumber.getEmployeeinvoicenumber());
 			//System.out.println("Employee Invoice random code-->" + randomnumber.getEmployeeinvoicecode());
 			String employeecode = randomnumber.getCode() + randomnumber.getNumber();
-			System.out.println("Employee code-->" + employeecode);
+			logger.info("Employee code-->" + employeecode);
 			employee.setEmployeecode(employeecode);
 			employee.setAddeddate(Custom.getCurrentInvoiceDate());
-			System.out.println("Current Date --->" + Custom.getCurrentDate());
+			logger.info("Current Date-->" + Custom.getCurrentDate());
 			employee = employeedal.save(employee);
 			randomnumberdal.updateEmployeeRandamNumber(randomnumber);
 			return new ResponseEntity<>(HttpStatus.OK); 
 
 		} catch (Exception e) {
-			logger.info("Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -111,15 +110,13 @@ public class EmployeeService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/load", method = RequestMethod.GET)
 	public ResponseEntity<?> load() {
-		logger.info("------------- Inside Emplist Load-----------------");
+		logger.info("load emloyee");
 		List<Employee> responseList = null;
 		try {
-			logger.info("-----------Inside Emplist Load Called----------");
 			responseList = employeedal.load(responseList);
 			return new ResponseEntity<List<Employee>>(responseList, HttpStatus.CREATED);
-
 		} catch (Exception e) {
-			logger.info("Exception ------------->" + e.getMessage());
+			logger.info("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -130,15 +127,13 @@ public class EmployeeService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public ResponseEntity<?> get(String id) {
-		logger.info("------------- Inside get Employee -----------------");
+		logger.info("get employee");
 		List<Employee> responseList = null;
 		try {
-			logger.info("-----------Inside get employee ----------");
 			responseList = employeedal.get(id);
 			return new ResponseEntity<List<Employee>>(responseList, HttpStatus.CREATED);
-
 		} catch (Exception e) {
-			logger.info("Exception ------------->" + e.getMessage());
+			logger.info("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
 		} finally {
@@ -154,13 +149,12 @@ public class EmployeeService implements Filter {
 			logger.info("EmployeeService Id-->"+id);
 			List<DailyReport> responseList = null;
 			try {
-				logger.info("Inside try loadDailyReport");
 				responseList = employeedal.loadDailyReport(id);
 				logger.info("List Size-->"+responseList.size());
 				return new ResponseEntity<List<DailyReport>>(responseList, HttpStatus.OK);
 
 			} catch (Exception e) {
-				logger.info("Exception -->" + e.getMessage());
+				logger.info("Exception-->" + e.getMessage());
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
 			} finally {
@@ -172,6 +166,7 @@ public class EmployeeService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	public ResponseEntity<?> update(@RequestBody Employee employee) {
+		logger.info("update employee");
 		try {
 			System.out.println("Employee update inside try--->" + employee.getEmployeecode());
 			employee = employeedal.update(employee);
@@ -189,19 +184,16 @@ public class EmployeeService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/remove", method = RequestMethod.DELETE)
 	public ResponseEntity<?> remove(String employeecode) {
-
+		logger.info("remove employee");
 		try {
 			employee = new Employee();
 			logger.info("-----------Before Calling  remove employee ----------");
-			System.out.println("Remove employee code" + employeecode);
 			employeedal.remove(employeecode);
-			employee.setStatus("Success");
 			logger.info("-----------Successfully Called  remo employee ----------");
 			return new ResponseEntity<>(HttpStatus.OK); 
 
 		} catch (Exception e) {
-			logger.info("Exception ------------->" + e.getMessage());
-			employee.setStatus("failure");
+			logger.info("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -223,7 +215,7 @@ public class EmployeeService implements Filter {
 				}
 
 			} catch (Exception e) {
-				logger.info("Exception ------------->" + e.getMessage());
+				logger.info("Exception-->" + e.getMessage());
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 500
 			} finally {
 
