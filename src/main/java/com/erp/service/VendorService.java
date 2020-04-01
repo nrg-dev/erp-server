@@ -85,9 +85,9 @@ public class VendorService implements Filter {
 		RandomNumber randomnumber = null;
 		try {
 			randomnumber = randomnumberdal.getVendorRandamNumber();
-			System.out.println("Vendor Invoice random number-->" + randomnumber.getVendorinvoicenumber());
-			System.out.println("Vendor Invoice random code-->" + randomnumber.getVendorinvoicecode());
-			String invoice = randomnumber.getVendorinvoicecode() + randomnumber.getVendorinvoicenumber();
+			//System.out.println("Vendor Invoice random number-->" + randomnumber.getVendorinvoicenumber());
+			//System.out.println("Vendor Invoice random code-->" + randomnumber.getVendorinvoicecode());
+			String invoice = randomnumber.getCode() + randomnumber.getNumber();
 			System.out.println("Invoice number -->" + invoice);
 
 			vendor.setVendorcode(invoice);

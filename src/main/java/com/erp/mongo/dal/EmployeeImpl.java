@@ -15,9 +15,7 @@ import com.erp.dto.EmployeeDto;
 import com.erp.mongo.model.AbsentList;
 import com.erp.mongo.model.ContractList;
 import com.erp.mongo.model.DailyReport;
-import com.erp.mongo.model.Discount;
 import com.erp.mongo.model.Employee;
-import com.erp.mongo.model.POInvoiceDetails;
 
 @Repository
 public class EmployeeImpl implements EmployeeDAL {

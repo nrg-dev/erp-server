@@ -150,7 +150,7 @@ public class StockService implements Filter {
 		int temp = 1;
 		try {
 			randomnumber = randomnumberdal.getStockDamageRandomNumber();
-			String invoice = randomnumber.getStockreturninvoicecode() + randomnumber.getStockreturninvoicenumber();
+			String invoice = randomnumber.getCode() + randomnumber.getNumber();
 			stockreturn.setStockReturnCode(invoice);
 			System.out.println("Invoice Number -->" + stockreturn.getStockReturnCode());
 
@@ -181,7 +181,7 @@ public class StockService implements Filter {
 		int temp = 2;
 		try {
 			randomnumber = randomnumberdal.getStockDamageRandomNumber();
-			String invoice = randomnumber.getStockdamageinvoicecode() + randomnumber.getStockdamageinvoicenumber();
+			String invoice = randomnumber.getCode() + randomnumber.getNumber();
 			stockdamage.setStockDamageCode(invoice);
 			System.out.println("Product name -->" + stockdamage.getProductName());
 			System.out.println("Invoice Number -->" + stockdamage.getStockDamageCode());
@@ -306,9 +306,9 @@ public class StockService implements Filter {
 				if (jsonArr.optJSONArray(i) != null) {
 					for (int j = 0; j < arr2.length(); j++) {
 						randomnumber = randomnumberdal.getStockRandamNumber();
-						System.out.println("StockIn random number-->" + randomnumber.getStockIninvoicenumber());
-						System.out.println("StockIn random code-->" + randomnumber.getStockIninvoicecode());
-						String invoice = randomnumber.getStockIninvoicecode() + randomnumber.getStockIninvoicenumber();
+						//System.out.println("StockIn random number-->" + randomnumber.getStockIninvoicenumber());
+						//System.out.println("StockIn random code-->" + randomnumber.getStockIninvoicecode());
+						String invoice = randomnumber.getCode() + randomnumber.getNumber();
 						System.out.println("Invoice number -->" + invoice);
 						if (arr2.getJSONObject(j) != null) {
 							JSONObject jObject = arr2.getJSONObject(j);
@@ -407,9 +407,9 @@ public class StockService implements Filter {
 				if (jsonArr.optJSONArray(i) != null) {
 					for (int j = 0; j < arr2.length(); j++) {
 						randomnumber = randomnumberdal.getStockRandamNumber();
-						System.out.println("StockIn random number-->" + randomnumber.getStockIninvoicenumber());
-						System.out.println("StockIn random code-->" + randomnumber.getStockIninvoicecode());
-						String invoice = randomnumber.getStockIninvoicecode() + randomnumber.getStockIninvoicenumber();
+						///System.out.println("StockIn random number-->" + randomnumber.getStockIninvoicenumber());
+						//System.out.println("StockIn random code-->" + randomnumber.getStockIninvoicecode());
+						String invoice = randomnumber.getCode() + randomnumber.getNumber();
 						System.out.println("Invoice number -->" + invoice);
 						if (arr2.getJSONObject(j) != null) {
 							JSONObject jObject = arr2.getJSONObject(j);
@@ -532,9 +532,9 @@ public class StockService implements Filter {
 		RandomNumber randomnumber = null;
 		try {
 			randomnumber = randomnumberdal.getStockRandamNumber();
-			System.out.println("StockOut Invoice random number-->" + randomnumber.getStockOutinvoicenumber());
-			System.out.println("StockOut Invoice random code-->" + randomnumber.getStockOutinvoicecode());
-			String invoice = randomnumber.getStockOutinvoicecode() + randomnumber.getStockOutinvoicenumber();
+			//System.out.println("StockOut Invoice random number-->" + randomnumber.getStockOutinvoicenumber());
+			//System.out.println("StockOut Invoice random code-->" + randomnumber.getStockOutinvoicecode());
+			String invoice = randomnumber.getCode() + randomnumber.getNumber();
 			System.out.println("Invoice number -->" + invoice);
 			stock.setInvoicedate(Custom.getCurrentInvoiceDate());
 			stock.setInvoicenumber(invoice);

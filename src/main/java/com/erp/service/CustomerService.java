@@ -87,11 +87,11 @@ public class CustomerService implements Filter {
 		RandomNumber randomnumber = null;
 		try {
 			randomnumber = randomnumberdal.getVendorRandamNumber();
-			System.out.println("Customer  random number-->" + randomnumber.getCustomerinvoicenumber());
-			System.out.println("Customer  random code-->" + randomnumber.getCustomerinvoicecode());
-			String invoice = randomnumber.getCustomerinvoicecode() + randomnumber.getCustomerinvoicenumber();
-			System.out.println("custome code -->" + invoice);
-			customer.setCustcode(invoice);
+			//System.out.println("Customer  random number-->" + randomnumber.getCustomerinvoicenumber());
+			//System.out.println("Customer  random code-->" + randomnumber.getCustomerinvoicecode());
+			String customercode = randomnumber.getCode() + randomnumber.getNumber();
+			System.out.println("custome code -->" + customercode);
+			customer.setCustcode(customercode);
 			customer.setLastedit(Custom.getCurrentInvoiceDate());
 			customer.setAddeddate(Custom.getCurrentInvoiceDate());
 			customer = customerdal.saveCustomer(customer);

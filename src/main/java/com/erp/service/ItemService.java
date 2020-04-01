@@ -85,9 +85,9 @@ public class ItemService implements Filter {
 		RandomNumber randomnumber = null;
 		try {
 			randomnumber = randomnumberdal.getCategoryRandomNumber();
-			System.out.println("item Invoice random number-->" + randomnumber.getProductinvoicenumber());
-			System.out.println("item Invoice random code-->" + randomnumber.getProductinvoicecode());
-			String invoice = randomnumber.getProductinvoicecode() + randomnumber.getProductinvoicenumber();
+			//System.out.println("item Invoice random number-->" + randomnumber.getProductinvoicenumber());
+			//System.out.println("item Invoice random code-->" + randomnumber.getProductinvoicecode());
+			String invoice = randomnumber.getCode() + randomnumber.getNumber();
 			System.out.println("Invoice number -->" + invoice);
 			System.out.println("category code--->" + item.getCategorycode());
 			System.out.println("vendor code--->" + item.getVendorcode());
@@ -134,7 +134,7 @@ public class ItemService implements Filter {
 		RandomNumber randomnumber = null;
 		try {
 			randomnumber = randomnumberdal.getdiscountRandamNumber();
-			String invoice = randomnumber.getDiscountinvoicecode() + randomnumber.getDiscountinvoicenumber();
+			String invoice = randomnumber.getCode() + randomnumber.getNumber();
 			discount.setDiscountcode(invoice);
 			logger.info("Discount from date ------------->" + discount.getFromdate_promotionperiod());
 			logger.info("Discount To date ------------->" + discount.getTodate_promotionperiod());

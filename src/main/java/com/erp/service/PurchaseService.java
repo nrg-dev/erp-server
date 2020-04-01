@@ -136,9 +136,9 @@ public class PurchaseService implements Filter {
 			// logger.info("Vendor name --->"+vendorName);
 			// Store into parent table to show in first data table view
 			randomnumber = randomnumberdal.getRandamNumber();
-			logger.info("PO Invoice random number-->" + randomnumber.getPoinvoicenumber());
-			logger.info("PO Invoice random code-->" + randomnumber.getPoinvoicecode());
-			String invoice = randomnumber.getPoinvoicecode() + randomnumber.getPoinvoicenumber();
+			//logger.info("PO Invoice random number-->" + randomnumber.getPoinvoicenumber());
+			//logger.info("PO Invoice random code-->" + randomnumber.getPoinvoicecode());
+			String invoice = randomnumber.getCode() + randomnumber.getNumber();
 			logger.info("Invoice number -->" + invoice);
 			ArrayList<String> list = new ArrayList<String>();
 			JSONArray jsonArr = new JSONArray(purchasesearcharray);
@@ -652,11 +652,10 @@ public class PurchaseService implements Filter {
 				JSONArray arr2 = jsonArr.optJSONArray(i);
 				if (jsonArr.optJSONArray(i) != null) {
 					for (int j = 0; j < arr2.length(); j++) {
-						randomnumber = randomnumberdal.getReturnRandamNumber();
-						logger.info("PO Return random number-->" + randomnumber.getPoreturninvoicenumber());
-						logger.info("PO Return random code-->" + randomnumber.getPoreturninvoicecode());
-						String invoice = randomnumber.getPoreturninvoicecode()
-								+ randomnumber.getPoreturninvoicenumber();
+						randomnumber = randomnumberdal.getReturnRandamNumber(1);
+					//	logger.info("PO Return random number-->" + randomnumber.getPoreturninvoicenumber());
+					//	logger.info("PO Return random code-->" + randomnumber.getPoreturninvoicecode());
+						String invoice = randomnumber.getCode() + randomnumber.getNumber();
 						logger.info("Return Invoice number -->" + invoice);
 						if (arr2.getJSONObject(j) != null) {
 							JSONObject jObject = arr2.getJSONObject(j);
@@ -674,10 +673,10 @@ public class PurchaseService implements Filter {
 							poreturndetails.setInvid(j + 1);
 							logger.info("POInvoice Date --->" + poreturndetails.getPoDate());
 							purchasedal.insertReturn(poreturndetails);
-							logger.info("Invoice Number --->" + randomnumber.getPoreturninvoicenumber());
-							randomnumberdal.updateReturnRandamNumber(randomnumber);
-							logger.info(
-									"After Increament Invoice Number --->" + randomnumber.getPoreturninvoicenumber());
+							//logger.info("Invoice Number --->" + randomnumber.getPoreturninvoicenumber());
+							randomnumberdal.updatePOReturnRandamNumber(randomnumber);
+							//logger.info(
+							//		"After Increament Invoice Number --->" + randomnumber.getPoreturninvoicenumber());
 
 						} else {
 							logger.info("Null....");

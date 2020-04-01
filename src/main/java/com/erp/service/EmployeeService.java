@@ -88,11 +88,11 @@ public class EmployeeService implements Filter {
 		RandomNumber randomnumber = null;
 		try {
 			randomnumber = randomnumberdal.getEmployeeRandamNumber();
-			System.out.println("Employee Invoice random number-->" + randomnumber.getEmployeeinvoicenumber());
-			System.out.println("Employee Invoice random code-->" + randomnumber.getEmployeeinvoicecode());
-			String invoice = randomnumber.getEmployeeinvoicecode() + randomnumber.getEmployeeinvoicenumber();
-			System.out.println("Invoice number -->" + invoice);
-			employee.setEmployeecode(invoice);
+			//System.out.println("Employee Invoice random number-->" + randomnumber.getEmployeeinvoicenumber());
+			//System.out.println("Employee Invoice random code-->" + randomnumber.getEmployeeinvoicecode());
+			String employeecode = randomnumber.getCode() + randomnumber.getNumber();
+			System.out.println("Employee code-->" + employeecode);
+			employee.setEmployeecode(employeecode);
 			employee.setAddeddate(Custom.getCurrentInvoiceDate());
 			System.out.println("Current Date --->" + Custom.getCurrentDate());
 			employee = employeedal.save(employee);

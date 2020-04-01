@@ -78,8 +78,8 @@ public class CategoryService implements Filter {
 		RandomNumber randomnumber = null;
 		try {
 			randomnumber = randomnumberdal.getCategoryRandomNumber();
-			String invoice = randomnumber.getCategoryinvoicecode() + randomnumber.getCategoryinvoicenumber();
-			category.setCategorycode(invoice);
+			String categorycode = randomnumber.getCode() + randomnumber.getNumber();
+			category.setCategorycode(categorycode);
 			logger.info("Category name -->" + category.getName());
 			category = categorydal.saveCategory(category);
 			if (category.getStatus().equalsIgnoreCase("success")) {

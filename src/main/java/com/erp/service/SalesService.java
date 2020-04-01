@@ -134,9 +134,9 @@ public class SalesService implements Filter {
 			// logger.info("Vendor name --->"+vendorName);
 			// Store into parent table to show in first data table view
 			randomnumber = randomnumberdal.getRandamNumber();
-			System.out.println("SO Invoice random number-->" + randomnumber.getSalesinvoicenumber());
-			System.out.println("SO Invoice random code-->" + randomnumber.getSalesinvoicecode());
-			String invoice = randomnumber.getSalesinvoicecode() + randomnumber.getSalesinvoicenumber();
+			//System.out.println("SO Invoice random number-->" + randomnumber.getSalesinvoicenumber());
+			//System.out.println("SO Invoice random code-->" + randomnumber.getSalesinvoicecode());
+			String invoice = randomnumber.getCode() + randomnumber.getNumber();
 			System.out.println("Invoice number -->" + invoice);
 			ArrayList<String> list = new ArrayList<String>();
 			JSONArray jsonArr = new JSONArray(salesorderarray);
@@ -575,11 +575,10 @@ public class SalesService implements Filter {
 				JSONArray arr2 = jsonArr.optJSONArray(i);
 				if (jsonArr.optJSONArray(i) != null) {
 					for (int j = 0; j < arr2.length(); j++) {
-						randomnumber = randomnumberdal.getReturnRandamNumber();
-						System.out.println("SO Return random number-->" + randomnumber.getSoreturninvoicenumber());
-						System.out.println("SO Return random code-->" + randomnumber.getSoreturninvoicecode());
-						String invoice = randomnumber.getSoreturninvoicecode()
-								+ randomnumber.getSoreturninvoicenumber();
+						randomnumber = randomnumberdal.getReturnRandamNumber(2);
+						//System.out.println("SO Return random number-->" + randomnumber.getSoreturninvoicenumber());
+						//System.out.println("SO Return random code-->" + randomnumber.getSoreturninvoicecode());
+						String invoice = randomnumber.getCode() + randomnumber.getNumber();
 						System.out.println("Sales Return Invoice number -->" + invoice);
 						if (arr2.getJSONObject(j) != null) {
 							JSONObject jObject = arr2.getJSONObject(j);
@@ -597,10 +596,10 @@ public class SalesService implements Filter {
 							soreturndetails.setInvid(j + 1);
 							logger.info("POInvoice Date --->" + soreturndetails.getSoDate());
 							salesdal.insertReturn(soreturndetails);
-							logger.info("Invoice Number --->" + randomnumber.getSoreturninvoicenumber());
+							//logger.info("Invoice Number --->" + randomnumber.getSoreturninvoicenumber());
 							randomnumberdal.updateSalesReturnRandamNumber(randomnumber);
-							logger.info(
-									"After Increament Invoice Number --->" + randomnumber.getSoreturninvoicenumber());
+						//	logger.info(
+						//			"After Increament Invoice Number --->" + randomnumber.getSoreturninvoicenumber());
 
 						} else {
 							System.out.println("Null....");

@@ -31,8 +31,8 @@ public interface RandomNumberDAL {
 	public boolean updateSalesRandamNumber(RandomNumber randomnumber);
 	public boolean updateSalesReturnRandamNumber(RandomNumber randomnumber);
 
-	public RandomNumber getReturnRandamNumber();
-	public boolean updateReturnRandamNumber(RandomNumber randomnumber);
+	public RandomNumber getReturnRandamNumber(int i);
+	public boolean updatePOReturnRandamNumber(RandomNumber randomnumber);
 
 	
 	public RandomNumber getStockDamageRandomNumber();
