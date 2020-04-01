@@ -135,7 +135,7 @@ public class PurchaseService implements Filter {
 			logger.info("Post Json -->" + purchasesearcharray);
 			// logger.info("Vendor name --->"+vendorName);
 			// Store into parent table to show in first data table view
-			randomnumber = randomnumberdal.getRandamNumber();
+			randomnumber = randomnumberdal.getRandamNumber(1);
 			//logger.info("PO Invoice random number-->" + randomnumber.getPoinvoicenumber());
 			//logger.info("PO Invoice random code-->" + randomnumber.getPoinvoicecode());
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
@@ -429,8 +429,16 @@ public class PurchaseService implements Filter {
 	@RequestMapping(value = "/savePO", method = RequestMethod.POST)
 	public ResponseEntity<?> savePO(@RequestBody PurchaseOrder purchaseorder) {
 		logger.info("------------- Inside loadPO -----------------");
+		RandomNumber randomnumber = null;
 		try {
+			randomnumber = randomnumberdal.getRandamNumber(1);
+			String pocode = randomnumber.getCode() + randomnumber.getNumber();
+			System.out.println("purchase code -->" + pocode);
+			purchaseorder.setPocode(pocode);
 			purchaseorder = purchasedal.savePO(purchaseorder);
+			if (purchaseorder.getStatus().equalsIgnoreCase("success")) {
+				randomnumberdal.updateRandamNumber(randomnumber);
+			}
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
 		} finally {

@@ -21,6 +21,7 @@ public class PurchaseOrder {
 	private String date;
 	private String description;
 	private String status;
+	private String pocode;
 	public String getId() {
 		return id;
 	}
@@ -106,6 +107,12 @@ public class PurchaseOrder {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public String getPocode() {
+		return pocode;
+	}
+	public void setPocode(String pocode) {
+		this.pocode = pocode;
 	}
 
 

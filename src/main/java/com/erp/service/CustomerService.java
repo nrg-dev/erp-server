@@ -86,7 +86,7 @@ public class CustomerService implements Filter {
 		System.out.println("--------save customer-------------");
 		RandomNumber randomnumber = null;
 		try {
-			randomnumber = randomnumberdal.getVendorRandamNumber();
+			randomnumber = randomnumberdal.getCustomerRandamNumber();
 			//System.out.println("Customer  random number-->" + randomnumber.getCustomerinvoicenumber());
 			//System.out.println("Customer  random code-->" + randomnumber.getCustomerinvoicecode());
 			String customercode = randomnumber.getCode() + randomnumber.getNumber();

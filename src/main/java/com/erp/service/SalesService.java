@@ -133,7 +133,7 @@ public class SalesService implements Filter {
 			System.out.println("Post Json -->" + salesorderarray);
 			// logger.info("Vendor name --->"+vendorName);
 			// Store into parent table to show in first data table view
-			randomnumber = randomnumberdal.getRandamNumber();
+			randomnumber = randomnumberdal.getRandamNumber(2);
 			//System.out.println("SO Invoice random number-->" + randomnumber.getSalesinvoicenumber());
 			//System.out.println("SO Invoice random code-->" + randomnumber.getSalesinvoicecode());
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();

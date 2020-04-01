@@ -234,6 +234,7 @@ public class PurchaseImpl implements PurchaseDAL {
 	
 	public PurchaseOrder savePO(PurchaseOrder purchaseorder) {
 		mongoTemplate.save(purchaseorder);
+		purchaseorder.setStatus("success"); 
 		return purchaseorder;
 	}
 	

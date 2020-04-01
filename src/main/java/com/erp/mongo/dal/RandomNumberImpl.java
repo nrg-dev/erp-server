@@ -28,13 +28,17 @@ public class RandomNumberImpl implements RandomNumberDAL {
 	 */
 
 	@Override
-	public RandomNumber getRandamNumber() {
+	public RandomNumber getRandamNumber(int i) {
 		RandomNumber radomNumber = null;
 		try {
 			logger.info("----------- Inside getRandamNumber-----------");
 			Query query = new Query();
 			logger.info("-----------  Before addCriteria-----------");
-			query.addCriteria(Criteria.where("randomID").is(1));
+			if(i == 1) {
+				query.addCriteria(Criteria.where("randomID").is(6));
+			}else if(i == 2) {
+				query.addCriteria(Criteria.where("randomID").is(7));
+			}
 			logger.info("-----------  After addCriteria-----------");
 			radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
 		//	logger.info("PO Invoice number ----------->" + radomNumber.getPoinvoicenumber());
@@ -54,9 +58,9 @@ public class RandomNumberImpl implements RandomNumberDAL {
 	public boolean updateRandamNumber(RandomNumber rn) {
 		logger.info("Code | Number -->" + rn.getCode() + "|" +rn.getNumber());
 		Query query = new Query();
-		query.addCriteria(Criteria.where("randomID").is(1));
+		query.addCriteria(Criteria.where("randomID").is(6));
 		Update update = new Update();
-		update.set("poinvoicenumber", rn.getNumber() + 1);
+		update.set("number", rn.getNumber() + 1);
 		mongoTemplate.updateFirst(query, update, RandomNumber.class);// (query, RandamNumber.class);
 		return true;// mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
 	}
@@ -93,6 +97,28 @@ public class RandomNumberImpl implements RandomNumberDAL {
 
 		}
 	}
+	
+	// ---- Vendor and customer RandomCade Getting ---
+		@Override
+		public RandomNumber getCustomerRandamNumber() {
+			RandomNumber radomNumber = null;
+			try {
+				logger.info("----------- Inside getCustomerRandamNumber-----------");
+				Query query = new Query();
+				logger.info("-----------  Before addCriteria-----------");
+				query.addCriteria(Criteria.where("randomID").is(2));
+				logger.info("-----------  After addCriteria-----------");
+				radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
+				logger.info("Code-->" + radomNumber.getCode());
+				logger.info("Number-->" + radomNumber.getNumber());
+				return radomNumber;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return radomNumber;
+			} finally {
+
+			}
+		}
 
 	@Override
 	public boolean updateVendorRandamNumber(RandomNumber rn, int num) {
@@ -144,13 +170,17 @@ public class RandomNumberImpl implements RandomNumberDAL {
 
 	// Category and product RandomNumber Getting
 	@Override
-	public RandomNumber getCategoryRandomNumber() {
+	public RandomNumber getCategoryRandomNumber(int i) {
 		RandomNumber radomNumber = null;
 		try {
 			logger.info("----------- Inside getcategory and prod RandamNumber-----------");
 			Query query = new Query();
 			logger.info("-----------  Before addCriteria-----------");
-			query.addCriteria(Criteria.where("randomID").is(5));
+			if(i == 1) {
+				query.addCriteria(Criteria.where("randomID").is(5));
+			}else if(i == 2) {
+				query.addCriteria(Criteria.where("randomID").is(4));
+			}
 			logger.info("-----------  After addCriteria-----------");
 			radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
 			logger.info("Code-->" + radomNumber.getCode());

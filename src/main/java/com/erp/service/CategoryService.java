@@ -77,7 +77,7 @@ public class CategoryService implements Filter {
 		logger.info("saveCategory");
 		RandomNumber randomnumber = null;
 		try {
-			randomnumber = randomnumberdal.getCategoryRandomNumber();
+			randomnumber = randomnumberdal.getCategoryRandomNumber(1);
 			String categorycode = randomnumber.getCode() + randomnumber.getNumber();
 			category.setCategorycode(categorycode);
 			logger.info("Category name -->" + category.getName());

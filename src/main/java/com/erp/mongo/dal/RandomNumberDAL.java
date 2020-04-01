@@ -4,12 +4,14 @@ import com.erp.mongo.model.RandomNumber;
 
 public interface RandomNumberDAL {
 
-	public RandomNumber getRandamNumber();
+	public RandomNumber getRandamNumber(int i);
 
 	public boolean updateRandamNumber(RandomNumber rn);
 
 	// --- Vendor Dal Random Calling --
 	public RandomNumber getVendorRandamNumber();
+	//---- Customer Dal Random Calling ---
+	public RandomNumber getCustomerRandamNumber();
 
 	public boolean updateVendorRandamNumber(RandomNumber rn, int num);
 
@@ -19,7 +21,7 @@ public interface RandomNumberDAL {
 	public boolean updateEmployeeRandamNumber(RandomNumber rn);
 
 	// ----Category and product RandomDAL Calling
-	public RandomNumber getCategoryRandomNumber();
+	public RandomNumber getCategoryRandomNumber(int i);
 
 	public boolean updateCategoryRandamNumber(RandomNumber rn, int num);
 
@@ -40,5 +42,6 @@ public interface RandomNumberDAL {
 
 	public RandomNumber getStockRandamNumber();  
 	public boolean updateStockRandamNumber(RandomNumber randomnumber,int temp);
+
 
 }

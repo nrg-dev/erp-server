@@ -84,7 +84,7 @@ public class ItemService implements Filter {
 		System.out.println("--------save product-------------");
 		RandomNumber randomnumber = null;
 		try {
-			randomnumber = randomnumberdal.getCategoryRandomNumber();
+			randomnumber = randomnumberdal.getCategoryRandomNumber(2);
 			//System.out.println("item Invoice random number-->" + randomnumber.getProductinvoicenumber());
 			//System.out.println("item Invoice random code-->" + randomnumber.getProductinvoicecode());
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
