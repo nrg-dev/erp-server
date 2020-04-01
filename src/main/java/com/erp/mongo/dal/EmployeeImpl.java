@@ -48,7 +48,7 @@ public class EmployeeImpl implements EmployeeDAL {
 			else {
 				update = new Update();
 				query = new Query();
-				query.addCriteria(Criteria.where("_id").is(employeeDto.getId()));
+				query.addCriteria(Criteria.where("employeecode").is(employeeDto.getId()));
 				update.set("report", employeeDto.getReport());
 				mongoTemplate.updateFirst(query, update, DailyReport.class);
 			}

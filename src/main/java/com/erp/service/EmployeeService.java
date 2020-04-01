@@ -247,8 +247,8 @@ public class EmployeeService implements Filter {
 	
 	    // Save Daily Report
 		@CrossOrigin(origins = "http://localhost:8080")
-		@RequestMapping(value = "/saveUpdateDailyReport", method = RequestMethod.POST)
-		public ResponseEntity<?> saveUpdateDailyReport(@RequestBody EmployeeDto employeeDto) {
+		@RequestMapping(value = "/saveDailyReport", method = RequestMethod.POST)
+		public ResponseEntity<?> saveDailyReport(@RequestBody EmployeeDto employeeDto) {
 			logger.info("saveDailyReport");
 			try {
 				boolean status = employeedal.saveUpdateDailyReport(employeeDto);
@@ -265,6 +265,28 @@ public class EmployeeService implements Filter {
 
 			}
 		}
+		
+			// Save Daily Report
+			@CrossOrigin(origins = "http://localhost:8080")
+			@RequestMapping(value = "/updateDailyReport", method = RequestMethod.PUT)
+			public ResponseEntity<?> updateDailyReport(@RequestBody EmployeeDto employeeDto) {
+				logger.info("updateDailyReport");
+				try {
+					boolean status = employeedal.saveUpdateDailyReport(employeeDto);
+					if(status) {
+						return new ResponseEntity<>(HttpStatus.OK); 
+					} else {
+						return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+					}
+
+				} catch (Exception e) {
+					logger.info("Exception-->" + e.getMessage());
+					return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 500
+				} finally {
+
+				}
+			}
+				
 		
 		// Save Absent
 		@CrossOrigin(origins = "http://localhost:8080")
