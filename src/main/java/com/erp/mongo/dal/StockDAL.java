@@ -2,7 +2,6 @@ package com.erp.mongo.dal;
 
 import java.util.List;
 
-import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.SOReturnDetails;

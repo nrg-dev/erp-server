@@ -10,6 +10,7 @@ import com.erp.mongo.model.SOInvoiceDetails;
 import com.erp.mongo.model.SOReturnDetails;
 
 public interface SalesDAL {
+	
 	public SOInvoice saveSOInvoice(SOInvoice soinvoice);
 
 	public SOInvoiceDetails saveSales(SOInvoiceDetails purchaseorder);
@@ -37,6 +38,7 @@ public interface SalesDAL {
 	public SOInvoice updateSOInvoice(SOInvoice soinvoice);
 	
 	public SOInvoice loadSOInvoice(String invoicenumber);
+	
 	public ArrayList<String> loadCustomerName();
 
 	public List<SOInvoice> loadfilterData(List<SOInvoice> response, String fromdate, String todate);   

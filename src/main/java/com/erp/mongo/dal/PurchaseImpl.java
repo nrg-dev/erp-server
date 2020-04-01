@@ -11,8 +11,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import com.erp.dto.Purchase;
-import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
@@ -34,27 +32,22 @@ public class PurchaseImpl implements PurchaseDAL {
 
 	// Save PO Invoice
 	public POInvoice savePOInvoice(POInvoice poinvoice) {
-		System.out.println("Before save Invoice");
+		logger.info("savePOInvoice");
+		logger.info("Before save Invoice");
 		mongoTemplate.save(poinvoice);
-		System.out.println("After save Invoice");
+		logger.info("After save Invoice");
 		return poinvoice;
 	}
 
 	// Save PO Invoice details
 	@Override
 	public POInvoiceDetails savePurchase(POInvoiceDetails purchaseorder) {
-		System.out.println("Before save PO Invoice details");
+		logger.info("Before save PO Invoice details");
 		mongoTemplate.save(purchaseorder);
-		System.out.println("After save Invoice details");
+		logger.info("After save Invoice details");
 		return purchaseorder;
 	}
 
-	/*
-	 * @Override public PurchaseOrder savePurchase(PurchaseOrder purchaseorder) {
-	 * //mongoTemplate.insert(customer);//(query, RandamNumber.class);
-	 * mongoTemplate.save(purchaseorder); //po.setStatus("success"); return
-	 * purchaseorder; }
-	 */
 	public List<Vendor> loadVendorList(List<Vendor> list) {
 		list = mongoTemplate.findAll(Vendor.class);// .find(query, OwnTree.class); return
 		return list;
@@ -177,8 +170,7 @@ public class PurchaseImpl implements PurchaseDAL {
 	public POInvoice updatePOInvoice(POInvoice purchase) {
 		Update update = new Update();
 		Query query = new Query();
-		query.addCriteria(Criteria.where("invoicenumber").is(purchase.getInvoicenumber()));
-		
+		query.addCriteria(Criteria.where("invoicenumber").is(purchase.getInvoicenumber()));		
 		update.set("invoicedate", purchase.getInvoicedate());
 		update.set("invoicenumber", purchase.getInvoicenumber());
 		update.set("vendorname", purchase.getVendorname());
@@ -194,9 +186,9 @@ public class PurchaseImpl implements PurchaseDAL {
 	// Save PO Return details
 	@Override
 	public POReturnDetails insertReturn(POReturnDetails purchasereturn) {
-		System.out.println("Before save PO Return details");
+		logger.info("Before save PO Return details");
 		mongoTemplate.save(purchasereturn);
-		System.out.println("After save PO Return details");
+		logger.info("After save PO Return details");
 		return purchasereturn;
 	}
 	

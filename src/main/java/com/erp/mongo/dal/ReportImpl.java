@@ -22,6 +22,7 @@ public class ReportImpl implements ReportDAL {
 
 	// employee load
 	public List<Employee> employeeReport(List<Employee> employeelist) {
+		logger.info("employeeReport");
 		employeelist = mongoTemplate.findAll(Employee.class);
 		return employeelist;
 
@@ -29,6 +30,7 @@ public class ReportImpl implements ReportDAL {
 
 	// purchase load
 	public List<POInvoice> purchaseReport(List<POInvoice> purchaselist) {
+		logger.info("purchaseReport");
 		purchaselist = mongoTemplate.findAll(POInvoice.class);
 		return purchaselist;
 
@@ -36,10 +38,9 @@ public class ReportImpl implements ReportDAL {
 
 	// sales load
 	public List<SOInvoice> salesReport(List<SOInvoice> saleslist) {
-		logger.info("------------- Inside salesReport imp-----------------");
+		logger.info("salesReport");
 		saleslist = mongoTemplate.findAll(SOInvoice.class);
 		return saleslist;
-
 	}
 
 }

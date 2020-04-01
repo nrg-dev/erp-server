@@ -29,6 +29,7 @@ public class RandomNumberImpl implements RandomNumberDAL {
 
 	@Override
 	public RandomNumber getRandamNumber(int i) {
+		logger.info("getRandamNumber");
 		RandomNumber radomNumber = null;
 		try {
 			logger.info("----------- Inside getRandamNumber-----------");
@@ -41,8 +42,6 @@ public class RandomNumberImpl implements RandomNumberDAL {
 			}
 			logger.info("-----------  After addCriteria-----------");
 			radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
-		//	logger.info("PO Invoice number ----------->" + radomNumber.getPoinvoicenumber());
-		//	logger.info("SO Invoice number ----------->" + radomNumber.getSalesinvoicenumber());
 			return radomNumber;// mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -56,6 +55,7 @@ public class RandomNumberImpl implements RandomNumberDAL {
 
 	@Override
 	public boolean updateRandamNumber(RandomNumber rn) {
+		logger.info("updateRandamNumber");
 		logger.info("Code | Number -->" + rn.getCode() + "|" +rn.getNumber());
 		Query query = new Query();
 		query.addCriteria(Criteria.where("randomID").is(6));
@@ -67,6 +67,7 @@ public class RandomNumberImpl implements RandomNumberDAL {
 
 	@Override
 	public boolean updateSalesRandamNumber(RandomNumber rn) {
+		logger.info("updateSalesRandamNumber");
 		logger.info("Code | Number -->" + rn.getCode() + "|" +rn.getNumber());
 		Query query = new Query();
 		query.addCriteria(Criteria.where("randomID").is(7));
@@ -79,6 +80,7 @@ public class RandomNumberImpl implements RandomNumberDAL {
 	// ---- Vendor and customer RandomCade Getting ---
 	@Override
 	public RandomNumber getVendorRandamNumber() {
+		logger.info("getVendorRandamNumber");
 		RandomNumber radomNumber = null;
 		try {
 			logger.info("----------- Inside getVendorRandamNumber-----------");
@@ -101,6 +103,7 @@ public class RandomNumberImpl implements RandomNumberDAL {
 	// ---- Vendor and customer RandomCade Getting ---
 		@Override
 		public RandomNumber getCustomerRandamNumber() {
+			logger.info("getCustomerRandamNumber");
 			RandomNumber radomNumber = null;
 			try {
 				logger.info("----------- Inside getCustomerRandamNumber-----------");
@@ -122,6 +125,7 @@ public class RandomNumberImpl implements RandomNumberDAL {
 
 	@Override
 	public boolean updateVendorRandamNumber(RandomNumber rn, int num) {
+		logger.info("updateVendorRandamNumber");
 		logger.info("Code | Number -->" + rn.getCode() + "|" +rn.getNumber());
 		Query query = new Query();
 		Update update = new Update();
@@ -139,6 +143,7 @@ public class RandomNumberImpl implements RandomNumberDAL {
 	// ---- Employee RandomCode Getting ---
 	@Override
 	public RandomNumber getEmployeeRandamNumber() {
+		logger.info("getEmployeeRandamNumber");
 		RandomNumber radomNumber = null;
 		try {
 			logger.info("----------- Inside getEmployeeRandamNumber-----------");
@@ -159,6 +164,7 @@ public class RandomNumberImpl implements RandomNumberDAL {
 
 	@Override
 	public boolean updateEmployeeRandamNumber(RandomNumber rn) {
+		logger.info("updateEmployeeRandamNumber");
 		logger.info("Code | Number -->" + rn.getCode() + "|" +rn.getNumber());
 		Query query = new Query();
 		query.addCriteria(Criteria.where("randomID").is(1));
@@ -171,6 +177,7 @@ public class RandomNumberImpl implements RandomNumberDAL {
 	// Category and product RandomNumber Getting
 	@Override
 	public RandomNumber getCategoryRandomNumber(int i) {
+		logger.info("getCategoryRandomNumber");
 		RandomNumber radomNumber = null;
 		try {
 			logger.info("----------- Inside getcategory and prod RandamNumber-----------");
@@ -196,6 +203,7 @@ public class RandomNumberImpl implements RandomNumberDAL {
 
 	@Override
 	public boolean updateCategoryRandamNumber(RandomNumber rn, int num) {
+		logger.info("updateCategoryRandamNumber");
 		logger.info("Code | Number -->" + rn.getCode() + "|" +rn.getNumber());
 		logger.info("Number for category -->" + num);
 		Query query = new Query();
@@ -214,6 +222,7 @@ public class RandomNumberImpl implements RandomNumberDAL {
 	// Discount RandomNumber Getting
 	@Override
 	public RandomNumber getdiscountRandamNumber() {
+		logger.info("getdiscountRandamNumber");
 		RandomNumber radomNumber = null;
 		try {
 			logger.info("----------- Inside discount RandamNumber-----------");
@@ -235,6 +244,7 @@ public class RandomNumberImpl implements RandomNumberDAL {
 
 	@Override
 	public boolean updatediscountRandamNumber(RandomNumber rn) {
+		logger.info("updatediscountRandamNumber");
 		logger.info("Code | Number -->" + rn.getCode() + "|" +rn.getNumber());
 		Query query = new Query();
 		query.addCriteria(Criteria.where("randomID").is(15));
@@ -246,6 +256,7 @@ public class RandomNumberImpl implements RandomNumberDAL {
 
 	@Override
 	public RandomNumber getReturnRandamNumber(int i) {
+		logger.info("getReturnRandamNumber");
 		RandomNumber radomNumber = null;
 		try {
 			logger.info("----------- Inside getReturnRandamNumber-----------");
@@ -273,6 +284,7 @@ public class RandomNumberImpl implements RandomNumberDAL {
 
 	@Override
 	public boolean updatePOReturnRandamNumber(RandomNumber rn) {
+		logger.info("updatePOReturnRandamNumber");
 		logger.info("Code | Number -->" + rn.getCode() + "|" +rn.getNumber());
 		Query query = new Query();
 		query.addCriteria(Criteria.where("randomID").is(8));
@@ -284,6 +296,7 @@ public class RandomNumberImpl implements RandomNumberDAL {
 
 	@Override
 	public boolean updateSalesReturnRandamNumber(RandomNumber rn) {
+		logger.info("updateSalesReturnRandamNumber");
 		logger.info("Code | Number -->" + rn.getCode() + "|" +rn.getNumber());
 		Query query = new Query();
 		query.addCriteria(Criteria.where("randomID").is(9));
@@ -296,6 +309,7 @@ public class RandomNumberImpl implements RandomNumberDAL {
 	// Category and product RandomNumber Getting
 	@Override
 	public RandomNumber getStockDamageRandomNumber() {
+		logger.info("getStockDamageRandomNumber");
 		RandomNumber radomNumber = null;
 		try {
 			logger.info("----------- Inside getStockDamageRandomNumber -----------");
@@ -317,6 +331,7 @@ public class RandomNumberImpl implements RandomNumberDAL {
 
 	@Override
 	public boolean updateStockDamRandamNumber(RandomNumber rn, int temp) {
+		logger.info("updateStockDamRandamNumber");
 		logger.info("Code | Number -->" + rn.getCode() + "|" +rn.getNumber());
 		Query query = new Query();
 		Update update = new Update();
@@ -336,6 +351,7 @@ public class RandomNumberImpl implements RandomNumberDAL {
 	
 	@Override
 	public RandomNumber getStockRandamNumber() {
+		logger.info("getStockRandamNumber");
 		RandomNumber radomNumber = null;
 		try {
 			logger.info("----------- Inside getStockRandamNumber -----------");
@@ -356,6 +372,7 @@ public class RandomNumberImpl implements RandomNumberDAL {
 	
 	@Override
 	public boolean updateStockRandamNumber(RandomNumber rn, int temp) {
+		logger.info("updateStockRandamNumber");
 		logger.info("Number-->" + rn.getNumber());
 		Query query = new Query();
 		Update update = new Update();

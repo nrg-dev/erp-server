@@ -11,16 +11,13 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
-import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOReturnDetails;
 import com.erp.mongo.model.Stock;
 import com.erp.mongo.model.StockDamage;
 import com.erp.mongo.model.StockInDetails;
 import com.erp.mongo.model.StockReturn;
-import com.erp.mongo.model.Vendor;
 
 @Repository
 public class StockImpl implements StockDAL {
