@@ -134,13 +134,12 @@ public class CustomerService implements Filter {
 	// get
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public ResponseEntity<?> geCustomer(String id) {
-		logger.info("------------- Inside getTempPublicTree-----------------");
+	public ResponseEntity<?> geCustomer(String custcode) {
+		logger.info("geCustomer");
 		List<Customer> responseList = null;
 		try {
-			logger.info("-----------Inside getTempPublicTree Called----------");
-			responseList = customerdal.getCustomer(id);
-			return new ResponseEntity<List<Customer>>(responseList, HttpStatus.CREATED);
+			responseList = customerdal.getCustomer(custcode);
+			return new ResponseEntity<List<Customer>>(responseList, HttpStatus.OK);
 
 		} catch (Exception e) {
 			logger.info("Exception ------------->" + e.getMessage());

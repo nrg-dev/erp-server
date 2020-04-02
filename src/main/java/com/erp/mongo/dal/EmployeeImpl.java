@@ -211,8 +211,13 @@ public class EmployeeImpl implements EmployeeDAL {
 
 	
 	// get
-	public List<Employee> get(String id) {
-		List<Employee> list = null;
+	public List<Employee> get(String employeecode) {
+		logger.info("get");
+		List<Employee> list=null;
+		Query query = new Query();
+		query.addCriteria(Criteria.where("employeecode").is(employeecode));
+		list = mongoTemplate.find(query,Employee.class);
+		logger.info("EmployeeImpl Single DailyReportSize-->"+list.size());
 		return list;
 	}
 

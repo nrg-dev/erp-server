@@ -45,10 +45,11 @@ public class VendorImpl implements VendorDAL {
 
 	// get
 	@Override
-	public List<Vendor> getVendor(String primaryKey) {
+	public List<Vendor> getVendor(String vendorcode) {
 		List<Vendor> list;
 		Query query = new Query();
-		query.addCriteria(Criteria.where("userID").is(Integer.valueOf(primaryKey)));
+		//query.addCriteria(Criteria.where("userID").is(Integer.valueOf(primaryKey)));
+		query.addCriteria(Criteria.where("vendorcode").is(vendorcode));
 		list = mongoTemplate.find(query, Vendor.class);
 		return list;
 		// return mongoTemplate.find(query, Publictree.class);

@@ -8,7 +8,7 @@ public interface VendorDAL {
 
 	public Vendor saveVendor(Vendor vendor);
 
-	public List<Vendor> getVendor(String id);
+	public List<Vendor> getVendor(String vendorcode);
 
 	public Vendor updateVendor(Vendor vendor);
 

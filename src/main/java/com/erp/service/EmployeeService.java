@@ -128,11 +128,11 @@ public class EmployeeService implements Filter {
 	// get
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public ResponseEntity<?> get(String id) {
+	public ResponseEntity<?> get(String employeecode) {
 		logger.info("get employee");
 		List<Employee> responseList = null;
 		try {
-			responseList = employeedal.get(id);
+			responseList = employeedal.get(employeecode);
 			return new ResponseEntity<List<Employee>>(responseList, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.info("Exception-->" + e.getMessage());
@@ -212,7 +212,7 @@ public class EmployeeService implements Filter {
 	public ResponseEntity<?> update(@RequestBody Employee employee) {
 		logger.info("update employee");
 		try {
-			System.out.println("Employee update inside try--->" + employee.getEmployeecode());
+			logger.info("Employee update inside try--->" + employee.getEmployeecode());
 			employee = employeedal.update(employee);
 			return new ResponseEntity<>(HttpStatus.OK); 
 

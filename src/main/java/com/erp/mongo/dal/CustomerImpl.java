@@ -37,10 +37,10 @@ public class CustomerImpl implements CustomerDAL {
 
 	// get
 	@Override
-	public List<Customer> getCustomer(String primaryKey) {
+	public List<Customer> getCustomer(String custcode) {
 		List<Customer> list;
 		Query query = new Query();
-		query.addCriteria(Criteria.where("userID").is(Integer.valueOf(primaryKey)));
+		query.addCriteria(Criteria.where("custcode").is(custcode));
 		list = mongoTemplate.find(query, Customer.class);
 		return list;
 		// return mongoTemplate.find(query, Publictree.class);

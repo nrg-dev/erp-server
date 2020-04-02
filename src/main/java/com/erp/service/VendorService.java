@@ -110,10 +110,9 @@ public class VendorService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/load", method = RequestMethod.GET)
 	public ResponseEntity<?> loadVendor() {
-		logger.info("------------- Inside load vendor-----------------");
+		logger.info("loadVendor");
 		List<Vendor> responseList = null;
 		try {
-			logger.info("-----------Inside load vendor Called----------");
 			responseList = vendordal.loadVendor(responseList);
 			return new ResponseEntity<List<Vendor>>(responseList, HttpStatus.CREATED);
 
@@ -154,12 +153,12 @@ public class VendorService implements Filter {
 	// get
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public ResponseEntity<?> geVendor(String id) {
+	public ResponseEntity<?> geVendor(String vendorcode) {
 		logger.info("------------- Inside get Vendor -----------------");
 		List<Vendor> responseList = null;
 		try {
 			logger.info("-----------Inside get Vendor Called----------");
-			responseList = vendordal.getVendor(id);
+			responseList = vendordal.getVendor(vendorcode);
 			return new ResponseEntity<List<Vendor>>(responseList, HttpStatus.CREATED);
 
 		} catch (Exception e) {
