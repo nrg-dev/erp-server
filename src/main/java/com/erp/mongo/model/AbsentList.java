@@ -16,6 +16,19 @@ public class AbsentList {
 	 String absent;
 	 String reason;
 	 String date;
+	 
+	 public AbsentList(String employeecode,String checkinreason,String checkintime,
+			 String checkoutreason,String checkouttime,String absent,String reason,String date){
+		 this.employeecode=employeecode;
+		 this.checkinreason=checkinreason;
+		 this.checkintime=checkintime;
+		 this.checkoutreason=checkoutreason;
+		 this.checkouttime=checkouttime;
+		 this.absent=absent;
+		 this.reason=reason;
+		 this.date=date;
+	 }
+	 
 	public String getId() {
 		return id;
 	}

@@ -433,7 +433,7 @@ public class PurchaseService implements Filter {
 		try {
 			randomnumber = randomnumberdal.getRandamNumber(1);
 			String pocode = randomnumber.getCode() + randomnumber.getNumber();
-			System.out.println("purchase code -->" + pocode);
+			logger.info("purchase code -->" + pocode);
 			purchaseorder.setPocode(pocode);
 			purchaseorder = purchasedal.savePO(purchaseorder);
 			if (purchaseorder.getStatus().equalsIgnoreCase("success")) {

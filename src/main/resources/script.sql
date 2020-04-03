@@ -35,6 +35,9 @@ db.pOInvoice.find();
 db.pOInvoice.remove( { } )
 db.pOInvoiceDetails.find();
 db.pOInvoiceDetails.remove( { } )
+-- New
+db.purchaseOrder.find();
+db.purchaseOrder.remove( { } )
 
 -- PurchaseReturn
 db.pOReturnDetails.find();
@@ -47,8 +50,8 @@ db.sOInvoiceDetails.find();
 db.sOInvoiceDetails.remove( { } )
 
 -- employee
-db.employee.drop()
 db.employee.find();
+db.employee.drop()
 db.employee.remove( { } )
 
 -- Customer

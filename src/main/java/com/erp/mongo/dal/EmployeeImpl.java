@@ -31,6 +31,7 @@ public class EmployeeImpl implements EmployeeDAL {
 
 	// save
 	public Employee save(Employee employee) {
+		logger.info("Employee Status-->"+employee.getStatus());
 		mongoTemplate.save(employee);
 		return employee;
 	}
@@ -65,10 +66,34 @@ public class EmployeeImpl implements EmployeeDAL {
 		}
 	}
 
-	public boolean saveAbsentList(AbsentList absentList) {
+	public boolean saveAbsentList(EmployeeDto employeeDto) {
 		boolean status;
+		Update update = null;//new Update();
+		Query query = null;//new Query();
+		AbsentList absentList=null;
 		try {
-			mongoTemplate.save(absentList);
+			if(employeeDto.getType().equalsIgnoreCase("save")) {
+				absentList=new AbsentList(
+						employeeDto.getEmployeecode(),employeeDto.getCheckinreason(),
+						employeeDto.getCheckintime(),employeeDto.getCheckoutreason(),
+						employeeDto.getCheckouttime(),employeeDto.getAbsent(),
+						employeeDto.getReason(),employeeDto.getDate());
+				mongoTemplate.save(absentList);
+			}
+			else {
+				update = new Update();
+				query = new Query();
+				query.addCriteria(Criteria.where("employeecode").is(employeeDto.getId()));
+				query.addCriteria(Criteria.where("date").is(employeeDto.getDate()));
+				update.set("checkinreason", employeeDto.getCheckinreason());
+				update.set("checkintime", employeeDto.getCheckintime());
+				update.set("checkoutreason", employeeDto.getCheckoutreason());
+				update.set("checkouttime", employeeDto.getCheckouttime());
+				update.set("absent", employeeDto.getAbsent());
+				update.set("reason", employeeDto.getReason());
+				update.set("date", employeeDto.getDate());
+				mongoTemplate.updateFirst(query, update, DailyReport.class);
+			}
 			status=true;
 			return status;
 		}catch(Exception e) {
@@ -91,28 +116,21 @@ public class EmployeeImpl implements EmployeeDAL {
 		}
 	}
 	
-	public boolean updateAbsentList(AbsentList absentList) {
-		boolean status;
-		try {
-			Update update = new Update();
-			Query query = new Query();
-			query.addCriteria(Criteria.where("employeecode").is(absentList.getEmployeecode()));
-			update.set("checkinreason", absentList.getCheckinreason());
-			update.set("checkintime", absentList.getCheckintime());
-			update.set("checkoutreason", absentList.getCheckoutreason());
-			update.set("checkouttime", absentList.getCheckouttime());
-			update.set("absent", absentList.getAbsent());
-			update.set("reason", absentList.getReason());
-			update.set("date", absentList.getDate());
-			mongoTemplate.updateFirst(query, update, AbsentList.class);
-			status=true;
-			return status;
-		}catch(Exception e) {
-			logger.error("EmployeeImpl saveAbsentList error"+e.getMessage());
-			status=false;
-			return status;
-		}
-	}
+	/*
+	 * public boolean updateAbsentList(AbsentList absentList) { boolean status; try
+	 * { Update update = new Update(); Query query = new Query();
+	 * query.addCriteria(Criteria.where("employeecode").is(absentList.
+	 * getEmployeecode())); update.set("checkinreason",
+	 * absentList.getCheckinreason()); update.set("checkintime",
+	 * absentList.getCheckintime()); update.set("checkoutreason",
+	 * absentList.getCheckoutreason()); update.set("checkouttime",
+	 * absentList.getCheckouttime()); update.set("absent", absentList.getAbsent());
+	 * update.set("reason", absentList.getReason()); update.set("date",
+	 * absentList.getDate()); mongoTemplate.updateFirst(query, update,
+	 * AbsentList.class); status=true; return status; }catch(Exception e) {
+	 * logger.error("EmployeeImpl saveAbsentList error"+e.getMessage());
+	 * status=false; return status; } }
+	 */
 
 	public boolean updateContractList(ContractList contractList) {
 		boolean status;
@@ -150,7 +168,7 @@ public class EmployeeImpl implements EmployeeDAL {
 		if(type.equalsIgnoreCase("D")) {
 			Query query = new Query();
 			query.addCriteria(Criteria.where("employeecode").is(employeecode));
-			query.addCriteria(Criteria.where("date").is(employeecode));
+			query.addCriteria(Criteria.where("date").is(date));
 			list = mongoTemplate.find(query,AbsentList.class);
 			logger.info("EmployeeImpl Single loadAbsentList-->"+list.size());
 		}
@@ -182,31 +200,29 @@ public class EmployeeImpl implements EmployeeDAL {
 	}
 
 	
-	public List<DailyReport> loadDailyReport(String id) {
-		logger.info("EmployeeImpl loadDailyReport");
-		logger.info("Id-->"+id);
-		List<DailyReport> list=null;
-		try {
-			if(id == null) {		
-			logger.info("Inside If");
-			list = mongoTemplate.findAll(DailyReport.class);
-			logger.info("EmployeeImpl All DailyReportSize-->"+list.size());
-
+	public List<DailyReport> loadDailyReport(String employeecode,String date,String type) {
+		List<DailyReport> list =null;
+		if(type.equalsIgnoreCase("A")) {
+			list = mongoTemplate.findAll(DailyReport.class);	
+			logger.info("EmployeeImpl All loadDailyReport-->"+list.size());
 		}
-		else {
-			logger.info("Inside else");
+		if(type.equalsIgnoreCase("D")) {
 			Query query = new Query();
-			//query.addCriteria(Criteria.where("id").is(id));
-			query.addCriteria(Criteria.where("_id").is(id));
+			query.addCriteria(Criteria.where("employeecode").is(employeecode));
+			query.addCriteria(Criteria.where("date").is(date));
 			list = mongoTemplate.find(query,DailyReport.class);
-			logger.info("EmployeeImpl Single DailyReportSize-->"+list.size());
+			logger.info("EmployeeImpl Single loadDailyReport-->"+list.size());
 		}
-			return list;
-
-		}catch(Exception e) {
-			return list;
+		if(type.equalsIgnoreCase("M")) {
+			Query query = new Query();
+			query.addCriteria(Criteria.where("employeecode").is(employeecode));
+			list = mongoTemplate.find(query,DailyReport.class);
+			logger.info("EmployeeImpl Month loadDailyReport-->"+list.size());
 		}
-		//return list;
+		else if(list.size()==0){
+			logger.info("EmployeeImpl loadDailyReport No Type found");
+		}
+		return list;
 	}
 
 	

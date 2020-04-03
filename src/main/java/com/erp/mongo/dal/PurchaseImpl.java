@@ -225,6 +225,8 @@ public class PurchaseImpl implements PurchaseDAL {
 	}
 	
 	public PurchaseOrder savePO(PurchaseOrder purchaseorder) {
+		logger.info("DAO PurchaseOrder");
+		logger.info("PO Number-->"+purchaseorder.getPocode());
 		mongoTemplate.save(purchaseorder);
 		purchaseorder.setStatus("success"); 
 		return purchaseorder;
