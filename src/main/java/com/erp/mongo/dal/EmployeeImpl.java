@@ -67,12 +67,14 @@ public class EmployeeImpl implements EmployeeDAL {
 	}
 
 	public boolean saveAbsentList(EmployeeDto employeeDto) {
+		logger.info("Inside saveAbsentList");
 		boolean status;
 		Update update = null;//new Update();
 		Query query = null;//new Query();
 		AbsentList absentList=null;
 		try {
 			if(employeeDto.getType().equalsIgnoreCase("save")) {
+				logger.info("Inside saveAbsentList save");
 				absentList=new AbsentList(
 						employeeDto.getEmployeecode(),employeeDto.getCheckinreason(),
 						employeeDto.getCheckintime(),employeeDto.getCheckoutreason(),
@@ -81,9 +83,18 @@ public class EmployeeImpl implements EmployeeDAL {
 				mongoTemplate.save(absentList);
 			}
 			else {
+				logger.info("Inside saveAbsentList update");
+				logger.info("Employee code-->"+employeeDto.getEmployeecode());
+				logger.info("Date-->"+employeeDto.getDate());
+				logger.info("CheckInReason-->"+employeeDto.getCheckinreason());
+				logger.info("CheckInTime-->"+employeeDto.getCheckintime());
+				logger.info("CheckOutReason-->"+employeeDto.getCheckoutreason());
+				logger.info("CheckOutTime-->"+employeeDto.getCheckouttime());
+				logger.info("Absent-->"+employeeDto.getAbsent());
+				logger.info("Reason-->"+employeeDto.getReason());
 				update = new Update();
 				query = new Query();
-				query.addCriteria(Criteria.where("employeecode").is(employeeDto.getId()));
+				query.addCriteria(Criteria.where("employeecode").is(employeeDto.getEmployeecode()));
 				query.addCriteria(Criteria.where("date").is(employeeDto.getDate()));
 				update.set("checkinreason", employeeDto.getCheckinreason());
 				update.set("checkintime", employeeDto.getCheckintime());
@@ -92,7 +103,7 @@ public class EmployeeImpl implements EmployeeDAL {
 				update.set("absent", employeeDto.getAbsent());
 				update.set("reason", employeeDto.getReason());
 				update.set("date", employeeDto.getDate());
-				mongoTemplate.updateFirst(query, update, DailyReport.class);
+				mongoTemplate.updateFirst(query, update, AbsentList.class);
 			}
 			status=true;
 			return status;
@@ -100,6 +111,10 @@ public class EmployeeImpl implements EmployeeDAL {
 			logger.error("EmployeeImpl saveAbsentList error"+e.getMessage());
 			status=false;
 			return status;
+		}
+		finally {
+			update=null;
+			query=null;
 		}
 	}
 
