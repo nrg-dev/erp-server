@@ -10,7 +10,7 @@ import com.erp.mongo.model.Employee;
 
 public interface EmployeeDAL {
 
-	public Employee save(Employee employee);
+	public boolean save(Employee employee);
 
 	public List<Employee> load(List<Employee> list);
 

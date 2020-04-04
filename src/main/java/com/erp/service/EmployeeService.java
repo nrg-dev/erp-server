@@ -85,21 +85,35 @@ public class EmployeeService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<?> save(@RequestBody Employee employee) {
-		logger.info("save employee");
+		logger.info("save & update employee");
 		RandomNumber randomnumber = null;
+		boolean status;
 		try {
-			randomnumber = randomnumberdal.getEmployeeRandamNumber();
-			//System.out.println("Employee Invoice random number-->" + randomnumber.getEmployeeinvoicenumber());
-			//System.out.println("Employee Invoice random code-->" + randomnumber.getEmployeeinvoicecode());
-			String employeecode = randomnumber.getCode() + randomnumber.getNumber();
-			logger.info("Employee code-->" + employeecode);
-			employee.setEmployeecode(employeecode);
-			employee.setAddeddate(Custom.getCurrentInvoiceDate());
-			employee.setStatus("Active");
-			logger.info("Current Date-->" + Custom.getCurrentDate());
-			employee = employeedal.save(employee);
-			randomnumberdal.updateEmployeeRandamNumber(randomnumber);
-			return new ResponseEntity<>(HttpStatus.OK); 
+			if(employee.getEmployeecode()!=null) {
+				logger.info("update employee");
+				status = employeedal.save(employee);
+			}
+			else {
+				logger.info("save employee");
+				randomnumber = randomnumberdal.getEmployeeRandamNumber();
+				String employeecode = randomnumber.getCode() + randomnumber.getNumber();
+				logger.info("Employee code-->" + employeecode);
+				employee.setEmployeecode(employeecode);
+				employee.setAddeddate(Custom.getCurrentInvoiceDate());
+				employee.setStatus("Active");
+				logger.info("Current Date-->" + Custom.getCurrentDate());
+				status = employeedal.save(employee);
+				randomnumberdal.updateEmployeeRandamNumber(randomnumber);
+			}
+
+			if(status) {
+				return new ResponseEntity<>(HttpStatus.OK); 
+
+			}else {
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+
+			}
+			//return new ResponseEntity<>(HttpStatus.OK); 
 
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
@@ -207,23 +221,24 @@ public class EmployeeService implements Filter {
 			}
 		}
 		
-	// update
-	@CrossOrigin(origins = "http://localhost:8080")
-	@RequestMapping(value = "/update", method = RequestMethod.PUT)
-	public ResponseEntity<?> update(@RequestBody Employee employee) {
-		logger.info("update employee");
-		try {
-			logger.info("Employee update inside try--->" + employee.getEmployeecode());
-			employee = employeedal.update(employee);
-			return new ResponseEntity<>(HttpStatus.OK); 
-
-		} catch (Exception e) {
-			logger.info("Exception ------------->" + e.getMessage());
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		} finally {
-
-		}
-	}
+	/*
+	 * // update
+	 * 
+	 * @CrossOrigin(origins = "http://localhost:8080")
+	 * 
+	 * @RequestMapping(value = "/update", method = RequestMethod.PUT) public
+	 * ResponseEntity<?> update(@RequestBody Employee employee) {
+	 * logger.info("update employee"); try {
+	 * logger.info("Employee update inside try--->" + employee.getEmployeecode());
+	 * employee = employeedal.update(employee); return new
+	 * ResponseEntity<>(HttpStatus.OK);
+	 * 
+	 * } catch (Exception e) { logger.info("Exception ------------->" +
+	 * e.getMessage()); return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+	 * finally {
+	 * 
+	 * } }
+	 */
 
 	// Remove
 	@CrossOrigin(origins = "http://localhost:8080")

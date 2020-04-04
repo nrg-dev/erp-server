@@ -30,10 +30,55 @@ public class EmployeeImpl implements EmployeeDAL {
 	 */
 
 	// save
-	public Employee save(Employee employee) {
-		logger.info("Employee Status-->"+employee.getStatus());
-		mongoTemplate.save(employee);
-		return employee;
+	public boolean save(Employee employee) {
+		logger.info("Employee Code-->"+employee.getEmployeecode());
+		logger.info("Employee name-->"+employee.getName());
+		logger.info("rank-->"+employee.getRank());
+		logger.info("phonenumber-->"+employee.getPhonenumber());
+		logger.info("email-->"+employee.getEmail());
+		logger.info("dob-->"+employee.getDob());
+		logger.info("contractnumber-->"+employee.getContractnumber());
+		logger.info("npwp-->"+employee.getNpwp());
+		logger.info("bpjs-->"+employee.getBpjs());
+		logger.info("monthlysalary-->"+employee.getMonthlysalary());
+		logger.info("workHour-->"+employee.getWorkHour());
+		logger.info("annualLeave-->"+employee.getAnnualLeave());
+		boolean status;
+		try {
+			// Update
+			if(employee.getEmployeecode()!=null) {
+				logger.info("Inside Upate");
+				Update update = new Update();
+				Query query = new Query();
+				query.addCriteria(Criteria.where("employeecode").is(employee.getEmployeecode()));
+				update.set("name", employee.getName());
+				update.set("rank", employee.getRank());
+				update.set("phonenumber", employee.getPhonenumber());
+				update.set("address", employee.getAddress());
+				update.set("email", employee.getEmail());
+				update.set("dob", employee.getDob());
+				update.set("contractnumber", employee.getContractnumber());
+				update.set("npwp", employee.getNpwp());
+				update.set("bpjs", employee.getBpjs());
+				update.set("monthlysalary", employee.getMonthlysalary());
+				update.set("workHour", employee.getWorkHour());
+				update.set("annualLeave", employee.getAnnualLeave());
+				mongoTemplate.updateFirst(query, update, Employee.class);
+				status=true;
+			}
+			// Save
+			else {
+				logger.info("Inside Save");
+				mongoTemplate.save(employee);
+				status=true;		
+			}
+			return status;
+		}catch(Exception e) {
+			logger.error("Exception-->"+e.getMessage());
+			status=false;
+			return status;
+		}
+
 	}
 	
 	public boolean saveUpdateDailyReport(EmployeeDto employeeDto) {
@@ -42,20 +87,40 @@ public class EmployeeImpl implements EmployeeDAL {
 		Query query = null;//new Query();
 		DailyReport dailyReport=null;
 		try {
-			if(employeeDto.getType().equalsIgnoreCase("save")) {
-				dailyReport=new DailyReport(employeeDto.getEmployeecode(),employeeDto.getDate(),employeeDto.getReport());
-				mongoTemplate.save(dailyReport);
-			}
-			else {
-				update = new Update();
-				query = new Query();
-				query.addCriteria(Criteria.where("employeecode").is(employeeDto.getId()));
-				update.set("report", employeeDto.getReport());
-				mongoTemplate.updateFirst(query, update, DailyReport.class);
-			}
+			query = new Query();
+		
+		query.addCriteria(Criteria.where("employeecode").is(employeeDto.getEmployeecode()));
+		query.addCriteria(Criteria.where("date").is(employeeDto.getDate()));
+		List<DailyReport> list = mongoTemplate.find(query,DailyReport.class);
+		if(list.size()>0) {
+			// update
+			update = new Update();
+			query = new Query();
+			query.addCriteria(Criteria.where("employeecode").is(employeeDto.getEmployeecode()));
+			query.addCriteria(Criteria.where("date").is(employeeDto.getDate()));
+			update.set("report", employeeDto.getReport());
+			mongoTemplate.updateFirst(query, update, DailyReport.class);
 			status=true;
-			return status;
-		}catch(Exception e) {
+		}
+		else {
+            // save
+			dailyReport=new DailyReport(employeeDto.getEmployeecode(),employeeDto.getDate(),employeeDto.getReport());
+			mongoTemplate.save(dailyReport);
+			status=true;
+		}
+		return status;
+	}
+		/*try {
+			
+			 * if(employeeDto.getType().equalsIgnoreCase("save")) { dailyReport=new
+			 * DailyReport(employeeDto.getEmployeecode(),employeeDto.getDate(),employeeDto.
+			 * getReport()); mongoTemplate.save(dailyReport); } else { update = new
+			 * Update(); query = new Query();
+			 * query.addCriteria(Criteria.where("employeecode").is(employeeDto.getId()));
+			 * update.set("report", employeeDto.getReport());
+			 * mongoTemplate.updateFirst(query, update, DailyReport.class); } status=true;
+			 * return status;
+			 }*/ catch(Exception e) {
 			logger.error("EmployeeImpl saveDailyReport error"+e.getMessage());
 			status=false;
 			return status;
@@ -73,16 +138,12 @@ public class EmployeeImpl implements EmployeeDAL {
 		Query query = null;//new Query();
 		AbsentList absentList=null;
 		try {
-			if(employeeDto.getType().equalsIgnoreCase("save")) {
-				logger.info("Inside saveAbsentList save");
-				absentList=new AbsentList(
-						employeeDto.getEmployeecode(),employeeDto.getCheckinreason(),
-						employeeDto.getCheckintime(),employeeDto.getCheckoutreason(),
-						employeeDto.getCheckouttime(),employeeDto.getAbsent(),
-						employeeDto.getReason(),employeeDto.getDate());
-				mongoTemplate.save(absentList);
-			}
-			else {
+			
+			query = new Query();
+			query.addCriteria(Criteria.where("employeecode").is(employeeDto.getEmployeecode()));
+			query.addCriteria(Criteria.where("date").is(employeeDto.getDate()));
+			List<AbsentList> list = mongoTemplate.find(query,AbsentList.class);
+			if(list.size()>0) {
 				logger.info("Inside saveAbsentList update");
 				logger.info("Employee code-->"+employeeDto.getEmployeecode());
 				logger.info("Date-->"+employeeDto.getDate());
@@ -104,7 +165,48 @@ public class EmployeeImpl implements EmployeeDAL {
 				update.set("reason", employeeDto.getReason());
 				update.set("date", employeeDto.getDate());
 				mongoTemplate.updateFirst(query, update, AbsentList.class);
+			
 			}
+			else {
+
+				logger.info("Inside saveAbsentList save");
+				absentList=new AbsentList(
+						employeeDto.getEmployeecode(),employeeDto.getCheckinreason(),
+						employeeDto.getCheckintime(),employeeDto.getCheckoutreason(),
+						employeeDto.getCheckouttime(),employeeDto.getAbsent(),
+						employeeDto.getReason(),employeeDto.getDate());
+				mongoTemplate.save(absentList);
+			
+			}
+			/*
+			 * if(employeeDto.getType().equalsIgnoreCase("save")) {
+			 * logger.info("Inside saveAbsentList save"); absentList=new AbsentList(
+			 * employeeDto.getEmployeecode(),employeeDto.getCheckinreason(),
+			 * employeeDto.getCheckintime(),employeeDto.getCheckoutreason(),
+			 * employeeDto.getCheckouttime(),employeeDto.getAbsent(),
+			 * employeeDto.getReason(),employeeDto.getDate());
+			 * mongoTemplate.save(absentList); } else {
+			 * logger.info("Inside saveAbsentList update");
+			 * logger.info("Employee code-->"+employeeDto.getEmployeecode());
+			 * logger.info("Date-->"+employeeDto.getDate());
+			 * logger.info("CheckInReason-->"+employeeDto.getCheckinreason());
+			 * logger.info("CheckInTime-->"+employeeDto.getCheckintime());
+			 * logger.info("CheckOutReason-->"+employeeDto.getCheckoutreason());
+			 * logger.info("CheckOutTime-->"+employeeDto.getCheckouttime());
+			 * logger.info("Absent-->"+employeeDto.getAbsent());
+			 * logger.info("Reason-->"+employeeDto.getReason()); update = new Update();
+			 * query = new Query();
+			 * query.addCriteria(Criteria.where("employeecode").is(employeeDto.
+			 * getEmployeecode()));
+			 * query.addCriteria(Criteria.where("date").is(employeeDto.getDate()));
+			 * update.set("checkinreason", employeeDto.getCheckinreason());
+			 * update.set("checkintime", employeeDto.getCheckintime());
+			 * update.set("checkoutreason", employeeDto.getCheckoutreason());
+			 * update.set("checkouttime", employeeDto.getCheckouttime());
+			 * update.set("absent", employeeDto.getAbsent()); update.set("reason",
+			 * employeeDto.getReason()); update.set("date", employeeDto.getDate());
+			 * mongoTemplate.updateFirst(query, update, AbsentList.class); }
+			 */
 			status=true;
 			return status;
 		}catch(Exception e) {

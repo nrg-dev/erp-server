@@ -104,6 +104,10 @@ APILocalUrl
 { "apiurl": "http://localhost:8095/erp/" } 
 
 
+== update
+db.randomNumber.update({"_id" :ObjectId("5e85bd01818f68e96d0a4f19") },{$set : {"number":10012}})
+
+
 Login Insert Query
 ===================
 db.login.insertOne({ "invnumber":"INVLO001","username":"admin","password":"admin","status":"Active","userOtp":""});
