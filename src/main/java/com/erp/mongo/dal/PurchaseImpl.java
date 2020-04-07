@@ -54,11 +54,19 @@ public class PurchaseImpl implements PurchaseDAL {
 
 	}
 
-	public List<POInvoice> loadPurchase(List<POInvoice> list) {
+	/*
+	 * public List<POInvoice> loadPurchase(List<POInvoice> list) { //
+	 * List<PurchaseOrder> list = mongoTemplate.findAll(POInvoice.class);//
+	 * .find(query, OwnTree.class); return return list; }
+	 */
+	
+	public List<POInvoice> loadInvoice(){
 		// List<PurchaseOrder>
-		list = mongoTemplate.findAll(POInvoice.class);// .find(query, OwnTree.class); return
+		List<POInvoice> list = mongoTemplate.findAll(POInvoice.class);// Load Invoice
 		return list;
+	
 	}
+
 
 	// get Purchase on Impl
 	@Override
@@ -165,24 +173,21 @@ public class PurchaseImpl implements PurchaseDAL {
 		return poinvoice;
 	}
 	
-	// update POInvoice
-	@Override
-	public POInvoice updatePOInvoice(POInvoice purchase) {
-		Update update = new Update();
-		Query query = new Query();
-		query.addCriteria(Criteria.where("invoicenumber").is(purchase.getInvoicenumber()));		
-		update.set("invoicedate", purchase.getInvoicedate());
-		update.set("invoicenumber", purchase.getInvoicenumber());
-		update.set("vendorname", purchase.getVendorname());
-		update.set("deliveryprice", purchase.getDeliveryprice());
-		update.set("totalqty", purchase.getTotalqty());
-		update.set("totalprice", purchase.getTotalprice());
-		update.set("totalitem", purchase.getTotalitem());
-		update.set("status", purchase.getStatus());
-		mongoTemplate.updateFirst(query, update, POInvoice.class);
-		return purchase;
-	}
-
+	/*
+	 * // update POInvoice
+	 * 
+	 * @Override public POInvoice updatePOInvoice(POInvoice purchase) { Update
+	 * update = new Update(); Query query = new Query();
+	 * query.addCriteria(Criteria.where("invoicenumber").is(purchase.
+	 * getInvoicenumber())); update.set("invoicedate", purchase.getInvoicedate());
+	 * update.set("invoicenumber", purchase.getInvoicenumber());
+	 * update.set("vendorname", purchase.getVendorname());
+	 * update.set("deliveryprice", purchase.getDeliveryprice());
+	 * update.set("totalqty", purchase.getTotalqty()); update.set("totalprice",
+	 * purchase.getTotalprice()); update.set("totalitem", purchase.getTotalitem());
+	 * update.set("status", purchase.getStatus()); mongoTemplate.updateFirst(query,
+	 * update, POInvoice.class); return purchase; }
+	 */
 	// Save PO Return details
 	@Override
 	public POReturnDetails insertReturn(POReturnDetails purchasereturn) {
@@ -230,6 +235,23 @@ public class PurchaseImpl implements PurchaseDAL {
 		mongoTemplate.save(purchaseorder);
 		purchaseorder.setStatus("success"); 
 		return purchaseorder;
+	}
+	
+	// Update PO With Invoice Number
+	public boolean updatePO(String invoice,String[] value) {
+		logger.info("DAO updatePO");
+		Update update = null;//new Update();
+		Query query = null;//new Query();
+		for(String v:value) {
+			update = new Update();
+			query = new Query();
+			logger.info("PO numbers-->"+v);
+			query.addCriteria(Criteria.where("pocode").is(v));
+			update.set("invoicenumber", invoice);
+			mongoTemplate.updateFirst(query, update, PurchaseOrder.class);
+		}
+		logger.info("updatePO done!");
+		return true;
 	}
 	
 	// Update PO order

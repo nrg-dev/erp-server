@@ -22,6 +22,7 @@ public class PurchaseOrder {
 	private String description;
 	private String status;
 	private String pocode;
+	private String invoicenumber;
 	public String getId() {
 		return id;
 	}
@@ -113,6 +114,12 @@ public class PurchaseOrder {
 	}
 	public void setPocode(String pocode) {
 		this.pocode = pocode;
+	}
+	public String getInvoicenumber() {
+		return invoicenumber;
+	}
+	public void setInvoicenumber(String invoicenumber) {
+		this.invoicenumber = invoicenumber;
 	}
 
 

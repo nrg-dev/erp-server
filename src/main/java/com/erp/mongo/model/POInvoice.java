@@ -1,5 +1,7 @@
 package com.erp.mongo.model;
 
+import java.sql.Blob;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -11,11 +13,13 @@ public class POInvoice {
 	private String invoicedate;
 	private String invoicenumber;
 	private String vendorname;
-	private int    totalqty;
-	private String deliveryprice;
+	private String vendorcode;
+	private int    qty;
+	private int    subtotal;
+	private int deliveryprice;
 	private int    totalprice;
+	private Blob base64;
 	private String status;
-	private int    totalitem;
 
 	public String getId() {
 		return id;
@@ -49,22 +53,7 @@ public class POInvoice {
 		this.vendorname = vendorname;
 	}
 
-	public int getTotalqty() {
-		return totalqty;
-	}
-
-	public void setTotalqty(int totalqty) {
-		this.totalqty = totalqty;
-	}
-
-	public String getDeliveryprice() {
-		return deliveryprice;
-	}
-
-	public void setDeliveryprice(String deliveryprice) {
-		this.deliveryprice = deliveryprice;
-	}
-
+	
 	public int getTotalprice() {
 		return totalprice;
 	}
@@ -81,13 +70,46 @@ public class POInvoice {
 		this.status = status;
 	}
 
-	public int getTotalitem() {
-		return totalitem;
+	public String getVendorcode() {
+		return vendorcode;
 	}
 
-	public void setTotalitem(int totalitem) {
-		this.totalitem = totalitem;
+	public void setVendorcode(String vendorcode) {
+		this.vendorcode = vendorcode;
 	}
 
+	public int getQty() {
+		return qty;
+	}
+
+	public void setQty(int qty) {
+		this.qty = qty;
+	}
+
+	public int getSubtotal() {
+		return subtotal;
+	}
+
+	public void setSubtotal(int subtotal) {
+		this.subtotal = subtotal;
+	}
+
+	public int getDeliveryprice() {
+		return deliveryprice;
+	}
+
+	public void setDeliveryprice(int deliveryprice) {
+		this.deliveryprice = deliveryprice;
+	}
+
+	public Blob getBase64() {
+		return base64;
+	}
+
+	public void setBase64(Blob base64) {
+		this.base64 = base64;
+	}
+
+	
 	 
 }
