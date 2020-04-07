@@ -35,11 +35,11 @@ public class RandomNumberImpl implements RandomNumberDAL {
 			logger.info("----------- Inside getRandamNumber-----------");
 			Query query = new Query();
 			logger.info("-----------  Before addCriteria-----------");
-			if(i == 1) {
-				query.addCriteria(Criteria.where("randomID").is(6));
-			}else if(i == 2) {
-				query.addCriteria(Criteria.where("randomID").is(7));
-			}
+			//if(i == 10) {
+				query.addCriteria(Criteria.where("randomID").is(i));
+		//	}else if(i == 2) {
+			//	query.addCriteria(Criteria.where("randomID").is(7));
+		//	}
 			logger.info("-----------  After addCriteria-----------");
 			radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
 			return radomNumber;// mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);

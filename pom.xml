@@ -259,6 +259,12 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     <artifactId>spring-boot-starter-thymeleaf</artifactId>
 </dependency>
 				
+		<dependency>
+            <groupId>com.lowagie</groupId>
+            <artifactId>itext</artifactId>
+            <version>4.2.2</version>
+         </dependency>
+        
 	</dependencies>
 	<build>
 		      <finalName>erpserver</finalName>

@@ -49,6 +49,7 @@ import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.Vendor;
 import com.erp.util.Custom;
+import com.erp.util.PDFGenerator;
 
 @SpringBootApplication
 @RestController
@@ -118,7 +119,7 @@ public class PurchaseService implements Filter {
 	
 
 	    // Create Invoice
-		@CrossOrigin(origins = "http://localhost:4200")
+		@CrossOrigin(origins = "http://localhost:8080")
 		@PostMapping(value = "/createInvoice")
 		public ResponseEntity<?> createInvoice(@RequestBody POInvoiceDto poinvoicedto) {
 			logger.info("createInvoice");
@@ -127,7 +128,7 @@ public class PurchaseService implements Filter {
 			logger.info("Sub Total-->" + poinvoicedto.getSubtotal());
 			logger.info("Delivery Charge-->" + poinvoicedto.getDeliverycharge());
 			logger.info("Total Price-->" + poinvoicedto.getTotalprice());
-			logger.info("Total Qty-->" + poinvoicedto.getTotalqty());
+			//logger.info("Total Qty-->" + poinvoicedto.getTotalqty());
 			RandomNumber randomnumber = null;
 			try {
 				logger.info("Delivery Charge-->"+poinvoicedto.getDeliverycharge());
@@ -144,6 +145,8 @@ public class PurchaseService implements Filter {
 				poinvoice.setSubtotal(poinvoicedto.getSubtotal());
 				poinvoice.setDeliveryprice(poinvoicedto.getDeliverycharge());
 				poinvoice.setTotalprice(poinvoicedto.getSubtotal()+poinvoicedto.getDeliverycharge());
+				String base64=PDFGenerator.getBase64();
+				poinvoice.setBase64(base64);
 				purchasedal.savePOInvoice(poinvoice);
 				logger.info("createInvoice done!");
 				return new ResponseEntity<>(HttpStatus.OK); // 200

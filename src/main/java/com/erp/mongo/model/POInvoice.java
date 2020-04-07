@@ -18,7 +18,7 @@ public class POInvoice {
 	private int    subtotal;
 	private int deliveryprice;
 	private int    totalprice;
-	private Blob base64;
+	private String base64;
 	private String status;
 
 	public String getId() {
@@ -102,11 +102,11 @@ public class POInvoice {
 		this.deliveryprice = deliveryprice;
 	}
 
-	public Blob getBase64() {
+	public String getBase64() {
 		return base64;
 	}
 
-	public void setBase64(Blob base64) {
+	public void setBase64(String base64) {
 		this.base64 = base64;
 	}
 

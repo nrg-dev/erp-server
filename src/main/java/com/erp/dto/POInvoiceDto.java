@@ -4,18 +4,12 @@ public class POInvoiceDto {
 
 	String createddate;
 	String[] ordernumbers;
-	int totalqty;
-	public int getTotalqty() {
-		return totalqty;
-	}
-
-	public void setTotalqty(int totalqty) {
-		this.totalqty = totalqty;
-	}
-
 	int subtotal;
 	int deliverycharge;
 	int totalprice;
+	
+
+
 	public String getCreateddate() {
 		return createddate;
 	}
