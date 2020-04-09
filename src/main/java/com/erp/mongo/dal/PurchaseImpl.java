@@ -242,16 +242,28 @@ public class PurchaseImpl implements PurchaseDAL {
 		logger.info("DAO updatePO");
 		Update update = null;//new Update();
 		Query query = null;//new Query();
-		for(String v:value) {
-			update = new Update();
-			query = new Query();
-			logger.info("PO numbers-->"+v);
-			query.addCriteria(Criteria.where("pocode").is(v));
-			update.set("invoicenumber", invoice);
-			mongoTemplate.updateFirst(query, update, PurchaseOrder.class);
+		String changestatus="Invoiced";
+		try {
+			for(String v:value) {
+				update = new Update();
+				query = new Query();
+				logger.info("PO numbers-->"+v);
+				query.addCriteria(Criteria.where("pocode").is(v));
+				update.set("invoicenumber", invoice);
+				update.set("status", changestatus);
+				mongoTemplate.updateFirst(query, update, PurchaseOrder.class);
+			}
+			logger.info("updatePO done!");
+			return true;
+		}catch(Exception e) {
+			logger.error("Exception-->"+e.getMessage());
+			return false;
+		}finally {
+			changestatus=null;
+			update=null;
+			query=null;
 		}
-		logger.info("updatePO done!");
-		return true;
+		
 	}
 	
 	// Update PO order
@@ -276,7 +288,7 @@ public class PurchaseImpl implements PurchaseDAL {
 		}
 			
 
-	// Remove
+		// Remove
 		public boolean removePO(String id) {
 			logger.info("PO delete Id-->"+id);
 			logger.info("PO delete start");
@@ -284,7 +296,6 @@ public class PurchaseImpl implements PurchaseDAL {
 			query.addCriteria(Criteria.where("_id").is(id));
 			mongoTemplate.remove(query, PurchaseOrder.class);
 			logger.info("PO deleted"+id);
-
 			return true;
 		}
 		

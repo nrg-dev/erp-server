@@ -6,7 +6,7 @@ public interface RandomNumberDAL {
 
 	public RandomNumber getRandamNumber(int i);
 
-	public boolean updateRandamNumber(RandomNumber rn);
+	public boolean updateRandamNumber(RandomNumber rn,int id);
 
 	// --- Vendor Dal Random Calling --
 	public RandomNumber getVendorRandamNumber();

@@ -120,7 +120,8 @@ public class PurchaseService implements Filter {
 
 	    // Create Invoice
 		@CrossOrigin(origins = "http://localhost:8080")
-		@PostMapping(value = "/createInvoice")
+		//@PostMapping(value = "/createInvoice")
+		@RequestMapping(value = "/createInvoice", method = RequestMethod.POST)
 		public ResponseEntity<?> createInvoice(@RequestBody POInvoiceDto poinvoicedto) {
 			logger.info("createInvoice");
 			logger.info("Invoice Date --->" + poinvoicedto.getCreateddate());
@@ -130,9 +131,10 @@ public class PurchaseService implements Filter {
 			logger.info("Total Price-->" + poinvoicedto.getTotalprice());
 			//logger.info("Total Qty-->" + poinvoicedto.getTotalqty());
 			RandomNumber randomnumber = null;
+			int randomId=10;
 			try {
 				logger.info("Delivery Charge-->"+poinvoicedto.getDeliverycharge());
-				randomnumber = randomnumberdal.getRandamNumber(10);
+				randomnumber = randomnumberdal.getRandamNumber(randomId);
 				String invoice = randomnumber.getCode() + randomnumber.getNumber();
 				logger.info("Invoice number -->" + invoice);
 				// Update Invoice Number and get Vendor name and code
@@ -148,6 +150,8 @@ public class PurchaseService implements Filter {
 				String base64=PDFGenerator.getBase64();
 				poinvoice.setBase64(base64);
 				purchasedal.savePOInvoice(poinvoice);
+				// Update Random number table
+				randomnumberdal.updateRandamNumber(randomnumber,randomId);
 				logger.info("createInvoice done!");
 				return new ResponseEntity<>(HttpStatus.OK); // 200
 
@@ -435,14 +439,15 @@ public class PurchaseService implements Filter {
 	public ResponseEntity<?> savePO(@RequestBody PurchaseOrder purchaseorder) {
 		logger.info("------------- Inside loadPO -----------------");
 		RandomNumber randomnumber = null;
+		int randomId=6;
 		try {
-			randomnumber = randomnumberdal.getRandamNumber(1);
+			randomnumber = randomnumberdal.getRandamNumber(randomId);
 			String pocode = randomnumber.getCode() + randomnumber.getNumber();
 			logger.info("purchase code -->" + pocode);
 			purchaseorder.setPocode(pocode);
 			purchaseorder = purchasedal.savePO(purchaseorder);
 			if (purchaseorder.getStatus().equalsIgnoreCase("success")) {
-				randomnumberdal.updateRandamNumber(randomnumber);
+				randomnumberdal.updateRandamNumber(randomnumber,randomId);
 			}
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
@@ -599,96 +604,70 @@ public class PurchaseService implements Filter {
 	 * finally { poinvoice=null; } }
 	 */
 
-	// SaveReturn
-	@CrossOrigin(origins = "http://localhost:4200")
-	@PostMapping(value = "/saveReturn")
-	public ResponseEntity<?> savePurchaseReturn(@RequestBody String returnarray) {
-		String temp = returnarray;
-		logger.info("Mapped value -->" + temp);
-		logger.info("--------save savePurchaseReturn-------------");
-		Purchase purchase = null;
-		POReturnDetails poreturndetails = null;
-		RandomNumber randomnumber = null;
-		try {
-			purchase = new Purchase();
-			logger.info("Post Json -->" + returnarray);
-
-			JSONArray jsonArr = new JSONArray(returnarray);
-			ArrayList<String> list = new ArrayList<String>();
-			logger.info("length =====" + jsonArr.length());
-			int remove = 0;
-			if (jsonArr != null) {
-				for (int i = 0; i < jsonArr.length(); i++) {
-					list.add(jsonArr.get(i).toString());
-					remove++;
-				}
-			}
-			int postion = remove - 1;
-			logger.info("Position-->" + postion);
-			list.remove(postion);
-			logger.info("Size -------->" + jsonArr.length());
-			// int l = 1;
-			for (int i = 0; i < jsonArr.length(); i++) {
-				JSONArray arr2 = jsonArr.optJSONArray(i);
-				if (jsonArr.optJSONArray(i) != null) {
-					for (int j = 0; j < arr2.length(); j++) {
-						randomnumber = randomnumberdal.getReturnRandamNumber(1);
-					//	logger.info("PO Return random number-->" + randomnumber.getPoreturninvoicenumber());
-					//	logger.info("PO Return random code-->" + randomnumber.getPoreturninvoicecode());
-						String invoice = randomnumber.getCode() + randomnumber.getNumber();
-						logger.info("Return Invoice number -->" + invoice);
-						if (arr2.getJSONObject(j) != null) {
-							JSONObject jObject = arr2.getJSONObject(j);
-							logger.info(jObject.getString("productName"));
-							logger.info(jObject.getString("category"));
-							poreturndetails = new POReturnDetails();
-							poreturndetails.setInvoicenumber(invoice);// random table..
-							poreturndetails.setVendorname(jObject.getString("vendorName"));
-							poreturndetails.setCategory(jObject.getString("category"));
-							poreturndetails.setItemname(jObject.getString("productName"));
-							poreturndetails.setQty(jObject.getString("quantity"));
-							poreturndetails.setItemStatus(jObject.getString("itemStatus"));
-							poreturndetails.setReturnStatus(jObject.getString("returnStatus"));
-							poreturndetails.setPoDate(Custom.getCurrentInvoiceDate());
-							poreturndetails.setInvid(j + 1);
-							logger.info("POInvoice Date --->" + poreturndetails.getPoDate());
-							purchasedal.insertReturn(poreturndetails);
-							//logger.info("Invoice Number --->" + randomnumber.getPoreturninvoicenumber());
-							randomnumberdal.updatePOReturnRandamNumber(randomnumber);
-							//logger.info(
-							//		"After Increament Invoice Number --->" + randomnumber.getPoreturninvoicenumber());
-
-						} else {
-							logger.info("Null....");
-						}
-						// l++;
-					}
-				} else {
-					logger.info("Outer Null....");
-				}
-			}
-			return new ResponseEntity<>(HttpStatus.OK);
-		}
-
-		catch (NullPointerException ne) {
-			purchase = new Purchase();
-			logger.info("Inside null pointer exception ....");
-			purchase.setStatus("success");
-			randomnumberdal.updateRandamNumber(randomnumber);
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-			// return new ResponseEntity<Purchase>(purchase, HttpStatus.CREATED);
-		} catch (Exception e) {
-			logger.info("Exception ------------->" + e.getMessage());
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-
-		finally {
-			 purchase = null;
-			 poreturndetails = null;
-			 randomnumber = null;
-		}
-
-	}
+	/*
+	 * // SaveReturn
+	 * 
+	 * @CrossOrigin(origins = "http://localhost:4200")
+	 * 
+	 * @PostMapping(value = "/saveReturn") public ResponseEntity<?>
+	 * savePurchaseReturn(@RequestBody String returnarray) { String temp =
+	 * returnarray; logger.info("Mapped value -->" + temp);
+	 * logger.info("--------save savePurchaseReturn-------------"); Purchase
+	 * purchase = null; POReturnDetails poreturndetails = null; RandomNumber
+	 * randomnumber = null; try { purchase = new Purchase();
+	 * logger.info("Post Json -->" + returnarray);
+	 * 
+	 * JSONArray jsonArr = new JSONArray(returnarray); ArrayList<String> list = new
+	 * ArrayList<String>(); logger.info("length =====" + jsonArr.length()); int
+	 * remove = 0; if (jsonArr != null) { for (int i = 0; i < jsonArr.length(); i++)
+	 * { list.add(jsonArr.get(i).toString()); remove++; } } int postion = remove -
+	 * 1; logger.info("Position-->" + postion); list.remove(postion);
+	 * logger.info("Size -------->" + jsonArr.length()); // int l = 1; for (int i =
+	 * 0; i < jsonArr.length(); i++) { JSONArray arr2 = jsonArr.optJSONArray(i); if
+	 * (jsonArr.optJSONArray(i) != null) { for (int j = 0; j < arr2.length(); j++) {
+	 * randomnumber = randomnumberdal.getReturnRandamNumber(1); //
+	 * logger.info("PO Return random number-->" +
+	 * randomnumber.getPoreturninvoicenumber()); //
+	 * logger.info("PO Return random code-->" +
+	 * randomnumber.getPoreturninvoicecode()); String invoice =
+	 * randomnumber.getCode() + randomnumber.getNumber();
+	 * logger.info("Return Invoice number -->" + invoice); if (arr2.getJSONObject(j)
+	 * != null) { JSONObject jObject = arr2.getJSONObject(j);
+	 * logger.info(jObject.getString("productName"));
+	 * logger.info(jObject.getString("category")); poreturndetails = new
+	 * POReturnDetails(); poreturndetails.setInvoicenumber(invoice);// random
+	 * table.. poreturndetails.setVendorname(jObject.getString("vendorName"));
+	 * poreturndetails.setCategory(jObject.getString("category"));
+	 * poreturndetails.setItemname(jObject.getString("productName"));
+	 * poreturndetails.setQty(jObject.getString("quantity"));
+	 * poreturndetails.setItemStatus(jObject.getString("itemStatus"));
+	 * poreturndetails.setReturnStatus(jObject.getString("returnStatus"));
+	 * poreturndetails.setPoDate(Custom.getCurrentInvoiceDate());
+	 * poreturndetails.setInvid(j + 1); logger.info("POInvoice Date --->" +
+	 * poreturndetails.getPoDate()); purchasedal.insertReturn(poreturndetails);
+	 * //logger.info("Invoice Number --->" +
+	 * randomnumber.getPoreturninvoicenumber());
+	 * randomnumberdal.updatePOReturnRandamNumber(randomnumber); //logger.info( //
+	 * "After Increament Invoice Number --->" +
+	 * randomnumber.getPoreturninvoicenumber());
+	 * 
+	 * } else { logger.info("Null...."); } // l++; } } else {
+	 * logger.info("Outer Null...."); } } return new
+	 * ResponseEntity<>(HttpStatus.OK); }
+	 * 
+	 * catch (NullPointerException ne) { purchase = new Purchase();
+	 * logger.info("Inside null pointer exception ....");
+	 * purchase.setStatus("success");
+	 * randomnumberdal.updateRandamNumber(randomnumber); return new
+	 * ResponseEntity<>(HttpStatus.BAD_REQUEST); // return new
+	 * ResponseEntity<Purchase>(purchase, HttpStatus.CREATED); } catch (Exception e)
+	 * { logger.info("Exception ------------->" + e.getMessage()); return new
+	 * ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+	 * 
+	 * finally { purchase = null; poreturndetails = null; randomnumber = null; }
+	 * 
+	 * }
+	 */
 
 	// Load item name
 	@CrossOrigin(origins = "http://localhost:8080")
