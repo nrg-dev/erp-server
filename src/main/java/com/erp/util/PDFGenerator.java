@@ -32,9 +32,9 @@ public class PDFGenerator {
 		Document document = new Document();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
-        	PdfPTable table = new PdfPTable(3);
-            table.setWidthPercentage(60);
-            table.setWidths(new int[]{1, 3, 3});
+        	PdfPTable table = new PdfPTable(6);
+            table.setWidthPercentage(100);
+            table.setWidths(new int[]{1, 3, 3, 3, 3, 3});
 
             Font headFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
 
