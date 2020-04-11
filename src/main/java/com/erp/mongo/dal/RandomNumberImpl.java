@@ -31,22 +31,18 @@ public class RandomNumberImpl implements RandomNumberDAL {
 	public RandomNumber getRandamNumber(int i) {
 		logger.info("getRandamNumber");
 		RandomNumber radomNumber = null;
+		Query query = null;
 		try {
-			logger.info("----------- Inside getRandamNumber-----------");
-			Query query = new Query();
-			logger.info("-----------  Before addCriteria-----------");
-			//if(i == 10) {
-				query.addCriteria(Criteria.where("randomID").is(i));
-		//	}else if(i == 2) {
-			//	query.addCriteria(Criteria.where("randomID").is(7));
-		//	}
-			logger.info("-----------  After addCriteria-----------");
+			query = new Query();
+			query.addCriteria(Criteria.where("randomID").is(i));
+			logger.info("Before Select Random");
 			radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
+			logger.info("After Select Random");
+			logger.debug("Random Number-->"+radomNumber);
 			return radomNumber;// mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Exception-->"+e.getMessage());
 			return radomNumber;
-
 		} finally {
 
 		}

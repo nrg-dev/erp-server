@@ -21,11 +21,36 @@ public class CategoryImpl implements CategoryDAL {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
-	// save
-	public Category saveCategory(Category category) {
-		mongoTemplate.save(category);
-		category.setStatus("success");
-		return category;
+	// save & update
+	public boolean saveCategory(Category category) {
+		logger.info("saveCategory");
+		boolean status;
+			try {	
+			
+			// Update
+			if(category.getCategorycode()!=null) {
+				logger.info("Inside Upate");
+				Update update = new Update();
+				Query query = new Query();
+				query.addCriteria(Criteria.where("categorycode").is(category.getCategorycode()));
+				update.set("name", category.getName());
+				update.set("description", category.getDescription());
+				mongoTemplate.updateFirst(query, update, Category.class);
+				status=true;
+			}
+			// Save
+			else {
+				logger.info("Inside Save");
+				mongoTemplate.save(category);
+				status=true;		
+			}
+			return status;
+			}catch(Exception e) {
+			logger.error("Exception-->"+e.getMessage());
+			status=false;
+			return status;
+		}
+	
 	}
 
 	// load

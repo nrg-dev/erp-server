@@ -76,15 +76,24 @@ public class CategoryService implements Filter {
 	public ResponseEntity<?> saveCategory(@RequestBody Category category) {
 		logger.info("saveCategory");
 		RandomNumber randomnumber = null;
+		boolean status=false;
+		int temp=5;
 		try {
-			randomnumber = randomnumberdal.getCategoryRandomNumber(1);
-			String categorycode = randomnumber.getCode() + randomnumber.getNumber();
-			category.setCategorycode(categorycode);
-			logger.info("Category name -->" + category.getName());
-			category = categorydal.saveCategory(category);
-			if (category.getStatus().equalsIgnoreCase("success")) {
-				randomnumberdal.updateCategoryRandamNumber(randomnumber, 1);
+			if(category.getCategorycode()!=null) {
+				logger.info("update employee");
+				status = categorydal.saveCategory(category);
 			}
+			else {
+				randomnumber = randomnumberdal.getCategoryRandomNumber(temp);
+				String categorycode = randomnumber.getCode() + randomnumber.getNumber();
+				category.setCategorycode(categorycode);
+				logger.info("Category name-->" + category.getName());
+				status = categorydal.saveCategory(category);
+				if (status) {
+					randomnumberdal.updateRandamNumber(randomnumber, temp);
+				}
+			}
+			
 			return new ResponseEntity<>(HttpStatus.OK); 
 
 		} catch (Exception e) {

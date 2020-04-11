@@ -81,7 +81,7 @@ public class EmployeeService implements Filter {
 	public void destroy() {
 	}
 
-	// Save
+	// Save & Update
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<?> save(@RequestBody Employee employee) {
