@@ -81,25 +81,22 @@ public class VendorService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<?> saveVendor(@RequestBody Vendor vendor) {
-		System.out.println("--------save customer-------------");
+		logger.info("saveVendor");
 		RandomNumber randomnumber = null;
 		try {
 			randomnumber = randomnumberdal.getVendorRandamNumber();
-			//System.out.println("Vendor Invoice random number-->" + randomnumber.getVendorinvoicenumber());
-			//System.out.println("Vendor Invoice random code-->" + randomnumber.getVendorinvoicecode());
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
-			System.out.println("Invoice number -->" + invoice);
-
+			logger.debug("Invoice number-->" + invoice);
 			vendor.setVendorcode(invoice);
 			vendor.setAddeddate(Custom.getCurrentInvoiceDate());
-			System.out.println("Current Date --->" + Custom.getCurrentDate());
+			logger.debug("Current Date-->" + Custom.getCurrentDate());
 			vendor = vendordal.saveVendor(vendor);
 			if (vendor.getStatus().equalsIgnoreCase("success")) {
 				randomnumberdal.updateVendorRandamNumber(randomnumber, 1);
 			}
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
-			logger.info("Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -117,7 +114,7 @@ public class VendorService implements Filter {
 			return new ResponseEntity<List<Vendor>>(responseList, HttpStatus.CREATED);
 
 		} catch (Exception e) {
-			logger.info("Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -129,21 +126,22 @@ public class VendorService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/loadvendornamecode", method = RequestMethod.GET)
 	public ResponseEntity<?> loadvendornamecode() {
-		logger.info("------------- Inside loadvendornamecode-----------------");
+		logger.info("loadvendornamecode");
 		List<Vendor> vendorlist = new ArrayList<Vendor>();
 		List<String> list = new ArrayList<String>();
 		try {
-			logger.info("-----------Inside loadvendornamecode Called----------");
+			logger.info("Before Calling loadVendor");
 			vendorlist = vendordal.loadVendor(vendorlist);
+			logger.info("Successfully Calling loadVendor");
 			for (Vendor vendor : vendorlist) {
-				System.out.println("vendor name-->" + vendor.getVendorName());
+				logger.debug("vendor name-->" + vendor.getVendorName());
 				list.add(vendor.getVendorName() + "-" + vendor.getVendorcode());
 			}
 
 			return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
 
 		} catch (Exception e) {
-			logger.info("loadvendornamecode Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -154,15 +152,16 @@ public class VendorService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public ResponseEntity<?> geVendor(String vendorcode) {
-		logger.info("------------- Inside get Vendor -----------------");
+		logger.info("geVendor");
 		List<Vendor> responseList = null;
 		try {
-			logger.info("-----------Inside get Vendor Called----------");
+			logger.info("Before Calling getVendor");
 			responseList = vendordal.getVendor(vendorcode);
+			logger.info("Successfully Calling getVendor");
 			return new ResponseEntity<List<Vendor>>(responseList, HttpStatus.CREATED);
 
 		} catch (Exception e) {
-			logger.info("Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -173,13 +172,14 @@ public class VendorService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateVendor(@RequestBody Vendor vendor) {
+		logger.info("updateVendor");
 		try {
-			System.out.println("vendor update inside try--->" + vendor.getVendorcode());
+			logger.debug("vendor update inside try-->" + vendor.getVendorcode());
 			vendor = vendordal.updateVendor(vendor);
 			return new ResponseEntity<>(HttpStatus.OK);
 
 		} catch (Exception e) {
-			logger.info("Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -190,17 +190,18 @@ public class VendorService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/remove", method = RequestMethod.DELETE)
 	public ResponseEntity<?> removeVendor(String vendorcode) {
+		logger.info("removeVendor");
 		try {
 			vendor = new Vendor();
-			logger.info("-----------Before Calling  removeCustomer ----------");
-			System.out.println("Remove vendor code" + vendorcode);
+			logger.debug("Remove vendor code-->" + vendorcode);
+			logger.info("Before Calling removeVendor");
 			vendordal.removeVendor(vendorcode);
-			vendor.setStatus("Success");
-			logger.info("-----------Successfully Called  removeCustomer ----------");
+			logger.info("Successfully Calling removeVendor");
+			vendor.setStatus("success");
 			return new ResponseEntity<>(HttpStatus.OK);
 
 		} catch (Exception e) {
-			logger.info("Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			vendor.setStatus("failure");
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 

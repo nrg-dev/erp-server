@@ -85,7 +85,7 @@ public class EmployeeService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<?> save(@RequestBody Employee employee) {
-		logger.info("save & update employee");
+		logger.info("save");
 		RandomNumber randomnumber = null;
 		boolean status;
 		try {
@@ -97,11 +97,11 @@ public class EmployeeService implements Filter {
 				logger.info("save employee");
 				randomnumber = randomnumberdal.getEmployeeRandamNumber();
 				String employeecode = randomnumber.getCode() + randomnumber.getNumber();
-				logger.info("Employee code-->" + employeecode);
+				logger.debug("Employee code-->" + employeecode);
 				employee.setEmployeecode(employeecode);
 				employee.setAddeddate(Custom.getCurrentInvoiceDate());
 				employee.setStatus("Active");
-				logger.info("Current Date-->" + Custom.getCurrentDate());
+				logger.debug("Current Date-->" + Custom.getCurrentDate());
 				status = employeedal.save(employee);
 				randomnumberdal.updateEmployeeRandamNumber(randomnumber);
 			}
@@ -127,7 +127,7 @@ public class EmployeeService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/load", method = RequestMethod.GET)
 	public ResponseEntity<?> load() {
-		logger.info("load emloyee");
+		logger.info("load");
 		List<Employee> responseList = null;
 		try {
 			responseList = employeedal.load(responseList);
@@ -163,15 +163,15 @@ public class EmployeeService implements Filter {
 	@RequestMapping(value = "/loadDailyReport", method = RequestMethod.GET)
 	public ResponseEntity<?> loadDailyReport(String employeecode,String date,String type) {
 		logger.info("loadDailyReport");
-		logger.info("EmployeeService Id-->"+employeecode);
+		logger.debug("EmployeeService Id-->"+employeecode);
 		List<DailyReport> responseList = null;
 		try {
 			responseList = employeedal.loadDailyReport(employeecode,date,type);
-			logger.info("List Size-->"+responseList.size());
+			logger.debug("List Size-->"+responseList.size());
 			return new ResponseEntity<List<DailyReport>>(responseList, HttpStatus.OK);
 
 		} catch (Exception e) {
-			logger.info("Exception-->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
 		} finally {
@@ -184,7 +184,7 @@ public class EmployeeService implements Filter {
 		@RequestMapping(value = "/loadAbsentList", method = RequestMethod.GET)
 		public ResponseEntity<?> loadAbsentList(String employeecode,String date,String type) {
 			logger.info("loadDailyReport");
-			logger.info("EmployeeService Code-->"+employeecode);
+			logger.debug("EmployeeService Code-->"+employeecode);
 			List<AbsentList> responseList = null;
 			try {
 				responseList = employeedal.loadAbsentList(employeecode,date,type);
@@ -192,7 +192,7 @@ public class EmployeeService implements Filter {
 				return new ResponseEntity<List<AbsentList>>(responseList, HttpStatus.OK);
 
 			} catch (Exception e) {
-				logger.info("Exception-->" + e.getMessage());
+				logger.error("Exception-->" + e.getMessage());
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
 			} finally {
@@ -205,15 +205,15 @@ public class EmployeeService implements Filter {
 		@RequestMapping(value = "/loadContractList", method = RequestMethod.GET)
 		public ResponseEntity<?> loadContractList(String employeecode) {
 			logger.info("loadContractList");
-			logger.info("EmployeeService Id-->"+employeecode);
+			logger.debug("EmployeeService Id-->"+employeecode);
 			List<ContractList> responseList = null;
 			try {
 				responseList = employeedal.loadContractList(employeecode);
-				logger.info("List Size-->"+responseList.size());
+				logger.debug("List Size-->"+responseList.size());
 				return new ResponseEntity<List<ContractList>>(responseList, HttpStatus.OK);
 
 			} catch (Exception e) {
-				logger.info("Exception-->" + e.getMessage());
+				logger.error("Exception-->" + e.getMessage());
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
 			} finally {
@@ -247,13 +247,13 @@ public class EmployeeService implements Filter {
 		logger.info("remove employee");
 		try {
 			employee = new Employee();
-			logger.info("-----------Before Calling  remove employee ----------");
+			logger.info("Before Calling  remove employee");
 			employeedal.remove(employeecode);
-			logger.info("-----------Successfully Called  remo employee ----------");
+			logger.info("Successfully Called  remo employee");
 			return new ResponseEntity<>(HttpStatus.OK); 
 
 		} catch (Exception e) {
-			logger.info("Exception-->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -275,7 +275,7 @@ public class EmployeeService implements Filter {
 				}
 
 			} catch (Exception e) {
-				logger.info("Exception-->" + e.getMessage());
+				logger.error("Exception-->" + e.getMessage());
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 500
 			} finally {
 
@@ -314,7 +314,7 @@ public class EmployeeService implements Filter {
 				}
 
 			} catch (Exception e) {
-				logger.info("Exception-->" + e.getMessage());
+				logger.error("Exception-->" + e.getMessage());
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 500
 			} finally {
 
@@ -353,7 +353,7 @@ public class EmployeeService implements Filter {
 				}
 
 			} catch (Exception e) {
-				logger.info("Exception-->" + e.getMessage());
+				logger.error("Exception-->" + e.getMessage());
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 500
 			} finally {
 
@@ -374,7 +374,7 @@ public class EmployeeService implements Filter {
 				}
 
 			} catch (Exception e) {
-				logger.info("Exception-->" + e.getMessage());
+				logger.error("Exception-->" + e.getMessage());
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 500
 			} finally {
 

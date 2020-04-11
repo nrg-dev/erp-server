@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -225,13 +226,14 @@ public class PurchaseImpl implements PurchaseDAL {
 	public List<PurchaseOrder> loadPO(){
 		List<PurchaseOrder> list=null;
 		logger.info("DAO Vendor item load all");
+	   // Query query = new Query().with(new Sort("_id", "-1"));
 		list = mongoTemplate.findAll(PurchaseOrder.class);
 		return list;
 	}
 	
 	public PurchaseOrder savePO(PurchaseOrder purchaseorder) {
 		logger.info("DAO PurchaseOrder");
-		logger.info("PO Number-->"+purchaseorder.getPocode());
+		logger.debug("PO Number-->"+purchaseorder.getPocode());
 		mongoTemplate.save(purchaseorder);
 		purchaseorder.setStatus("success"); 
 		return purchaseorder;

@@ -82,15 +82,11 @@ public class CustomerService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<?> saveCustomer(@RequestBody Customer customer) {
-		logger.info("country name -->" + customer.getCountry());
-		System.out.println("--------save customer-------------");
+		logger.info("saveCustomer");
 		RandomNumber randomnumber = null;
 		try {
 			randomnumber = randomnumberdal.getCustomerRandamNumber();
-			//System.out.println("Customer  random number-->" + randomnumber.getCustomerinvoicenumber());
-			//System.out.println("Customer  random code-->" + randomnumber.getCustomerinvoicecode());
 			String customercode = randomnumber.getCode() + randomnumber.getNumber();
-			System.out.println("custome code -->" + customercode);
 			customer.setCustcode(customercode);
 			customer.setLastedit(Custom.getCurrentInvoiceDate());
 			customer.setAddeddate(Custom.getCurrentInvoiceDate());
@@ -102,7 +98,7 @@ public class CustomerService implements Filter {
 
 		} catch (Exception e) {
 			customer.setStatus("failure");
-			logger.info("Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 			randomnumber=null;
@@ -114,15 +110,14 @@ public class CustomerService implements Filter {
 		@CrossOrigin(origins = "http://localhost:8080")
 		@RequestMapping(value = "/load", method = RequestMethod.GET)
 		public ResponseEntity<?> loadCustomer() {
-			logger.info("------------- Inside load customer-----------------");
+			logger.info("loadCustomer");
 			List<Customer> responseList = null;
 			try {
-				logger.info("-----------Inside load customer Called----------");
 				responseList = customerdal.loadCustomer(responseList);
 				return new ResponseEntity<List<Customer>>(responseList, HttpStatus.CREATED);
 
 			} catch (Exception e) {
-				logger.info("Exception ------------->" + e.getMessage());
+				logger.error("Exception-->" + e.getMessage());
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			} finally {
 
@@ -142,7 +137,7 @@ public class CustomerService implements Filter {
 			return new ResponseEntity<List<Customer>>(responseList, HttpStatus.OK);
 
 		} catch (Exception e) {
-			logger.info("Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -155,12 +150,13 @@ public class CustomerService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateCustomer(@RequestBody Customer customer) {
+		logger.info("updateCustomer");
 		try {
 			customer.setLastedit(Custom.getCurrentInvoiceDate());
 			customer = customerdal.updateCustomer(customer);
 			return new ResponseEntity<>(HttpStatus.OK); 
 		} catch (Exception e) {
-			logger.info("Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -172,17 +168,18 @@ public class CustomerService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/remove", method = RequestMethod.DELETE)
 	public ResponseEntity<?> removeCustomer(String custcode) {
+		logger.info("removeCustomer");
 		try {
-			System.out.println("Remove cust code is---->" + custcode);
+			logger.debug("Remove cust code is-->" + custcode);
 			customer = new Customer();
-			logger.info("-----------Before Calling  removeCustomer ----------");
+			logger.info("Before Calling  removeCustomer");
 			customerdal.removeCustomer(custcode);
-			customer.setStatus("Success");
-			logger.info("-----------Successfully Called  removeCustomer ----------");
+			customer.setStatus("success");
+			logger.info("Successfully Called  removeCustomer");
 			return new ResponseEntity<>(HttpStatus.OK); 
 		} catch (Exception e) {
 			customer.setStatus("failure");
-			logger.info("Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 

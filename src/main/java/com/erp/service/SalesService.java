@@ -93,13 +93,14 @@ public class SalesService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@GetMapping(value = "/loadCustomer", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> loadCustomerList() {
-		logger.info("------------- Inside loadCustomer List Calling -----------------");
+		logger.info("loadCustomerList");
 		List<Customer> response = new ArrayList<Customer>();
 		List<Sales> responseList = new ArrayList<Sales>();
 		Sales sales;
 		try {
-			logger.info("-----------Inside loadCustomer Called----------");
+			logger.info("Before Calling loadCustomerList");
 			response = salesdal.loadCustomerList(response);
+			logger.info("After Calling loadCustomerList");
 			for (Customer customerlist : response) {
 				sales = new Sales();
 				sales.setCustomerName(customerlist.getCustomerName() + "-" + customerlist.getCustcode());
@@ -107,7 +108,7 @@ public class SalesService implements Filter {
 			}
 			return new ResponseEntity<List<Sales>>(responseList, HttpStatus.CREATED);
 		} catch (Exception e) {
-			logger.info("loadCustomer Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 		}
@@ -118,9 +119,8 @@ public class SalesService implements Filter {
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(value = "/save")
 	public ResponseEntity<?> saveSales(@RequestBody String salesorderarray) {
+		logger.info("saveSales");
 		String temp = salesorderarray;
-		System.out.println("Mapped value -->" + temp);
-		System.out.println("--------save Sales-------------");
 		Sales sales = null;
 		SOInvoice soinvoice = null;
 		SOInvoiceDetails sodetails = null;
@@ -295,15 +295,15 @@ public class SalesService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public ResponseEntity<?> getSales(String id) {
-		logger.info("------------- Inside get Sales Order -----------------");
+		logger.info("getSales");
 		List<SOInvoiceDetails> responseList = null;
 		try {
-			logger.info("Id ---------->" + id);
+			logger.debug("Id-->" + id);
 			responseList = salesdal.getSales(id);
 			return new ResponseEntity<List<SOInvoiceDetails>>(responseList, HttpStatus.CREATED);
 
 		} catch (Exception e) {
-			logger.info("getSales Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -313,14 +313,14 @@ public class SalesService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/getCustomerDetails", method = RequestMethod.GET)
 	public ResponseEntity<?> getCustomerDetails(String customername) {
-		logger.info("------------- Inside get getCustomerDetails -----------------");
+		logger.info("getCustomerDetails");
 		Customer customer = null;
 		try {
-			logger.info("Customer Name -->" + customername);
+			logger.debug("Customer Name-->" + customername);
 			customer = new Customer();
 			String[] res = customername.split("-");
 			String customerCode = res[1];
-			logger.info("After Split Customer Name -->" + customerCode);
+			logger.debug("After Split Customer Name-->" + customerCode);
 			customer = salesdal.getCustomerDetails(customerCode);
 			customer.setCustomerName(customer.getCustomerName());
 			customer.setCity(customer.getCity());
@@ -329,7 +329,7 @@ public class SalesService implements Filter {
 			customer.setEmail(customer.getEmail());
 			return new ResponseEntity<Customer>(customer, HttpStatus.CREATED);
 		} catch (Exception e) {
-			logger.info("getCustomerDetails Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -340,18 +340,19 @@ public class SalesService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/remove", method = RequestMethod.DELETE)
 	public ResponseEntity<?> removeSales(String invoiceNumber) {
+		logger.info("remove Sales");
 		Sales sales = null;
 		try {
 			sales = new Sales();
-			logger.info("----------- Before Calling  removeSales ----------");
+			logger.info("Before Calling  removeSales");
 			System.out.println("Sales code" + invoiceNumber);
 			String status = salesdal.removeSales(invoiceNumber);
 			sales.setStatus(status);
-			logger.info("-----------Successfully Called  removeSales ----------");
+			logger.info("Successfully Calling removeSales");
 			return new ResponseEntity<>(HttpStatus.OK);
 
 		} catch (Exception e) {
-			logger.info("removeSales Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			sales.setStatus("failure");
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
@@ -381,7 +382,7 @@ public class SalesService implements Filter {
 			logger.info("Unit Price ----------" + item.getPrice());
 			return new ResponseEntity<Item>(item, HttpStatus.CREATED);
 		} catch (Exception e) {
-			logger.info("getUnitPrice Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -411,7 +412,7 @@ public class SalesService implements Filter {
 			logger.info("-- list Size --->" + responseList.size());
 			return new ResponseEntity<List<Sales>>(responseList, HttpStatus.CREATED);
 		} catch (Exception e) {
-			logger.info("loadItem Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -422,17 +423,18 @@ public class SalesService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/removePartId", method = RequestMethod.DELETE)
 	public ResponseEntity<?> removePartId(String id, String invoiceNumber) {
+		logger.info("removePartId");
 		Sales sales = null;
 		List<SOInvoiceDetails> responseList = null;
 		int temp;
 		try {
 			sales = new Sales();
-			logger.info("----------- Before Calling  remove Particular Sales ----------");
-			System.out.println("ObjectID -->" + id);
-			System.out.println("salesCode -->" + invoiceNumber);
+			logger.info("Before Calling  remove Particular Sales");
+			logger.debug("ObjectID -->" + id);
+			logger.debug("salesCode -->" + invoiceNumber);
 			// ---- Check List Size from SOInvoiceDetails Table
 			responseList = salesdal.getSales(invoiceNumber);
-			logger.info("List Size -->" + responseList.size());
+			logger.debug("List Size-->" + responseList.size());
 			if (responseList.size() == 0 || responseList.size() == 1) {
 				temp = 1;
 			} else {
@@ -441,11 +443,11 @@ public class SalesService implements Filter {
 
 			String status = salesdal.removePartId(id, invoiceNumber, temp);
 			sales.setStatus(status);
-			logger.info("-----------Successfully Called  removeSales  ----------");
+			logger.info("Successfully Called  removeSales");
 			return new ResponseEntity<>(HttpStatus.OK);
 
 		} catch (Exception e) {
-			logger.info("removeSales Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			sales.setStatus("failure");
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
@@ -457,9 +459,9 @@ public class SalesService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateSales(@RequestBody String saleseditarray) {
+		logger.info("updateSales");
 		String temp = saleseditarray;
-		System.out.println("Edit Sales value -->" + temp);
-		System.out.println("-------- Update Sales -------------");
+		logger.debug("Edit Sales value-->" + temp);
 		Sales sales = null;
 		SOInvoice soinvoice = null;
 		SOInvoiceDetails sodetails = null;
@@ -533,7 +535,7 @@ public class SalesService implements Filter {
 			sales.setStatus("success");
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
-			logger.info("Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -544,9 +546,9 @@ public class SalesService implements Filter {
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(value = "/saveReturn")
 	public ResponseEntity<?> saveSalesReturn(@RequestBody String returnarray) {
+		logger.info("saveSalesReturn");
 		String temp = returnarray;
 		System.out.println("Mapped value -->" + temp);
-		System.out.println("--------save saveSalesReturn-------------");
 		Sales sales = null;
 		SOReturnDetails soreturndetails = null;
 		RandomNumber randomnumber = null;
@@ -613,7 +615,7 @@ public class SalesService implements Filter {
 			sales.setStatus("success");
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
-			logger.info("Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
@@ -626,15 +628,15 @@ public class SalesService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/loadCustomerName", method = RequestMethod.GET)
 	public ResponseEntity<?> loadCustomerName() {
-		logger.info("------------- Inside loadCustomerName-----------------");
+		logger.info("loadCustomerName");
 		ArrayList<String> customerlist = null;
 		try {
-			logger.info("-----------Before Calling Load customer list----------");
+			logger.info("Before Calling loadCustomerName");
 			customerlist = salesdal.loadCustomerName();
-			logger.info("-----------Successfully Called Load customer list------");
+			logger.info("Successfully Calling loadCustomerName");
 			return new ResponseEntity<ArrayList<String>>(customerlist, HttpStatus.CREATED);
 		} catch (Exception e) {
-			logger.info("Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -645,25 +647,21 @@ public class SalesService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/loadfilterData", method = RequestMethod.POST)
 	public ResponseEntity<?> loadfilterData(@RequestBody Sales sales) {
-		System.out.println("-------- loadfilterData ---------");
+		logger.info("loadfilterData");
 		List<SOInvoice> response = new ArrayList<SOInvoice>();
 		List<Sales> saleslist = new ArrayList<Sales>();
 		List<SOInvoiceDetails> sodetail = new ArrayList<SOInvoiceDetails>();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat your_format = new SimpleDateFormat("dd/MM/yyyy");
 		try {
-			logger.info("-----------Inside loadfilterData Called----------");
-
-			logger.info("From Date -->" + sales.getFromdate());
+			logger.debug("From Date -->" + sales.getFromdate());
 			Date dt1 = format.parse(sales.getFromdate());
 			String fromdate = your_format.format(dt1);
-			System.out.println("dd/MM/yyyy date -->" + fromdate);
-
-			logger.info("To Date -->" + sales.getTodate());
+			logger.debug("dd/MM/yyyy date-->" + fromdate);
+			logger.debug("To Date-->" + sales.getTodate());
 			Date dt2 = format.parse(sales.getTodate());
 			String todate = your_format.format(dt2);
-			System.out.println("dd/MM/yyyy date -->" + todate);
-
+			logger.debug("dd/MM/yyyy date-->" + todate);
 			response = salesdal.loadfilterData(response, fromdate, todate);
 			for (SOInvoice res : response) {
 				sales = new Sales();
@@ -673,17 +671,17 @@ public class SalesService implements Filter {
 				String prodList = "";
 				sodetail = salesdal.getSales(res.getInvoicenumber());
 				for (int i = 0; i < sodetail.size(); i++) {
-					logger.info("Product Name -->" + sodetail.get(i).getItemname());
+					logger.debug("Product Name-->" + sodetail.get(i).getItemname());
 					itemnameList = itemnameList + sodetail.get(i).getItemname() + System.lineSeparator()
 							+ System.lineSeparator();
 					prodList = prodList + sodetail.get(i).getItemname() + "," + System.lineSeparator();
-					logger.info("Qty -->" + sodetail.get(i).getQty());
+					logger.debug("Qty-->" + sodetail.get(i).getQty());
 					qtylist = qtylist + sodetail.get(i).getQty() + System.lineSeparator() + System.lineSeparator();
-					logger.info("Total -->" + sodetail.get(i).getSubtotal());
+					logger.debug("Total-->" + sodetail.get(i).getSubtotal());
 					totalAmountlist = totalAmountlist + sodetail.get(i).getSubtotal() + System.lineSeparator()
 							+ System.lineSeparator();
 				}
-				System.out.println("Particular invoice productList -->" + itemnameList);
+				logger.debug("Particular invoice productList-->" + itemnameList);
 				sales.setInvoiceNumber(res.getInvoicenumber());
 				sales.setSoDate(res.getInvoicedate());
 				sales.setCustomerName(res.getCustomername());
@@ -700,7 +698,7 @@ public class SalesService implements Filter {
 			}
 			return new ResponseEntity<List<Sales>>(saleslist, HttpStatus.CREATED);
 		} catch (Exception e) {
-			logger.info("loadfilterData Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 

@@ -15,7 +15,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,11 +42,9 @@ import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
-import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.Vendor;
-import com.erp.util.Custom;
 import com.erp.util.PDFGenerator;
 
 @SpringBootApplication
@@ -60,8 +56,6 @@ public class PurchaseService implements Filter {
 
 	@Autowired
 	ErpBo erpBo;
-
-	// private final RandamNumberRepository randamNumberRepository;
 
 	private final PurchaseDAL purchasedal;
 	private final RandomNumberDAL randomnumberdal;
@@ -96,12 +90,11 @@ public class PurchaseService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@GetMapping(value = "/loadVendor", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> loadVendorList() {
-		logger.info("------------- Inside loadVendor List Calling -----------------");
+		logger.info("loadVendorList");
 		List<Vendor> response = new ArrayList<Vendor>();
 		List<Purchase> responseList = new ArrayList<Purchase>();
 		Purchase purhase;
 		try {
-			logger.info("-----------Inside loadVendor Called----------");
 			response = purchasedal.loadVendorList(response);
 			for (Vendor venList : response) {
 				purhase = new Purchase();
@@ -110,7 +103,7 @@ public class PurchaseService implements Filter {
 			}
 			return new ResponseEntity<List<Purchase>>(responseList, HttpStatus.CREATED);
 		} catch (Exception e) {
-			logger.info("loadVendor Exception ------------->" + e.getMessage());
+			logger.error("Exception-->"+e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
 		} finally {
 		}
@@ -120,28 +113,25 @@ public class PurchaseService implements Filter {
 
 	    // Create Invoice
 		@CrossOrigin(origins = "http://localhost:8080")
-		//@PostMapping(value = "/createInvoice")
 		@RequestMapping(value = "/createInvoice", method = RequestMethod.POST)
 		public ResponseEntity<?> createInvoice(@RequestBody POInvoiceDto poinvoicedto) {
 			logger.info("createInvoice");
-			logger.info("Invoice Date --->" + poinvoicedto.getCreateddate());
-			//logger.info("PO Code-->" + poinvoicedto.getOrdernumbers());
-			logger.info("Sub Total-->" + poinvoicedto.getSubtotal());
-			logger.info("Delivery Charge-->" + poinvoicedto.getDeliverycharge());
-			logger.info("Total Price-->" + poinvoicedto.getTotalprice());
-			//logger.info("Total Qty-->" + poinvoicedto.getTotalqty());
+			logger.debug("Invoice Date-->" + poinvoicedto.getCreateddate());
+			logger.debug("Sub Total-->" + poinvoicedto.getSubtotal());
+			logger.debug("Delivery Charge-->" + poinvoicedto.getDeliverycharge());
+			logger.debug("Total Price-->" + poinvoicedto.getTotalprice());
 			RandomNumber randomnumber = null;
 			int randomId=10;
 			try {
-				logger.info("Delivery Charge-->"+poinvoicedto.getDeliverycharge());
+				logger.debug("Delivery Charge-->"+poinvoicedto.getDeliverycharge());
 				randomnumber = randomnumberdal.getRandamNumber(randomId);
 				String invoice = randomnumber.getCode() + randomnumber.getNumber();
-				logger.info("Invoice number -->" + invoice);
+				logger.debug("Invoice number-->" + invoice);
 				// Update Invoice Number and get Vendor name and code
 				purchasedal.updatePO(invoice,poinvoicedto.getOrdernumbers());
 				POInvoice poinvoice = new POInvoice();
 				poinvoice.setInvoicedate(poinvoicedto.getCreateddate());
-				logger.info("Invoice Date --->" + poinvoice.getInvoicedate());
+				logger.debug("Invoice Date-->" + poinvoice.getInvoicedate());
 				poinvoice.setInvoicenumber(invoice);
 				poinvoice.setStatus("Pending");
 				poinvoice.setSubtotal(poinvoicedto.getSubtotal());
@@ -168,11 +158,10 @@ public class PurchaseService implements Filter {
 			logger.info("loadInvoice");
 			List<POInvoice> responselist = new ArrayList<POInvoice>();
 			try {
-				logger.info("Inside try loadInvoice");
 				responselist = purchasedal.loadInvoice();
 				return new ResponseEntity<List<POInvoice>>(responselist, HttpStatus.OK);				
 			} catch (Exception e) {
-				logger.info("Exception ------------->" + e.getMessage());
+				logger.error("Exception-->" + e.getMessage());
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
 			} finally {
 			}
@@ -306,13 +295,13 @@ public class PurchaseService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public ResponseEntity<?> getPurchase(String id) {
-		logger.info("------------- Inside get Purchase -----------------");
+		logger.info("getPurchase");
 		List<POInvoiceDetails> responseList = null;
 		try {
-			logger.info("Id ---------->" + id);
+			logger.debug("Id-->" + id);
 			responseList = purchasedal.getPurchase(id);
 		} catch (Exception e) {
-			logger.info("getPurchase Exception ------------->" + e.getMessage());
+			logger.info("Exception-->"+e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
 		} finally {
 
@@ -323,16 +312,16 @@ public class PurchaseService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/getVendorDetails", method = RequestMethod.GET)
 	public ResponseEntity<?> getVendorDetails(String vendorname) {
-		logger.info("------------- Inside get getVendorDetails -----------------");
+		logger.info("getVendorDetails");
 		Vendor vendor = null;
 		Purchase purchase = null;
 		try {
-			logger.info("Vendor Name -->" + vendorname);
+			logger.debug("Vendor Name-->" +vendorname);
 			vendor = new Vendor();
 			purchase = new Purchase();
 			String[] res = vendorname.split("-");
 			String vendorCode = res[1];
-			logger.info("After Split Vendor Name -->" + vendorCode);
+			logger.debug("After Split Vendor Name-->" +vendorCode);
 			vendor = purchasedal.getVendorDetails(vendorCode);
 			purchase.setVendorName(vendor.getVendorName());
 			purchase.setVendorCity(vendor.getCity());
@@ -340,7 +329,7 @@ public class PurchaseService implements Filter {
 			purchase.setVendorPhone(vendor.getPhoneNumber());
 			purchase.setVendorEmail(vendor.getEmail());
 		} catch (Exception e) {
-			logger.info("getVendorDetails Exception ------------->" + e.getMessage());
+			logger.error("Exception-->"+e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
 		} finally {
 
@@ -352,17 +341,18 @@ public class PurchaseService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/remove", method = RequestMethod.DELETE)
 	public ResponseEntity<?> removePurchase(String invoiceNumber) {
+		logger.info("removePurchase");
 		Purchase purchase = null;
 		try {
 			purchase = new Purchase();
-			logger.info("-----------Before Calling  removePurchase ----------");
-			logger.info("purchase code" + invoiceNumber);
+			logger.info("Before Calling  removePurchase");
+			logger.debug("purchase code" + invoiceNumber);
 			String status = purchasedal.removePurchase(invoiceNumber);
 			purchase.setStatus(status);
-			logger.info("-----------Successfully Called  removePurchase ----------");
+			logger.info("Successfully Called  removePurchase");
 
 		} catch (Exception e) {
-			logger.info("RemovePurchase Exception ------------->" + e.getMessage());
+			logger.error("Exception-->"+e.getMessage());
 			purchase.setStatus("failure");
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
 		} finally {
@@ -376,25 +366,24 @@ public class PurchaseService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/getUnitPrice", method = RequestMethod.GET)
 	public ResponseEntity<?> getUnitPrice(String productName, String category) {
+		logger.info("getUnitPrice");
 		Item item = null;
 		try {
 			item = new Item();
-			logger.info("----------- Before Calling  getUnitPrice Purchase ----------");
-			logger.info("Product Name -->" + productName);
-			logger.info("category -->" + category);
-
+			logger.debug("Product Name-->" + productName);
+			logger.debug("category-->" + category);
 			String[] res = productName.split("-");
 			String productCode = res[1];
-			logger.info("After Split productCode -->" + productCode);
+			logger.debug("After Split productCode-->" + productCode);
 			String[] response = category.split("-");
 			String categoryCode = response[1];
-			logger.info("After Split categoryCode -->" + categoryCode);
+			logger.debug("After Split categoryCode -->" + categoryCode);
 			item = purchasedal.getUnitPrice(productCode, categoryCode);
-			logger.info("Unit Price ----------" + item.getSellingprice());
+			logger.debug("Unit Price-->" + item.getSellingprice());
 			return new ResponseEntity<Item>(item, HttpStatus.CREATED);
 
 		} catch (Exception e) {
-			logger.info("getUnitPrice Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
 		} finally {
 
@@ -406,26 +395,26 @@ public class PurchaseService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/loadItem", method = RequestMethod.GET)
 	public ResponseEntity<?> loadItem(String category) {
-		logger.info("------------- Inside loadItem -----------------");
+		logger.info("loadItem");
 		List<Item> item = null;
 		Purchase purchase;
 		List<Purchase> responseList = new ArrayList<Purchase>();
 		try {
-			logger.info("Category Name -->" + category);
+			logger.debug("Category Name-->" + category);
 			item = new ArrayList<Item>();
 			String[] res = category.split("-");
 			String categoryCode = res[1];
-			logger.info("After Split Category Code -->" + categoryCode);
+			logger.debug("After Split Category Code-->" + categoryCode);
 			item = purchasedal.loadItem(categoryCode);
 			for (Item itemList : item) {
 				purchase = new Purchase();
 				purchase.setProductName(itemList.getProductname() + "-" + itemList.getProdcode());
 				responseList.add(purchase);
 			}
-			logger.info("-- list Size --->" + responseList.size());
+			logger.debug("List Size-->" + responseList.size());
 			return new ResponseEntity<List<Purchase>>(responseList, HttpStatus.CREATED);
 		} catch (Exception e) {
-			logger.info("loadItem Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
 		} finally {
 
@@ -437,19 +426,20 @@ public class PurchaseService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/savePO", method = RequestMethod.POST)
 	public ResponseEntity<?> savePO(@RequestBody PurchaseOrder purchaseorder) {
-		logger.info("------------- Inside loadPO -----------------");
+		logger.info("savePO");
 		RandomNumber randomnumber = null;
 		int randomId=6;
 		try {
 			randomnumber = randomnumberdal.getRandamNumber(randomId);
 			String pocode = randomnumber.getCode() + randomnumber.getNumber();
-			logger.info("purchase code -->" + pocode);
+			logger.debug("purchase code-->" + pocode);
 			purchaseorder.setPocode(pocode);
 			purchaseorder = purchasedal.savePO(purchaseorder);
 			if (purchaseorder.getStatus().equalsIgnoreCase("success")) {
 				randomnumberdal.updateRandamNumber(randomnumber,randomId);
 			}
 		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
 		} finally {
 
@@ -461,14 +451,14 @@ public class PurchaseService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/loadPO", method = RequestMethod.GET)
 	public ResponseEntity<?> loadPO() {
-		logger.info("------------- Inside loadPO -----------------");
+		logger.info("loadPO");
 		List<PurchaseOrder> polist = null;// new ArrayList<PurchaseOrder>();
 		try {
 			polist = purchasedal.loadPO();
 			return new ResponseEntity<List<PurchaseOrder>>(polist, HttpStatus.CREATED);
 
 		} catch (Exception e) {
-			logger.info("loadPO Exception ------------->" + e.getMessage());
+			logger.error("Exception-->"+e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -479,7 +469,8 @@ public class PurchaseService implements Filter {
 		@CrossOrigin(origins = "http://localhost:8080")
 		@RequestMapping(value = "/removePO", method = RequestMethod.DELETE)
 		public ResponseEntity<?> removePO(String id) {
-			logger.info("Service PO delete Id-->"+id);
+			logger.info("removePO");
+			logger.debug("Service PO delete Id-->"+id);
 			try {
 				boolean stauts = purchasedal.removePO(id);
 				if(stauts) {
@@ -487,7 +478,7 @@ public class PurchaseService implements Filter {
 				}
 				return new ResponseEntity<>(HttpStatus.OK); 
 			} catch (Exception e) {
-				logger.info("RemovePurchase Exception ------------->" + e.getMessage());
+				logger.error("Exception-->"+e.getMessage());
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			} finally {
 
@@ -498,6 +489,7 @@ public class PurchaseService implements Filter {
 		@CrossOrigin(origins = "http://localhost:8080")
 		@RequestMapping(value = "/updatePurchaseOrder", method = RequestMethod.PUT)
 		public ResponseEntity<?> updatePurchaseOrder(@RequestBody PurchaseOrder purchaseorder) {
+			logger.info("updatePurchaseOrder");
 			try {
 				boolean stauts = purchasedal.updatePurchaseOrder(purchaseorder);
 				if(stauts) {
@@ -508,7 +500,7 @@ public class PurchaseService implements Filter {
 
 				}
 			} catch (Exception e) {
-				logger.info("RemovePurchase Exception ------------->" + e.getMessage());
+				logger.error("Exception-->"+e.getMessage());
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			} finally {
 
@@ -520,13 +512,13 @@ public class PurchaseService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/removePartId", method = RequestMethod.DELETE)
 	public ResponseEntity<?> removePartId(String id, String invoiceNumber) {
+		logger.info("removePartId");
 		List<POInvoiceDetails> responseList = null;
 		int temp = 0;
 		try {
 			// purchase = new Purchase();
-			logger.info("----------- Before Calling remove Particular Purchase ----------");
-			logger.info("ObjectID -->" + id);
-			logger.info("purchaseCode -->" + invoiceNumber);
+			logger.debug("ObjectID -->"+id);
+			logger.debug("purchaseCode -->"+invoiceNumber);
 			// ---- Check List Size from POInvoiceDetails Table
 			responseList = purchasedal.getPurchase(invoiceNumber);
 			logger.info("List Size -->" + responseList.size());
@@ -535,13 +527,10 @@ public class PurchaseService implements Filter {
 			} else {
 				temp = 2;
 			}
-
 			purchasedal.removePartId(id, invoiceNumber, temp);
-			logger.info("-----------Successfully Called  removePurchase ----------");
 			return new ResponseEntity<>(HttpStatus.OK);
-
 		} catch (Exception e) {
-			logger.info("RemovePurchase Exception ------------->" + e.getMessage());
+			logger.error("Exception-->"+e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -673,19 +662,19 @@ public class PurchaseService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/loadVendorItem", method = RequestMethod.GET)
 	public ResponseEntity<?> loadVendorItem(String vendorName) {
-		logger.info("------------- Inside loadVendorItem -----------------");
+		logger.info("loadVendorItem");
 		List<Item> itemlist = new ArrayList<Item>();
 		try {
 			String[] res = vendorName.split("-");
 			String vendorCode = res[1];
-			logger.info("After Split Vendor Code ------->" + vendorCode);
+			logger.debug("After Split Vendor Code-->"+vendorCode);
 			itemlist = purchasedal.loadVendorItem(itemlist, vendorCode);
 			for (Item item : itemlist) {
-				logger.info("product code -->" + item.getProdcode());
+				logger.debug("product code-->" + item.getProdcode());
 			}
 			return new ResponseEntity<List<Item>>(itemlist, HttpStatus.CREATED);
 		} catch (Exception e) {
-			logger.info("loadVendorItem Exception ------------->" + e.getMessage());
+			logger.error("Exception-->"+e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -696,25 +685,21 @@ public class PurchaseService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/loadfilterData", method = RequestMethod.POST)
 	public ResponseEntity<?> loadfilterData(@RequestBody Purchase purchase) {
-		logger.info("-------- loadfilterData ---------");
+		logger.info("loadfilterData");
 		List<POInvoice> response = new ArrayList<POInvoice>();
 		List<Purchase> purlist = new ArrayList<Purchase>();
 		List<POInvoiceDetails> podetail = new ArrayList<POInvoiceDetails>();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat your_format = new SimpleDateFormat("dd/MM/yyyy");
 		try {
-			logger.info("-----------Inside loadfilterData Called----------");
-
-			logger.info("From Date -->" + purchase.getFromdate());
+			logger.debug("From Date-->" + purchase.getFromdate());
 			Date dt1 = format.parse(purchase.getFromdate());
 			String fromdate = your_format.format(dt1);
-			logger.info("dd/MM/yyyy date -->" + fromdate);
-
-			logger.info("To Date -->" + purchase.getTodate());
+			logger.debug("dd/MM/yyyy date-->" + fromdate);
+			logger.debug("To Date-->" + purchase.getTodate());
 			Date dt2 = format.parse(purchase.getTodate());
 			String todate = your_format.format(dt2);
-			logger.info("dd/MM/yyyy date -->" + todate);
-
+			logger.debug("dd/MM/yyyy date -->" + todate);
 			response = purchasedal.loadfilterData(response, fromdate, todate);
 			for (POInvoice res : response) {
 				purchase = new Purchase();
@@ -724,16 +709,16 @@ public class PurchaseService implements Filter {
 				String prodList = "";
 				podetail = purchasedal.getPurchase(res.getInvoicenumber());
 				for (int i = 0; i < podetail.size(); i++) {
-					logger.info("Product Name -->" + podetail.get(i).getItemname());
+					logger.debug("Product Name -->"+podetail.get(i).getItemname());
 					itemnameList = itemnameList + podetail.get(i).getItemname() + "\r\n";
 					prodList = prodList + podetail.get(i).getItemname() + "," + System.lineSeparator();
-					logger.info("Qty -->" + podetail.get(i).getQty());
+					logger.debug("Qty -->" + podetail.get(i).getQty());
 					qtylist = qtylist + podetail.get(i).getQty() + "\r\n";
-					logger.info("Total -->" + podetail.get(i).getSubtotal());
+					logger.debug("Total -->" + podetail.get(i).getSubtotal());
 					totalAmountlist = totalAmountlist + podetail.get(i).getSubtotal() + System.lineSeparator()
 							+ System.lineSeparator();
 				}
-				logger.info("Particular invoice productList -->" + itemnameList);
+				logger.debug("Particular invoice productList-->" + itemnameList);
 				purchase.setInvoiceNumber(res.getInvoicenumber());
 				purchase.setPoDate(res.getInvoicedate());
 				purchase.setVendorName(res.getVendorname());
@@ -750,7 +735,7 @@ public class PurchaseService implements Filter {
 			return new ResponseEntity<List<Purchase>>(purlist, HttpStatus.OK);
 
 		} catch (Exception e) {
-			logger.info("loadfilterData Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 

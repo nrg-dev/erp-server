@@ -64,20 +64,20 @@ public class LoginService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ResponseEntity<?> loginUser(@RequestParam String username, @RequestParam String password) {
-		logger.info("---------- Inside LoginUser ----------");
-		logger.info("User Name ---------------->" + username);
-		logger.info("Password  ---------------->" + password);
+		logger.info("loginUser");
+		logger.debug("User Name-->" + username);
+		logger.debug("Password-->" + password);
 		User user = null;
 		try {
 			user = new User();
 			user.setUsername(username);
 			user.setPassword(password);
 			user = bo.userLogin(user);
-			logger.info("Status --->" + user.getStatus());
-			logger.info("User Type -->" + user.getUserRole());
+			logger.debug("Status-->" + user.getStatus());
+			logger.debug("User Type-->" + user.getUserRole());
 		} catch (Exception e) {
 			user.setStatus("Network Error Please try again");
-			logger.info("Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 		} finally {
 
 		}
@@ -87,16 +87,17 @@ public class LoginService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/Checkuser", method = RequestMethod.GET)
 	public ResponseEntity<?> Checkuser(@RequestParam String username) {
-		logger.info("---------- Inside Checkuser -------" + username);
+		logger.info("Checkuser");
 		User user = null;
 		try {
+			logger.debug("User Name-->" + username);
 			user = new User();
 			user.setUsername(username);
 			user = bo.Checkuser(user, 1);
 			return new ResponseEntity<>(HttpStatus.OK); 
 		} catch (Exception e) {
 			user.setStatus("Network Error Please try again");
-			logger.info("Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
 		} finally {
@@ -107,7 +108,7 @@ public class LoginService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/resetPassword", method = RequestMethod.GET)
 	public ResponseEntity<?> resetPassword(@RequestParam String newPassword, @RequestParam String userName) {
-		logger.info("---------- Inside resetPassword -------");
+		logger.info("resetPassword");
 		User user = null;
 		try {
 			user = new User();
@@ -118,7 +119,7 @@ public class LoginService implements Filter {
 
 		} catch (Exception e) {
 			user.setStatus("Network Error Please try again");
-			logger.info("Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
 		} finally {

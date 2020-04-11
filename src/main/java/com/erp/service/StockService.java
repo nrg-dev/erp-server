@@ -93,7 +93,7 @@ public class StockService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@GetMapping(value = "/loadStockReturn", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> loadStockReturn() {
-		logger.info("------------- Inside loadStockReturn -----------------");
+		logger.info("loadStockReturn");
 		List<POReturnDetails> poList = new ArrayList<POReturnDetails>();
 		List<SOReturnDetails> soList = new ArrayList<SOReturnDetails>();
 		List<Purchase> list = new ArrayList<Purchase>();
@@ -101,9 +101,9 @@ public class StockService implements Filter {
 		Purchase so = null;
 		try {
 			poList = stockdal.loadPurchaseReturn(poList);
-			logger.info("PO List Size ---------->" + poList.size());
+			logger.debug("PO List Size-->" + poList.size());
 			soList = stockdal.loadSalesReturn(soList);
-			logger.info("SO List Size ---------->" + soList.size());
+			logger.debug("SO List Size-->" + soList.size());
 			for (int i = 0; i < poList.size(); i++) {
 				logger.info("---- PO Date -- >" + poList.get(i).getPoDate());
 				po = new Purchase();
@@ -117,7 +117,7 @@ public class StockService implements Filter {
 				po.setInvoiceNumber(poList.get(i).getInvoicenumber());
 				list.add(po);
 			}
-			logger.info("Add PO into List Value ----->" + list.get(0).getReturnCategory());
+			logger.debug("Add PO into List Value-->" + list.get(0).getReturnCategory());
 			for (int j = 0; j < soList.size(); j++) {
 				so = new Purchase();
 				so.setPoDate(soList.get(j).getSoDate());
@@ -130,10 +130,10 @@ public class StockService implements Filter {
 				so.setInvoiceNumber(soList.get(j).getInvoicenumber());
 				list.add(so);
 			}
-			logger.info("Add SO into List Value ----->" + list.get(0).getReturnCategory());
+			logger.debug("Add SO into List Value-->" + list.get(0).getReturnCategory());
 			return new ResponseEntity<List<Purchase>>(list, HttpStatus.CREATED);
 		} catch (Exception e) {
-			logger.info("loadStockReturn Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -145,7 +145,7 @@ public class StockService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/saveStockReturn", method = RequestMethod.POST)
 	public ResponseEntity<?> saveStockReturn(@RequestBody StockReturn stockreturn) {
-		System.out.println("-------- Save Stock Damage -------------");
+		logger.info("saveStockReturn");
 		RandomNumber randomnumber = null;
 		int temp = 1;
 		try {
@@ -153,16 +153,14 @@ public class StockService implements Filter {
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
 			stockreturn.setStockReturnCode(invoice);
 			System.out.println("Invoice Number -->" + stockreturn.getStockReturnCode());
-
 			stockreturn.setAddedDate(Custom.getCurrentInvoiceDate());
-
 			stockreturn = stockdal.saveStockReturn(stockreturn);
 			if (stockreturn.getStatus().equalsIgnoreCase("success")) {
 				randomnumberdal.updateStockDamRandamNumber(randomnumber, temp);
 			}
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
-			logger.info("StockReturn Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
@@ -176,15 +174,15 @@ public class StockService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<?> saveStockDamage(@RequestBody StockDamage stockdamage) {
-		System.out.println("-------- Save Stock Damage -------------");
+		System.out.println("saveStockDamage");
 		RandomNumber randomnumber = null;
 		int temp = 2;
 		try {
 			randomnumber = randomnumberdal.getStockDamageRandomNumber();
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
 			stockdamage.setStockDamageCode(invoice);
-			System.out.println("Product name -->" + stockdamage.getProductName());
-			System.out.println("Invoice Number -->" + stockdamage.getStockDamageCode());
+			logger.debug("Product name-->" + stockdamage.getProductName());
+			logger.debug("Invoice Number-->" + stockdamage.getStockDamageCode());
 			stockdamage.setAddedDate(Custom.getCurrentInvoiceDate());
 			stockdamage = stockdal.saveStockDamage(stockdamage);
 			if (stockdamage.getStatus().equalsIgnoreCase("success")) {
@@ -192,7 +190,7 @@ public class StockService implements Filter {
 			}
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
-			logger.info("Stockdamage Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
@@ -206,14 +204,13 @@ public class StockService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/loadStockDamage", method = RequestMethod.GET)
 	public ResponseEntity<?> loadStockDamage() {
-		logger.info("------------- Inside loadStockDamage-----------------");
+		logger.info("loadStockDamage");
 		List<StockDamage> damagelist = new ArrayList<StockDamage>();
 		try {
-			logger.info("-----------Inside loadStockDamage Called----------");
 			damagelist = stockdal.loadStockDamage(damagelist);
 			return new ResponseEntity<List<StockDamage>>(damagelist, HttpStatus.CREATED);
 		} catch (Exception e) {
-			logger.info("loadStockDamage Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -226,12 +223,12 @@ public class StockService implements Filter {
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateStockDamage(@RequestBody StockDamage damage) {
 		try {
-			System.out.println("Stock code inside try--->" + damage.getStockDamageCode());
+			logger.debug("Stock code inside try-->" + damage.getStockDamageCode());
 			damage = stockdal.updateDamage(damage);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			damage.setStatus("failure");
-			logger.info("updateStockDamage Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -243,11 +240,10 @@ public class StockService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/loadInvoice", method = RequestMethod.GET)
 	public ResponseEntity<?> loadInvoice(String paymentOption) {
-		logger.info("------------- Inside loadInvoice -----------------");
+		logger.info("loadInvoice");
 		List<POInvoiceDetails> polist = new ArrayList<POInvoiceDetails>();
 		List<String> list = new ArrayList<String>();
 		try {
-			logger.info("-----------Inside loadInvoice Called ----------");
 			polist = stockdal.loadInvoice(polist, paymentOption);
 			for (POInvoiceDetails po : polist) {
 				list.add(po.getInvoicenumber());
@@ -258,7 +254,7 @@ public class StockService implements Filter {
 			list.addAll(set);
 			return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
 		} catch (Exception e) {
-			logger.info("loadInvoice Exception ------------->" + e.getMessage());
+			logger.info("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -270,8 +266,8 @@ public class StockService implements Filter {
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(value = "/saveFullStockIn")
 	public ResponseEntity<?> saveFullStockIn(@RequestBody String stockInarray) {
+		logger.info("saveFullStockIn");
 		String temp = stockInarray;
-		System.out.println("-------- Save FullStockIn -------------");
 		Purchase purchase = null;
 		Stock stock = null;
 		StockInDetails stockIndetails = null;
@@ -375,7 +371,7 @@ public class StockService implements Filter {
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(value = "/savePartialStockIn")
 	public ResponseEntity<?> savePartialStockIn(@RequestBody String stockInarray) {
-		System.out.println("-------- Save PartialStockIn -------------");
+		logger.info("savePartialStockIn");
 		Purchase purchase = null;
 		Stock stock = null;
 		StockInDetails stockIndetails = null;
@@ -387,7 +383,7 @@ public class StockService implements Filter {
 		int tempNo = 1;
 		try {
 			purchase = new Purchase();
-			System.out.println("Post Json -->" + stockInarray);
+			logger.debug("Post Json-->" + stockInarray);
 			ArrayList<String> list = new ArrayList<String>();
 			JSONArray jsonArr = new JSONArray(stockInarray);
 			int remove = 0;
@@ -495,7 +491,7 @@ public class StockService implements Filter {
 			purchase.setStatus("success");
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
-			logger.info("saveStockIn Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
@@ -509,14 +505,13 @@ public class StockService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/loadStock", method = RequestMethod.GET)
 	public ResponseEntity<?> loadStock(String status) {
-		logger.info("------------- Inside loadStock-----------------");
+		logger.info("loadStock");
 		List<Stock> stocklist = new ArrayList<Stock>();
 		try {
-			logger.info("-----------Inside loadStock Called----------");
 			stocklist = stockdal.loadStock(stocklist, status);
 			return new ResponseEntity<List<Stock>>(stocklist, HttpStatus.CREATED);
 		} catch (Exception e) {
-			logger.info("loadStock Exception ------------->" + e.getMessage());
+			logger.info("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -528,7 +523,7 @@ public class StockService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/saveStockOut", method = RequestMethod.POST)
 	public ResponseEntity<?> saveStockOut(@RequestBody Stock stock) {
-		System.out.println("-------- saveStockOut ---------");
+		System.out.println("saveStockOut");
 		RandomNumber randomnumber = null;
 		try {
 			randomnumber = randomnumberdal.getStockRandamNumber();
@@ -547,7 +542,7 @@ public class StockService implements Filter {
 			}
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
-			logger.info("Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
