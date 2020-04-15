@@ -11,7 +11,7 @@ public interface CategoryDAL {
 
 	public Category getCategory(String categoryid);
 
-	public Category updateCategory(Category category);
+	//public Category updateCategory(Category category);
 
-	public Category removeCategory(String categorycode);
+	public boolean removeCategory(String categorycode);
 }

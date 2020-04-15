@@ -68,6 +68,10 @@ db.vendor.remove( { } )
 db.category.find();
 db.category.drop()
 db.category.remove( { } )
+
+db.randomNumber.update({"_id" :ObjectId("5e85b8ba604917047f128b43") },{$set : {"number":10000}})
+
+
 -- Item or Product
 db.item.drop()
 db.item.find();

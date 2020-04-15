@@ -67,26 +67,25 @@ public class CategoryImpl implements CategoryDAL {
 
 	}
 
-	// update
-	@Override
-	public Category updateCategory(Category category) {
-		logger.info("Category Code -->"+category.getCategorycode());
-		Update update = new Update();
-		Query query = new Query();
-		query.addCriteria(Criteria.where("categorycode").is(category.getCategorycode()));
-		update.set("name", category.getName());
-		update.set("description", category.getDescription());
-		mongoTemplate.updateFirst(query, update, Category.class);
-		return category;
-
-	}
-
+	/*
+	 * // update
+	 * 
+	 * @Override public Category updateCategory(Category category) {
+	 * logger.info("Category Code -->"+category.getCategorycode()); Update update =
+	 * new Update(); Query query = new Query();
+	 * query.addCriteria(Criteria.where("categorycode").is(category.getCategorycode(
+	 * ))); update.set("name", category.getName()); update.set("description",
+	 * category.getDescription()); mongoTemplate.updateFirst(query, update,
+	 * Category.class); return category;
+	 * 
+	 * }
+	 */
 	// remove
-	public Category removeCategory(String categorycode) {
+	public boolean removeCategory(String categorycode) {
 		Category response = null;
 		Query query = new Query();
 		query.addCriteria(Criteria.where("categorycode").is(categorycode));
 		mongoTemplate.remove(query, Category.class);
-		return response;
+		return true;
 	}
 }

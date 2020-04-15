@@ -22,6 +22,7 @@ public class Employee {
 	 String workHour;
 	 String annualLeave;
 	 String status 		;
+	 String profilepic 		;
 	 private String addeddate;
 
 	public String getId() {

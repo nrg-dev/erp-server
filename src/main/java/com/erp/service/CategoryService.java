@@ -84,7 +84,7 @@ public class CategoryService implements Filter {
 				status = categorydal.saveCategory(category);
 			}
 			else {
-				randomnumber = randomnumberdal.getCategoryRandomNumber(temp);
+				randomnumber = randomnumberdal.getRandamNumber(temp);
 				String categorycode = randomnumber.getCode() + randomnumber.getNumber();
 				category.setCategorycode(categorycode);
 				logger.info("Category name-->" + category.getName());
@@ -97,7 +97,7 @@ public class CategoryService implements Filter {
 			return new ResponseEntity<>(HttpStatus.OK); 
 
 		} catch (Exception e) {
-			logger.info("Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
@@ -125,49 +125,45 @@ public class CategoryService implements Filter {
 			}
 
 		} catch (Exception e) {
-			logger.info("loadCategory Exception-->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
 		}
 	}
 
-	// update
-	@CrossOrigin(origins = "http://localhost:8080")
-	@RequestMapping(value = "/update", method = RequestMethod.PUT)
-	public ResponseEntity<?> updateCategory(@RequestBody Category category) {
-		logger.info("updateCategory");
-		try {
-			logger.info("Category code --->" + category.getCategorycode());
-			category = categorydal.updateCategory(category);
-			return new ResponseEntity<>(HttpStatus.OK);
-
-		} catch (Exception e) {
-			logger.info("Exception ------------->" + e.getMessage());
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		} finally {
-
-		}
-		//return new ResponseEntity<Category>(category, HttpStatus.CREATED);
-	}
+	/*
+	 * // update
+	 * 
+	 * @CrossOrigin(origins = "http://localhost:8080")
+	 * 
+	 * @RequestMapping(value = "/update", method = RequestMethod.PUT) public
+	 * ResponseEntity<?> updateCategory(@RequestBody Category category) {
+	 * logger.info("updateCategory"); try { logger.info("Category code --->" +
+	 * category.getCategorycode()); category = categorydal.updateCategory(category);
+	 * return new ResponseEntity<>(HttpStatus.OK);
+	 * 
+	 * } catch (Exception e) { logger.info("Exception ------------->" +
+	 * e.getMessage()); return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+	 * finally {
+	 * 
+	 * } //return new ResponseEntity<Category>(category, HttpStatus.CREATED); }
+	 */
 
 	// Remove
 	// Remove
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/remove", method = RequestMethod.DELETE)
 	public ResponseEntity<?> removeCategory(String categorycode) {
+		logger.info("removeCategory");
 		try {
 			category = new Category();
-			logger.info("-----------Before Calling  removeCategory ----------");
-			logger.info("Remove Category code" + categorycode);
+			logger.debug("Remove Category code" + categorycode);
 			categorydal.removeCategory(categorycode);
-			category.setStatus("Success");
-			logger.info("-----------Successfully Called  removeCategory ----------");
 			return new ResponseEntity<>(HttpStatus.OK);
 
 		} catch (Exception e) {
-			logger.info("Exception ------------->" + e.getMessage());
-			category.setStatus("failure");
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
 		} finally {
@@ -180,12 +176,13 @@ public class CategoryService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/loadCategoryName", method = RequestMethod.GET)
 	public ResponseEntity<?> loadCategoryName() {
-		logger.info("------------- Inside loadCategoryName-----------------");
+		logger.info("loadCategoryName");
 		List<Category> categorylist = new ArrayList<Category>();
 		List<String> list = new ArrayList<String>();
 		try {
-			logger.info("-----------Inside loadCategoryName Called----------");
+			logger.info("Before Calling loadCategory");
 			categorylist = categorydal.loadCategory(categorylist);
+			logger.info("Successfully Calling loadCategory");
 			for(Category cat: categorylist) {
 				logger.info("category name-->"+cat.getName());
 				list.add(cat.getName()+"-"+cat.getCategorycode());
@@ -194,7 +191,7 @@ public class CategoryService implements Filter {
 			return new ResponseEntity<List<String>>(list, HttpStatus.CREATED);
 
 		} catch (Exception e) {
-			logger.info("loadCategoryName Exception ------------->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
