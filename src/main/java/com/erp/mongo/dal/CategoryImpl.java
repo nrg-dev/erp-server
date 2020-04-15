@@ -22,13 +22,14 @@ public class CategoryImpl implements CategoryDAL {
 	private MongoTemplate mongoTemplate;
 
 	// save & update
-	public boolean saveCategory(Category category) {
+	public boolean saveCategory(Category category,int i) {
 		logger.info("saveCategory");
+		logger.info("category code-->"+category.getCategorycode());
 		boolean status;
 			try {	
 			
 			// Update
-			if(category.getCategorycode()!=null) {
+			if(i==1) {
 				logger.info("Inside Upate");
 				Update update = new Update();
 				Query query = new Query();

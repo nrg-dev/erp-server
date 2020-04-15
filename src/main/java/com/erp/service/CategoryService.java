@@ -78,17 +78,18 @@ public class CategoryService implements Filter {
 		RandomNumber randomnumber = null;
 		boolean status=false;
 		int temp=5;
+		logger.info("CategoryCode-->"+category.getCategorycode());
 		try {
 			if(category.getCategorycode()!=null) {
-				logger.info("update employee");
-				status = categorydal.saveCategory(category);
+				logger.info("update category");
+				status = categorydal.saveCategory(category,1);
 			}
 			else {
 				randomnumber = randomnumberdal.getRandamNumber(temp);
 				String categorycode = randomnumber.getCode() + randomnumber.getNumber();
 				category.setCategorycode(categorycode);
 				logger.info("Category name-->" + category.getName());
-				status = categorydal.saveCategory(category);
+				status = categorydal.saveCategory(category,2);
 				if (status) {
 					randomnumberdal.updateRandamNumber(randomnumber, temp);
 				}
@@ -117,9 +118,12 @@ public class CategoryService implements Filter {
 			categorylist = categorydal.loadCategory(categorylist);
 			logger.info("loadCategory");
 			if(categorylist.size()>0) {
+				logger.info("Category found!");
+				logger.debug("Category-->"+categorylist.size());
 				return new ResponseEntity<List<Category>>(categorylist, HttpStatus.OK);
 			}
 			else {
+				logger.info("No Category found!");
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT); // No data
 
 			}
