@@ -91,18 +91,19 @@ public class EmployeeService implements Filter {
 		try {
 			if(employee.getEmployeecode()!=null) {
 				logger.info("update employee");
-				status = employeedal.save(employee);
+				status = employeedal.save(employee,2);
 			}
 			else {
 				logger.info("save employee");
 				randomnumber = randomnumberdal.getEmployeeRandamNumber();
 				String employeecode = randomnumber.getCode() + randomnumber.getNumber();
 				logger.debug("Employee code-->" + employeecode);
+				logger.info("Base64 String ----->"+employee.getCardImageBase64());
 				employee.setEmployeecode(employeecode);
 				employee.setAddeddate(Custom.getCurrentInvoiceDate());
 				employee.setStatus("Active");
 				logger.debug("Current Date-->" + Custom.getCurrentDate());
-				status = employeedal.save(employee);
+				status = employeedal.save(employee,1);
 				randomnumberdal.updateEmployeeRandamNumber(randomnumber);
 			}
 

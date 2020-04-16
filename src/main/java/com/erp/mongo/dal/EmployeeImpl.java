@@ -30,7 +30,7 @@ public class EmployeeImpl implements EmployeeDAL {
 	 */
 
 	// save
-	public boolean save(Employee employee) {
+	public boolean save(Employee employee,int i) {
 		logger.info("Employee Code-->"+employee.getEmployeecode());
 		logger.info("Employee name-->"+employee.getName());
 		logger.info("rank-->"+employee.getRank());
@@ -43,11 +43,11 @@ public class EmployeeImpl implements EmployeeDAL {
 		logger.info("monthlysalary-->"+employee.getMonthlysalary());
 		logger.info("workHour-->"+employee.getWorkHour());
 		logger.info("annualLeave-->"+employee.getAnnualLeave());
-		boolean status;
+		boolean status = false;
 		try {
 			// Update
-			if(employee.getEmployeecode()!=null) {
-				logger.info("Inside Upate");
+			if(i == 2) {
+				logger.info("Inside Employee Update");
 				Update update = new Update();
 				Query query = new Query();
 				query.addCriteria(Criteria.where("employeecode").is(employee.getEmployeecode()));
@@ -67,7 +67,7 @@ public class EmployeeImpl implements EmployeeDAL {
 				status=true;
 			}
 			// Save
-			else {
+			else if(i == 1) {
 				logger.info("Inside Save");
 				mongoTemplate.save(employee);
 				status=true;		

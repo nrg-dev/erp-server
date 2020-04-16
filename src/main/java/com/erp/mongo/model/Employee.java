@@ -24,6 +24,7 @@ public class Employee {
 	 String status 		;
 	 String profilepic 		;
 	 private String addeddate;
+	 private String cardImageBase64;
 
 	public String getId() {
 		return id;
@@ -151,6 +152,14 @@ public class Employee {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getCardImageBase64() {
+		return cardImageBase64;
+	}
+
+	public void setCardImageBase64(String cardImageBase64) {
+		this.cardImageBase64 = cardImageBase64;
 	}
 	
 
