@@ -20,6 +20,7 @@ public class Vendor {
       String lastedit 		;
       String status 		;
       private String addeddate;
+      private String vendorbase64;
 
 	public String getId() {
 		return id;
@@ -92,6 +93,12 @@ public class Vendor {
 	}
 	public void setAddeddate(String addeddate) {
 		this.addeddate = addeddate;
+	}
+	public String getVendorbase64() {
+		return vendorbase64;
+	}
+	public void setVendorbase64(String vendorbase64) {
+		this.vendorbase64 = vendorbase64;
 	}
 	
 	
