@@ -87,6 +87,7 @@ public class VendorService implements Filter {
 			randomnumber = randomnumberdal.getVendorRandamNumber();
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
 			logger.debug("Invoice number-->" + invoice);
+			logger.info("Base64 String ----->"+vendor.getCardImageBase64());
 			vendor.setVendorcode(invoice);
 			vendor.setAddeddate(Custom.getCurrentInvoiceDate());
 			logger.debug("Current Date-->" + Custom.getCurrentDate());
