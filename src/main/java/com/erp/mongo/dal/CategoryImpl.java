@@ -23,7 +23,7 @@ public class CategoryImpl implements CategoryDAL {
 
 	// save & update
 	public boolean saveCategory(Category category,int i) {
-		logger.info("saveCategory");
+		logger.info("saveCategory & updateCategory");
 		logger.info("category code-->"+category.getCategorycode());
 		boolean status;
 			try {	
@@ -36,6 +36,8 @@ public class CategoryImpl implements CategoryDAL {
 				query.addCriteria(Criteria.where("categorycode").is(category.getCategorycode()));
 				update.set("name", category.getName());
 				update.set("description", category.getDescription());
+				update.set("status", category.getStatus());
+				update.set("updateddate", category.getUpdateddate());
 				mongoTemplate.updateFirst(query, update, Category.class);
 				status=true;
 			}

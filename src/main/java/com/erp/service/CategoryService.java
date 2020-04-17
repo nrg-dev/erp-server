@@ -74,7 +74,7 @@ public class CategoryService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<?> saveCategory(@RequestBody Category category) {
-		logger.info("saveCategory");
+		logger.info("saveCategory & updateCategory");
 		RandomNumber randomnumber = null;
 		boolean status=false;
 		int temp=5;
@@ -82,7 +82,10 @@ public class CategoryService implements Filter {
 		try {
 			if(category.getCategorycode()!=null) {
 				logger.info("update category");
+				logger.info("Before Calling update Category");
 				status = categorydal.saveCategory(category,1);
+				logger.info("After Calling update Category");
+
 			}
 			else {
 				randomnumber = randomnumberdal.getRandamNumber(temp);
