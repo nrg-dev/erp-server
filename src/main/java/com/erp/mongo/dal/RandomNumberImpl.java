@@ -181,8 +181,10 @@ public class RandomNumberImpl implements RandomNumberDAL {
 			Query query = new Query();
 			logger.info("-----------  Before addCriteria-----------");
 			if(i == 1) {
+				// Category
 				query.addCriteria(Criteria.where("randomID").is(5));
 			}else if(i == 2) {
+				// Product
 				query.addCriteria(Criteria.where("randomID").is(4));
 			}
 			logger.info("-----------  After addCriteria-----------");

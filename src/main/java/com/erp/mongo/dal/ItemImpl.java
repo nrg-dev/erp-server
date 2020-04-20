@@ -1,5 +1,6 @@
 package com.erp.mongo.dal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -18,6 +19,7 @@ import com.erp.mongo.model.Discount;
 //import java.util.List;
 
 import com.erp.mongo.model.Item;
+import com.erp.mongo.model.Units;
 
 @Repository
 public class ItemImpl implements ItemDAL {
@@ -34,23 +36,40 @@ public class ItemImpl implements ItemDAL {
 		return product;
 	}
 
+	public List<Units> loadUnits(String id){
+		List<Units> unitlist = new ArrayList<Units>();
+		if(id!=null) {
+			logger.info("DAO unit load all");
+			unitlist = mongoTemplate.findAll(Units.class);
+			logger.info("DAO unit size -->" + unitlist.size());
+		}else {
+			
+		}
+		return unitlist;
+	}
+
 	// item load
-	public List<Item> loadItem(List<Item> itemlist, String category) {
+	public List<Item> loadItem(String vendorcode,String category,String prodcode) {
 		logger.info("DAO Category type-->" + category);
-		if (category.equalsIgnoreCase("all") || category.equalsIgnoreCase(null)) {
+		List<Item> itemlist = new ArrayList<Item>();
+		if (category.equalsIgnoreCase("all")) {
 			logger.info("DAO item load all");
 			itemlist = mongoTemplate.findAll(Item.class);
 			logger.info("DAO item size -->" + itemlist.size());
 
-		} else {
+		} 
+		if (vendorcode!=null && category!=null && prodcode!=null) {
 			Query query = new Query();
-			query.addCriteria(Criteria.where("categorycode").is(category));
+			logger.info("DAO Vendor Code-->" + vendorcode);
+			logger.info("DAO Category-->" + category);
+			logger.info("DAO Product Code-->" + prodcode);
+			query.addCriteria(Criteria.where("vendorcode")
+					.is(vendorcode).and("prodcode").is(prodcode).and("categorycode").is(category));
 			itemlist = mongoTemplate.find(query, Item.class);
+			logger.info("DAO item size -->" + itemlist.size());
 
-		}
-
+		} 
 		return itemlist;
-
 	}
 
 	// Discount load
@@ -72,13 +91,13 @@ public class ItemImpl implements ItemDAL {
 
 	// update
 	public Item updateItem(Item item) {
-		logger.info("[ItemImpl] Item Code -->"+item.getProdcode());
-		logger.info("[ItemImpl] Category Name -->"+item.getCategoryname());
-		logger.info("[ItemImpl] Category Code -->"+item.getCategorycode());
-		logger.info("[ItemImpl] Vendor Name -->"+item.getVendorname());
-		logger.info("[ItemImpl] Vendor Code -->"+item.getVendorcode());
-		logger.info("[ItemImpl] Item Name -->"+item.getProductname());
-		logger.info("[ItemImpl] Description Name -->"+item.getDescription());
+		logger.info("[ItemImpl] Item Code-->"+item.getProdcode());
+		logger.info("[ItemImpl] Category Name-->"+item.getCategoryname());
+		logger.info("[ItemImpl] Category Code-->"+item.getCategorycode());
+		logger.info("[ItemImpl] Vendor Name-->"+item.getVendorname());
+		logger.info("[ItemImpl] Vendor Code-->"+item.getVendorcode());
+		logger.info("[ItemImpl] Item Name-->"+item.getProductname());
+		logger.info("[ItemImpl] Description Name-->"+item.getDescription());
 		Update update = new Update();
 		Query query = new Query();
 		query.addCriteria(Criteria.where("prodcode").is(item.getProdcode()));
@@ -141,5 +160,19 @@ public class ItemImpl implements ItemDAL {
 		discount.setStatus("success");
 		return discount;
 	}
+
+	// units save and update
+	public boolean saveUnits(Units units) {
+		if(units.getId()!=null) {
+			logger.info("DAO Update Units");
+			// update
+		}else {
+			// save
+			logger.info("DAO Save Units");
+			mongoTemplate.save(units);
+		}
+		return true;
+	}
+
 
 }

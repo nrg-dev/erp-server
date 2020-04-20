@@ -15,11 +15,13 @@ public class Item {
 	String vendorname;
 	String price;
 	String tax;
+	String unit;
 	String margin;
 	String sellingprice;
 	String status;
 	String categorycode;
 	String categoryname;
+	String productImage[];
 
 	public String getId() {
 		return id;
@@ -123,6 +125,22 @@ public class Item {
 
 	public void setCategoryname(String categoryname) {
 		this.categoryname = categoryname;
+	}
+
+	public String[] getProductImage() {
+		return productImage;
+	}
+
+	public void setProductImage(String[] productImage) {
+		this.productImage = productImage;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 	
 }

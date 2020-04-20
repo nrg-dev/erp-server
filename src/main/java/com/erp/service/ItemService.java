@@ -35,6 +35,7 @@ import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.model.Discount;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.RandomNumber;
+import com.erp.mongo.model.Units;
 
 @SpringBootApplication
 @RestController
@@ -88,7 +89,7 @@ public class ItemService implements Filter {
 			//System.out.println("item Invoice random number-->" + randomnumber.getProductinvoicenumber());
 			//System.out.println("item Invoice random code-->" + randomnumber.getProductinvoicecode());
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
-			logger.debug("Invoice number-->" + invoice);
+			logger.debug("Product number-->" + invoice);
 			logger.debug("category code-->" + item.getCategorycode());
 			logger.debug("vendor code-->" + item.getVendorcode());
 			if (item.getCategorycode() != null) {
@@ -126,7 +127,6 @@ public class ItemService implements Filter {
 	}
 
 	// save promotion
-
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/addpromotionsave", method = RequestMethod.POST)
 	public ResponseEntity<?> saveDiscount(@RequestBody Discount discount) {
@@ -155,17 +155,42 @@ public class ItemService implements Filter {
 		}
 	}
 
+
+	// save and update Units
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/saveunits", method = RequestMethod.POST)
+	public ResponseEntity<?> saveUnits(@RequestBody Units units) {
+		logger.info("saveUnits");
+		try {
+			boolean status = itemdal.saveUnits(units);
+			if(status) {
+				return new ResponseEntity<>(HttpStatus.OK);	
+			}else {
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+
+		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+
+		finally {
+
+		}
+	}
+
+	
 	// load
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/load", method = RequestMethod.GET)
-	public ResponseEntity<?> loadItem(String category) {
+	public ResponseEntity<?> loadItem(String vendorcode,String category,String prodcode) {
 		logger.info("loadItem");
 		List<Item> itemlist = null;
 		try {
 			logger.info("Category Code or Name-->" + category);
 			logger.info("Before Calling ItemLoad");
 			itemlist = new ArrayList<Item>();
-			itemlist = itemdal.loadItem(itemlist, category);
+			itemlist = itemdal.loadItem(vendorcode,category,prodcode);
 			logger.info("After Calling ItemLoad");
 			for (Item item : itemlist) {
 				logger.debug("product code-->" + item.getProdcode());
@@ -180,6 +205,28 @@ public class ItemService implements Filter {
 		}
 	}
 
+		// load units
+		@CrossOrigin(origins = "http://localhost:8080")
+		@RequestMapping(value = "/loadunits", method = RequestMethod.GET)
+		public ResponseEntity<?> loadUnits(String id) {
+			logger.info("loadunits");
+			List<Units> unitlist = null;
+			try {
+				logger.info("Unit Id-->" + id);
+				unitlist = new ArrayList<Units>();
+				logger.info("Before Calling Unit load");
+				unitlist = itemdal.loadUnits(id);
+				logger.info("After Calling Unit load");
+				logger.info("Unit Size-->"+unitlist.size());
+			   return new ResponseEntity<List<Units>>(unitlist, HttpStatus.CREATED);
+			} catch (Exception e) {
+				logger.error("Exception-->" + e.getMessage());
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			} finally {
+
+			}
+		}
+		
 	/*
 	 * // Load only item name for auto text box search for promotion add // load
 	 * 
@@ -360,7 +407,7 @@ public class ItemService implements Filter {
 			itemlist = new ArrayList<Item>();
 			list = new ArrayList<String>();
 			logger.info("Before Calling loadItem");
-			itemlist = itemdal.loadItem(itemlist, "all");
+			itemlist = itemdal.loadItem(null,"all",null);
 			logger.info("After Calling loadItem");
 			for (Item item : itemlist) {
 				logger.debug("Product name-->" + item.getProductname());

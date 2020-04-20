@@ -2,15 +2,18 @@ package com.erp.mongo.dal;
 
 import java.util.List;
 
-import com.erp.mongo.model.Category;
 import com.erp.mongo.model.Discount;
 import com.erp.mongo.model.Item;
+import com.erp.mongo.model.Units;
 
 public interface ItemDAL {
 	public Item saveItem(Item product);
 	public Discount saveDiscount(Discount discount);
+	public boolean saveUnits(Units units);
+
+	public List<Item> loadItem(String vendorcode,String category,String prodcode);
+	public List<Units> loadUnits(String id);
 	
-	public List<Item> loadItem(List<Item> itemlist,String category);
 	public List<Discount> loadDiscount(List<Discount> discountlist,String discount);
 	
 	public Item getItem(String itemid);
