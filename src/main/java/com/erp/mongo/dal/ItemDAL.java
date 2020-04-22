@@ -23,4 +23,5 @@ public interface ItemDAL {
 	
 	public Item removeItem(String productcode);	
 	public Discount removeDiscount(String discountcode);
+	public Units removeUnit(String id); 
 }

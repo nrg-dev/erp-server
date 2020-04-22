@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.erp.bo.ErpBo;
 import com.erp.mongo.dal.ItemDAL;
 import com.erp.mongo.dal.RandomNumberDAL;
+import com.erp.mongo.model.Category;
 import com.erp.mongo.model.Discount;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.RandomNumber;
@@ -205,28 +206,46 @@ public class ItemService implements Filter {
 		}
 	}
 
-		// load units
-		@CrossOrigin(origins = "http://localhost:8080")
-		@RequestMapping(value = "/loadunits", method = RequestMethod.GET)
-		public ResponseEntity<?> loadUnits(String id) {
-			logger.info("loadunits");
-			List<Units> unitlist = null;
-			try {
-				logger.info("Unit Id-->" + id);
-				unitlist = new ArrayList<Units>();
-				logger.info("Before Calling Unit load");
-				unitlist = itemdal.loadUnits(id);
-				logger.info("After Calling Unit load");
-				logger.info("Unit Size-->"+unitlist.size());
-			   return new ResponseEntity<List<Units>>(unitlist, HttpStatus.CREATED);
-			} catch (Exception e) {
-				logger.error("Exception-->" + e.getMessage());
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-			} finally {
+	// load units
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/loadunits", method = RequestMethod.GET)
+	public ResponseEntity<?> loadUnits(String id) {
+		logger.info("loadunits");
+		List<Units> unitlist = null;
+		try {
+			logger.info("Unit Id-->" + id);
+			unitlist = new ArrayList<Units>();
+			logger.info("Before Calling Unit load");
+			unitlist = itemdal.loadUnits(id);
+			logger.info("After Calling Unit load");
+			logger.info("Unit Size-->"+unitlist.size());
+		   return new ResponseEntity<List<Units>>(unitlist, HttpStatus.CREATED);
+		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} finally {
 
-			}
 		}
-		
+	}
+	
+	//-- Remove Units ---
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/removeUnit", method = RequestMethod.DELETE)
+	public ResponseEntity<?> removeUnit(String id) {
+		logger.info("------ Inside removeUnit -------");
+		try {
+			logger.debug("Remove ObjectID ------->" + id);
+			itemdal.removeUnit(id);
+			return new ResponseEntity<>(HttpStatus.OK);
+
+		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+		} finally {
+
+		}
+	}
 	/*
 	 * // Load only item name for auto text box search for promotion add // load
 	 * 

@@ -174,5 +174,19 @@ public class ItemImpl implements ItemDAL {
 		return true;
 	}
 
+	//------ Remove Units --------
+	public Units removeUnit(String id) {
+		Units response = null;
+		Query query = new Query();
+		try {
+			query.addCriteria(Criteria.where("id").is(id));
+			mongoTemplate.remove(query, Units.class);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			
+		}
+		return response;
+	}
 
 }
