@@ -91,7 +91,7 @@ public class EmployeeService implements Filter {
 		try {
 			if(employee.getEmployeecode()!=null) {
 				logger.info("update employee");
-				status = employeedal.save(employee);
+				status = employeedal.save(employee,2);
 			}
 			else {
 				logger.info("save employee");
@@ -102,7 +102,7 @@ public class EmployeeService implements Filter {
 				employee.setAddeddate(Custom.getCurrentInvoiceDate());
 				employee.setStatus("Active");
 				logger.debug("Current Date-->" + Custom.getCurrentDate());
-				status = employeedal.save(employee);
+				status = employeedal.save(employee,1);
 				randomnumberdal.updateEmployeeRandamNumber(randomnumber);
 			}
 
