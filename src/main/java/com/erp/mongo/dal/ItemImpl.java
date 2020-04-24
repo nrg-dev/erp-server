@@ -110,6 +110,7 @@ public class ItemImpl implements ItemDAL {
 		update.set("price", item.getPrice());
 		update.set("tax", item.getTax());
 		update.set("margin", item.getMargin());
+		update.set("unit", item.getUnit());
 		update.set("sellingprice", item.getSellingprice());
 		mongoTemplate.updateFirst(query, update, Item.class);
 		return item;
