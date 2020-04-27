@@ -2,9 +2,11 @@ package com.erp.mongo.dal;
 
 import java.util.List;
 
+import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -16,6 +18,9 @@ import com.erp.mongo.model.AbsentList;
 import com.erp.mongo.model.ContractList;
 import com.erp.mongo.model.DailyReport;
 import com.erp.mongo.model.Employee;
+import org.springframework.data.domain.Sort; 
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 
 @Repository
 public class EmployeeImpl implements EmployeeDAL {
@@ -30,7 +35,7 @@ public class EmployeeImpl implements EmployeeDAL {
 	 */
 
 	// save
-	public boolean save(Employee employee) {
+	public boolean save(Employee employee,int temp) {
 		logger.info("Employee Code-->"+employee.getEmployeecode());
 		logger.info("Employee name-->"+employee.getName());
 		logger.info("rank-->"+employee.getRank());
@@ -46,7 +51,7 @@ public class EmployeeImpl implements EmployeeDAL {
 		boolean status;
 		try {
 			// Update
-			if(employee.getEmployeecode()!=null) {
+			if(employee.getEmployeecode()!=null && temp==1) {
 				logger.info("Inside Upate");
 				Update update = new Update();
 				Query query = new Query();
@@ -272,7 +277,18 @@ public class EmployeeImpl implements EmployeeDAL {
 
 	// load
 	public List<Employee> load(List<Employee> list) {
-		list = mongoTemplate.findAll(Employee.class);
+		//Query query = new Query();
+		//query.with(new Sort(Sort.Direction.DESC, "_id"));
+	    Query query = new Query();//.with(new Sort("_id", "-1"));
+	   // query.with(new Sort(new Order(Direction.ASC, "employeecode")));
+	  // query.with(new Sort(new Order(Direction.DESC, "addeddate")));
+	   query.with(new Sort(new Order(Direction.DESC, "employeecode")));
+	    //List<MyClass> allObjects = mongoTemplate.find(query, MyClass.class);
+		list = mongoTemplate.find(query,Employee.class);
+		logger.info("Size-->"+list.size());
+		for (Employee e : list) {
+		    logger.info(e.getName());    
+		   }
 		return list;
 	}
 

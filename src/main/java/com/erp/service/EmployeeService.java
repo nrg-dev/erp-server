@@ -88,10 +88,12 @@ public class EmployeeService implements Filter {
 		logger.info("save");
 		RandomNumber randomnumber = null;
 		boolean status;
+		int temp=0;
 		try {
 			if(employee.getEmployeecode()!=null) {
 				logger.info("update employee");
-				status = employeedal.save(employee);
+				temp=1;
+				status = employeedal.save(employee,temp);
 			}
 			else {
 				logger.info("save employee");
@@ -102,7 +104,8 @@ public class EmployeeService implements Filter {
 				employee.setAddeddate(Custom.getCurrentInvoiceDate());
 				employee.setStatus("Active");
 				logger.debug("Current Date-->" + Custom.getCurrentDate());
-				status = employeedal.save(employee);
+				temp=2;
+				status = employeedal.save(employee,temp);
 				randomnumberdal.updateEmployeeRandamNumber(randomnumber);
 			}
 
@@ -131,6 +134,7 @@ public class EmployeeService implements Filter {
 		List<Employee> responseList = null;
 		try {
 			responseList = employeedal.load(responseList);
+			logger.info("Employee List Size-->"+responseList.size());
 			return new ResponseEntity<List<Employee>>(responseList, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.info("Exception-->" + e.getMessage());

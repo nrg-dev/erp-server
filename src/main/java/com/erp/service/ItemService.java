@@ -156,6 +156,30 @@ public class ItemService implements Filter {
 		}
 	}
 
+	// load
+		@CrossOrigin(origins = "http://localhost:8080")
+		@RequestMapping(value = "/load", method = RequestMethod.GET)
+		public ResponseEntity<?> loadItem(String vendorcode,String category,String prodcode) {
+			logger.info("loadItem");
+			List<Item> itemlist = null;
+			try {
+				logger.info("Category Code or Name-->" + category);
+				logger.info("Before Calling ItemLoad");
+				itemlist = new ArrayList<Item>();
+				itemlist = itemdal.loadItem(vendorcode,category,prodcode);
+				logger.info("After Calling ItemLoad");
+				for (Item item : itemlist) {
+					logger.debug("product code-->" + item.getProdcode());
+				}
+				return new ResponseEntity<List<Item>>(itemlist, HttpStatus.CREATED);
+
+			} catch (Exception e) {
+				logger.error("Exception-->" + e.getMessage());
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			} finally {
+
+			}
+		}
 
 	// save and update Units
 	@CrossOrigin(origins = "http://localhost:8080")
@@ -163,6 +187,12 @@ public class ItemService implements Filter {
 	public ResponseEntity<?> saveUnits(@RequestBody Units units) {
 		logger.info("saveUnits");
 		try {
+			if(units.getId()!=null) {
+				// update
+			}else {
+				// save
+				
+			}
 			boolean status = itemdal.saveUnits(units);
 			if(status) {
 				return new ResponseEntity<>(HttpStatus.OK);	
@@ -181,30 +211,7 @@ public class ItemService implements Filter {
 	}
 
 	
-	// load
-	@CrossOrigin(origins = "http://localhost:8080")
-	@RequestMapping(value = "/load", method = RequestMethod.GET)
-	public ResponseEntity<?> loadItem(String vendorcode,String category,String prodcode) {
-		logger.info("loadItem");
-		List<Item> itemlist = null;
-		try {
-			logger.info("Category Code or Name-->" + category);
-			logger.info("Before Calling ItemLoad");
-			itemlist = new ArrayList<Item>();
-			itemlist = itemdal.loadItem(vendorcode,category,prodcode);
-			logger.info("After Calling ItemLoad");
-			for (Item item : itemlist) {
-				logger.debug("product code-->" + item.getProdcode());
-			}
-			return new ResponseEntity<List<Item>>(itemlist, HttpStatus.CREATED);
-
-		} catch (Exception e) {
-			logger.error("Exception-->" + e.getMessage());
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		} finally {
-
-		}
-	}
+	
 
 	// load units
 	@CrossOrigin(origins = "http://localhost:8080")

@@ -50,15 +50,28 @@ public class ItemImpl implements ItemDAL {
 
 	// item load
 	public List<Item> loadItem(String vendorcode,String category,String prodcode) {
-		logger.info("DAO Category type-->" + category);
+		logger.info("DAO Category-->" + category);
+		logger.info("DAO VendorCode-->" + vendorcode);
+		logger.info("DAO ProductCode-->" + prodcode);
+
 		List<Item> itemlist = new ArrayList<Item>();
-		if (category.equalsIgnoreCase("all")) {
+		
+		if (vendorcode!=null && ( category==null && prodcode==null)) {
+			Query query = new Query();
+			logger.info("DAO Vendor Code-->" + vendorcode);
+			query.addCriteria(Criteria.where("vendorcode").is(vendorcode));
+			itemlist = mongoTemplate.find(query, Item.class);
+			logger.info("DAO item size -->" + itemlist.size());
+
+		} 
+		
+		else if (category.equalsIgnoreCase("all")) {
 			logger.info("DAO item load all");
 			itemlist = mongoTemplate.findAll(Item.class);
 			logger.info("DAO item size -->" + itemlist.size());
 
 		} 
-		if (vendorcode!=null && category!=null && prodcode!=null) {
+		else if (vendorcode!=null && category!=null && prodcode!=null) {
 			Query query = new Query();
 			logger.info("DAO Vendor Code-->" + vendorcode);
 			logger.info("DAO Category-->" + category);
