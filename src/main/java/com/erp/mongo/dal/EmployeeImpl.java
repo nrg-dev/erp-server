@@ -48,7 +48,7 @@ public class EmployeeImpl implements EmployeeDAL {
 		logger.info("monthlysalary-->"+employee.getMonthlysalary());
 		logger.info("workHour-->"+employee.getWorkHour());
 		logger.info("annualLeave-->"+employee.getAnnualLeave());
-		boolean status;
+		boolean status = false;
 		try {
 			// Update
 			if(employee.getEmployeecode()!=null && temp==1) {
@@ -72,7 +72,7 @@ public class EmployeeImpl implements EmployeeDAL {
 				status=true;
 			}
 			// Save
-			else {
+			else if(i == 1){
 				logger.info("Inside Save");
 				mongoTemplate.save(employee);
 				status=true;		
