@@ -5,6 +5,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.erp.bo.ErpBo;
 import com.erp.mongo.model.Customer;
+import com.erp.mongo.model.Employee;
 
 @Repository
 public class CustomerImpl implements CustomerDAL {
@@ -65,8 +69,11 @@ public class CustomerImpl implements CustomerDAL {
 
 	// Load
 	public List<Customer> loadCustomer(List<Customer> list) {
-		list = mongoTemplate.findAll(Customer.class);// .find(query, OwnTree.class);
-		return list;
+		 Query query = new Query();
+		 query.with(new Sort(new Order(Direction.DESC, "custcode")));
+  		 list = mongoTemplate.find(query,Customer.class);
+		 //list = mongoTemplate.findAll(Customer.class);// .find(query, OwnTree.class);
+		 return list;
 
 	}
 

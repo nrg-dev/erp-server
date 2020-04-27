@@ -72,7 +72,7 @@ public class EmployeeImpl implements EmployeeDAL {
 				status=true;
 			}
 			// Save
-			else if(i == 1){
+			else {
 				logger.info("Inside Save");
 				mongoTemplate.save(employee);
 				status=true;		
@@ -92,21 +92,20 @@ public class EmployeeImpl implements EmployeeDAL {
 		Query query = null;//new Query();
 		DailyReport dailyReport=null;
 		try {
-			query = new Query();
-		
-		query.addCriteria(Criteria.where("employeecode").is(employeeDto.getEmployeecode()));
-		query.addCriteria(Criteria.where("date").is(employeeDto.getDate()));
-		List<DailyReport> list = mongoTemplate.find(query,DailyReport.class);
-		if(list.size()>0) {
-			// update
-			update = new Update();
-			query = new Query();
+			query = new Query();		
 			query.addCriteria(Criteria.where("employeecode").is(employeeDto.getEmployeecode()));
 			query.addCriteria(Criteria.where("date").is(employeeDto.getDate()));
-			update.set("report", employeeDto.getReport());
-			mongoTemplate.updateFirst(query, update, DailyReport.class);
-			status=true;
-		}
+			List<DailyReport> list = mongoTemplate.find(query,DailyReport.class);
+			if(list.size()>0) {
+				// update
+				update = new Update();
+				query = new Query();
+				query.addCriteria(Criteria.where("employeecode").is(employeeDto.getEmployeecode()));
+				query.addCriteria(Criteria.where("date").is(employeeDto.getDate()));
+				update.set("report", employeeDto.getReport());
+				mongoTemplate.updateFirst(query, update, DailyReport.class);
+				status=true;
+			}
 		else {
             // save
 			dailyReport=new DailyReport(employeeDto.getEmployeecode(),employeeDto.getDate(),employeeDto.getReport());
