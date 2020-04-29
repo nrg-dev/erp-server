@@ -19,6 +19,7 @@ public class Customer {
 	String lastedit;
     String addeddate;
 	String status;
+	String customerbase64;
 
 	public String getId() {
 		return id;
@@ -114,6 +115,14 @@ public class Customer {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getCustomerbase64() {
+		return customerbase64;
+	}
+
+	public void setCustomerbase64(String customerbase64) {
+		this.customerbase64 = customerbase64;
 	}
 
 }

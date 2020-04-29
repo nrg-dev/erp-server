@@ -34,7 +34,6 @@ public class VendorImpl implements VendorDAL {
 	@Override
 	public Vendor saveVendor(Vendor vendor) {
 		System.out.println("Save Vendor");
-		// mongoTemplate.insert(customer);//(query, RandamNumber.class);
 		mongoTemplate.save(vendor);
 		vendor.setStatus("success");
 		return vendor;

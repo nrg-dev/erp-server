@@ -90,6 +90,7 @@ public class CustomerService implements Filter {
 			customer.setCustcode(customercode);
 			customer.setLastedit(Custom.getCurrentInvoiceDate());
 			customer.setAddeddate(Custom.getCurrentInvoiceDate());
+			logger.info("Customer Image Base 64 -->" + customer.getCustomerbase64());
 			customer = customerdal.saveCustomer(customer);
 			if (customer.getStatus().equalsIgnoreCase("success")) {
 				randomnumberdal.updateVendorRandamNumber(randomnumber, 2);
