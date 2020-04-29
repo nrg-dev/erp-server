@@ -152,6 +152,7 @@ public class EmployeeService implements Filter {
 		List<Employee> responseList = null;
 		try {
 			responseList = employeedal.get(employeecode);
+			logger.info("Base 64 Employee-->"+responseList.get(0).getProfilepic());
 			return new ResponseEntity<List<Employee>>(responseList, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.info("Exception-->" + e.getMessage());

@@ -152,6 +152,14 @@ public class Employee {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
+	public String getProfilepic() {
+		return profilepic;
+	}
+
+	public void setProfilepic(String profilepic) {
+		this.profilepic = profilepic;
+	}
 	
 
 }
