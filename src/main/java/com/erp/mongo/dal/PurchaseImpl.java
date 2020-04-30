@@ -12,12 +12,17 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import com.erp.mongo.model.Employee;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.Vendor;
+
+import org.springframework.data.domain.Sort; 
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 
 @Repository
 public class PurchaseImpl implements PurchaseDAL {
@@ -63,7 +68,16 @@ public class PurchaseImpl implements PurchaseDAL {
 	
 	public List<POInvoice> loadInvoice(){
 		// List<PurchaseOrder>
-		List<POInvoice> list = mongoTemplate.findAll(POInvoice.class);// Load Invoice
+		List<POInvoice> list;
+		Query query = new Query();
+	    query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
+		list = mongoTemplate.find(query,POInvoice.class);
+		logger.info("Size-->"+list.size());
+		for (POInvoice e : list) {
+		    logger.info("Invoice Number -->"+e.getInvoicenumber());    
+		}
+		
+		//List<POInvoice> list = mongoTemplate.findAll(POInvoice.class);// Load Invoice
 		return list;
 	
 	}
@@ -226,8 +240,10 @@ public class PurchaseImpl implements PurchaseDAL {
 	public List<PurchaseOrder> loadPO(){
 		List<PurchaseOrder> list=null;
 		logger.info("DAO Vendor item load all");
-	   // Query query = new Query().with(new Sort("_id", "-1"));
-		list = mongoTemplate.findAll(PurchaseOrder.class);
+		Query query = new Query();
+		query.with(new Sort(new Order(Direction.DESC, "pocode")));
+		list = mongoTemplate.find(query,PurchaseOrder.class);
+		logger.info("Size-->"+list.size());
 		return list;
 	}
 	
