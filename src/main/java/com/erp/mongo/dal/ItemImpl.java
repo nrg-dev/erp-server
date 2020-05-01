@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
-
+import org.springframework.data.domain.Sort;
 import com.erp.mongo.model.Discount;
 
 //import java.util.ArrayList;
@@ -66,8 +66,19 @@ public class ItemImpl implements ItemDAL {
 		} 
 		
 		else if (category.equalsIgnoreCase("all")) {
+			Query query = new Query();
+			query.with(new Sort(Sort.Direction.DESC, "prodcode"));
+			query.fields().include("id");
+			query.fields().include("prodcode");
+			query.fields().include("productname");
+			query.fields().include("categoryname");
+			query.fields().include("vendorname");
+			query.fields().include("price");
+			query.fields().include("margin");
+			query.fields().include("tax");
+			query.fields().include("unit");
 			logger.info("DAO item load all");
-			itemlist = mongoTemplate.findAll(Item.class);
+			itemlist = mongoTemplate.find(query,Item.class);
 			logger.info("DAO item size -->" + itemlist.size());
 
 		} 
