@@ -21,8 +21,8 @@ public class Employee {
 	 String monthlysalary;
 	 String workHour;
 	 String annualLeave;
-	 String status 		;
-	 String profilepic 		;
+	 String status;
+	 private String profilepic;
 	 private String addeddate;
 
 	public String getId() {
@@ -160,6 +160,7 @@ public class Employee {
 	public void setProfilepic(String profilepic) {
 		this.profilepic = profilepic;
 	}
+
 	
 
 }
