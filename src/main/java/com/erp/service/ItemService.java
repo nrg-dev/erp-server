@@ -110,6 +110,7 @@ public class ItemService implements Filter {
 			}
 
 			item.setProdcode(invoice);
+			logger.info("Product Image Base64 -->"+item.getProductImage());
 			item = itemdal.saveItem(item);
 			if (item.getStatus().equalsIgnoreCase("success")) {
 				randomnumberdal.updateCategoryRandamNumber(randomnumber, 2);

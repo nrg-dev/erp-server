@@ -91,6 +91,8 @@ db.randomNumber.remove( { } )
 db.stock.find({"_id" :ObjectId("5e4fb74ab1840225ec539395") });
 db.pOInvoiceDetails.find({"paymentStatus" :"Not Paid"});
 db.pOInvoiceDetails.find({"itemname" :"Heals-PROD6"});
+db.item.find({"prodcode" : "P10009"});
+
 
 db.stock.remove({"status" :"StockOut" });
 

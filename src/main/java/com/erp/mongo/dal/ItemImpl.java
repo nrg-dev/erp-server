@@ -73,6 +73,7 @@ public class ItemImpl implements ItemDAL {
 			query.fields().include("productname");
 			query.fields().include("categoryname");
 			query.fields().include("vendorname");
+			query.fields().include("vendorcode");
 			query.fields().include("price");
 			query.fields().include("margin");
 			query.fields().include("tax");
@@ -136,6 +137,7 @@ public class ItemImpl implements ItemDAL {
 		update.set("margin", item.getMargin());
 		update.set("unit", item.getUnit());
 		update.set("sellingprice", item.getSellingprice());
+		update.set("productImage", item.getProductImage());
 		mongoTemplate.updateFirst(query, update, Item.class);
 		return item;
 
