@@ -13,12 +13,21 @@ public class SalesOrder {
 	@Id
 	private String id;
 	private String categoryname;
+	private String categorycode;
 	private String productname;
+	private String productcode;
 	private String customername;
-	private int totalqty;
+	private String customercode;
+	private int qty;
+	private String unit;
+	private int unitprice;
+	private int subtotal;
 	private String date;
 	private String description;
 	private String status;
+	private String socode;
+	private String invoicenumber;
+	
 	public String getId() {
 		return id;
 	}
@@ -44,11 +53,60 @@ public class SalesOrder {
 	public void setCustomername(String customername) {
 		this.customername = customername;
 	}
-	public int getTotalqty() {
-		return totalqty;
+	
+	public String getCategorycode() {
+		return categorycode;
 	}
-	public void setTotalqty(int totalqty) {
-		this.totalqty = totalqty;
+	public void setCategorycode(String categorycode) {
+		this.categorycode = categorycode;
+	}
+	public String getProductcode() {
+		return productcode;
+	}
+	public void setProductcode(String productcode) {
+		this.productcode = productcode;
+	}
+	public String getCustomercode() {
+		return customercode;
+	}
+	public void setCustomercode(String customercode) {
+		this.customercode = customercode;
+	}
+	public int getQty() {
+		return qty;
+	}
+	public void setQty(int qty) {
+		this.qty = qty;
+	}
+	public String getUnit() {
+		return unit;
+	}
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+	public int getUnitprice() {
+		return unitprice;
+	}
+	public void setUnitprice(int unitprice) {
+		this.unitprice = unitprice;
+	}
+	public int getSubtotal() {
+		return subtotal;
+	}
+	public void setSubtotal(int subtotal) {
+		this.subtotal = subtotal;
+	}
+	public String getSocode() {
+		return socode;
+	}
+	public void setSocode(String socode) {
+		this.socode = socode;
+	}
+	public String getInvoicenumber() {
+		return invoicenumber;
+	}
+	public void setInvoicenumber(String invoicenumber) {
+		this.invoicenumber = invoicenumber;
 	}
 	public String getDate() {
 		return date;

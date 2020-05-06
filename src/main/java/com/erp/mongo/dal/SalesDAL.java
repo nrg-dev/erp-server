@@ -5,9 +5,11 @@ import java.util.List;
 
 import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Item;
+import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOInvoiceDetails;
 import com.erp.mongo.model.SOReturnDetails;
+import com.erp.mongo.model.SalesOrder;
 
 public interface SalesDAL {
 	
@@ -41,6 +43,13 @@ public interface SalesDAL {
 	
 	public ArrayList<String> loadCustomerName();
 
-	public List<SOInvoice> loadfilterData(List<SOInvoice> response, String fromdate, String todate);   
+	public List<SOInvoice> loadfilterData(List<SOInvoice> response, String fromdate, String todate);
+
+	public SalesOrder saveSO(SalesOrder salesorder);   
+	public boolean updateSalesOrder(SalesOrder salesorder);
+	public boolean removeSO(String id);
+	public List<SalesOrder> loadSO();
+
+	public boolean updateSO(String invoice,String[] value);
 
 }

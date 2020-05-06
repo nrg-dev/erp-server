@@ -37,16 +37,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.bo.ErpBo;
+import com.erp.dto.POInvoiceDto;
+import com.erp.dto.SOInvoiceDto;
 import com.erp.dto.Sales;
 import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.dal.SalesDAL;
 import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Item;
+import com.erp.mongo.model.POInvoice;
+import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOInvoiceDetails;
 import com.erp.mongo.model.SOReturnDetails;
+import com.erp.mongo.model.SalesOrder;
 import com.erp.util.Custom;
+import com.erp.util.PDFGenerator;
 
 @SpringBootApplication
 @RestController
@@ -206,10 +212,10 @@ public class SalesService implements Filter {
 			soinvoice.setCustomername(sales.getCustomerName());
 			soinvoice.setInvoicenumber(invoice);
 			soinvoice.setStatus("Pending");
-			soinvoice.setTotalqty(totalQty);
+			soinvoice.setQty(totalQty);
 			soinvoice.setTotalprice(totalPrice);
-			soinvoice.setTotalitem(totalitem);
-			soinvoice.setDeliveryprice(sales.getDeliveryCost());
+			//soinvoice.setTotalitem(totalitem);
+			soinvoice.setDeliveryprice(Integer.valueOf(sales.getDeliveryCost()));
 			salesdal.saveSOInvoice(soinvoice);
 			System.out.println("Service call start.....");
 			sales.setStatus("success");
@@ -273,12 +279,12 @@ public class SalesService implements Filter {
 				sales.setCustomerName(res.getCustomername());
 				sales.setNetAmount(totalAmountlist);
 				sales.setTotalAmount(res.getTotalprice());
-				sales.setDeliveryCost(res.getDeliveryprice());
+				//sales.setDeliveryCost(res.getDeliveryprice());
 				sales.setStatus(res.getStatus());
 				sales.setProductName(itemnameList);
 				sales.setQuantity(qtylist);
 				sales.setUnitPrice(totalAmountlist);
-				sales.setTotalItem(res.getTotalitem());
+				//sales.setTotalItem(res.getTotalitem());
 				sales.setDescription(prodList);
 				responseList.add(sales);
 			}
@@ -526,11 +532,11 @@ public class SalesService implements Filter {
 			soinvoice.setInvoicenumber(sodetails.getInvoicenumber());
 			logger.info("Total Qty -->" + totalQty);
 			logger.info("Total Price -->" + totalPrice);
-			soinvoice.setTotalqty(totalQty);
+			soinvoice.setQty(totalQty);
 			soinvoice.setTotalprice(totalPrice);
-			logger.info("After soInvoice Total Qty -->" + soinvoice.getTotalqty());
+			logger.info("After soInvoice Total Qty -->" + soinvoice.getQty());
 			logger.info("After soInvoice Total Price -->" + soinvoice.getTotalprice());
-			soinvoice.setTotalitem(totalitem);
+			//soinvoice.setTotalitem(totalitem);
 			salesdal.updateSOInvoice(soinvoice);
 			sales.setStatus("success");
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -687,12 +693,12 @@ public class SalesService implements Filter {
 				sales.setCustomerName(res.getCustomername());
 				sales.setNetAmount(totalAmountlist);
 				sales.setTotalAmount(res.getTotalprice());
-				sales.setDeliveryCost(res.getDeliveryprice());
+				//sales.setDeliveryCost(res.getDeliveryprice());
 				sales.setStatus(res.getStatus());
 				sales.setProductName(itemnameList);
 				sales.setQuantity(qtylist);
 				sales.setUnitPrice(totalAmountlist);
-				sales.setTotalItem(res.getTotalitem());
+				//sales.setTotalItem(res.getTotalitem());
 				sales.setDescription(prodList);
 				saleslist.add(sales);
 			}
@@ -704,5 +710,134 @@ public class SalesService implements Filter {
 
 		}
 	}
+	
+	
+	// ------- Load Purchase Order --
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/saveSO", method = RequestMethod.POST)
+	public ResponseEntity<?> saveSO(@RequestBody SalesOrder salesorder) {
+		logger.info("-------- saveSO --------");
+		RandomNumber randomnumber = null;
+		int randomId = 7;
+		try {
+			randomnumber = randomnumberdal.getRandamNumber(randomId);
+			String socode = randomnumber.getCode() + randomnumber.getNumber();
+			logger.debug("sales code-->" + socode);
+			salesorder.setSocode(socode);
+			salesorder = salesdal.saveSO(salesorder);
+			if (salesorder.getStatus().equalsIgnoreCase("success")) {
+				randomnumberdal.updateRandamNumber(randomnumber,randomId);
+			}
+		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
+		} finally {
+
+		}
+		return new ResponseEntity<>(HttpStatus.OK); // 200
+	}
+	
+	// Update PO
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/updateSalesOrder", method = RequestMethod.PUT)
+	public ResponseEntity<?> updateSalesOrder(@RequestBody SalesOrder salesorder) {
+		logger.info("---------- updateSalesOrder ----------");
+		try {
+			boolean stauts = salesdal.updateSalesOrder(salesorder);
+			if(stauts) {
+				return new ResponseEntity<>(HttpStatus.OK); 
+			}
+			else {
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);// 500 Internal Server error
+
+			}
+		} catch (Exception e) {
+			logger.error("Exception-->"+e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} finally {
+
+		}
+	}
+	
+	// Remove PO Order
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/removeSO", method = RequestMethod.DELETE)
+	public ResponseEntity<?> removeSO(String id) {
+		logger.info("------- removeSO ----------");
+		logger.debug("Service PO delete Id-->"+id);
+		try {
+			boolean stauts = salesdal.removeSO(id);
+			if(stauts) {
+				return new ResponseEntity<>(HttpStatus.OK); 
+			}
+			return new ResponseEntity<>(HttpStatus.OK); 
+		} catch (Exception e) {
+			logger.error("Exception-->"+e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} finally {
+
+		}
+	}
+	
+	
+	// ------- Load Purchase Order --
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/loadSO", method = RequestMethod.GET)
+	public ResponseEntity<?> loadSO() {
+		logger.info("-------- loadSO -----------");
+		List<SalesOrder> solist = null;
+		try {
+			solist = salesdal.loadSO();
+			return new ResponseEntity<List<SalesOrder>>(solist, HttpStatus.CREATED);
+
+		} catch (Exception e) {
+			logger.error("Exception-->"+e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} finally {
+
+		}
+	}
+		
+	// Create Invoice
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/createInvoice", method = RequestMethod.POST)
+	public ResponseEntity<?> createInvoice(@RequestBody SOInvoiceDto soinvoicedto) {
+		logger.info("-------- createInvoice ---------");
+		logger.debug("Invoice Date-->" + soinvoicedto.getCreateddate());
+		logger.debug("Sub Total-->" + soinvoicedto.getSubtotal());
+		logger.debug("Delivery Charge-->" + soinvoicedto.getDeliverycharge());
+		logger.debug("Total Price-->" + soinvoicedto.getTotalprice());
+		RandomNumber randomnumber = null;
+		int randomId = 11;
+		try {
+			logger.debug("Delivery Charge-->"+soinvoicedto.getDeliverycharge());
+			randomnumber = randomnumberdal.getRandamNumber(randomId);
+			String invoice = randomnumber.getCode() + randomnumber.getNumber();
+			logger.debug("Invoice number-->" + invoice);
+			// Update Invoice Number and get Vendor name and code
+			salesdal.updateSO(invoice,soinvoicedto.getOrdernumbers());
+			SOInvoice soinvoice = new SOInvoice();
+			soinvoice.setInvoicedate(soinvoicedto.getCreateddate());
+			logger.debug("Invoice Date-->" + soinvoice.getInvoicedate());
+			soinvoice.setInvoicenumber(invoice);
+			soinvoice.setStatus("Pending");
+			soinvoice.setSubtotal(soinvoicedto.getSubtotal());
+			soinvoice.setDeliveryprice(soinvoicedto.getDeliverycharge());
+			soinvoice.setTotalprice(soinvoicedto.getSubtotal()+soinvoicedto.getDeliverycharge());
+			String base64=PDFGenerator.getBase64();
+			soinvoice.setBase64(base64);
+			salesdal.saveSOInvoice(soinvoice);
+			// Update Random number table
+			randomnumberdal.updateRandamNumber(randomnumber,randomId);
+			logger.info("createInvoice done!");
+			return new ResponseEntity<>(HttpStatus.OK); // 200
+
+		}catch(Exception e) {
+			logger.error("Exception-->"+e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 400
+
+		}
+	
+	}	
 
 }

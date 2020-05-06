@@ -39,7 +39,7 @@ public class RandomNumberImpl implements RandomNumberDAL {
 			radomNumber = mongoTemplate.findOne(query, RandomNumber.class);
 			logger.info("After Select Random");
 			logger.debug("Random Number-->"+radomNumber);
-			return radomNumber;// mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
+			return radomNumber;
 		} catch (Exception e) {
 			logger.error("Exception-->"+e.getMessage());
 			return radomNumber;
@@ -54,12 +54,11 @@ public class RandomNumberImpl implements RandomNumberDAL {
 		logger.info("updateRandamNumber");
 		logger.info("Code | Number -->" + rn.getCode() + "|" +rn.getNumber());
 		Query query = new Query();
-		//query.addCriteria(Criteria.where("randomID").is(6));
 		query.addCriteria(Criteria.where("randomID").is(id));
 		Update update = new Update();
 		update.set("number", rn.getNumber() + 1);
-		mongoTemplate.updateFirst(query, update, RandomNumber.class);// (query, RandamNumber.class);
-		return true;// mongoTemplate.find(query, RandamNumber.class);//(RandamNumber.class);
+		mongoTemplate.updateFirst(query, update, RandomNumber.class);
+		return true;
 	}
 
 	@Override

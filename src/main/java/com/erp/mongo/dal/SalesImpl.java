@@ -6,6 +6,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -15,9 +18,11 @@ import org.springframework.stereotype.Repository;
 import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
+import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOInvoiceDetails;
 import com.erp.mongo.model.SOReturnDetails;
+import com.erp.mongo.model.SalesOrder;
 
 @Repository
 public class SalesImpl implements SalesDAL {
@@ -174,9 +179,9 @@ public class SalesImpl implements SalesDAL {
 		update.set("invoicenumber", purchase.getInvoicenumber());
 		update.set("customername", purchase.getCustomername());
 		update.set("deliveryprice", purchase.getDeliveryprice());
-		update.set("totalqty", purchase.getTotalqty());
+		update.set("qty", purchase.getQty());
 		update.set("totalprice", purchase.getTotalprice());
-		update.set("totalitem", purchase.getTotalitem());
+		//update.set("totalitem", purchase.getTotalitem());
 		update.set("status", purchase.getStatus());
 
 		mongoTemplate.updateFirst(query, update, SOInvoice.class);
@@ -212,4 +217,84 @@ public class SalesImpl implements SalesDAL {
                 SOInvoice.class);
 		return list;
 	}
+	
+	//------- Save SalesOrder Details ---------
+	public SalesOrder saveSO(SalesOrder salesorder) {
+		logger.info("------ DAO SalesOrder ------");
+		logger.debug("SO Number-->"+salesorder.getSocode());
+		mongoTemplate.save(salesorder);
+		salesorder.setStatus("success"); 
+		return salesorder;
+	}
+	
+	// Update PO order
+	public boolean updateSalesOrder(SalesOrder salesorder) {
+		Update update = new Update();
+		Query query = new Query();
+		query.addCriteria(Criteria.where("_id").is(salesorder.getId()));
+		update.set("categoryname", salesorder.getCategoryname());
+		update.set("categorycode", salesorder.getCategorycode());
+		update.set("productname", salesorder.getProductname());
+		update.set("productcode", salesorder.getProductcode());
+		update.set("customername", salesorder.getCustomername());
+		update.set("customercode", salesorder.getCustomercode());
+		update.set("qty", salesorder.getQty());
+		update.set("unit", salesorder.getUnit());
+		update.set("unitprice", salesorder.getUnitprice());
+		update.set("subtotal", salesorder.getSubtotal());
+		update.set("date", salesorder.getDate());
+		update.set("description", salesorder.getDescription());
+		mongoTemplate.updateFirst(query, update, SalesOrder.class);
+		return true;
+	}
+	
+	// Remove
+	public boolean removeSO(String id) {
+		logger.info("SO delete Id-->"+id);
+		logger.info("SO delete start");
+		Query query = new Query();
+		query.addCriteria(Criteria.where("_id").is(id));
+		mongoTemplate.remove(query, SalesOrder.class);
+		logger.info("SO deleted"+id);
+		return true;
+	}
+	
+	public List<SalesOrder> loadSO(){
+		List<SalesOrder> list=null;
+		Query query = new Query();
+		query.with(new Sort(new Order(Direction.DESC, "socode")));
+		list = mongoTemplate.find(query,SalesOrder.class);
+		logger.info("Size-->"+list.size());
+		return list;
+	}
+	
+	// Update SO With Invoice Number
+	public boolean updateSO(String invoice,String[] value) {
+		logger.info("----- DAO updateSO -----");
+		Update update = null;//new Update();
+		Query query = null;//new Query();
+		String changestatus="Invoiced";
+		try {
+			for(String v:value) {
+				update = new Update();
+				query = new Query();
+				logger.info("SO numbers-->"+v);
+				query.addCriteria(Criteria.where("socode").is(v));
+				update.set("invoicenumber", invoice);
+				update.set("status", changestatus);
+				mongoTemplate.updateFirst(query, update, SalesOrder.class);
+			}
+			logger.info("updateSO done!");
+			return true;
+		}catch(Exception e) {
+			logger.error("Exception  -->"+e.getMessage());
+			return false;
+		}finally {
+			changestatus=null;
+			update=null;
+			query=null;
+		}
+		
+	}
+
 }

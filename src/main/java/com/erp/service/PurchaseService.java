@@ -111,61 +111,61 @@ public class PurchaseService implements Filter {
 	}
 	
 
-	    // Create Invoice
-		@CrossOrigin(origins = "http://localhost:8080")
-		@RequestMapping(value = "/createInvoice", method = RequestMethod.POST)
-		public ResponseEntity<?> createInvoice(@RequestBody POInvoiceDto poinvoicedto) {
-			logger.info("createInvoice");
-			logger.debug("Invoice Date-->" + poinvoicedto.getCreateddate());
-			logger.debug("Sub Total-->" + poinvoicedto.getSubtotal());
-			logger.debug("Delivery Charge-->" + poinvoicedto.getDeliverycharge());
-			logger.debug("Total Price-->" + poinvoicedto.getTotalprice());
-			RandomNumber randomnumber = null;
-			int randomId=10;
-			try {
-				logger.debug("Delivery Charge-->"+poinvoicedto.getDeliverycharge());
-				randomnumber = randomnumberdal.getRandamNumber(randomId);
-				String invoice = randomnumber.getCode() + randomnumber.getNumber();
-				logger.debug("Invoice number-->" + invoice);
-				// Update Invoice Number and get Vendor name and code
-				purchasedal.updatePO(invoice,poinvoicedto.getOrdernumbers());
-				POInvoice poinvoice = new POInvoice();
-				poinvoice.setInvoicedate(poinvoicedto.getCreateddate());
-				logger.debug("Invoice Date-->" + poinvoice.getInvoicedate());
-				poinvoice.setInvoicenumber(invoice);
-				poinvoice.setStatus("Pending");
-				poinvoice.setSubtotal(poinvoicedto.getSubtotal());
-				poinvoice.setDeliveryprice(poinvoicedto.getDeliverycharge());
-				poinvoice.setTotalprice(poinvoicedto.getSubtotal()+poinvoicedto.getDeliverycharge());
-				String base64=PDFGenerator.getBase64();
-				poinvoice.setBase64(base64);
-				purchasedal.savePOInvoice(poinvoice);
-				// Update Random number table
-				randomnumberdal.updateRandamNumber(randomnumber,randomId);
-				logger.info("createInvoice done!");
-				return new ResponseEntity<>(HttpStatus.OK); // 200
+    // Create Invoice
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/createInvoice", method = RequestMethod.POST)
+	public ResponseEntity<?> createInvoice(@RequestBody POInvoiceDto poinvoicedto) {
+		logger.info("createInvoice");
+		logger.debug("Invoice Date-->" + poinvoicedto.getCreateddate());
+		logger.debug("Sub Total-->" + poinvoicedto.getSubtotal());
+		logger.debug("Delivery Charge-->" + poinvoicedto.getDeliverycharge());
+		logger.debug("Total Price-->" + poinvoicedto.getTotalprice());
+		RandomNumber randomnumber = null;
+		int randomId=10;
+		try {
+			logger.debug("Delivery Charge-->"+poinvoicedto.getDeliverycharge());
+			randomnumber = randomnumberdal.getRandamNumber(randomId);
+			String invoice = randomnumber.getCode() + randomnumber.getNumber();
+			logger.debug("Invoice number-->" + invoice);
+			// Update Invoice Number and get Vendor name and code
+			purchasedal.updatePO(invoice,poinvoicedto.getOrdernumbers());
+			POInvoice poinvoice = new POInvoice();
+			poinvoice.setInvoicedate(poinvoicedto.getCreateddate());
+			logger.debug("Invoice Date-->" + poinvoice.getInvoicedate());
+			poinvoice.setInvoicenumber(invoice);
+			poinvoice.setStatus("Pending");
+			poinvoice.setSubtotal(poinvoicedto.getSubtotal());
+			poinvoice.setDeliveryprice(poinvoicedto.getDeliverycharge());
+			poinvoice.setTotalprice(poinvoicedto.getSubtotal()+poinvoicedto.getDeliverycharge());
+			String base64=PDFGenerator.getBase64();
+			poinvoice.setBase64(base64);
+			purchasedal.savePOInvoice(poinvoice);
+			// Update Random number table
+			randomnumberdal.updateRandamNumber(randomnumber,randomId);
+			logger.info("createInvoice done!");
+			return new ResponseEntity<>(HttpStatus.OK); // 200
 
-			}catch(Exception e) {
-				logger.error("Exception-->"+e.getMessage());
-				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 400
+		}catch(Exception e) {
+			logger.error("Exception-->"+e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 400
 
-			}
-		
 		}
-		@CrossOrigin(origins = "http://localhost:8080")
-		@GetMapping(value = "/loadInvoice", produces = MediaType.APPLICATION_JSON_VALUE)
-		public ResponseEntity<?> loadInvoice() {
-			logger.info("loadInvoice");
-			List<POInvoice> responselist = new ArrayList<POInvoice>();
-			try {
-				responselist = purchasedal.loadInvoice();
-				return new ResponseEntity<List<POInvoice>>(responselist, HttpStatus.OK);				
-			} catch (Exception e) {
-				logger.error("Exception-->" + e.getMessage());
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
-			} finally {
-			}
+	
+	}
+	@CrossOrigin(origins = "http://localhost:8080")
+	@GetMapping(value = "/loadInvoice", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> loadInvoice() {
+		logger.info("loadInvoice");
+		List<POInvoice> responselist = new ArrayList<POInvoice>();
+		try {
+			responselist = purchasedal.loadInvoice();
+			return new ResponseEntity<List<POInvoice>>(responselist, HttpStatus.OK);				
+		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
+		} finally {
 		}
+	}
 
 	/*
 	 * // Save

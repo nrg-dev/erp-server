@@ -97,7 +97,7 @@ db.item.find({"prodcode" : "P10009"});
 db.stock.remove({"status" :"StockOut" });
 
 db.randomNumber.remove({"_id" :ObjectId("5e4fbb4987a94ea98989b9f4") });
-db.pOInvoiceDetails.update({"_id" :ObjectId("5e4f8e3cb184021bb0c9e7d5") },{$set : {"paymentStatus":'Not Paid'}})
+db.salesOrder.update({"_id" :ObjectId("5eb25db8b184021f304697d2") },{$set : {"status":'Open'}})
 
 
 APIServerUrl

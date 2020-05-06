@@ -16,7 +16,7 @@ public class POInvoice {
 	private String vendorcode;
 	private int    qty;
 	private int    subtotal;
-	private int deliveryprice;
+	private int    deliveryprice;
 	private int    totalprice;
 	private String base64;
 	private String status;

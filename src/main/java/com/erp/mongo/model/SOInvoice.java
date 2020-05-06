@@ -11,11 +11,13 @@ public class SOInvoice {
 	private String invoicedate;
 	private String invoicenumber;
 	private String customername;
-	private int totalqty;
-	private String deliveryprice;
-	private int totalprice;
+	private String customercode;
+	private int    qty;
+	private int    subtotal;
+	private int    deliveryprice;
+	private int    totalprice;
+	private String base64;
 	private String status;
-	private int totalitem;
 
 	public String getId() {
 		return id;
@@ -49,19 +51,35 @@ public class SOInvoice {
 		this.customername = customername;
 	}
 
-	public int getTotalqty() {
-		return totalqty;
+	public String getCustomercode() {
+		return customercode;
 	}
 
-	public void setTotalqty(int totalqty) {
-		this.totalqty = totalqty;
+	public void setCustomercode(String customercode) {
+		this.customercode = customercode;
 	}
 
-	public String getDeliveryprice() {
+	public int getQty() {
+		return qty;
+	}
+
+	public void setQty(int qty) {
+		this.qty = qty;
+	}
+
+	public int getSubtotal() {
+		return subtotal;
+	}
+
+	public void setSubtotal(int subtotal) {
+		this.subtotal = subtotal;
+	}
+
+	public int getDeliveryprice() {
 		return deliveryprice;
 	}
 
-	public void setDeliveryprice(String deliveryprice) {
+	public void setDeliveryprice(int deliveryprice) {
 		this.deliveryprice = deliveryprice;
 	}
 
@@ -73,6 +91,14 @@ public class SOInvoice {
 		this.totalprice = totalprice;
 	}
 
+	public String getBase64() {
+		return base64;
+	}
+
+	public void setBase64(String base64) {
+		this.base64 = base64;
+	}
+
 	public String getStatus() {
 		return status;
 	}
@@ -81,13 +107,7 @@ public class SOInvoice {
 		this.status = status;
 	}
 
-	public int getTotalitem() {
-		return totalitem;
-	}
-
-	public void setTotalitem(int totalitem) {
-		this.totalitem = totalitem;
-	}
+	
 
 	 
 }
