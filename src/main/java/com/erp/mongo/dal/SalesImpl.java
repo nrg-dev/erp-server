@@ -294,7 +294,19 @@ public class SalesImpl implements SalesDAL {
 			update=null;
 			query=null;
 		}
-		
+	}
+	
+	public List<SOInvoice> loadInvoice(){
+		List<SOInvoice> list;
+		Query query = new Query();
+	    query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
+		list = mongoTemplate.find(query,SOInvoice.class);
+		logger.info("Size-->"+list.size());
+		for (SOInvoice e : list) {
+		    logger.info("Invoice Number -->"+e.getInvoicenumber());    
+		}
+		return list;
+	
 	}
 
 }

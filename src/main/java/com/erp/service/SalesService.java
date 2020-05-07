@@ -837,7 +837,23 @@ public class SalesService implements Filter {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 400
 
 		}
-	
 	}	
+	
+	//--------- Load SOInvoice List -----------
+	@CrossOrigin(origins = "http://localhost:8080")
+	@GetMapping(value = "/loadInvoice", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> loadInvoice() {
+		logger.info("----- loadInvoice -------");
+		List<SOInvoice> responselist = new ArrayList<SOInvoice>();
+		try {
+			responselist = salesdal.loadInvoice();
+			return new ResponseEntity<List<SOInvoice>>(responselist, HttpStatus.OK);				
+		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
+		} finally {
+		}
+	}
+
 
 }

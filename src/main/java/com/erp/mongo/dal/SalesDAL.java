@@ -52,4 +52,7 @@ public interface SalesDAL {
 
 	public boolean updateSO(String invoice,String[] value);
 
+	public List<SOInvoice> loadInvoice();
+	
+
 }

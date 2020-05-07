@@ -18,10 +18,10 @@ public class SalesOrder {
 	private String productcode;
 	private String customername;
 	private String customercode;
-	private int qty;
+	private long qty;
 	private String unit;
-	private int unitprice;
-	private int subtotal;
+	private long unitprice;
+	private long subtotal;
 	private String date;
 	private String description;
 	private String status;
@@ -72,28 +72,29 @@ public class SalesOrder {
 	public void setCustomercode(String customercode) {
 		this.customercode = customercode;
 	}
-	public int getQty() {
-		return qty;
-	}
-	public void setQty(int qty) {
-		this.qty = qty;
-	}
 	public String getUnit() {
 		return unit;
 	}
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
-	public int getUnitprice() {
+	
+	public long getQty() {
+		return qty;
+	}
+	public void setQty(long qty) {
+		this.qty = qty;
+	}
+	public long getUnitprice() {
 		return unitprice;
 	}
-	public void setUnitprice(int unitprice) {
+	public void setUnitprice(long unitprice) {
 		this.unitprice = unitprice;
 	}
-	public int getSubtotal() {
+	public long getSubtotal() {
 		return subtotal;
 	}
-	public void setSubtotal(int subtotal) {
+	public void setSubtotal(long subtotal) {
 		this.subtotal = subtotal;
 	}
 	public String getSocode() {

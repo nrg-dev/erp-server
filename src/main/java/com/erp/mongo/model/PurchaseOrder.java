@@ -14,10 +14,10 @@ public class PurchaseOrder {
 	private String productcode;
 	private String vendorname;
 	private String vendorcode;
-	private int qty;
+	private long qty;
 	private String unit;
-	private int unitprice;
-	private int subtotal;
+	private long unitprice;
+	private long subtotal;
 	private String date;
 	private String description;
 	private String status;
@@ -67,28 +67,29 @@ public class PurchaseOrder {
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
-	public int getUnitprice() {
-		return unitprice;
-	}
-	public void setUnitprice(int unitprice) {
-		this.unitprice = unitprice;
-	}
 	public String getCategorycode() {
 		return categorycode;
 	}
 	public void setCategorycode(String categorycode) {
 		this.categorycode = categorycode;
 	}
-	public int getQty() {
+	
+	public long getQty() {
 		return qty;
 	}
-	public void setQty(int qty) {
+	public void setQty(long qty) {
 		this.qty = qty;
 	}
-	public int getSubtotal() {
+	public long getUnitprice() {
+		return unitprice;
+	}
+	public void setUnitprice(long unitprice) {
+		this.unitprice = unitprice;
+	}
+	public long getSubtotal() {
 		return subtotal;
 	}
-	public void setSubtotal(int subtotal) {
+	public void setSubtotal(long subtotal) {
 		this.subtotal = subtotal;
 	}
 	public String getDate() {
