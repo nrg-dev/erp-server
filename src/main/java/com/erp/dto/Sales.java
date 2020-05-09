@@ -27,7 +27,7 @@ public class Sales {
 	  String customerCity;
 	  String customerCountry;
 	  String invoiceNumber;
-	  int totalAmount;
+	  long totalAmount;
 	  int totalItem;
 	  String fromdate; 
 	  String todate; 
@@ -131,10 +131,10 @@ public class Sales {
 	public void setInvoiceNumber(String invoiceNumber) {
 		this.invoiceNumber = invoiceNumber;
 	}
-	public int getTotalAmount() {
+	public long getTotalAmount() {
 		return totalAmount;
 	}
-	public void setTotalAmount(int totalAmount) {
+	public void setTotalAmount(long totalAmount) {
 		this.totalAmount = totalAmount;
 	}
 	public int getTotalItem() {
