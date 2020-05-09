@@ -4,10 +4,11 @@ public class SOInvoiceDto {
 
 	String createddate;
 	String[] ordernumbers;
-	int subtotal;
+	long subtotal;
 	int deliverycharge;
-	int totalprice;
-	
+	long totalprice;
+	long[] qty;
+	String[] customercode;
 
 
 	public String getCreateddate() {
@@ -34,20 +35,36 @@ public class SOInvoiceDto {
 		this.deliverycharge = deliverycharge;
 	}
 
-	public int getSubtotal() {
+	public long getSubtotal() {
 		return subtotal;
 	}
 
-	public void setSubtotal(int subtotal) {
+	public void setSubtotal(long subtotal) {
 		this.subtotal = subtotal;
 	}
 
-	public int getTotalprice() {
+	public long getTotalprice() {
 		return totalprice;
 	}
 
-	public void setTotalprice(int totalprice) {
+	public void setTotalprice(long totalprice) {
 		this.totalprice = totalprice;
+	}
+
+	public long[] getQty() {
+		return qty;
+	}
+
+	public void setQty(long[] qty) {
+		this.qty = qty;
+	}
+
+	public String[] getCustomercode() {
+		return customercode;
+	}
+
+	public void setCustomercode(String[] customercode) {
+		this.customercode = customercode;
 	}
 
 

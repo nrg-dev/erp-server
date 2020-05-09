@@ -14,10 +14,10 @@ public class POInvoice {
 	private String invoicenumber;
 	private String vendorname;
 	private String vendorcode;
-	private int    qty;
-	private int    subtotal;
+	private long    qty;
+	private long    subtotal;
 	private int    deliveryprice;
-	private int    totalprice;
+	private long    totalprice;
 	private String base64;
 	private String status;
 
@@ -53,15 +53,6 @@ public class POInvoice {
 		this.vendorname = vendorname;
 	}
 
-	
-	public int getTotalprice() {
-		return totalprice;
-	}
-
-	public void setTotalprice(int totalprice) {
-		this.totalprice = totalprice;
-	}
-
 	public String getStatus() {
 		return status;
 	}
@@ -78,20 +69,28 @@ public class POInvoice {
 		this.vendorcode = vendorcode;
 	}
 
-	public int getQty() {
+	public long getQty() {
 		return qty;
 	}
 
-	public void setQty(int qty) {
+	public void setQty(long qty) {
 		this.qty = qty;
 	}
 
-	public int getSubtotal() {
+	public long getSubtotal() {
 		return subtotal;
 	}
 
-	public void setSubtotal(int subtotal) {
+	public void setSubtotal(long subtotal) {
 		this.subtotal = subtotal;
+	}
+
+	public long getTotalprice() {
+		return totalprice;
+	}
+
+	public void setTotalprice(long totalprice) {
+		this.totalprice = totalprice;
 	}
 
 	public int getDeliveryprice() {

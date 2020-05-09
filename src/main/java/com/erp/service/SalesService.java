@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.bo.ErpBo;
 import com.erp.dto.POInvoiceDto;
+import com.erp.dto.Purchase;
 import com.erp.dto.SOInvoiceDto;
 import com.erp.dto.Sales;
 import com.erp.mongo.dal.RandomNumberDAL;
@@ -51,6 +52,7 @@ import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOInvoiceDetails;
 import com.erp.mongo.model.SOReturnDetails;
 import com.erp.mongo.model.SalesOrder;
+import com.erp.mongo.model.Vendor;
 import com.erp.util.Custom;
 import com.erp.util.PDFGenerator;
 
@@ -808,6 +810,7 @@ public class SalesService implements Filter {
 		logger.debug("Delivery Charge-->" + soinvoicedto.getDeliverycharge());
 		logger.debug("Total Price-->" + soinvoicedto.getTotalprice());
 		RandomNumber randomnumber = null;
+		Sales sales = new Sales();
 		int randomId = 11;
 		try {
 			logger.debug("Delivery Charge-->"+soinvoicedto.getDeliverycharge());
@@ -824,14 +827,27 @@ public class SalesService implements Filter {
 			soinvoice.setSubtotal(soinvoicedto.getSubtotal());
 			soinvoice.setDeliveryprice(soinvoicedto.getDeliverycharge());
 			soinvoice.setTotalprice(soinvoicedto.getSubtotal()+soinvoicedto.getDeliverycharge());
-			String base64=PDFGenerator.getBase64();
+			for(long v:soinvoicedto.getQty()) {
+				soinvoice.setQty(v);
+			}
+			for(String custcode:soinvoicedto.getCustomercode()) {
+				sales.setSoDate(custcode);
+			}
+			Customer cust = salesdal.getCustomerDetails(sales.getSoDate());
+			sales.setCustomerName(cust.getCustomerName());
+			sales.setCustomerCity(cust.getCity());
+			sales.setCustomerCountry(cust.getCountry());
+			sales.setCustomerPhone(cust.getPhoneNumber());
+			sales.setCustomerEmail(cust.getEmail());
+			
+			String base64=PDFGenerator.getSalesBase64(soinvoice,sales);
 			soinvoice.setBase64(base64);
 			salesdal.saveSOInvoice(soinvoice);
 			// Update Random number table
 			randomnumberdal.updateRandamNumber(randomnumber,randomId);
 			logger.info("createInvoice done!");
-			return new ResponseEntity<>(HttpStatus.OK); // 200
-
+			return new ResponseEntity<>(HttpStatus.OK);
+			
 		}catch(Exception e) {
 			logger.error("Exception-->"+e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 400

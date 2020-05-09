@@ -12,10 +12,10 @@ public class SOInvoice {
 	private String invoicenumber;
 	private String customername;
 	private String customercode;
-	private int    qty;
-	private int    subtotal;
+	private long    qty;
+	private long    subtotal;
 	private int    deliveryprice;
-	private int    totalprice;
+	private long    totalprice;
 	private String base64;
 	private String status;
 
@@ -59,22 +59,6 @@ public class SOInvoice {
 		this.customercode = customercode;
 	}
 
-	public int getQty() {
-		return qty;
-	}
-
-	public void setQty(int qty) {
-		this.qty = qty;
-	}
-
-	public int getSubtotal() {
-		return subtotal;
-	}
-
-	public void setSubtotal(int subtotal) {
-		this.subtotal = subtotal;
-	}
-
 	public int getDeliveryprice() {
 		return deliveryprice;
 	}
@@ -83,11 +67,27 @@ public class SOInvoice {
 		this.deliveryprice = deliveryprice;
 	}
 
-	public int getTotalprice() {
+	public long getQty() {
+		return qty;
+	}
+
+	public void setQty(long qty) {
+		this.qty = qty;
+	}
+
+	public long getSubtotal() {
+		return subtotal;
+	}
+
+	public void setSubtotal(long subtotal) {
+		this.subtotal = subtotal;
+	}
+
+	public long getTotalprice() {
 		return totalprice;
 	}
 
-	public void setTotalprice(int totalprice) {
+	public void setTotalprice(long totalprice) {
 		this.totalprice = totalprice;
 	}
 

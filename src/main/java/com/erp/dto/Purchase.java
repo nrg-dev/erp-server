@@ -26,7 +26,7 @@ public class Purchase {
 	  String vendorCountry;
 	  String returnCategory;
 	  String invoiceNumber;
-	  int totalAmount;
+	  long totalAmount;
 	  int totalItem;
 	  String fromdate; 
 	  String todate; 
@@ -136,10 +136,11 @@ public class Purchase {
 	public void setInvoiceNumber(String invoiceNumber) {
 		this.invoiceNumber = invoiceNumber;
 	}
-	public int getTotalAmount() {
+	
+	public long getTotalAmount() {
 		return totalAmount;
 	}
-	public void setTotalAmount(int totalAmount) {
+	public void setTotalAmount(long totalAmount) {
 		this.totalAmount = totalAmount;
 	}
 	public int getTotalItem() {

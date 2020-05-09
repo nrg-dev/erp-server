@@ -122,6 +122,7 @@ public class PurchaseService implements Filter {
 		logger.debug("Total Price-->" + poinvoicedto.getTotalprice());
 		RandomNumber randomnumber = null;
 		int randomId=10;
+		Purchase purchase = new Purchase();
 		try {
 			logger.debug("Delivery Charge-->"+poinvoicedto.getDeliverycharge());
 			randomnumber = randomnumberdal.getRandamNumber(randomId);
@@ -137,7 +138,20 @@ public class PurchaseService implements Filter {
 			poinvoice.setSubtotal(poinvoicedto.getSubtotal());
 			poinvoice.setDeliveryprice(poinvoicedto.getDeliverycharge());
 			poinvoice.setTotalprice(poinvoicedto.getSubtotal()+poinvoicedto.getDeliverycharge());
-			String base64=PDFGenerator.getBase64();
+			for(long v:poinvoicedto.getQty()) {
+				poinvoice.setQty(v);
+			}
+			for(String vencode:poinvoicedto.getVendorcode()) {
+				purchase.setPaymentStatus(vencode);
+			}
+			Vendor vendor = purchasedal.getVendorDetails(purchase.getPaymentStatus());
+			purchase.setVendorName(vendor.getVendorName());
+			purchase.setVendorCity(vendor.getCity());
+			purchase.setVendorCountry(vendor.getCountry());
+			purchase.setVendorPhone(vendor.getPhoneNumber());
+			purchase.setVendorEmail(vendor.getEmail());
+			
+			String base64=PDFGenerator.getBase64(poinvoice,purchase);
 			poinvoice.setBase64(base64);
 			purchasedal.savePOInvoice(poinvoice);
 			// Update Random number table

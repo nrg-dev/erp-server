@@ -4,11 +4,11 @@ public class POInvoiceDto {
 
 	String createddate;
 	String[] ordernumbers;
-	int subtotal;
+	long subtotal;
 	int deliverycharge;
-	int totalprice;
-	
-
+	long totalprice;
+	long[] qty;
+	String[] vendorcode;
 
 	public String getCreateddate() {
 		return createddate;
@@ -34,21 +34,38 @@ public class POInvoiceDto {
 		this.deliverycharge = deliverycharge;
 	}
 
-	public int getSubtotal() {
+	public long getSubtotal() {
 		return subtotal;
 	}
 
-	public void setSubtotal(int subtotal) {
+	public void setSubtotal(long subtotal) {
 		this.subtotal = subtotal;
 	}
 
-	public int getTotalprice() {
+	public long getTotalprice() {
 		return totalprice;
 	}
 
-	public void setTotalprice(int totalprice) {
+	public void setTotalprice(long totalprice) {
 		this.totalprice = totalprice;
 	}
 
+	public long[] getQty() {
+		return qty;
+	}
+
+	public void setQty(long[] qty) {
+		this.qty = qty;
+	}
+
+	public String[] getVendorcode() {
+		return vendorcode;
+	}
+
+	public void setVendorcode(String[] vendorcode) {
+		this.vendorcode = vendorcode;
+	}
+
+	
 
 }
