@@ -280,7 +280,7 @@ public class PDFGenerator {
             cell1 = new PdfPCell(new Phrase("0"));
             cell1.setPaddingLeft(5);
             cell1.setVerticalAlignment(Element.ALIGN_MIDDLE);
-            cell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+            cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
             table1.addCell(cell1);
             
             cell1 = new PdfPCell(new Phrase(String.valueOf(poinvoice.getSubtotal())));
@@ -290,8 +290,14 @@ public class PDFGenerator {
             table1.addCell(cell1);
         
             PdfPCell cell2;
+            cell2 = new PdfPCell(new Phrase(""));
+            cell2.setColspan(2);
+            rcell2.setBorder(Rectangle.NO_BORDER);
+            table1.addCell(cell2);
+            
             cell2 = new PdfPCell(new Phrase("Amount Due", headFont));
-            cell2.setColspan(3);
+            cell2.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
             table1.addCell(cell2);
             
             cell2 = new PdfPCell(new Phrase(String.valueOf(poinvoice.getSubtotal())));
@@ -565,7 +571,7 @@ public class PDFGenerator {
             cell1 = new PdfPCell(new Phrase("0"));
             cell1.setPaddingLeft(5);
             cell1.setVerticalAlignment(Element.ALIGN_MIDDLE);
-            cell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+            cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
             table1.addCell(cell1);
             
             cell1 = new PdfPCell(new Phrase(String.valueOf(soinvoice.getSubtotal())));
@@ -575,8 +581,14 @@ public class PDFGenerator {
             table1.addCell(cell1);
         
             PdfPCell cell2;
+            cell2 = new PdfPCell(new Phrase(""));
+            cell2.setColspan(2);
+            rcell2.setBorder(Rectangle.NO_BORDER);
+            table1.addCell(cell2);
+            
             cell2 = new PdfPCell(new Phrase("Amount Due", headFont));
-            cell2.setColspan(3);
+            cell2.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
             table1.addCell(cell2);
             
             cell2 = new PdfPCell(new Phrase(String.valueOf(soinvoice.getSubtotal())));
