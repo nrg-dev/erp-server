@@ -193,6 +193,16 @@ public class ItemImpl implements ItemDAL {
 	public boolean saveUnits(Units units) {
 		if(units.getId()!=null) {
 			logger.info("DAO Update Units");
+			Update update = new Update();
+			Query query = new Query();
+			query.addCriteria(Criteria.where("id").is(units.getId()));
+			update.set("unitname", units.getUnitname());
+			update.set("unitsymbol", units.getUnitsymbol());
+			update.set("quantityname", units.getQuantityname());
+			update.set("quantitysymbol", units.getQuantitysymbol());
+			update.set("dimensionsymbol", units.getDimensionsymbol());
+
+			mongoTemplate.updateFirst(query, update, Units.class);
 			// update
 		}else {
 			// save
