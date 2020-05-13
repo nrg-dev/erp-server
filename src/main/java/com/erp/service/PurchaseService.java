@@ -138,20 +138,28 @@ public class PurchaseService implements Filter {
 			poinvoice.setSubtotal(poinvoicedto.getSubtotal());
 			poinvoice.setDeliveryprice(poinvoicedto.getDeliverycharge());
 			poinvoice.setTotalprice(poinvoicedto.getSubtotal()+poinvoicedto.getDeliverycharge());
-			for(long v:poinvoicedto.getQty()) {
-				poinvoice.setQty(v);
+			for(long qty:poinvoicedto.getQty()) {
+				poinvoice.setQty(qty);
 			}
+			logger.info("Qty ----->"+poinvoice.getQty());
 			for(String vencode:poinvoicedto.getVendorcode()) {
 				purchase.setPaymentStatus(vencode);
 			}
+			for(String prod:poinvoicedto.getProductname()) {
+				poinvoice.setProductname(prod);
+			}
+			logger.info("Product Name ----->"+poinvoice.getProductname());
 			Vendor vendor = purchasedal.getVendorDetails(purchase.getPaymentStatus());
 			purchase.setVendorName(vendor.getVendorName());
 			purchase.setVendorCity(vendor.getCity());
 			purchase.setVendorCountry(vendor.getCountry());
 			purchase.setVendorPhone(vendor.getPhoneNumber());
-			purchase.setVendorEmail(vendor.getEmail());
-			
+			purchase.setVendorEmail(vendor.getEmail()); 
+			logger.info("--------- Before Calling PDF Generator -----------");
+			poinvoice.setVendorname(vendor.getVendorName());
+			poinvoice.setVendorcode(vendor.getVendorcode());
 			String base64=PDFGenerator.getBase64(poinvoice,purchase);
+			logger.info("--------- After Calling PDF Generator -----------");
 			poinvoice.setBase64(base64);
 			purchasedal.savePOInvoice(poinvoice);
 			// Update Random number table

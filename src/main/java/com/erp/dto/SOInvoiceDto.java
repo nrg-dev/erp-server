@@ -9,7 +9,7 @@ public class SOInvoiceDto {
 	long totalprice;
 	long[] qty;
 	String[] customercode;
-
+	String[] productname;
 
 	public String getCreateddate() {
 		return createddate;
@@ -65,6 +65,14 @@ public class SOInvoiceDto {
 
 	public void setCustomercode(String[] customercode) {
 		this.customercode = customercode;
+	}
+
+	public String[] getProductname() {
+		return productname;
+	}
+
+	public void setProductname(String[] productname) {
+		this.productname = productname;
 	}
 
 

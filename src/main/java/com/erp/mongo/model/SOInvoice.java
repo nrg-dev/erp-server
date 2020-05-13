@@ -18,6 +18,7 @@ public class SOInvoice {
 	private long    totalprice;
 	private String base64;
 	private String status;
+	private String productname;
 
 	public String getId() {
 		return id;
@@ -105,6 +106,14 @@ public class SOInvoice {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getProductname() {
+		return productname;
+	}
+
+	public void setProductname(String productname) {
+		this.productname = productname;
 	}
 
 	

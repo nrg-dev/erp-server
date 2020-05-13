@@ -20,6 +20,7 @@ public class POInvoice {
 	private long    totalprice;
 	private String base64;
 	private String status;
+	private String productname;
 
 	public String getId() {
 		return id;
@@ -107,6 +108,14 @@ public class POInvoice {
 
 	public void setBase64(String base64) {
 		this.base64 = base64;
+	}
+
+	public String getProductname() {
+		return productname;
+	}
+
+	public void setProductname(String productname) {
+		this.productname = productname;
 	}
 
 	

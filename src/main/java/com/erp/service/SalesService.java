@@ -833,13 +833,17 @@ public class SalesService implements Filter {
 			for(String custcode:soinvoicedto.getCustomercode()) {
 				sales.setSoDate(custcode);
 			}
+			for(String prod:soinvoicedto.getProductname()) {
+				soinvoice.setProductname(prod);
+			}
 			Customer cust = salesdal.getCustomerDetails(sales.getSoDate());
 			sales.setCustomerName(cust.getCustomerName());
 			sales.setCustomerCity(cust.getCity());
 			sales.setCustomerCountry(cust.getCountry());
 			sales.setCustomerPhone(cust.getPhoneNumber());
 			sales.setCustomerEmail(cust.getEmail());
-			
+			soinvoice.setCustomercode(cust.getCustcode());
+			soinvoice.setCustomername(cust.getCustomerName()); 
 			String base64=PDFGenerator.getSalesBase64(soinvoice,sales);
 			soinvoice.setBase64(base64);
 			salesdal.saveSOInvoice(soinvoice);

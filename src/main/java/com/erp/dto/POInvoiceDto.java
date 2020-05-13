@@ -9,6 +9,7 @@ public class POInvoiceDto {
 	long totalprice;
 	long[] qty;
 	String[] vendorcode;
+	String[] productname;
 
 	public String getCreateddate() {
 		return createddate;
@@ -64,6 +65,14 @@ public class POInvoiceDto {
 
 	public void setVendorcode(String[] vendorcode) {
 		this.vendorcode = vendorcode;
+	}
+
+	public String[] getProductname() {
+		return productname;
+	}
+
+	public void setProductname(String[] productname) {
+		this.productname = productname;
 	}
 
 	
