@@ -18,6 +18,7 @@ public class POReturnDetails {
 	private String poDate;
 	private String status;
 	private int invid;
+	private String invoicedqty;
 
 	public String getId() {
 		return id;
@@ -106,6 +107,14 @@ public class POReturnDetails {
 
 	public void setInvid(int invid) {
 		this.invid = invid;
+	}
+
+	public String getInvoicedqty() {
+		return invoicedqty;
+	}
+
+	public void setInvoicedqty(String invoicedqty) {
+		this.invoicedqty = invoicedqty;
 	}
 
 	

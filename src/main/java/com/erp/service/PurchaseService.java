@@ -42,9 +42,11 @@ import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
+import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.Vendor;
+import com.erp.util.Custom;
 import com.erp.util.PDFGenerator;
 
 @SpringBootApplication
@@ -761,6 +763,42 @@ public class PurchaseService implements Filter {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
+		}
+	}
+	
+	// Create Invoice
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/createReturn", method = RequestMethod.POST)
+	public ResponseEntity<?> createReturn(@RequestBody POReturnDetails poreturn) {
+		logger.info("--------- createReturn -------");
+		logger.info("Vendor Name -->" + poreturn.getVendorname());
+		logger.info("Item Name -->" + poreturn.getItemname());
+		logger.info("Invoiced Qty-->" + poreturn.getInvoicedqty());
+		logger.info("Date -->" + poreturn.getPoDate());
+		logger.info("Item Status -->" + poreturn.getItemStatus());
+		logger.info("Payment Status -->" + poreturn.getReturnStatus());
+		logger.info("Qty -->" + poreturn.getQty());
+		RandomNumber randomnumber = null;
+		int randomId=8;
+		Purchase purchase = new Purchase();
+		try {
+			randomnumber = randomnumberdal.getRandamNumber(randomId);
+			String invoice = randomnumber.getCode() + randomnumber.getNumber();
+			logger.debug("Invoice number -->" + invoice);
+			// Update Invoice Number and get Vendor name and code
+			//purchasedal.updatePO(invoice,poinvoicedto.getOrdernumbers());
+			
+			poreturn.setInvoicenumber(invoice);
+			poreturn.setPoDate(Custom.getCurrentInvoiceDate());
+			purchasedal.insertReturn(poreturn);
+			// Update Random number table
+			randomnumberdal.updateRandamNumber(randomnumber,randomId);
+			logger.info("createReturn done!");
+			return new ResponseEntity<>(HttpStatus.OK); // 200
+
+		}catch(Exception e) {
+			logger.error("Exception-->"+e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 400
 		}
 	}
 }
