@@ -766,7 +766,7 @@ public class PurchaseService implements Filter {
 		}
 	}
 	
-	// Create Invoice
+	// Create Return
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/createReturn", method = RequestMethod.POST)
 	public ResponseEntity<?> createReturn(@RequestBody POReturnDetails poreturn) {
@@ -774,31 +774,42 @@ public class PurchaseService implements Filter {
 		logger.info("Vendor Name -->" + poreturn.getVendorname());
 		logger.info("Item Name -->" + poreturn.getItemname());
 		logger.info("Invoiced Qty-->" + poreturn.getInvoicedqty());
-		logger.info("Date -->" + poreturn.getPoDate());
+		logger.info("Date -->" + poreturn.getInvoiceddate());
 		logger.info("Item Status -->" + poreturn.getItemStatus());
 		logger.info("Payment Status -->" + poreturn.getReturnStatus());
 		logger.info("Qty -->" + poreturn.getQty());
+		logger.info("Price -->" + poreturn.getPrice());
 		RandomNumber randomnumber = null;
 		int randomId=8;
-		Purchase purchase = new Purchase();
 		try {
 			randomnumber = randomnumberdal.getRandamNumber(randomId);
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
 			logger.debug("Invoice number -->" + invoice);
-			// Update Invoice Number and get Vendor name and code
 			//purchasedal.updatePO(invoice,poinvoicedto.getOrdernumbers());
-			
 			poreturn.setInvoicenumber(invoice);
-			poreturn.setPoDate(Custom.getCurrentInvoiceDate());
+			poreturn.setCreateddate(Custom.getCurrentInvoiceDate());
 			purchasedal.insertReturn(poreturn);
-			// Update Random number table
 			randomnumberdal.updateRandamNumber(randomnumber,randomId);
 			logger.info("createReturn done!");
 			return new ResponseEntity<>(HttpStatus.OK); // 200
-
 		}catch(Exception e) {
 			logger.error("Exception-->"+e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 400
+		}
+	}
+	
+	@CrossOrigin(origins = "http://localhost:8080")
+	@GetMapping(value = "/loadReturn", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> loadReturn() {
+		logger.info("-------- loadReturn ----------");
+		List<POReturnDetails> responselist = new ArrayList<POReturnDetails>();
+		try {
+			responselist = purchasedal.loadReturn();
+			return new ResponseEntity<List<POReturnDetails>>(responselist, HttpStatus.OK);				
+		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
+		} finally {
 		}
 	}
 }

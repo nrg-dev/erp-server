@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
+import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOInvoiceDetails;
@@ -307,6 +308,16 @@ public class SalesImpl implements SalesDAL {
 		}
 		return list;
 	
+	}
+	
+	@Override
+	public List<SOReturnDetails> loadReturn() {
+		List<SOReturnDetails> list=null;
+		Query query = new Query();
+		query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
+		list = mongoTemplate.find(query,SOReturnDetails.class);
+		logger.info("Return List Size ------>"+list.size());
+		return list; 
 	}
 
 }

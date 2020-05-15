@@ -51,10 +51,7 @@ public interface PurchaseDAL {
 	public boolean updatePurchaseOrder(PurchaseOrder purchaseorder);
 	public boolean updatePO(String invoice,String[] value);
 
-	
-
-	
-
+	public List<POReturnDetails> loadReturn();
 	
 
 

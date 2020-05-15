@@ -15,10 +15,12 @@ public class POReturnDetails {
 	private String vendorname;
 	private String category;
 	private String itemStatus;
-	private String poDate;
+	private String createddate;
 	private String status;
 	private int invid;
 	private String invoicedqty;
+	private String invoiceddate;
+	private double price;
 
 	public String getId() {
 		return id;
@@ -69,14 +71,6 @@ public class POReturnDetails {
 		this.category = category;
 	}
 
-	public String getPoDate() {
-		return poDate;
-	}
-
-	public void setPoDate(String poDate) {
-		this.poDate = poDate;
-	}
-
 	public String getItemStatus() {
 		return itemStatus;
 	}
@@ -115,6 +109,30 @@ public class POReturnDetails {
 
 	public void setInvoicedqty(String invoicedqty) {
 		this.invoicedqty = invoicedqty;
+	}
+
+	public String getCreateddate() {
+		return createddate;
+	}
+
+	public void setCreateddate(String createddate) {
+		this.createddate = createddate;
+	}
+
+	public String getInvoiceddate() {
+		return invoiceddate;
+	}
+
+	public void setInvoiceddate(String invoiceddate) {
+		this.invoiceddate = invoiceddate;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
 	}
 
 	

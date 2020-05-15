@@ -105,9 +105,9 @@ public class StockService implements Filter {
 			soList = stockdal.loadSalesReturn(soList);
 			logger.debug("SO List Size-->" + soList.size());
 			for (int i = 0; i < poList.size(); i++) {
-				logger.info("---- PO Date -- >" + poList.get(i).getPoDate());
+				logger.info("---- PO Date -- >" + poList.get(i).getCreateddate());
 				po = new Purchase();
-				po.setPoDate(poList.get(i).getPoDate());
+				po.setPoDate(poList.get(i).getCreateddate());
 				po.setReturnCategory("Purchase Return" + "  " + poList.get(i).getInvoicenumber());
 				po.setCategory(poList.get(i).getCategory());
 				po.setProductName(poList.get(i).getItemname());
@@ -120,7 +120,7 @@ public class StockService implements Filter {
 			logger.debug("Add PO into List Value-->" + list.get(0).getReturnCategory());
 			for (int j = 0; j < soList.size(); j++) {
 				so = new Purchase();
-				so.setPoDate(soList.get(j).getSoDate());
+				so.setPoDate(soList.get(j).getCreateddate());
 				so.setReturnCategory("Sales Return" + "  " + soList.get(j).getInvoicenumber());
 				so.setCategory(soList.get(j).getCategory());
 				so.setProductName(soList.get(j).getItemname());

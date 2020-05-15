@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Item;
+import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOInvoiceDetails;
@@ -53,6 +54,8 @@ public interface SalesDAL {
 	public boolean updateSO(String invoice,String[] value);
 
 	public List<SOInvoice> loadInvoice();
+
+	public List<SOReturnDetails> loadReturn(); 
 	
 
 }

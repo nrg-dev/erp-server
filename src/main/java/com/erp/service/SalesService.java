@@ -46,6 +46,7 @@ import com.erp.mongo.dal.SalesDAL;
 import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
+import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.SOInvoice;
@@ -551,7 +552,7 @@ public class SalesService implements Filter {
 	}
 
 	// SaveReturn
-	@CrossOrigin(origins = "http://localhost:4200")
+	/*@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(value = "/saveReturn")
 	public ResponseEntity<?> saveSalesReturn(@RequestBody String returnarray) {
 		logger.info("saveSalesReturn");
@@ -630,7 +631,7 @@ public class SalesService implements Filter {
 		finally {
 
 		}
-	}
+	}*/
 
 	// Load customer for populate for auto text box
 	@CrossOrigin(origins = "http://localhost:8080")
@@ -875,5 +876,50 @@ public class SalesService implements Filter {
 		}
 	}
 
-
+	// Create Return
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/createReturn", method = RequestMethod.POST)
+	public ResponseEntity<?> createReturn(@RequestBody SOReturnDetails soreturn) {
+		logger.info("--------- createReturn -------");
+		logger.info("SO CUstomer Name -->" + soreturn.getCustomername());
+		logger.info("SO Item Name -->" + soreturn.getItemname());
+		logger.info("SO Invoiced Qty-->" + soreturn.getInvoicedqty());
+		logger.info("SO Date -->" + soreturn.getInvoiceddate());
+		logger.info("SO Item Status -->" + soreturn.getItemStatus());
+		logger.info("SO Payment Status -->" + soreturn.getReturnStatus());
+		logger.info("SO Qty -->" + soreturn.getQty());
+		logger.info("SO Price -->" + soreturn.getPrice());
+		RandomNumber randomnumber = null;
+		int randomId=9;
+		try {
+			randomnumber = randomnumberdal.getRandamNumber(randomId);
+			String invoice = randomnumber.getCode() + randomnumber.getNumber();
+			logger.debug("Invoice number -->" + invoice);
+			//purchasedal.updateSO(invoice,poinvoicedto.getOrdernumbers());
+			soreturn.setInvoicenumber(invoice);
+			soreturn.setCreateddate(Custom.getCurrentInvoiceDate());
+			salesdal.insertReturn(soreturn);
+			randomnumberdal.updateRandamNumber(randomnumber,randomId);
+			logger.info("createReturn done!");
+			return new ResponseEntity<>(HttpStatus.OK); // 200
+		}catch(Exception e) {
+			logger.error("Exception-->"+e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 400
+		}
+	}
+	
+	@CrossOrigin(origins = "http://localhost:8080")
+	@GetMapping(value = "/loadReturn", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> loadReturn() {
+		logger.info("-------- loadReturn ----------");
+		List<SOReturnDetails> responselist = new ArrayList<SOReturnDetails>();
+		try {
+			responselist = salesdal.loadReturn();
+			return new ResponseEntity<List<SOReturnDetails>>(responselist, HttpStatus.OK);				
+		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
+		} finally {
+		}
+	}
 }

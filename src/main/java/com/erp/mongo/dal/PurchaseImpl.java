@@ -317,5 +317,13 @@ public class PurchaseImpl implements PurchaseDAL {
 			return true;
 		}
 		
-		
+		@Override
+		public List<POReturnDetails> loadReturn() {
+			List<POReturnDetails> list=null;
+			Query query = new Query();
+			query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
+			list = mongoTemplate.find(query,POReturnDetails.class);
+			logger.info("Return List Size ------>"+list.size());
+			return list; 
+		}
 }

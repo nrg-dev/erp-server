@@ -15,10 +15,13 @@ public class SOReturnDetails {
 	private String customername;
 	private String category;
 	private String itemStatus;
-	private String soDate;
+	private String createddate;
 	private String status;
 	private int invid;
-
+	private String invoicedqty;
+	private String invoiceddate;
+	private double price;
+	
 	public String getId() {
 		return id;
 	}
@@ -67,14 +70,6 @@ public class SOReturnDetails {
 		this.category = category;
 	}
 
-	public String getSoDate() {
-		return soDate;
-	}
-
-	public void setSoDate(String soDate) {
-		this.soDate = soDate;
-	}
-
 	public String getItemStatus() {
 		return itemStatus;
 	}
@@ -107,5 +102,37 @@ public class SOReturnDetails {
 		this.invid = invid;
 	}
 
-	
+	public String getCreateddate() {
+		return createddate;
+	}
+
+	public void setCreateddate(String createddate) {
+		this.createddate = createddate;
+	}
+
+	public String getInvoicedqty() {
+		return invoicedqty;
+	}
+
+	public void setInvoicedqty(String invoicedqty) {
+		this.invoicedqty = invoicedqty;
+	}
+
+	public String getInvoiceddate() {
+		return invoiceddate;
+	}
+
+	public void setInvoiceddate(String invoiceddate) {
+		this.invoiceddate = invoiceddate;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	 
 }
