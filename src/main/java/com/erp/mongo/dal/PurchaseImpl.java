@@ -237,12 +237,18 @@ public class PurchaseImpl implements PurchaseDAL {
 		return list;
 	}
 	
-	public List<PurchaseOrder> loadPO(){
+	public List<PurchaseOrder> loadPO(int temp,String invoice){
 		List<PurchaseOrder> list=null;
-		logger.info("DAO Vendor item load all");
 		Query query = new Query();
-		query.with(new Sort(new Order(Direction.DESC, "pocode")));
-		list = mongoTemplate.find(query,PurchaseOrder.class);
+		if(temp == 1) {
+			logger.info("DAO Vendor item load all");
+			query.with(new Sort(new Order(Direction.DESC, "pocode")));
+			list = mongoTemplate.find(query,PurchaseOrder.class);
+		}else if(temp == 2) {
+			query.addCriteria(Criteria.where("invoicenumber").is(invoice));
+			list = mongoTemplate.find(query,PurchaseOrder.class);
+		}
+		
 		logger.info("Size-->"+list.size());
 		return list;
 	}

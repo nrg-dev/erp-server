@@ -12,11 +12,14 @@ public class Stock {
 	private String invoicenumber;
 	private String stockCategory;
 	private String itemname;
+	private String itemcode;
 	private String category;
-	private String recentStock;
-	private String addedqty;
+	private String categorycode;
+	private long recentStock;
+	private long addedqty;
 	private String status;
 	private String stockOutCategory;
+	private String unit;
 	
 	public String getId() {
 		return id;
@@ -66,22 +69,6 @@ public class Stock {
 		this.category = category;
 	}
 
-	public String getRecentStock() {
-		return recentStock;
-	}
-
-	public void setRecentStock(String recentStock) {
-		this.recentStock = recentStock;
-	}
-
-	public String getAddedqty() {
-		return addedqty;
-	}
-
-	public void setAddedqty(String addedqty) {
-		this.addedqty = addedqty;
-	}
-
 	public String getStatus() {
 		return status;
 	}
@@ -98,6 +85,46 @@ public class Stock {
 		this.stockOutCategory = stockOutCategory;
 	}
 
+	public String getItemcode() {
+		return itemcode;
+	}
 
+	public void setItemcode(String itemcode) {
+		this.itemcode = itemcode;
+	}
+
+	public String getCategorycode() {
+		return categorycode;
+	}
+
+	public void setCategorycode(String categorycode) {
+		this.categorycode = categorycode;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
+	public long getRecentStock() {
+		return recentStock;
+	}
+
+	public void setRecentStock(long recentStock) {
+		this.recentStock = recentStock;
+	}
+
+	public long getAddedqty() {
+		return addedqty;
+	}
+
+	public void setAddedqty(long addedqty) {
+		this.addedqty = addedqty;
+	}
+
+ 
 	 
 }

@@ -105,6 +105,7 @@ public class StockImpl implements StockDAL {
 	public Stock saveStock(Stock stock) {
 		System.out.println("Before Save Stock");
 		mongoTemplate.save(stock);
+		stock.setStatus("success");
 		System.out.println("After Save Stock");
 		return stock;
 	}
@@ -127,17 +128,29 @@ public class StockImpl implements StockDAL {
 			query.addCriteria(Criteria.where("status").is("StockIn"));
 		}else if(status.equalsIgnoreCase("StockOut")) {
 			query.addCriteria(Criteria.where("status").is("StockOut"));
+		}else if(status.equalsIgnoreCase("Ready for Sales")) {
+			query.addCriteria( new Criteria().andOperator(
+					Criteria.where("status").is("Ready for Sales"),
+					Criteria.where("recentStock").ne(0) ) );
 		}
 		stocklist = mongoTemplate.find(query, Stock.class);
 		return stocklist;
 	}
 	
 	//--- Get ID Based on Invoice
-	public Stock loadStockInvoice(String StockInCategory) {
+	public Stock loadStockInvoice(String StockInCategory, int i) {
 		Stock res=null;
 		try {
 			Query query = new Query();
-			query.addCriteria(Criteria.where("stockCategory").is(StockInCategory));
+			if(i == 1) {
+				query.addCriteria(Criteria.where("stockCategory").is(StockInCategory));
+			}else if(i == 2) {
+				logger.info("Item Code --->"+StockInCategory);
+				query.addCriteria( new Criteria().andOperator(
+						Criteria.where("itemcode").is(StockInCategory),
+						Criteria.where("status").is("Ready for Sales") ) );
+			}
+			
 			res = mongoTemplate.findOne(query, Stock.class);
 			if(res != null) {
 				System.out.println("------ StockId Match ------");
@@ -200,15 +213,30 @@ public class StockImpl implements StockDAL {
 	public Stock updateStock(Stock stock, String id) {
 		Update update = new Update();
 		Query query = new Query();
-		query.addCriteria(Criteria.where("id").is(id));
+		if(id == "all") {
+			query.addCriteria( new Criteria().andOperator(
+					Criteria.where("itemcode").is(stock.getItemcode()),
+					Criteria.where("status").is("Ready for Sales") ) );
+			update.set("invoicedate", stock.getInvoicedate());
+			update.set("invoicenumber", "NONE");
+			update.set("itemname", stock.getItemname());
+			update.set("itemcode", stock.getItemcode());
+			update.set("category", stock.getCategory());
+			update.set("categorycode", stock.getCategorycode());
+			update.set("recentStock", stock.getAddedqty());
+			update.set("unit", stock.getUnit());
+			update.set("status", "Ready for Sales");
+		}else {
+			query.addCriteria(Criteria.where("id").is(id));
+			update.set("invoicedate", stock.getInvoicedate());
+			update.set("stockInCategory", stock.getStockCategory());
+			update.set("itemname", stock.getItemname());
+			update.set("category", stock.getCategory());
+			update.set("recentStock", stock.getRecentStock());
+			update.set("addedqty", stock.getAddedqty());
+			update.set("status", stock.getStatus());
+		}
 		
-		update.set("invoicedate", stock.getInvoicedate());
-		update.set("stockInCategory", stock.getStockCategory());
-		update.set("itemname", stock.getItemname());
-		update.set("category", stock.getCategory());
-		update.set("recentStock", stock.getRecentStock());
-		update.set("addedqty", stock.getAddedqty());
-		update.set("status", stock.getStatus());
 		mongoTemplate.updateFirst(query, update, Stock.class);
 		return stock;
 	}
@@ -219,6 +247,5 @@ public class StockImpl implements StockDAL {
 		stock.setStatus("success");
 		return stock;
 	}
-	
 
 }

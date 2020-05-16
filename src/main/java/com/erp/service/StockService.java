@@ -36,10 +36,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.dto.Purchase;
+import com.erp.mongo.dal.PurchaseDAL;
 import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.dal.StockDAL;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
+import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.SOReturnDetails;
 import com.erp.mongo.model.Stock;
@@ -56,14 +58,14 @@ public class StockService implements Filter {
 	public static final Logger logger = LoggerFactory.getLogger(StockService.class);
 
 	private final StockDAL stockdal;
-	//private final PurchaseDAL purchasedal;
+	private final PurchaseDAL purchasedal;
 	//private final SalesDAL salesdal;
 	private final RandomNumberDAL randomnumberdal;
 
 	public StockService(StockDAL stockdal, 
-			RandomNumberDAL randomnumberdal) {
+			RandomNumberDAL randomnumberdal, PurchaseDAL purchasedal) {
 		this.stockdal = stockdal;
-		//this.purchasedal = purchasedal;
+		this.purchasedal = purchasedal;
 		//this.salesdal = salesdal;
 		this.randomnumberdal = randomnumberdal;
 	}
@@ -348,8 +350,8 @@ public class StockService implements Filter {
 			stock.setStockCategory("Purchase " + stockIndetails.getInvoicenumber());
 			stock.setItemname(itemnameList);
 			stock.setCategory(categoryList);
-			stock.setAddedqty(addedQty);
-			stock.setRecentStock(recentStockList);
+			stock.setAddedqty(Integer.valueOf(addedQty));
+			stock.setRecentStock(Integer.valueOf(recentStockList));
 			stock.setStatus("StockIn");
 			stockdal.saveStock(stock);
 			System.out.println("Service call start.....");
@@ -467,11 +469,11 @@ public class StockService implements Filter {
 			stock.setStockCategory("Purchase " + stockIndetails.getInvoicenumber());
 			stock.setItemname(itemnameList);
 			stock.setCategory(categoryList);
-			stock.setAddedqty(addedQty);
-			stock.setRecentStock(recentStockList);
+			stock.setAddedqty(Integer.valueOf(addedQty));
+			stock.setRecentStock(Integer.valueOf(recentStockList));
 			stock.setStatus("StockIn");
 			Stock st = new Stock();
-			st = stockdal.loadStockInvoice(stock.getStockCategory());
+			st = stockdal.loadStockInvoice(stock.getStockCategory(),1);
 			if (st != null) {
 				logger.info("----------- Stock Category match--------" + st.getId());
 				logger.info("StockInCategory  --->" + stock.getStockCategory());
@@ -539,6 +541,42 @@ public class StockService implements Filter {
 			stock = stockdal.saveStockOut(stock);
 			if (stock.getStatus().equalsIgnoreCase("success")) {
 				randomnumberdal.updateStockRandamNumber(randomnumber, 2);
+			}
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} finally {
+
+		}
+	}
+	
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/createStock", method = RequestMethod.POST)
+	public ResponseEntity<?> createStock(@RequestBody String invoiceNumber) {
+		System.out.println("------- createStock ---------");
+		logger.info("Invoice Number -->"+invoiceNumber );
+		Stock stock = null;
+		List<PurchaseOrder> polist = new ArrayList<PurchaseOrder>();
+		try {
+			polist = purchasedal.loadPO(2,invoiceNumber);
+			for(PurchaseOrder po :polist) {
+				stock = new Stock();
+				stock.setCategory(po.getCategoryname());
+				stock.setCategorycode(po.getCategorycode());
+				stock.setItemname(po.getProductname());
+				stock.setItemcode(po.getProductcode());
+				stock.setUnit(po.getUnit()); 
+				stock.setRecentStock(po.getQty()); 
+				stock.setStatus("Stock In"); 
+				stock.setInvoicedate(Custom.getCurrentInvoiceDate());
+				stock.setInvoicenumber(po.getPocode());
+				stockdal.saveStock(stock);
+				Stock st = new Stock();
+				st = stockdal.loadStockInvoice(stock.getItemcode(),2);
+				long currentStock = po.getQty()+st.getRecentStock();
+				stock.setAddedqty(currentStock); 
+				stockdal.updateStock(stock,"all");
 			}
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {

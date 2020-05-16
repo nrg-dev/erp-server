@@ -2,6 +2,7 @@ package com.erp.mongo.dal;
 
 import java.util.List;
 
+import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.SOReturnDetails;
@@ -37,10 +38,10 @@ public interface StockDAL {
 
 	public List<Stock> loadStock(List<Stock> stocklist, String status); 
 
-	public Stock loadStockInvoice(String stockInCategory); 
+	public Stock loadStockInvoice(String stockInCategory, int i); 
 
 	public POInvoiceDetails updateFullPurchase(StockInDetails stockIndetails, POInvoiceDetails podetails);
 
-	public Stock saveStockOut(Stock stock);    
+	public Stock saveStockOut(Stock stock);
 
 }

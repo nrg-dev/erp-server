@@ -44,7 +44,7 @@ public interface PurchaseDAL {
 
 	public List<POInvoice> loadfilterData(List<POInvoice> response,String fromdate, String todate); 
 	
-	public List<PurchaseOrder> loadPO();
+	public List<PurchaseOrder> loadPO(int i,String type);
 	
 	public PurchaseOrder savePO(PurchaseOrder purchaseorder);
 	public boolean removePO(String id);

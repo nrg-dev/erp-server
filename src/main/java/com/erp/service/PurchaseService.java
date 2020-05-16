@@ -478,7 +478,7 @@ public class PurchaseService implements Filter {
 		logger.info("loadPO");
 		List<PurchaseOrder> polist = null;// new ArrayList<PurchaseOrder>();
 		try {
-			polist = purchasedal.loadPO();
+			polist = purchasedal.loadPO(1,"all");
 			return new ResponseEntity<List<PurchaseOrder>>(polist, HttpStatus.CREATED);
 
 		} catch (Exception e) {

@@ -32,11 +32,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.erp.bo.ErpBo;
 import com.erp.mongo.dal.ItemDAL;
 import com.erp.mongo.dal.RandomNumberDAL;
+import com.erp.mongo.dal.StockDAL;
 import com.erp.mongo.model.Category;
 import com.erp.mongo.model.Discount;
 import com.erp.mongo.model.Item;
 import com.erp.mongo.model.RandomNumber;
+import com.erp.mongo.model.Stock;
 import com.erp.mongo.model.Units;
+import com.erp.util.Custom;
 
 @SpringBootApplication
 @RestController
@@ -50,12 +53,14 @@ public class ItemService implements Filter {
 
 	private final ItemDAL itemdal;
 	private final RandomNumberDAL randomnumberdal;
+	private final StockDAL stockdal;
 	Item item = null;
 	Discount discount = null;
 
-	public ItemService(ItemDAL itemdal, RandomNumberDAL randomnumberdal) {
+	public ItemService(ItemDAL itemdal, RandomNumberDAL randomnumberdal, StockDAL stockdal) {
 		this.itemdal = itemdal;
 		this.randomnumberdal = randomnumberdal;
+		this.stockdal = stockdal;
 	}
 
 	@Override
@@ -85,6 +90,8 @@ public class ItemService implements Filter {
 	public ResponseEntity<?> saveItem(@RequestBody Item item) {
 		logger.info("saveItem");
 		RandomNumber randomnumber = null;
+		Stock stock = new Stock();
+		int randomId=16;
 		try {
 			randomnumber = randomnumberdal.getCategoryRandomNumber(2);
 			//System.out.println("item Invoice random number-->" + randomnumber.getProductinvoicenumber());
@@ -115,6 +122,22 @@ public class ItemService implements Filter {
 			if (item.getStatus().equalsIgnoreCase("success")) {
 				randomnumberdal.updateCategoryRandamNumber(randomnumber, 2);
 			}
+			stock.setCategory(item.getCategoryname());
+			stock.setCategorycode(item.getCategorycode());
+			stock.setItemname(item.getProductname());
+			stock.setItemcode(item.getProdcode());
+			stock.setUnit(item.getUnit()); 
+			stock.setRecentStock(0); 
+			stock.setStatus("Ready for Sales"); 
+			stock.setInvoicedate(Custom.getCurrentInvoiceDate());
+			stock.setInvoicenumber("NONE");
+			/*randomnumber = randomnumberdal.getRandamNumber(randomId);
+			String invoiceno = randomnumber.getCode() + randomnumber.getNumber();
+			stock.setInvoicenumber(invoiceno);*/
+			stockdal.saveStock(stock);
+			/*if (stock.getStatus().equalsIgnoreCase("success")) {
+				randomnumberdal.updateRandamNumber(randomnumber,randomId);
+			}*/
 			return new ResponseEntity<>(HttpStatus.OK);
 
 		} catch (Exception e) {
