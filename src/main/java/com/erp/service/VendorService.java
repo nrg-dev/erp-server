@@ -109,10 +109,14 @@ public class VendorService implements Filter {
 	@RequestMapping(value = "/load", method = RequestMethod.GET)
 	public ResponseEntity<?> loadVendor() {
 		logger.info("loadVendor");
-		List<Vendor> responseList = null;
+		List<Vendor> responselist = null;
 		try {
-			responseList = vendordal.loadVendor(responseList);
-			return new ResponseEntity<List<Vendor>>(responseList, HttpStatus.CREATED);
+			responselist = vendordal.loadVendor(responselist);
+			logger.debug("Vendor List Size-->"+responselist.size());
+			/*
+			 * if(responselist.size()>0) { throw new Exception("Vendor Error"); }
+			 */
+			return new ResponseEntity<List<Vendor>>(responselist, HttpStatus.CREATED);
 
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
