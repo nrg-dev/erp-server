@@ -32,7 +32,7 @@ import com.erp.dto.User;
 
 @SpringBootApplication
 @RestController
-@RequestMapping(value = "/login")
+@RequestMapping(value = "/auth")
 public class LoginService implements Filter {
 
 	public static final Logger logger = LoggerFactory.getLogger(LoginService.class);
@@ -72,9 +72,10 @@ public class LoginService implements Filter {
 			user = new User();
 			user.setUsername(username);
 			user.setPassword(password);
-			user = bo.userLogin(user);
-			logger.debug("Status-->" + user.getStatus());
-			logger.debug("User Type-->" + user.getUserRole());
+			//user = bo.userLogin(user);
+			return new ResponseEntity<User>(user, HttpStatus.OK);
+			//logger.debug("Status-->" + user.getStatus());
+			//logger.debug("User Type-->" + user.getUserRole());
 		} catch (Exception e) {
 			user.setStatus("Network Error Please try again");
 			logger.error("Exception-->" + e.getMessage());
