@@ -144,7 +144,7 @@ public class PurchaseService implements Filter {
 			for(long qty:poinvoicedto.getQty()) {
 				poinvoice.setQty(qty);
 			}
-			logger.info("Qty ----->"+poinvoice.getQty());
+			logger.debug("Qty-->"+poinvoice.getQty());
 			for(String vencode:poinvoicedto.getVendorcode()) {
 				purchase.setPaymentStatus(vencode);
 			}
@@ -152,7 +152,7 @@ public class PurchaseService implements Filter {
 			for(String prod:poinvoicedto.getProductname()) {
 				poinvoice.setProductname(prod);
 			}
-			logger.info("Product Name ----->"+poinvoice.getProductname());
+			logger.debug("Product Name-->"+poinvoice.getProductname());
 			Vendor vendor = purchasedal.getVendorDetails(purchase.getPaymentStatus());
 			purchase.setVendorName(vendor.getVendorName());
 			purchase.setVendorCity(vendor.getCity());
@@ -327,7 +327,7 @@ public class PurchaseService implements Filter {
 			logger.debug("Id-->" + id);
 			responseList = purchasedal.getPurchase(id);
 		} catch (Exception e) {
-			logger.info("Exception-->"+e.getMessage());
+			logger.error("Exception-->"+e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
 		} finally {
 
@@ -547,7 +547,7 @@ public class PurchaseService implements Filter {
 			logger.debug("purchaseCode -->"+invoiceNumber);
 			// ---- Check List Size from POInvoiceDetails Table
 			responseList = purchasedal.getPurchase(invoiceNumber);
-			logger.info("List Size -->" + responseList.size());
+			logger.debug("List Size-->" + responseList.size());
 			if (responseList.size() == 0 || responseList.size() == 1) {
 				temp = 1;
 			} else {
@@ -772,15 +772,15 @@ public class PurchaseService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/createReturn", method = RequestMethod.POST)
 	public ResponseEntity<?> createReturn(@RequestBody POReturnDetails poreturn) {
-		logger.info("--------- createReturn -------");
-		logger.info("Vendor Name -->" + poreturn.getVendorname());
-		logger.info("Item Name -->" + poreturn.getItemname());
-		logger.info("Invoiced Qty-->" + poreturn.getInvoicedqty());
-		logger.info("Date -->" + poreturn.getInvoiceddate());
-		logger.info("Item Status -->" + poreturn.getItemStatus());
-		logger.info("Payment Status -->" + poreturn.getReturnStatus());
-		logger.info("Qty -->" + poreturn.getQty());
-		logger.info("Price -->" + poreturn.getPrice());
+		logger.info("createReturn");
+		logger.debug("Vendor Name-->" + poreturn.getVendorname());
+		logger.debug("Item Name-->" + poreturn.getItemname());
+		logger.debug("Invoiced Qty-->" + poreturn.getInvoicedqty());
+		logger.debug("Date-->" + poreturn.getInvoiceddate());
+		logger.debug("Item Status-->" + poreturn.getItemStatus());
+		logger.debug("Payment Status-->" + poreturn.getReturnStatus());
+		logger.debug("Qty-->" + poreturn.getQty());
+		logger.debug("Price-->" + poreturn.getPrice());
 		RandomNumber randomnumber = null;
 		int randomId=8;
 		try {

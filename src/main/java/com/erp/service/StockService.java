@@ -155,7 +155,7 @@ public class StockService implements Filter {
 			randomnumber = randomnumberdal.getStockDamageRandomNumber();
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
 			stockreturn.setStockReturnCode(invoice);
-			System.out.println("Invoice Number -->" + stockreturn.getStockReturnCode());
+			logger.info("Invoice Number -->" + stockreturn.getStockReturnCode());
 			stockreturn.setAddedDate(Custom.getCurrentInvoiceDate());
 			stockreturn = stockdal.saveStockReturn(stockreturn);
 			if (stockreturn.getStatus().equalsIgnoreCase("success")) {
@@ -177,7 +177,7 @@ public class StockService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<?> saveStockDamage(@RequestBody StockDamage stockdamage) {
-		System.out.println("saveStockDamage");
+		logger.info("saveStockDamage");
 		RandomNumber randomnumber = null;
 		int temp = 2;
 		try {
@@ -284,7 +284,7 @@ public class StockService implements Filter {
 		int totalQty = 0;
 		try {
 			purchase = new Purchase();
-			System.out.println("Post Json -->" + stockInarray);
+			logger.info("Post Json -->" + stockInarray);
 			// Store into parent table to show in first data table view
 			ArrayList<String> list = new ArrayList<String>();
 			JSONArray jsonArr = new JSONArray(stockInarray);
@@ -296,23 +296,23 @@ public class StockService implements Filter {
 				}
 			}
 			int postion = remove - 1;
-			System.out.println("Position-->" + postion);
+			logger.info("Position-->" + postion);
 			list.remove(postion);
-			System.out.println("Size -------->" + jsonArr.length());
+			logger.info("Size -------->" + jsonArr.length());
 			// int l = 1;
 			for (int i = 0; i < jsonArr.length(); i++) {
 				JSONArray arr2 = jsonArr.optJSONArray(i);
 				if (jsonArr.optJSONArray(i) != null) {
 					for (int j = 0; j < arr2.length(); j++) {
 						randomnumber = randomnumberdal.getStockRandamNumber();
-						//System.out.println("StockIn random number-->" + randomnumber.getStockIninvoicenumber());
-						//System.out.println("StockIn random code-->" + randomnumber.getStockIninvoicecode());
+						//logger.info("StockIn random number-->" + randomnumber.getStockIninvoicenumber());
+						//logger.info("StockIn random code-->" + randomnumber.getStockIninvoicecode());
 						String invoice = randomnumber.getCode() + randomnumber.getNumber();
-						System.out.println("Invoice number -->" + invoice);
+						logger.info("Invoice number -->" + invoice);
 						if (arr2.getJSONObject(j) != null) {
 							JSONObject jObject = arr2.getJSONObject(j);
-							System.out.println(jObject.getString("productName"));
-							System.out.println(jObject.getString("category"));
+							logger.info(jObject.getString("productName"));
+							logger.info(jObject.getString("category"));
 							stockIndetails = new StockInDetails();
 							stockIndetails.setStockInNumber(invoice);
 							stockIndetails.setInvoicenumber(jObject.getString("invoiceNumber"));
@@ -337,11 +337,11 @@ public class StockService implements Filter {
 							categoryList = categoryList + stockIndetails.getCategory() + ",";
 							randomnumberdal.updateStockRandamNumber(randomnumber, tempNo);
 						} else {
-							System.out.println("Null....");
+							logger.info("Null....");
 						}
 					}
 				} else {
-					System.out.println("Outer Null....");
+					logger.info("Outer Null....");
 				}
 				// l++;
 			}
@@ -355,7 +355,7 @@ public class StockService implements Filter {
 			stock.setRecentStock(Integer.valueOf(recentStockList));
 			stock.setStatus("StockIn");
 			stockdal.saveStock(stock);
-			System.out.println("Service call start.....");
+			logger.info("Service call start.....");
 
 			purchase.setStatus("success");
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -397,23 +397,23 @@ public class StockService implements Filter {
 				}
 			}
 			int postion = remove - 1;
-			System.out.println("Position-->" + postion);
+			logger.info("Position-->" + postion);
 			list.remove(postion);
-			System.out.println("Size -------->" + jsonArr.length());
+			logger.info("Size -------->" + jsonArr.length());
 			// int l = 1;
 			for (int i = 0; i < jsonArr.length(); i++) {
 				JSONArray arr2 = jsonArr.optJSONArray(i);
 				if (jsonArr.optJSONArray(i) != null) {
 					for (int j = 0; j < arr2.length(); j++) {
 						randomnumber = randomnumberdal.getStockRandamNumber();
-						///System.out.println("StockIn random number-->" + randomnumber.getStockIninvoicenumber());
-						//System.out.println("StockIn random code-->" + randomnumber.getStockIninvoicecode());
+						///logger.info("StockIn random number-->" + randomnumber.getStockIninvoicenumber());
+						//logger.info("StockIn random code-->" + randomnumber.getStockIninvoicecode());
 						String invoice = randomnumber.getCode() + randomnumber.getNumber();
-						System.out.println("Invoice number -->" + invoice);
+						logger.info("Invoice number -->" + invoice);
 						if (arr2.getJSONObject(j) != null) {
 							JSONObject jObject = arr2.getJSONObject(j);
-							System.out.println(jObject.getString("productName"));
-							System.out.println(jObject.getString("category"));
+							logger.info(jObject.getString("productName"));
+							logger.info(jObject.getString("category"));
 							stockIndetails = new StockInDetails();
 							stockIndetails.setStockInNumber(invoice);
 							stockIndetails.setInvoicenumber(jObject.getString("invoiceNumber"));
@@ -456,11 +456,11 @@ public class StockService implements Filter {
 							categoryList = categoryList + stockIndetails.getCategory() + ",";
 							randomnumberdal.updateStockRandamNumber(randomnumber, tempNo);
 						} else {
-							System.out.println("Null....");
+							logger.info("Null....");
 						}
 					}
 				} else {
-					System.out.println("Outer Null....");
+					logger.info("Outer Null....");
 				}
 				// l++;
 			}
@@ -489,7 +489,7 @@ public class StockService implements Filter {
 				stockdal.saveStock(stock);
 			}
 
-			System.out.println("Service call start.....");
+			logger.info("Service call start.....");
 
 			purchase.setStatus("success");
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -526,14 +526,14 @@ public class StockService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/saveStockOut", method = RequestMethod.POST)
 	public ResponseEntity<?> saveStockOut(@RequestBody Stock stock) {
-		System.out.println("saveStockOut");
+		logger.info("saveStockOut");
 		RandomNumber randomnumber = null;
 		try {
 			randomnumber = randomnumberdal.getStockRandamNumber();
-			//System.out.println("StockOut Invoice random number-->" + randomnumber.getStockOutinvoicenumber());
-			//System.out.println("StockOut Invoice random code-->" + randomnumber.getStockOutinvoicecode());
+			//logger.info("StockOut Invoice random number-->" + randomnumber.getStockOutinvoicenumber());
+			//logger.info("StockOut Invoice random code-->" + randomnumber.getStockOutinvoicecode());
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
-			System.out.println("Invoice number -->" + invoice);
+			logger.info("Invoice number -->" + invoice);
 			stock.setInvoicedate(Custom.getCurrentInvoiceDate());
 			stock.setInvoicenumber(invoice);
 			stock.setStockCategory(stock.getStockOutCategory());
@@ -555,8 +555,8 @@ public class StockService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/createStock", method = RequestMethod.POST)
 	public ResponseEntity<?> createStock(@RequestBody String invoiceNumber) {
-		System.out.println("------- createStock ---------");
-		logger.info("Invoice Number -->"+invoiceNumber );
+		logger.info("createStock");
+		logger.debug("Invoice Number-->"+invoiceNumber );
 		Stock stock = null;
 		List<PurchaseOrder> polist = new ArrayList<PurchaseOrder>();
 		POInvoice poinv = new POInvoice();

@@ -33,7 +33,7 @@ public class CustomerImpl implements CustomerDAL {
 
 	@Override
 	public Customer saveCustomer(Customer customer) {
-		System.out.println("Save Customer");
+		logger.info("saveCustomer");
 		mongoTemplate.save(customer);
 		customer.setStatus("success");
 		return customer;

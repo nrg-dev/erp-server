@@ -72,9 +72,9 @@ public class PurchaseImpl implements PurchaseDAL {
 		Query query = new Query();
 	    query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
 		list = mongoTemplate.find(query,POInvoice.class);
-		logger.info("Size-->"+list.size());
+		logger.debug("Size-->"+list.size());
 		for (POInvoice e : list) {
-		    logger.info("Invoice Number -->"+e.getInvoicenumber());    
+		    logger.debug("Invoice Number -->"+e.getInvoicenumber());    
 		}
 		
 		//List<POInvoice> list = mongoTemplate.findAll(POInvoice.class);// Load Invoice
@@ -238,7 +238,7 @@ public class PurchaseImpl implements PurchaseDAL {
 		if (vendorCode.equalsIgnoreCase("") || vendorCode.equalsIgnoreCase(null)) {
 			logger.info("DAO Vendor item load all");
 			itemlist = mongoTemplate.findAll(Item.class);
-			logger.info("DAO item size -->" + itemlist.size());
+			logger.debug("DAO item size -->" + itemlist.size());
 
 		} else {
 			Query query = new Query();
@@ -269,7 +269,7 @@ public class PurchaseImpl implements PurchaseDAL {
 			list = mongoTemplate.find(query,PurchaseOrder.class);
 		}
 		
-		logger.info("Size-->"+list.size());
+		logger.debug("Size-->"+list.size());
 		return list;
 	}
 	
@@ -291,7 +291,7 @@ public class PurchaseImpl implements PurchaseDAL {
 			for(String v:value) {
 				update = new Update();
 				query = new Query();
-				logger.info("PO numbers-->"+v);
+				logger.debug("PO numbers-->"+v);
 				query.addCriteria(Criteria.where("pocode").is(v));
 				update.set("invoicenumber", invoice);
 				update.set("status", changestatus);
@@ -339,7 +339,7 @@ public class PurchaseImpl implements PurchaseDAL {
 			Query query = new Query();
 			query.addCriteria(Criteria.where("_id").is(id));
 			mongoTemplate.remove(query, PurchaseOrder.class);
-			logger.info("PO deleted"+id);
+			logger.debug("PO deleted"+id);
 			return true;
 		}
 		
@@ -349,7 +349,7 @@ public class PurchaseImpl implements PurchaseDAL {
 			Query query = new Query();
 			query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
 			list = mongoTemplate.find(query,POReturnDetails.class);
-			logger.info("Return List Size ------>"+list.size());
+			logger.debug("Return List Size-->"+list.size());
 			return list; 
 		}
 }

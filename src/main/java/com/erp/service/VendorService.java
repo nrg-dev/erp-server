@@ -90,14 +90,14 @@ public class VendorService implements Filter {
 			vendor.setVendorcode(invoice);
 			vendor.setAddeddate(Custom.getCurrentInvoiceDate());
 			logger.debug("Current Date-->" + Custom.getCurrentDate());
-			logger.info("Vendor Image Base 64 -->" + vendor.getVendorbase64());
+			logger.debug("Vendor Image Base 64 -->" + vendor.getVendorbase64());
 			vendor = vendordal.saveVendor(vendor);
 			if (vendor.getStatus().equalsIgnoreCase("success")) {
 				randomnumberdal.updateVendorRandamNumber(randomnumber, 1);
 			}
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
-			logger.error("Exception-->" + e.getMessage());
+			logger.error("Exception-->"+e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 

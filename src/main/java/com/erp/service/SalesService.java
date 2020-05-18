@@ -139,14 +139,14 @@ public class SalesService implements Filter {
 		int totalitem = 0;
 		try {
 			sales = new Sales();
-			System.out.println("Post Json -->" + salesorderarray);
+			logger.info("Post Json -->" + salesorderarray);
 			// logger.info("Vendor name --->"+vendorName);
 			// Store into parent table to show in first data table view
 			randomnumber = randomnumberdal.getRandamNumber(2);
-			//System.out.println("SO Invoice random number-->" + randomnumber.getSalesinvoicenumber());
-			//System.out.println("SO Invoice random code-->" + randomnumber.getSalesinvoicecode());
+			//logger.info("SO Invoice random number-->" + randomnumber.getSalesinvoicenumber());
+			//logger.info("SO Invoice random code-->" + randomnumber.getSalesinvoicecode());
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
-			System.out.println("Invoice number -->" + invoice);
+			logger.info("Invoice number -->" + invoice);
 			ArrayList<String> list = new ArrayList<String>();
 			JSONArray jsonArr = new JSONArray(salesorderarray);
 			int remove = 0;
@@ -157,19 +157,19 @@ public class SalesService implements Filter {
 				}
 			}
 			int postion = remove - 1;
-			System.out.println("Position-->" + postion);
+			logger.info("Position-->" + postion);
 			list.remove(postion);
-			System.out.println("Size -------->" + jsonArr.length());
+			logger.info("Size -------->" + jsonArr.length());
 			int l = 1;
 			for (int i = 0; i < jsonArr.length(); i++) {
-				System.out.println("Loop 1...." + i);
+				logger.info("Loop 1...." + i);
 				JSONArray arr2 = jsonArr.optJSONArray(i);
 				if (l == jsonArr.length()) {
-					System.out.println("Last Value");
+					logger.info("Last Value");
 					JSONObject jObject = arr2.getJSONObject(0);
-					System.out.println("SO Date -->" + jObject.getString("sodate"));
-					// System.out.println("Customer Name -->" + jObject.getString("customername"));
-					System.out.println("Delivery Cost -->" + jObject.getString("deliveryCost"));
+					logger.info("SO Date -->" + jObject.getString("sodate"));
+					// logger.info("Customer Name -->" + jObject.getString("customername"));
+					logger.info("Delivery Cost -->" + jObject.getString("deliveryCost"));
 					// sales.setCustomerName(jObject.getString("customername"));
 					sales.setDeliveryCost(jObject.getString("deliveryCost"));
 
@@ -177,11 +177,11 @@ public class SalesService implements Filter {
 					if (jsonArr.optJSONArray(i) != null) {
 						// JSONArray arr2 = jsonArr.optJSONArray(i);
 						for (int j = 0; j < arr2.length(); j++) {
-							System.out.println("Loop 2...." + j);
+							logger.info("Loop 2...." + j);
 							if (arr2.getJSONObject(j) != null) {
 								JSONObject jObject = arr2.getJSONObject(j);
-								System.out.println(jObject.getString("productName"));
-								System.out.println(jObject.getString("category"));
+								logger.info(jObject.getString("productName"));
+								logger.info(jObject.getString("category"));
 								sodetails = new SOInvoiceDetails();
 								sodetails.setInvoicenumber(invoice);// random table..
 								sales.setCustomerName(jObject.getString("customerName"));
@@ -200,11 +200,11 @@ public class SalesService implements Filter {
 								totalPrice += jObject.getDouble("netAmount");
 								totalitem = j + 1;
 							} else {
-								System.out.println("Null....");
+								logger.info("Null....");
 							}
 						}
 					} else {
-						System.out.println("Outer Null....");
+						logger.info("Outer Null....");
 					}
 				}
 				l++;
@@ -220,7 +220,7 @@ public class SalesService implements Filter {
 			//soinvoice.setTotalitem(totalitem);
 			soinvoice.setDeliveryprice(Integer.valueOf(sales.getDeliveryCost()));
 			salesdal.saveSOInvoice(soinvoice);
-			System.out.println("Service call start.....");
+			logger.info("Service call start.....");
 			sales.setStatus("success");
 			randomnumberdal.updateSalesRandamNumber(randomnumber);
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -228,7 +228,7 @@ public class SalesService implements Filter {
 
 		/*
 		 * catch (NullPointerException ne) { sales = new Sales();
-		 * System.out.println("Inside null pointer exception ....");
+		 * logger.info("Inside null pointer exception ....");
 		 * sales.setStatus("success"); boolean status =
 		 * randomnumberdal.updateRandamNumber(randomnumber); return new
 		 * ResponseEntity<Sales>(sales, HttpStatus.CREATED);
@@ -276,7 +276,7 @@ public class SalesService implements Filter {
 					totalAmountlist = totalAmountlist + sodetail.get(i).getSubtotal() + System.lineSeparator()
 							+ System.lineSeparator();
 				}
-				System.out.println("Particular invoice productList -->" + itemnameList);
+				logger.info("Particular invoice productList -->" + itemnameList);
 				sales.setInvoiceNumber(res.getInvoicenumber());
 				sales.setSoDate(res.getInvoicedate());
 				sales.setCustomerName(res.getCustomername());
@@ -354,7 +354,7 @@ public class SalesService implements Filter {
 		try {
 			sales = new Sales();
 			logger.info("Before Calling  removeSales");
-			System.out.println("Sales code" + invoiceNumber);
+			logger.info("Sales code" + invoiceNumber);
 			String status = salesdal.removeSales(invoiceNumber);
 			sales.setStatus(status);
 			logger.info("Successfully Calling removeSales");
@@ -378,8 +378,8 @@ public class SalesService implements Filter {
 		try {
 			item = new Item();
 			logger.info("----------- Before Calling  getUnitPrice Sales ----------");
-			System.out.println("Product Name -->" + productName);
-			System.out.println("category -->" + category);
+			logger.info("Product Name -->" + productName);
+			logger.info("category -->" + category);
 
 			String[] res = productName.split("-");
 			String productCode = res[1];
@@ -479,7 +479,7 @@ public class SalesService implements Filter {
 		int totalitem = 0;
 		try {
 			sales = new Sales();
-			System.out.println("Get Sales Json -->" + saleseditarray);
+			logger.info("Get Sales Json -->" + saleseditarray);
 			ArrayList<String> list = new ArrayList<String>();
 			JSONArray jsonArr = new JSONArray(saleseditarray);
 			int remove = 0;
@@ -490,20 +490,20 @@ public class SalesService implements Filter {
 				}
 			}
 			int postion = remove - 1;
-			System.out.println("Position ---->" + postion);
+			logger.info("Position ---->" + postion);
 			list.remove(postion);
-			System.out.println("Edit Size -------->" + jsonArr.length());
+			logger.info("Edit Size -------->" + jsonArr.length());
 			// int l = 1;
 			for (int i = 0; i < jsonArr.length(); i++) {
-				System.out.println("Loop 1....");
+				logger.info("Loop 1....");
 				JSONArray arr2 = jsonArr.optJSONArray(i);
 				if (jsonArr.optJSONArray(i) != null) {
 					for (int j = 0; j < arr2.length(); j++) {
-						System.out.println("Loop 2....");
+						logger.info("Loop 2....");
 						if (arr2.getJSONObject(j) != null) {
 							JSONObject jObject = arr2.getJSONObject(j);
-							System.out.println(jObject.getString("productName"));
-							System.out.println(jObject.getString("category"));
+							logger.info(jObject.getString("productName"));
+							logger.info(jObject.getString("category"));
 							sodetails = new SOInvoiceDetails();
 							sodetails.setCategory(jObject.getString("category"));
 							sodetails.setItemname(jObject.getString("productName"));
@@ -522,11 +522,11 @@ public class SalesService implements Filter {
 							totalPrice += jObject.getDouble("netAmount");
 							totalitem = j + 1;
 						} else {
-							System.out.println("Null....");
+							logger.info("Null....");
 						}
 					}
 				} else {
-					System.out.println("Outer Null....");
+					logger.info("Outer Null....");
 				}
 				// l++;
 			}
@@ -557,18 +557,18 @@ public class SalesService implements Filter {
 	public ResponseEntity<?> saveSalesReturn(@RequestBody String returnarray) {
 		logger.info("saveSalesReturn");
 		String temp = returnarray;
-		System.out.println("Mapped value -->" + temp);
+		logger.info("Mapped value -->" + temp);
 		Sales sales = null;
 		SOReturnDetails soreturndetails = null;
 		RandomNumber randomnumber = null;
 
 		try {
 			sales = new Sales();
-			System.out.println("Post Json -->" + returnarray);
+			logger.info("Post Json -->" + returnarray);
 
 			JSONArray jsonArr = new JSONArray(returnarray);
 			ArrayList<String> list = new ArrayList<String>();
-			System.out.println("length =====" + jsonArr.length());
+			logger.info("length =====" + jsonArr.length());
 			int remove = 0;
 			if (jsonArr != null) {
 				for (int i = 0; i < jsonArr.length(); i++) {
@@ -578,23 +578,23 @@ public class SalesService implements Filter {
 			}
 
 			int postion = remove - 1;
-			System.out.println("Position-->" + postion);
+			logger.info("Position-->" + postion);
 			list.remove(postion);
-			System.out.println("Size -------->" + jsonArr.length());
+			logger.info("Size -------->" + jsonArr.length());
 			// int l = 1;
 			for (int i = 0; i < jsonArr.length(); i++) {
 				JSONArray arr2 = jsonArr.optJSONArray(i);
 				if (jsonArr.optJSONArray(i) != null) {
 					for (int j = 0; j < arr2.length(); j++) {
 						randomnumber = randomnumberdal.getReturnRandamNumber(2);
-						//System.out.println("SO Return random number-->" + randomnumber.getSoreturninvoicenumber());
-						//System.out.println("SO Return random code-->" + randomnumber.getSoreturninvoicecode());
+						//logger.info("SO Return random number-->" + randomnumber.getSoreturninvoicenumber());
+						//logger.info("SO Return random code-->" + randomnumber.getSoreturninvoicecode());
 						String invoice = randomnumber.getCode() + randomnumber.getNumber();
-						System.out.println("Sales Return Invoice number -->" + invoice);
+						logger.info("Sales Return Invoice number -->" + invoice);
 						if (arr2.getJSONObject(j) != null) {
 							JSONObject jObject = arr2.getJSONObject(j);
-							System.out.println(jObject.getString("productName"));
-							System.out.println(jObject.getString("category"));
+							logger.info(jObject.getString("productName"));
+							logger.info(jObject.getString("category"));
 							soreturndetails = new SOReturnDetails();
 							soreturndetails.setInvoicenumber(invoice);// random table..
 							soreturndetails.setCustomername(jObject.getString("customerName"));
@@ -613,12 +613,12 @@ public class SalesService implements Filter {
 						//			"After Increament Invoice Number --->" + randomnumber.getSoreturninvoicenumber());
 
 						} else {
-							System.out.println("Null....");
+							logger.info("Null....");
 						}
 						// l++;
 					}
 				} else {
-					System.out.println("Outer Null....");
+					logger.info("Outer Null....");
 				}
 			}
 			sales.setStatus("success");

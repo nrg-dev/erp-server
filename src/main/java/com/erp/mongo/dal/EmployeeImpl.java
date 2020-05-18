@@ -36,18 +36,18 @@ public class EmployeeImpl implements EmployeeDAL {
 
 	// save
 	public boolean save(Employee employee,int temp) {
-		logger.info("Employee Code-->"+employee.getEmployeecode());
-		logger.info("Employee name-->"+employee.getName());
-		logger.info("rank-->"+employee.getRank());
-		logger.info("phonenumber-->"+employee.getPhonenumber());
-		logger.info("email-->"+employee.getEmail());
-		logger.info("dob-->"+employee.getDob());
-		logger.info("contractnumber-->"+employee.getContractnumber());
-		logger.info("npwp-->"+employee.getNpwp());
-		logger.info("bpjs-->"+employee.getBpjs());
-		logger.info("monthlysalary-->"+employee.getMonthlysalary());
-		logger.info("workHour-->"+employee.getWorkHour());
-		logger.info("annualLeave-->"+employee.getAnnualLeave());
+		logger.debug("Employee Code-->"+employee.getEmployeecode());
+		logger.debug("Employee name-->"+employee.getName());
+		logger.debug("rank-->"+employee.getRank());
+		logger.debug("phonenumber-->"+employee.getPhonenumber());
+		logger.debug("email-->"+employee.getEmail());
+		logger.debug("dob-->"+employee.getDob());
+		logger.debug("contractnumber-->"+employee.getContractnumber());
+		logger.debug("npwp-->"+employee.getNpwp());
+		logger.debug("bpjs-->"+employee.getBpjs());
+		logger.debug("monthlysalary-->"+employee.getMonthlysalary());
+		logger.debug("workHour-->"+employee.getWorkHour());
+		logger.debug("annualLeave-->"+employee.getAnnualLeave());
 		boolean status = false;
 		try {
 			// Update
@@ -149,14 +149,14 @@ public class EmployeeImpl implements EmployeeDAL {
 			List<AbsentList> list = mongoTemplate.find(query,AbsentList.class);
 			if(list.size()>0) {
 				logger.info("Inside saveAbsentList update");
-				logger.info("Employee code-->"+employeeDto.getEmployeecode());
-				logger.info("Date-->"+employeeDto.getDate());
-				logger.info("CheckInReason-->"+employeeDto.getCheckinreason());
-				logger.info("CheckInTime-->"+employeeDto.getCheckintime());
-				logger.info("CheckOutReason-->"+employeeDto.getCheckoutreason());
-				logger.info("CheckOutTime-->"+employeeDto.getCheckouttime());
-				logger.info("Absent-->"+employeeDto.getAbsent());
-				logger.info("Reason-->"+employeeDto.getReason());
+				logger.debug("Employee code-->"+employeeDto.getEmployeecode());
+				logger.debug("Date-->"+employeeDto.getDate());
+				logger.debug("CheckInReason-->"+employeeDto.getCheckinreason());
+				logger.debug("CheckInTime-->"+employeeDto.getCheckintime());
+				logger.debug("CheckOutReason-->"+employeeDto.getCheckoutreason());
+				logger.debug("CheckOutTime-->"+employeeDto.getCheckouttime());
+				logger.debug("Absent-->"+employeeDto.getAbsent());
+				logger.debug("Reason-->"+employeeDto.getReason());
 				update = new Update();
 				query = new Query();
 				query.addCriteria(Criteria.where("employeecode").is(employeeDto.getEmployeecode()));
@@ -284,9 +284,9 @@ public class EmployeeImpl implements EmployeeDAL {
 	   query.with(new Sort(new Order(Direction.DESC, "employeecode")));
 	    //List<MyClass> allObjects = mongoTemplate.find(query, MyClass.class);
 		list = mongoTemplate.find(query,Employee.class);
-		logger.info("Size-->"+list.size());
+		logger.debug("Size-->"+list.size());
 		for (Employee e : list) {
-		    logger.info(e.getName());    
+		    logger.debug(e.getName());    
 		   }
 		return list;
 	}
@@ -295,20 +295,20 @@ public class EmployeeImpl implements EmployeeDAL {
 		List<AbsentList> list =null;
 		if(type.equalsIgnoreCase("A")) {
 			list = mongoTemplate.findAll(AbsentList.class);	
-			logger.info("EmployeeImpl All loadAbsentList-->"+list.size());
+			logger.debug("EmployeeImpl All loadAbsentList-->"+list.size());
 		}
 		if(type.equalsIgnoreCase("D")) {
 			Query query = new Query();
 			query.addCriteria(Criteria.where("employeecode").is(employeecode));
 			query.addCriteria(Criteria.where("date").is(date));
 			list = mongoTemplate.find(query,AbsentList.class);
-			logger.info("EmployeeImpl Single loadAbsentList-->"+list.size());
+			logger.debug("EmployeeImpl Single loadAbsentList-->"+list.size());
 		}
 		if(type.equalsIgnoreCase("M")) {
 			Query query = new Query();
 			query.addCriteria(Criteria.where("employeecode").is(employeecode));
 			list = mongoTemplate.find(query,AbsentList.class);
-			logger.info("EmployeeImpl Month loadAbsentList-->"+list.size());
+			logger.debug("EmployeeImpl Month loadAbsentList-->"+list.size());
 		}
 		else {
 			logger.info("EmployeeImpl No Type found");
@@ -320,13 +320,13 @@ public class EmployeeImpl implements EmployeeDAL {
 		List<ContractList> list =null;
 		if(employeecode!=null) {
 			list = mongoTemplate.findAll(ContractList.class);	
-			logger.info("EmployeeImpl All loadContractList-->"+list.size());
+			logger.debug("EmployeeImpl All loadContractList-->"+list.size());
 		}
 		else {
 			Query query = new Query();
 			query.addCriteria(Criteria.where("employeecode").is(employeecode));
 			list = mongoTemplate.find(query,ContractList.class);
-			logger.info("EmployeeImpl Single loadContractList-->"+list.size());
+			logger.debug("EmployeeImpl Single loadContractList-->"+list.size());
 		}
 		return list;
 	}
@@ -336,20 +336,20 @@ public class EmployeeImpl implements EmployeeDAL {
 		List<DailyReport> list =null;
 		if(type.equalsIgnoreCase("A")) {
 			list = mongoTemplate.findAll(DailyReport.class);	
-			logger.info("EmployeeImpl All loadDailyReport-->"+list.size());
+			logger.debug("EmployeeImpl All loadDailyReport-->"+list.size());
 		}
 		if(type.equalsIgnoreCase("D")) {
 			Query query = new Query();
 			query.addCriteria(Criteria.where("employeecode").is(employeecode));
 			query.addCriteria(Criteria.where("date").is(date));
 			list = mongoTemplate.find(query,DailyReport.class);
-			logger.info("EmployeeImpl Single loadDailyReport-->"+list.size());
+			logger.debug("EmployeeImpl Single loadDailyReport-->"+list.size());
 		}
 		if(type.equalsIgnoreCase("M")) {
 			Query query = new Query();
 			query.addCriteria(Criteria.where("employeecode").is(employeecode));
 			list = mongoTemplate.find(query,DailyReport.class);
-			logger.info("EmployeeImpl Month loadDailyReport-->"+list.size());
+			logger.debug("EmployeeImpl Month loadDailyReport-->"+list.size());
 		}
 		else if(list.size()==0){
 			logger.info("EmployeeImpl loadDailyReport No Type found");
@@ -365,7 +365,7 @@ public class EmployeeImpl implements EmployeeDAL {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("employeecode").is(employeecode));
 		list = mongoTemplate.find(query,Employee.class);
-		logger.info("EmployeeImpl Single DailyReportSize-->"+list.size());
+		logger.debug("EmployeeImpl Single DailyReportSize-->"+list.size());
 		return list;
 	}
 
