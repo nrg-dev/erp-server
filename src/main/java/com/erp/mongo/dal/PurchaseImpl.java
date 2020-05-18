@@ -188,6 +188,26 @@ public class PurchaseImpl implements PurchaseDAL {
 		return poinvoice;
 	}
 	
+	@Override public POInvoice updatePOInvoice(POInvoice purchase) {
+		logger.info("Update POInvoice Number --->"+purchase.getInvoicenumber());
+		Update update = new Update();
+		Query query = new Query();
+		query.addCriteria(Criteria.where("invoicenumber").is(purchase.getInvoicenumber()));
+		update.set("invoicedate", purchase.getInvoicedate());
+		update.set("invoicenumber", purchase.getInvoicenumber());
+		update.set("vendorname", purchase.getVendorname());
+		update.set("vendorcode", purchase.getVendorcode());
+		update.set("qty", purchase.getQty());
+		update.set("subtotal", purchase.getSubtotal());
+		update.set("deliveryprice",purchase.getDeliveryprice());
+		update.set("totalprice", purchase.getTotalprice());
+		update.set("status", "Delivered");
+		update.set("stockstatus", "Received");
+		update.set("base64", purchase.getBase64());
+		mongoTemplate.updateFirst(query,update, POInvoice.class);
+		return purchase; 
+	}
+	
 	/*
 	 * // update POInvoice
 	 * 

@@ -20,6 +20,7 @@ public class POInvoice {
 	private long    totalprice;
 	private String base64;
 	private String status;
+	private String stockstatus;
 	private String productname;
 
 	public String getId() {
@@ -116,6 +117,14 @@ public class POInvoice {
 
 	public void setProductname(String productname) {
 		this.productname = productname;
+	}
+
+	public String getStockstatus() {
+		return stockstatus;
+	}
+
+	public void setStockstatus(String stockstatus) {
+		this.stockstatus = stockstatus;
 	}
 
 	

@@ -34,7 +34,7 @@ public class PDFGenerator {
 
 	public static String  getBase64(POInvoice poinvoice,Purchase purchase) { 
 		logger.info("PDFGenerator");
-		logger.info("PDF QTY ------->"+poinvoice.getQty()); 
+		logger.info("PDF QTY -->"+poinvoice.getQty()); 
 		String base64=null;
 		byte[] encodedBytes=null;
 		String encodedString=null;
@@ -345,7 +345,7 @@ public class PDFGenerator {
 	
 	//------------  Sales PDF Generator -------------
 	public static String  getSalesBase64(SOInvoice soinvoice,Sales sales) { 
-		logger.info("------ Sales PDFGenerator --------");
+		logger.info("Sales PDFGenerator");
 		String base64=null;
 		byte[] encodedBytes=null;
 		String encodedString=null;

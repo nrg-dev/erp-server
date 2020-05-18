@@ -36,7 +36,7 @@ public interface PurchaseDAL {
 
 	public POReturnDetails insertReturn(POReturnDetails poreturndetails);
 	
-	//public POInvoice updatePOInvoice(POInvoice poinvoice);
+	public POInvoice updatePOInvoice(POInvoice poinvoice);
 	
 	public POInvoice loadPOInvoice(String invoicenumber);
 

@@ -39,6 +39,7 @@ import com.erp.dto.Purchase;
 import com.erp.mongo.dal.PurchaseDAL;
 import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.dal.StockDAL;
+import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PurchaseOrder;
@@ -558,6 +559,7 @@ public class StockService implements Filter {
 		logger.info("Invoice Number -->"+invoiceNumber );
 		Stock stock = null;
 		List<PurchaseOrder> polist = new ArrayList<PurchaseOrder>();
+		POInvoice poinv = new POInvoice();
 		try {
 			polist = purchasedal.loadPO(2,invoiceNumber);
 			for(PurchaseOrder po :polist) {
@@ -572,12 +574,17 @@ public class StockService implements Filter {
 				stock.setInvoicedate(Custom.getCurrentInvoiceDate());
 				stock.setInvoicenumber(po.getPocode());
 				stockdal.saveStock(stock);
+				
 				Stock st = new Stock();
 				st = stockdal.loadStockInvoice(stock.getItemcode(),2);
 				long currentStock = po.getQty()+st.getRecentStock();
 				stock.setAddedqty(currentStock); 
 				stockdal.updateStock(stock,"all");
+				
 			}
+
+			poinv = purchasedal.loadPOInvoice(invoiceNumber);
+			purchasedal.updatePOInvoice(poinv);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());

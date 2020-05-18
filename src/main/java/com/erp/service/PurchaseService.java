@@ -137,6 +137,7 @@ public class PurchaseService implements Filter {
 			logger.debug("Invoice Date-->" + poinvoice.getInvoicedate());
 			poinvoice.setInvoicenumber(invoice);
 			poinvoice.setStatus("Pending");
+			poinvoice.setStockstatus("Pending");
 			poinvoice.setSubtotal(poinvoicedto.getSubtotal());
 			poinvoice.setDeliveryprice(poinvoicedto.getDeliverycharge());
 			poinvoice.setTotalprice(poinvoicedto.getSubtotal()+poinvoicedto.getDeliverycharge());
@@ -147,6 +148,7 @@ public class PurchaseService implements Filter {
 			for(String vencode:poinvoicedto.getVendorcode()) {
 				purchase.setPaymentStatus(vencode);
 			}
+			logger.info("Vendor Code ----->"+purchase.getPaymentStatus());
 			for(String prod:poinvoicedto.getProductname()) {
 				poinvoice.setProductname(prod);
 			}
