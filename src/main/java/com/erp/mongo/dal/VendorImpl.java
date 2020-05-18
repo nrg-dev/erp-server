@@ -33,7 +33,7 @@ public class VendorImpl implements VendorDAL {
 
 	@Override
 	public Vendor saveVendor(Vendor vendor) {
-		System.out.println("Save Vendor");
+		logger.info("Save Vendor");
 		mongoTemplate.save(vendor);
 		vendor.setStatus("success");
 		return vendor;

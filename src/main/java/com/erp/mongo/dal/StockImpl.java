@@ -95,18 +95,18 @@ public class StockImpl implements StockDAL {
 	// Save StockInDetails
 	@Override
 	public StockInDetails saveStockIn(StockInDetails stockIndetails) {
-		System.out.println("Before save stockIn details");
+		logger.info("Before save stockIn details");
 		mongoTemplate.save(stockIndetails);
-		System.out.println("After save stockIn details");
+		logger.info("After save stockIn details");
 		return stockIndetails;
 	}
 	
 	// Save Stock
 	public Stock saveStock(Stock stock) {
-		System.out.println("Before Save Stock");
+		logger.info("Before Save Stock");
 		mongoTemplate.save(stock);
 		stock.setStatus("success");
-		System.out.println("After Save Stock");
+		logger.info("After Save Stock");
 		return stock;
 	}
 	
@@ -153,9 +153,9 @@ public class StockImpl implements StockDAL {
 			
 			res = mongoTemplate.findOne(query, Stock.class);
 			if(res != null) {
-				System.out.println("------ StockId Match ------");
+				logger.info("------ StockId Match ------");
 			}else {
-				System.out.println("------ StockId Not Match---------------");
+				logger.info("------ StockId Not Match---------------");
 			}
 		}catch(Exception e) {
 			e.printStackTrace();

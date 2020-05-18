@@ -94,8 +94,8 @@ public class ItemService implements Filter {
 		int randomId=16;
 		try {
 			randomnumber = randomnumberdal.getCategoryRandomNumber(2);
-			//System.out.println("item Invoice random number-->" + randomnumber.getProductinvoicenumber());
-			//System.out.println("item Invoice random code-->" + randomnumber.getProductinvoicecode());
+			//logger.info("item Invoice random number-->" + randomnumber.getProductinvoicenumber());
+			//logger.info("item Invoice random code-->" + randomnumber.getProductinvoicecode());
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
 			logger.debug("Product number-->" + invoice);
 			logger.debug("category code-->" + item.getCategorycode());
@@ -187,7 +187,7 @@ public class ItemService implements Filter {
 			logger.info("loadItem");
 			List<Item> itemlist = null;
 			try {
-				logger.info("Category Code or Name-->" + category);
+				logger.debug("Category Code or Name-->" + category);
 				logger.info("Before Calling ItemLoad");
 				itemlist = new ArrayList<Item>();
 				itemlist = itemdal.loadItem(vendorcode,category,prodcode);
@@ -244,12 +244,12 @@ public class ItemService implements Filter {
 		logger.info("loadunits");
 		List<Units> unitlist = null;
 		try {
-			logger.info("Unit Id-->" + id);
+			logger.debug("Unit Id-->" + id);
 			unitlist = new ArrayList<Units>();
 			logger.info("Before Calling Unit load");
 			unitlist = itemdal.loadUnits(id);
 			logger.info("After Calling Unit load");
-			logger.info("Unit Size-->"+unitlist.size());
+			logger.debug("Unit Size-->"+unitlist.size());
 		   return new ResponseEntity<List<Units>>(unitlist, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
@@ -291,7 +291,7 @@ public class ItemService implements Filter {
 	 * try { logger.info("-----------Inside loadItemName Called----------");
 	 * itemlist = itemdal.loadItem(itemlist); for (Item item : itemlist) {
 	 * itemnamecode.add(item.getProductname()+"-"+item.getProdcode());
-	 * System.out.println("product code -->" + item.getProdcode());
+	 * logger.info("product code -->" + item.getProdcode());
 	 * 
 	 * } return new ResponseEntity<List<String>>(itemnamecode, HttpStatus.CREATED);
 	 * 

@@ -34,7 +34,7 @@ public class PDFGenerator {
 
 	public static String  getBase64(POInvoice poinvoice,Purchase purchase) { 
 		logger.info("PDFGenerator");
-		logger.info("PDF QTY ------->"+poinvoice.getQty()); 
+		logger.debug("PDF QTY-->"+poinvoice.getQty()); 
 		String base64=null;
 		byte[] encodedBytes=null;
 		String encodedString=null;

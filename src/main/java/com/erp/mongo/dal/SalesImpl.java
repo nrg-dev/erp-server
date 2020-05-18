@@ -39,9 +39,9 @@ public class SalesImpl implements SalesDAL {
 
 	// Save SO Invoice
 	public SOInvoice saveSOInvoice(SOInvoice soinvoice) {
-		System.out.println("Before save Invoice");
+		logger.info("Before save Invoice");
 		mongoTemplate.save(soinvoice);
-		System.out.println("After save Invoice");
+		logger.info("After save Invoice");
 		return soinvoice;
 
 	}
@@ -49,9 +49,9 @@ public class SalesImpl implements SalesDAL {
 	// Save SO Invoice details
 	@Override
 	public SOInvoiceDetails saveSales(SOInvoiceDetails salesorder) {
-		System.out.println("Before save SO Invoice details");
+		logger.info("Before save SO Invoice details");
 		mongoTemplate.save(salesorder);
-		System.out.println("After save SO Invoice details");
+		logger.info("After save SO Invoice details");
 		return salesorder;
 	}
 
@@ -192,9 +192,9 @@ public class SalesImpl implements SalesDAL {
 	// Save SO Invoice details
 	@Override
 	public SOReturnDetails insertReturn(SOReturnDetails salesreturn) {
-		System.out.println("Before save SO Return details");
+		logger.info("Before save SO Return details");
 		mongoTemplate.save(salesreturn);
-		System.out.println("After save SO Return details");
+		logger.info("After save SO Return details");
 		return salesreturn;
 	}
 	

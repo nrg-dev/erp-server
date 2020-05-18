@@ -41,7 +41,7 @@ public class ItemImpl implements ItemDAL {
 		if(id!=null) {
 			logger.info("DAO unit load all");
 			unitlist = mongoTemplate.findAll(Units.class);
-			logger.info("DAO unit size -->" + unitlist.size());
+			logger.debug("DAO unit size -->" + unitlist.size());
 		}else {
 			
 		}
@@ -50,18 +50,18 @@ public class ItemImpl implements ItemDAL {
 
 	// item load
 	public List<Item> loadItem(String vendorcode,String category,String prodcode) {
-		logger.info("DAO Category-->" + category);
-		logger.info("DAO VendorCode-->" + vendorcode);
-		logger.info("DAO ProductCode-->" + prodcode);
+		logger.debug("DAO Category-->" + category);
+		logger.debug("DAO VendorCode-->" + vendorcode);
+		logger.debug("DAO ProductCode-->" + prodcode);
 
 		List<Item> itemlist = new ArrayList<Item>();
 		
 		if (vendorcode!=null && ( category==null && prodcode==null)) {
 			Query query = new Query();
-			logger.info("DAO Vendor Code-->" + vendorcode);
+			logger.debug("DAO Vendor Code-->" + vendorcode);
 			query.addCriteria(Criteria.where("vendorcode").is(vendorcode));
 			itemlist = mongoTemplate.find(query, Item.class);
-			logger.info("DAO item size -->" + itemlist.size());
+			logger.debug("DAO item size -->" + itemlist.size());
 
 		} 
 		
@@ -81,18 +81,18 @@ public class ItemImpl implements ItemDAL {
 			query.fields().include("sellingprice");
 			logger.info("DAO item load all");
 			itemlist = mongoTemplate.find(query,Item.class);
-			logger.info("DAO item size -->" + itemlist.size());
+			logger.debug("DAO item size -->" + itemlist.size());
 
 		} 
 		else if (vendorcode!=null && category!=null && prodcode!=null) {
 			Query query = new Query();
-			logger.info("DAO Vendor Code-->" + vendorcode);
-			logger.info("DAO Category-->" + category);
-			logger.info("DAO Product Code-->" + prodcode);
+			logger.debug("DAO Vendor Code-->" + vendorcode);
+			logger.debug("DAO Category-->" + category);
+			logger.debug("DAO Product Code-->" + prodcode);
 			query.addCriteria(Criteria.where("vendorcode")
 					.is(vendorcode).and("prodcode").is(prodcode).and("categorycode").is(category));
 			itemlist = mongoTemplate.find(query, Item.class);
-			logger.info("DAO item size -->" + itemlist.size());
+			logger.debug("DAO item size -->" + itemlist.size());
 
 		} 
 		return itemlist;
@@ -100,7 +100,7 @@ public class ItemImpl implements ItemDAL {
 
 	// Discount load
 	public List<Discount> loadDiscount(List<Discount> discountlist,String discount) {
-		System.out.println("Fetech Type -->"+discount);
+		logger.debug("Fetech Type-->"+discount);
 		Query query = new Query();
 		query.addCriteria(Criteria.where("discountType").is(discount));
 		discountlist = mongoTemplate.find(query,Discount.class);
@@ -117,13 +117,13 @@ public class ItemImpl implements ItemDAL {
 
 	// update
 	public Item updateItem(Item item) {
-		logger.info("[ItemImpl] Item Code-->"+item.getProdcode());
-		logger.info("[ItemImpl] Category Name-->"+item.getCategoryname());
-		logger.info("[ItemImpl] Category Code-->"+item.getCategorycode());
-		logger.info("[ItemImpl] Vendor Name-->"+item.getVendorname());
-		logger.info("[ItemImpl] Vendor Code-->"+item.getVendorcode());
-		logger.info("[ItemImpl] Item Name-->"+item.getProductname());
-		logger.info("[ItemImpl] Description Name-->"+item.getDescription());
+		logger.debug("[ItemImpl] Item Code-->"+item.getProdcode());
+		logger.debug("[ItemImpl] Category Name-->"+item.getCategoryname());
+		logger.debug("[ItemImpl] Category Code-->"+item.getCategorycode());
+		logger.debug("[ItemImpl] Vendor Name-->"+item.getVendorname());
+		logger.debug("[ItemImpl] Vendor Code-->"+item.getVendorcode());
+		logger.debug("[ItemImpl] Item Name-->"+item.getProductname());
+		logger.debug("[ItemImpl] Description Name-->"+item.getDescription());
 		Update update = new Update();
 		Query query = new Query();
 		query.addCriteria(Criteria.where("prodcode").is(item.getProdcode()));
@@ -146,7 +146,7 @@ public class ItemImpl implements ItemDAL {
 
 	// Discount update
 	public Discount updateDiscount(Discount discount) {
-		System.out.println("---Inside discount edit imp---");
+		logger.info("updateDiscount");
 		Update update = new Update();
 		Query query = new Query();
 		query.addCriteria(Criteria.where("discountcode").is(discount.getDiscountcode()));
@@ -156,7 +156,6 @@ public class ItemImpl implements ItemDAL {
 		update.set("qty", discount.getQty());
 		update.set("fromdate_promotionperiod", discount.getFromdate_promotionperiod());
 		update.set("todate_promotionperiod", discount.getTodate_promotionperiod());
-
 		mongoTemplate.updateFirst(query, update, Discount.class);
 		return discount;
 
@@ -201,7 +200,6 @@ public class ItemImpl implements ItemDAL {
 			update.set("quantityname", units.getQuantityname());
 			update.set("quantitysymbol", units.getQuantitysymbol());
 			update.set("dimensionsymbol", units.getDimensionsymbol());
-
 			mongoTemplate.updateFirst(query, update, Units.class);
 			// update
 		}else {

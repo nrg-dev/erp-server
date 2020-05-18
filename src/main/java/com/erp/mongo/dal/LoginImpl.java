@@ -30,17 +30,17 @@ public class LoginImpl implements LoginDAL {
 	@Override
 	public List<Login> userLogin(User user, List<Login> result) {
 		Query query = new Query();
-		logger.info("-------- Inside UserLogin Method Calling in Impl ---------");
+		logger.info("userLogin");
 		try {
 			if(user.getId()==1) {
-				logger.info("--- User Name Validation ---");
+				logger.info("User Name Validation");
 				query.addCriteria( new Criteria().andOperator(
 						Criteria.where("username").is(user.getUsername()),
 						Criteria.where("status").is("Active") ) );
 				result = mongoTemplate.find(query, Login.class);
 			}
 			if(user.getId()==2){
-				logger.info("--- User Name and Password Validation ---");
+				logger.info("User Name and Password Validation");
 				query.addCriteria( new Criteria().andOperator(
 						Criteria.where("username").is(user.getUsername()),Criteria.where("status").is("Active"),
 						Criteria.where("password").is(user.getPassword()) ) );

@@ -30,13 +30,13 @@ public class FinanceImpl implements FinanceDAL {
 		List<Customer> customerlist = mongoTemplate.findAll(Customer.class);
 		List<Vendor> vendorlist = mongoTemplate.findAll(Vendor.class);
 		for (Customer customer : customerlist) {
-			logger.info("Customer name-->" + customer.getCustomerName());
-			logger.info("Customer code-->" + customer.getCustcode());
+			logger.debug("Customer name-->" + customer.getCustomerName());
+			logger.debug("Customer code-->" + customer.getCustcode());
 			list.add(customer.getCustomerName() + "-" + customer.getCustcode());
 		}
 		for (Vendor vendor : vendorlist) {
-			logger.info("Vendor name-->" + vendor.getVendorName());
-			logger.info("Vendor code-->" + vendor.getVendorcode());
+			logger.debug("Vendor name-->" + vendor.getVendorName());
+			logger.debug("Vendor code-->" + vendor.getVendorcode());
 			list.add(vendor.getVendorName() + "-" + vendor.getVendorcode());
 		}
 		return list;

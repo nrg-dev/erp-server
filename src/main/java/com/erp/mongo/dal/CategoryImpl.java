@@ -24,7 +24,7 @@ public class CategoryImpl implements CategoryDAL {
 	// save & update
 	public boolean saveCategory(Category category,int i) {
 		logger.info("saveCategory & updateCategory");
-		logger.info("category code-->"+category.getCategorycode());
+		logger.debug("category code-->"+category.getCategorycode());
 		boolean status;
 			try {	
 			

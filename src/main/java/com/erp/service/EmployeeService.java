@@ -134,10 +134,10 @@ public class EmployeeService implements Filter {
 		List<Employee> responseList = null;
 		try {
 			responseList = employeedal.load(responseList);
-			logger.info("Employee List Size-->"+responseList.size());
+			logger.debug("Employee List Size-->"+responseList.size());
 			return new ResponseEntity<List<Employee>>(responseList, HttpStatus.CREATED);
 		} catch (Exception e) {
-			logger.info("Exception-->" + e.getMessage());
+			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
 
@@ -193,7 +193,7 @@ public class EmployeeService implements Filter {
 			List<AbsentList> responseList = null;
 			try {
 				responseList = employeedal.loadAbsentList(employeecode,date,type);
-				logger.info("List Size-->"+responseList.size());
+				logger.debug("List Size-->"+responseList.size());
 				return new ResponseEntity<List<AbsentList>>(responseList, HttpStatus.OK);
 
 			} catch (Exception e) {

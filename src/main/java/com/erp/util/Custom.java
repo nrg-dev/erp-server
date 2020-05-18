@@ -9,6 +9,12 @@ import java.util.Calendar;
 */import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.erp.service.VendorService;
+
 import java.util.Date;
 
 public class Custom {
@@ -16,14 +22,15 @@ public class Custom {
 	//private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
    // private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 	
-	
+	public static final Logger logger = LoggerFactory.getLogger(Custom.class);
+
 
 	public static String getCurrentInvoiceDate() {
 		//SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		Date date = new Date();
-		System.out.println(formatter.format(date));
-		System.out.println("Invoice Date -->"+date);
+		logger.debug(formatter.format(date));
+		logger.debug("Invoice Date -->"+date);
 		return formatter.format(date);
 	}
 
@@ -38,7 +45,7 @@ public class Custom {
     	
     	Date today = new Date();
     	String currentTime = sdff.format(today);
-    	System.out.println("Current time ---------->"+currentTime);
+    	logger.debug("Current time-->"+currentTime);
         return currentTime;
     }
     
@@ -48,7 +55,7 @@ public class Custom {
 
     	//Date today = new Date();
     	String formate = formateDate.format(inputDate);
-    	System.out.println("Formated Date ---------->"+formate);
+    	logger.debug("Formated Date-->"+formate);
         return formate;
     }
  
