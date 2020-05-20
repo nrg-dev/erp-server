@@ -781,13 +781,13 @@ public class PurchaseService implements Filter {
 		logger.debug("Payment Status-->" + poreturn.getReturnStatus());
 		logger.debug("Qty-->" + poreturn.getQty());
 		logger.debug("Price-->" + poreturn.getPrice());
+		logger.debug("PoCode-->" + poreturn.getPocode());
 		RandomNumber randomnumber = null;
 		int randomId=8;
 		try {
 			randomnumber = randomnumberdal.getRandamNumber(randomId);
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
 			logger.debug("Invoice number -->" + invoice);
-			//purchasedal.updatePO(invoice,poinvoicedto.getOrdernumbers());
 			poreturn.setInvoicenumber(invoice);
 			poreturn.setCreateddate(Custom.getCurrentInvoiceDate());
 			purchasedal.insertReturn(poreturn);

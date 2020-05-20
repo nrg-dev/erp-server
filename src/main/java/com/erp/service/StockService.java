@@ -574,7 +574,7 @@ public class StockService implements Filter {
 				stock.setInvoicedate(Custom.getCurrentInvoiceDate());
 				stock.setInvoicenumber(po.getPocode());
 				stockdal.saveStock(stock);
-				
+				logger.debug("Item Code -->"+stock.getItemcode());
 				Stock st = new Stock();
 				st = stockdal.loadStockInvoice(stock.getItemcode(),2);
 				long currentStock = po.getQty()+st.getRecentStock();

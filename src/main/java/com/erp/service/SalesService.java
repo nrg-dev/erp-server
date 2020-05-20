@@ -889,6 +889,7 @@ public class SalesService implements Filter {
 		logger.info("SO Payment Status -->" + soreturn.getReturnStatus());
 		logger.info("SO Qty -->" + soreturn.getQty());
 		logger.info("SO Price -->" + soreturn.getPrice());
+		logger.debug("SoCode-->" + soreturn.getSocode());
 		RandomNumber randomnumber = null;
 		int randomId=9;
 		try {

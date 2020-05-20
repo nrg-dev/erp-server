@@ -21,6 +21,7 @@ public class POReturnDetails {
 	private String invoicedqty;
 	private String invoiceddate;
 	private double price;
+	private String pocode;
 
 	public String getId() {
 		return id;
@@ -133,6 +134,14 @@ public class POReturnDetails {
 
 	public void setPrice(double price) {
 		this.price = price;
+	}
+
+	public String getPocode() {
+		return pocode;
+	}
+
+	public void setPocode(String pocode) {
+		this.pocode = pocode;
 	}
 
 	

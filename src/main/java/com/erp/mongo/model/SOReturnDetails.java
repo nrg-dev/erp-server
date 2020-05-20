@@ -21,6 +21,7 @@ public class SOReturnDetails {
 	private String invoicedqty;
 	private String invoiceddate;
 	private double price;
+	private String socode;
 	
 	public String getId() {
 		return id;
@@ -132,6 +133,14 @@ public class SOReturnDetails {
 
 	public void setPrice(double price) {
 		this.price = price;
+	}
+
+	public String getSocode() {
+		return socode;
+	}
+
+	public void setSocode(String socode) {
+		this.socode = socode;
 	}
 
 	 
