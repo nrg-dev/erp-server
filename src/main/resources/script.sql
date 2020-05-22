@@ -20,6 +20,7 @@ db.randomNumber.insert({ "randomID" : 14,"number": 10000,"code" : "STD","descrip
 db.randomNumber.insert({ "randomID" : 15,"number": 10000,"code" : "D","description"   : "Discount"})
 db.randomNumber.insert({ "randomID" : 16,"number": 10000,"code" : "STIN","description": "Stock In"})
 db.randomNumber.insert({ "randomID" : 17,"number": 10000,"code" : "STOT","description": "Stock Out"})
+db.randomNumber.insert({ "randomID" : 18,"number": 10000,"code" : "MEN","description": "Menu"})
 
 show collections
 db.test.drop()
@@ -126,3 +127,27 @@ db.userRole.insertOne({ "invnumber":"INVUS001","userRole":"HRD","menuItem":"Empl
 db.userRole.insertOne({ "invnumber":"INVUS002","userRole":"SALES MANAGER","menuItem":"Employment,Vendor & Customer,Category & Product,Purchase,Sales,Finance","subMenuItem":"","status":"Active"});
 db.userRole.insertOne({ "invnumber":"INVUS003","userRole":"ADMINISTRATOR","menuItem":"Employment,Vendor & Customer,Category & Product,Purchase,Sales,Stock","subMenuItem":"","status":"Active"});
 db.userRole.insertOne({ "invnumber":"INVUS004","userRole":"WAREHOUSE CHIEF","menuItem":"Employment,Vendor & Customer,Category & Product,Stock,Report","subMenuItem":"","status":"Active"});
+
+
+
+
+Menu Insert Query
+===================
+db.menu.insertOne({ "menucode":"MEN10000","menuname":"Dashboard","submenuname":"","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10000","menuname":"Dasbor","submenuname":"","langcode":"INDO"});
+db.menu.insertOne({ "menucode":"MEN10001","menuname":"Employees","submenuname":"","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10001","menuname":"Para karyawan","submenuname":"","langcode":"INDO"});
+db.menu.insertOne({ "menucode":"MEN10002","menuname":"Vendors","submenuname":"","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10002","menuname":"Vendor","submenuname":"","langcode":"INDO"});
+db.menu.insertOne({ "menucode":"MEN10003","menuname":"Purchases","submenuname":"Orders,Invoices,Returns","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10003","menuname":"Pembelian","submenuname":"Pesanan,Faktur,Kembali","langcode":"INDO"});
+db.menu.insertOne({ "menucode":"MEN10004","menuname":"Product","submenuname":"product,units,category","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10004","menuname":"Produk","submenuname":"Produk,unit,kategori","langcode":"INDO"});
+db.menu.insertOne({ "menucode":"MEN10005","menuname":"Sales","submenuname":"Orders,Invoices,Customer,Returns","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10005","menuname":"Penjualan","submenuname":"Pesanan,Faktur,Pelanggan,Kembali","langcode":"INDO"});
+db.menu.insertOne({ "menucode":"MEN10006","menuname":"Stock","submenuname":"","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10006","menuname":"persediaan","submenuname":"","langcode":"INDO"});
+db.menu.insertOne({ "menucode":"MEN10007","menuname":"Finance","submenuname":"pettycash","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10007","menuname":"Keuangan","submenuname":"kas kecil","langcode":"INDO"});
+db.menu.insertOne({ "menucode":"MEN10008","menuname":"User Management","submenuname":"","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10008","menuname":"manajemen pengguna","submenuname":"","langcode":"INDO"});
