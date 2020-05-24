@@ -39,3 +39,33 @@ db.sOReturnDetails.remove( { } )
 db.salesOrder.remove( { } )
 
 db.stock.remove( { } )
+
+db.menu.remove( { } )
+
+
+db.menu.insertOne({ "menucode":"MEN10000","menuname":"Dashboard","submenuname":"","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10000","menuname":"Dasbor","submenuname":"","langcode":"INDO"});
+
+db.menu.insertOne({ "menucode":"MEN10001","menuname":"Employees","submenuname":"","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10001","menuname":"Para karyawan","submenuname":"","langcode":"INDO"});
+
+db.menu.insertOne({ "menucode":"MEN10002","menuname":"Vendors","submenuname":"","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10002","menuname":"Vendor","submenuname":"","langcode":"INDO"});
+
+db.menu.insertOne({ "menucode":"MEN10003","menuname":"Purchases","submenuname":"Orders,Invoices,Returns","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10003","menuname":"Pembelian","submenuname":"Pesanan,Faktur,Kembali","langcode":"INDO"});
+
+db.menu.insertOne({ "menucode":"MEN10004","menuname":"Product","submenuname":"product,units,category","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10004","menuname":"Produk","submenuname":"Produk,unit,kategori","langcode":"INDO"});
+
+db.menu.insertOne({ "menucode":"MEN10005","menuname":"Sales","submenuname":"Orders,Invoices,Customer,Returns","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10005","menuname":"Penjualan","submenuname":"Pesanan,Faktur,Pelanggan,Kembali","langcode":"INDO"});
+
+db.menu.insertOne({ "menucode":"MEN10006","menuname":"Stock","submenuname":"","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10006","menuname":"persediaan","submenuname":"","langcode":"INDO"});
+
+db.menu.insertOne({ "menucode":"MEN10007","menuname":"Finance","submenuname":"pettycash","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10007","menuname":"Keuangan","submenuname":"kas kecil","langcode":"INDO"});
+
+db.menu.insertOne({ "menucode":"MEN10008","menuname":"User Management","submenuname":"","langcode":"EN"});
+db.menu.insertOne({ "menucode":"MEN10008","menuname":"manajemen pengguna","submenuname":"","langcode":"INDO"});
