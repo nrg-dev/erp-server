@@ -16,13 +16,26 @@ db.randomNumber.insert({ "randomID" : 14,"number": 10000,"code" : "STD","descrip
 db.randomNumber.insert({ "randomID" : 15,"number": 10000,"code" : "D","description"    : "Discount"})
 db.randomNumber.insert({ "randomID" : 16,"number": 10000,"code" : "STIN","description" : "Stock In"})
 db.randomNumber.insert({ "randomID" : 17,"number": 10000,"code" : "STOT","description" : "Stock Out"})
-db.pOInvoice.remove( { } )
-db.purchaseOrder.remove( { } )
-db.sOInvoiceDetails.remove( { } )
+
 db.employee.remove( { } )
+db.absentList.remove( { } )
+db.dailyReport.remove( { } )
+
 db.customer.remove( { } )
 db.vendor.remove( { } )
-db.category.remove( { } )
+
+db.purchaseOrder.remove( { } )
+db.pOInvoice.remove( { } )
+db.pOReturnDetails.remove( { } )
+
 db.item.remove( { } )
 db.discount.remove( { } )
-db.unit.remove( { } )
+db.units.remove( { } )
+db.category.remove( { } )
+
+db.sOInvoice.remove( { } )
+db.sOInvoiceDetails.remove( { } )
+db.sOReturnDetails.remove( { } )
+db.salesOrder.remove( { } )
+
+db.stock.remove( { } )

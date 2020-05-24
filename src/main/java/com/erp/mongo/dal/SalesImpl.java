@@ -272,8 +272,8 @@ public class SalesImpl implements SalesDAL {
 	// Update SO With Invoice Number
 	public boolean updateSO(String invoice,String[] value) {
 		logger.info("----- DAO updateSO -----");
-		Update update = null;//new Update();
-		Query query = null;//new Query();
+		Update update = null;
+		Query query = null;
 		String changestatus="Invoiced";
 		try {
 			for(String v:value) {

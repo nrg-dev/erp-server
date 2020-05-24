@@ -719,7 +719,7 @@ public class SalesService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/saveSO", method = RequestMethod.POST)
 	public ResponseEntity<?> saveSO(@RequestBody SalesOrder salesorder) {
-		logger.info("-------- saveSO --------");
+		logger.info("saveSO");
 		RandomNumber randomnumber = null;
 		int randomId = 7;
 		try {
@@ -787,7 +787,7 @@ public class SalesService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/loadSO", method = RequestMethod.GET)
 	public ResponseEntity<?> loadSO() {
-		logger.info("-------- loadSO -----------");
+		logger.info("loadSO");
 		List<SalesOrder> solist = null;
 		try {
 			solist = salesdal.loadSO();
