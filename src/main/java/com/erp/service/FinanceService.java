@@ -92,11 +92,13 @@ public class FinanceService implements Filter {
 	public ResponseEntity<?> savePettycash(@RequestBody PettyCash finance) {
 		logger.info("savePettycash");
 		try {
-			//finance.setAddedDate(Custom.getCurrentInvoiceDate());
-			logger.debug("Current Date-->" + Custom.getCurrentDate());
 			finance.setStatus("Active"); 
-			finance = financedal.save(finance);
-			finance.setStatus("success");
+			logger.debug("PettyCash Id-->"+finance.getId());
+			if(finance.getId() != null) {
+				finance = financedal.updatePettyCash(finance);
+			}else {
+				finance = financedal.save(finance);
+			}
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
@@ -126,10 +128,10 @@ public class FinanceService implements Filter {
 		}
 	}
 
-	// update
+	/*// update
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
-	public ResponseEntity<?> updateCustomer(@RequestBody PettyCash pettycash) {
+	public ResponseEntity<?> updatePetty(@RequestBody PettyCash pettycash) {
 		try {
 			pettycash = financedal.updatePettyCash(pettycash);
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -140,19 +142,19 @@ public class FinanceService implements Filter {
 		} finally {
 
 		}
-	}
+	}*/
 
 	// Remove
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/remove", method = RequestMethod.DELETE)
 	public ResponseEntity<?> removePettyCash(String id) {
 		try {
-			logger.debug("Remove cust code is-->" + id);
+			logger.debug("Remove -->" + id);
 			pettycash = new PettyCash();
-			logger.info("Before Calling  removeCustomer");
+			logger.info("Before Calling  removePettyCash");
 			financedal.removePettyCash(id);
 			pettycash.setStatus("success");
-			logger.info("Successfully Called  removeCustomer");
+			logger.info("Successfully Called  removePettyCash");
 			return new ResponseEntity<>(HttpStatus.OK);
 
 		} catch (Exception e) {

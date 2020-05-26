@@ -61,9 +61,9 @@ public class FinanceImpl implements FinanceDAL {
 		update.set("description", pettycash.getDescription());
 		update.set("addedDate", pettycash.getAddedDate());
 		update.set("type", pettycash.getType());
-		update.set("fromPerson", pettycash.getFromPerson());
 		update.set("toPerson", pettycash.getToPerson());
 		update.set("totalAmount", pettycash.getTotalAmount());
+		update.set("status", "Active");
 		mongoTemplate.updateFirst(query, update, PettyCash.class);
 		return pettycash;
 	}
