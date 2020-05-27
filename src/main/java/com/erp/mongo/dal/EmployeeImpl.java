@@ -48,6 +48,8 @@ public class EmployeeImpl implements EmployeeDAL {
 		logger.debug("monthlysalary-->"+employee.getMonthlysalary());
 		logger.debug("workHour-->"+employee.getWorkHour());
 		logger.debug("annualLeave-->"+employee.getAnnualLeave());
+		logger.debug("Department Name-->"+employee.getDepartmentname());
+		logger.debug("Locatiob-->"+employee.getLocation());
 		boolean status = false;
 		try {
 			// Update
@@ -68,6 +70,8 @@ public class EmployeeImpl implements EmployeeDAL {
 				update.set("monthlysalary", employee.getMonthlysalary());
 				update.set("workHour", employee.getWorkHour());
 				update.set("annualLeave", employee.getAnnualLeave());
+				update.set("departmentname", employee.getDepartmentname());
+				update.set("location", employee.getLocation());
 				mongoTemplate.updateFirst(query, update, Employee.class);
 				status=true;
 			}
@@ -386,6 +390,8 @@ public class EmployeeImpl implements EmployeeDAL {
 		update.set("monthlysalary", employee.getMonthlysalary());
 		update.set("workHour", employee.getWorkHour());
 		update.set("annualLeave", employee.getAnnualLeave());
+		update.set("departmentname", employee.getDepartmentname());
+		update.set("location", employee.getLocation());
 		mongoTemplate.updateFirst(query, update, Employee.class);
 		return employee;
 
