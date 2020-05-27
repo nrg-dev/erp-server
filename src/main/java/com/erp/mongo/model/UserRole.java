@@ -10,9 +10,11 @@ public class UserRole {
 	private String id;
 	private String invnumber;
 	private String username;
+	private String password;
 	private String userRole;
 	private String menuItem;
 	private String subMenuItem;
+	private String departmentname;
 	
 	public String getId() {
 		return id;
@@ -50,6 +52,18 @@ public class UserRole {
 	}
 	public void setSubMenuItem(String subMenuItem) {
 		this.subMenuItem = subMenuItem;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getDepartmentname() {
+		return departmentname;
+	}
+	public void setDepartmentname(String departmentname) {
+		this.departmentname = departmentname;
 	}
 		
 	 

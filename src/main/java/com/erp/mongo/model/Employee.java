@@ -24,6 +24,8 @@ public class Employee {
 	 String status;
 	 private String profilepic;
 	 private String addeddate;
+	 String departmentname;
+	 String location;
 
 	public String getId() {
 		return id;
@@ -159,6 +161,22 @@ public class Employee {
 
 	public void setProfilepic(String profilepic) {
 		this.profilepic = profilepic;
+	}
+
+	public String getDepartmentname() {
+		return departmentname;
+	}
+
+	public void setDepartmentname(String departmentname) {
+		this.departmentname = departmentname;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 	
