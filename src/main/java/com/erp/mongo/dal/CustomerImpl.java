@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import com.erp.bo.ErpBo;
 import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Employee;
+import com.erp.mongo.model.PettyCash;
 
 @Repository
 public class CustomerImpl implements CustomerDAL {
@@ -53,9 +54,18 @@ public class CustomerImpl implements CustomerDAL {
 	// update
 	@Override
 	public Customer updateCustomer(Customer customer) {
+		logger.debug("Customer Code -->"+customer.getCustcode());
+		logger.debug("Customer Name -->"+customer.getCustomerName());
+		logger.debug("Customer Phone -->"+customer.getPhoneNumber());
+		logger.debug("Customer Country -->"+customer.getCountry());
+		logger.debug("Customer City -->"+customer.getCity());
+		logger.debug("Customer Address -->"+customer.getAddress());
+		logger.debug("Customer Email -->"+customer.getEmail());
+		logger.debug("Customer Base64 -->"+customer.getCustomerbase64());
 		Update update = new Update();
 		Query query = new Query();
 		query.addCriteria(Criteria.where("custcode").is(customer.getCustcode()));
+		update.set("custcode", customer.getCustcode());
 		update.set("customerName", customer.getCustomerName());
 		update.set("phoneNumber", customer.getPhoneNumber());
 		update.set("mobileNumber", customer.getMobileNumber());
@@ -63,6 +73,7 @@ public class CustomerImpl implements CustomerDAL {
 		update.set("email", customer.getEmail());
 		update.set("city", customer.getCity());
 		update.set("address", customer.getAddress());
+		update.set("customerbase64", customer.getCustomerbase64());
 		mongoTemplate.updateFirst(query, update, Customer.class);
 		return customer;
 	}

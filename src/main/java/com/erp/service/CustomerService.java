@@ -82,19 +82,24 @@ public class CustomerService implements Filter {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<?> saveCustomer(@RequestBody Customer customer) {
-		logger.info("saveCustomer");
 		RandomNumber randomnumber = null;
 		try {
-			randomnumber = randomnumberdal.getCustomerRandamNumber();
-			String customercode = randomnumber.getCode() + randomnumber.getNumber();
-			customer.setCustcode(customercode);
-			customer.setLastedit(Custom.getCurrentInvoiceDate());
-			customer.setAddeddate(Custom.getCurrentInvoiceDate());
-			logger.debug("Customer Image Base 64 -->" + customer.getCustomerbase64());
-			customer = customerdal.saveCustomer(customer);
-			if (customer.getStatus().equalsIgnoreCase("success")) {
-				randomnumberdal.updateVendorRandamNumber(randomnumber, 2);
+			if(customer.getId() != null) {
+				logger.info("UpdateCustomer");
+				customer.setLastedit(Custom.getCurrentInvoiceDate());
+				customer = customerdal.updateCustomer(customer);
+			}else {
+				logger.info("saveCustomer");
+				randomnumber = randomnumberdal.getCustomerRandamNumber();
+				String customercode = randomnumber.getCode() + randomnumber.getNumber();
+				customer.setCustcode(customercode);
+				customer.setAddeddate(Custom.getCurrentInvoiceDate());
+				customer = customerdal.saveCustomer(customer);
+				if (customer.getStatus().equalsIgnoreCase("success")) {
+					randomnumberdal.updateVendorRandamNumber(randomnumber, 2);
+				}
 			}
+			
 			return new ResponseEntity<>(HttpStatus.OK);
 
 		} catch (Exception e) {
