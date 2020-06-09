@@ -45,6 +45,7 @@ import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.RandomNumber;
+import com.erp.mongo.model.Transaction;
 import com.erp.mongo.model.Vendor;
 import com.erp.util.Custom;
 import com.erp.util.PDFGenerator;
@@ -126,8 +127,9 @@ public class PurchaseService implements Filter {
 		RandomNumber randomnumber = null;
 		int randomId=10;
 		Purchase purchase = new Purchase();
+		int randomtrId=19;
+		Transaction tran = new Transaction();
 		try {
-			logger.debug("Delivery Charge-->"+poinvoicedto.getDeliverycharge());
 			randomnumber = randomnumberdal.getRandamNumber(randomId);
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
 			logger.debug("Invoice number-->" + invoice);
@@ -172,6 +174,26 @@ public class PurchaseService implements Filter {
 			// Update Random number table
 			randomnumberdal.updateRandamNumber(randomnumber,randomId);
 			logger.info("createInvoice done!");
+
+			//-- Transaction Table Insert
+			if(poinvoicedto.getPaymenttype().equalsIgnoreCase("cash")) {
+				logger.info("Payment Type is cash!");
+				randomnumber = randomnumberdal.getRandamNumber(randomtrId);
+				String traninvoice = randomnumber.getCode() + randomnumber.getNumber();
+				logger.debug("Transaction Invoice number-->" + traninvoice);
+				tran.setTransactionnumber(traninvoice);
+				tran.setTransactiondate(Custom.getCurrentInvoiceDate());
+				tran.setDescription("Purchase Invoice");
+				tran.setInvoicenumber(invoice);
+				tran.setCredit(0);
+				tran.setDebit(poinvoicedto.getSubtotal());
+				purchasedal.saveTransaction(tran);
+				randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
+				logger.info("Transation Insert done!");
+			}else {
+				logger.info("Payment Type is not cash!");
+			}
+			
 			return new ResponseEntity<>(HttpStatus.OK); // 200
 
 		}catch(Exception e) {

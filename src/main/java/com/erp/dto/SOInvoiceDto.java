@@ -10,6 +10,7 @@ public class SOInvoiceDto {
 	long[] qty;
 	String[] customercode;
 	String[] productname;
+	String paymenttype;
 
 	public String getCreateddate() {
 		return createddate;
@@ -73,6 +74,14 @@ public class SOInvoiceDto {
 
 	public void setProductname(String[] productname) {
 		this.productname = productname;
+	}
+
+	public String getPaymenttype() {
+		return paymenttype;
+	}
+
+	public void setPaymenttype(String paymenttype) {
+		this.paymenttype = paymenttype;
 	}
 
 

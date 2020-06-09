@@ -18,6 +18,7 @@ import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PurchaseOrder;
+import com.erp.mongo.model.Transaction;
 import com.erp.mongo.model.Vendor;
 
 import org.springframework.data.domain.Sort; 
@@ -351,5 +352,13 @@ public class PurchaseImpl implements PurchaseDAL {
 			list = mongoTemplate.find(query,POReturnDetails.class);
 			logger.debug("Return List Size-->"+list.size());
 			return list; 
+		}
+		
+		//--- Insert Transaction Table ---
+		public Transaction saveTransaction(Transaction trans) {
+			logger.info("DAO saveTransaction");
+			mongoTemplate.save(trans);
+			trans.setStatus("success"); 
+			return trans;
 		}
 }

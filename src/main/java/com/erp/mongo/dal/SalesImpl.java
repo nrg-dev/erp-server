@@ -24,6 +24,7 @@ import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOInvoiceDetails;
 import com.erp.mongo.model.SOReturnDetails;
 import com.erp.mongo.model.SalesOrder;
+import com.erp.mongo.model.Transaction;
 
 @Repository
 public class SalesImpl implements SalesDAL {
@@ -318,6 +319,14 @@ public class SalesImpl implements SalesDAL {
 		list = mongoTemplate.find(query,SOReturnDetails.class);
 		logger.info("Return List Size ------>"+list.size());
 		return list; 
+	}
+	
+	//--- Insert Transaction Table ---
+	public Transaction saveTransaction(Transaction trans) {
+		logger.info("DAO saveTransaction");
+		mongoTemplate.save(trans);
+		trans.setStatus("success"); 
+		return trans;
 	}
 
 }

@@ -19,6 +19,8 @@ public class SOInvoice {
 	private String base64;
 	private String status;
 	private String productname;
+	private String paymenttype;
+	private String paymentstatus;
 
 	public String getId() {
 		return id;
@@ -114,6 +116,22 @@ public class SOInvoice {
 
 	public void setProductname(String productname) {
 		this.productname = productname;
+	}
+
+	public String getPaymenttype() {
+		return paymenttype;
+	}
+
+	public void setPaymenttype(String paymenttype) {
+		this.paymenttype = paymenttype;
+	}
+
+	public String getPaymentstatus() {
+		return paymentstatus;
+	}
+
+	public void setPaymentstatus(String paymentstatus) {
+		this.paymentstatus = paymentstatus;
 	}
 
 	

@@ -11,6 +11,7 @@ import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOInvoiceDetails;
 import com.erp.mongo.model.SOReturnDetails;
 import com.erp.mongo.model.SalesOrder;
+import com.erp.mongo.model.Transaction;
 
 public interface SalesDAL {
 	
@@ -55,7 +56,9 @@ public interface SalesDAL {
 
 	public List<SOInvoice> loadInvoice();
 
-	public List<SOReturnDetails> loadReturn(); 
+	public List<SOReturnDetails> loadReturn();
+
+	public Transaction saveTransaction(Transaction tran);  
 	
 
 }

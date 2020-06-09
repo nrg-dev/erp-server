@@ -53,6 +53,7 @@ import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOInvoiceDetails;
 import com.erp.mongo.model.SOReturnDetails;
 import com.erp.mongo.model.SalesOrder;
+import com.erp.mongo.model.Transaction;
 import com.erp.mongo.model.Vendor;
 import com.erp.util.Custom;
 import com.erp.util.PDFGenerator;
@@ -810,11 +811,13 @@ public class SalesService implements Filter {
 		logger.debug("Sub Total-->" + soinvoicedto.getSubtotal());
 		logger.debug("Delivery Charge-->" + soinvoicedto.getDeliverycharge());
 		logger.debug("Total Price-->" + soinvoicedto.getTotalprice());
+		logger.debug("Payment Type-->" + soinvoicedto.getPaymenttype());
 		RandomNumber randomnumber = null;
 		Sales sales = new Sales();
 		int randomId = 11;
+		int randomtrId=19;
+		Transaction tran = new Transaction();
 		try {
-			logger.debug("Delivery Charge-->"+soinvoicedto.getDeliverycharge());
 			randomnumber = randomnumberdal.getRandamNumber(randomId);
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
 			logger.debug("Invoice number-->" + invoice);
@@ -825,6 +828,8 @@ public class SalesService implements Filter {
 			logger.debug("Invoice Date-->" + soinvoice.getInvoicedate());
 			soinvoice.setInvoicenumber(invoice);
 			soinvoice.setStatus("Pending");
+			soinvoice.setPaymenttype(soinvoicedto.getPaymenttype());
+			soinvoice.setPaymentstatus("Pending"); 
 			soinvoice.setSubtotal(soinvoicedto.getSubtotal());
 			soinvoice.setDeliveryprice(soinvoicedto.getDeliverycharge());
 			soinvoice.setTotalprice(soinvoicedto.getSubtotal()+soinvoicedto.getDeliverycharge());
@@ -851,6 +856,25 @@ public class SalesService implements Filter {
 			// Update Random number table
 			randomnumberdal.updateRandamNumber(randomnumber,randomId);
 			logger.info("createInvoice done!");
+			
+			//-- Transaction Table Insert
+			if(soinvoicedto.getPaymenttype().equalsIgnoreCase("cash")) {
+				logger.info("Payment Type is cash!");
+				randomnumber = randomnumberdal.getRandamNumber(randomtrId);
+				String traninvoice = randomnumber.getCode() + randomnumber.getNumber();
+				logger.debug("Transaction Invoice number-->" + traninvoice);
+				tran.setTransactionnumber(traninvoice);
+				tran.setTransactiondate(Custom.getCurrentInvoiceDate());
+				tran.setDescription("Sales Invoice");
+				tran.setInvoicenumber(invoice);
+				tran.setCredit(soinvoicedto.getSubtotal());
+				tran.setDebit(0);
+				salesdal.saveTransaction(tran);
+				randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
+				logger.info("Transation Insert done!");
+			}else {
+				logger.info("Payment Type is not cash!");
+			}
 			return new ResponseEntity<>(HttpStatus.OK);
 			
 		}catch(Exception e) {

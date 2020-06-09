@@ -9,6 +9,7 @@ import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PurchaseOrder;
 import com.erp.mongo.model.Vendor;
+import com.erp.mongo.model.Transaction;
 
 public interface PurchaseDAL {
 	public POInvoice savePOInvoice(POInvoice poinvoice);
@@ -52,6 +53,8 @@ public interface PurchaseDAL {
 	public boolean updatePO(String invoice,String[] value);
 
 	public List<POReturnDetails> loadReturn();
+
+	public Transaction saveTransaction(Transaction tran);
 	
 
 
