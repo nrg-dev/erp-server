@@ -865,10 +865,12 @@ public class SalesService implements Filter {
 				logger.debug("Transaction Invoice number-->" + traninvoice);
 				tran.setTransactionnumber(traninvoice);
 				tran.setTransactiondate(Custom.getCurrentInvoiceDate());
-				tran.setDescription("Sales Invoice");
+				tran.setDescription("Sales Invoice Cash");
 				tran.setInvoicenumber(invoice);
 				tran.setCredit(soinvoicedto.getSubtotal());
 				tran.setDebit(0);
+				tran.setStatus("Pending");
+				tran.setCurrency("");
 				salesdal.saveTransaction(tran);
 				randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
 				logger.info("Transation Insert done!");

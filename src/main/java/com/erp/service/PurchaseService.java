@@ -183,10 +183,12 @@ public class PurchaseService implements Filter {
 				logger.debug("Transaction Invoice number-->" + traninvoice);
 				tran.setTransactionnumber(traninvoice);
 				tran.setTransactiondate(Custom.getCurrentInvoiceDate());
-				tran.setDescription("Purchase Invoice");
+				tran.setDescription("Purchase Invoice Cash");
 				tran.setInvoicenumber(invoice);
 				tran.setCredit(0);
 				tran.setDebit(poinvoicedto.getSubtotal());
+				tran.setStatus("Pending");
+				tran.setCurrency("");
 				purchasedal.saveTransaction(tran);
 				randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
 				logger.info("Transation Insert done!");
