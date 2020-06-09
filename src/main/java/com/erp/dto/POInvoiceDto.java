@@ -10,6 +10,7 @@ public class POInvoiceDto {
 	long[] qty;
 	String[] vendorcode;
 	String[] productname;
+	String paymenttype;
 
 	public String getCreateddate() {
 		return createddate;
@@ -73,6 +74,14 @@ public class POInvoiceDto {
 
 	public void setProductname(String[] productname) {
 		this.productname = productname;
+	}
+
+	public String getPaymenttype() {
+		return paymenttype;
+	}
+
+	public void setPaymenttype(String paymenttype) {
+		this.paymenttype = paymenttype;
 	}
 
 	

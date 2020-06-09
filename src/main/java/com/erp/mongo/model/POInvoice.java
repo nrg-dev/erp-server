@@ -22,6 +22,8 @@ public class POInvoice {
 	private String status;
 	private String stockstatus;
 	private String productname;
+	private String paymenttype;
+	private String paymentstatus;
 
 	public String getId() {
 		return id;
@@ -125,6 +127,22 @@ public class POInvoice {
 
 	public void setStockstatus(String stockstatus) {
 		this.stockstatus = stockstatus;
+	}
+
+	public String getPaymenttype() {
+		return paymenttype;
+	}
+
+	public void setPaymenttype(String paymenttype) {
+		this.paymenttype = paymenttype;
+	}
+
+	public String getPaymentstatus() {
+		return paymentstatus;
+	}
+
+	public void setPaymentstatus(String paymentstatus) {
+		this.paymentstatus = paymentstatus;
 	}
 
 	

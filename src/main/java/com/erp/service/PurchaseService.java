@@ -122,6 +122,7 @@ public class PurchaseService implements Filter {
 		logger.debug("Sub Total-->" + poinvoicedto.getSubtotal());
 		logger.debug("Delivery Charge-->" + poinvoicedto.getDeliverycharge());
 		logger.debug("Total Price-->" + poinvoicedto.getTotalprice());
+		logger.debug("Payment Type-->" + poinvoicedto.getPaymenttype());
 		RandomNumber randomnumber = null;
 		int randomId=10;
 		Purchase purchase = new Purchase();
@@ -138,6 +139,8 @@ public class PurchaseService implements Filter {
 			poinvoice.setInvoicenumber(invoice);
 			poinvoice.setStatus("Pending");
 			poinvoice.setStockstatus("Pending");
+			poinvoice.setPaymenttype(poinvoicedto.getPaymenttype());
+			poinvoice.setPaymentstatus("Pending"); 
 			poinvoice.setSubtotal(poinvoicedto.getSubtotal());
 			poinvoice.setDeliveryprice(poinvoicedto.getDeliverycharge());
 			poinvoice.setTotalprice(poinvoicedto.getSubtotal()+poinvoicedto.getDeliverycharge());
