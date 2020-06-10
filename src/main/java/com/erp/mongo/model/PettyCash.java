@@ -13,9 +13,9 @@ public class PettyCash {
 	private String type;;
 	private String fromPerson;
 	private String toPerson;
-	private long totalAmount;
+	private String totalAmount;
 	private String status;
-
+	private String currency;
 
 	public String getId() {
 		return id;
@@ -65,11 +65,11 @@ public class PettyCash {
 		this.toPerson = toPerson;
 	}
 
-	public long getTotalAmount() {
+	public String getTotalAmount() {
 		return totalAmount;
 	}
 
-	public void setTotalAmount(long totalAmount) {
+	public void setTotalAmount(String totalAmount) {
 		this.totalAmount = totalAmount;
 	}
 
@@ -79,6 +79,14 @@ public class PettyCash {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
 	}
 
 	
