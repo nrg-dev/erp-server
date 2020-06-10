@@ -20,7 +20,7 @@ public class SOReturnDetails {
 	private int invid;
 	private String invoicedqty;
 	private String invoiceddate;
-	private double price;
+	private long price;
 	private String socode;
 	
 	public String getId() {
@@ -127,11 +127,11 @@ public class SOReturnDetails {
 		this.invoiceddate = invoiceddate;
 	}
 
-	public double getPrice() {
+	public long getPrice() {
 		return price;
 	}
 
-	public void setPrice(double price) {
+	public void setPrice(long price) {
 		this.price = price;
 	}
 

@@ -811,6 +811,8 @@ public class PurchaseService implements Filter {
 		logger.debug("PoCode-->" + poreturn.getPocode());
 		RandomNumber randomnumber = null;
 		int randomId=8;
+		int randomtrId=19;
+		Transaction trans = new Transaction();
 		try {
 			randomnumber = randomnumberdal.getRandamNumber(randomId);
 			String invoice = randomnumber.getCode() + randomnumber.getNumber();
@@ -820,6 +822,28 @@ public class PurchaseService implements Filter {
 			purchasedal.insertReturn(poreturn);
 			randomnumberdal.updateRandamNumber(randomnumber,randomId);
 			logger.info("createReturn done!");
+			
+			//-- Transaction Table Insert
+			if(poreturn.getReturnStatus().equalsIgnoreCase("cash")) {
+				logger.info("Payment Type is cash!");
+				randomnumber = randomnumberdal.getRandamNumber(randomtrId);
+				String traninvoice = randomnumber.getCode() + randomnumber.getNumber();
+				logger.debug("Return Transaction Invoice number-->" + traninvoice);
+				trans.setTransactionnumber(traninvoice);
+				trans.setTransactiondate(Custom.getCurrentInvoiceDate());
+				trans.setDescription("Purchase Return Cash");
+				trans.setInvoicenumber(invoice);
+				long totalAmount = poreturn.getPrice() * Integer.valueOf(poreturn.getQty());
+				trans.setCredit(0);
+				trans.setDebit(totalAmount);
+				trans.setStatus("Pending");
+				trans.setCurrency("");
+				purchasedal.saveTransaction(trans);
+				randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
+				logger.info("Return Transation Insert done!");
+			}else {
+				logger.info("Payment Type is credit and voucher!");
+			}	
 			return new ResponseEntity<>(HttpStatus.OK); // 200
 		}catch(Exception e) {
 			logger.error("Exception-->"+e.getMessage());
