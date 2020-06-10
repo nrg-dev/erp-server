@@ -31,6 +31,7 @@ public class Purchase {
 	  String fromdate; 
 	  String todate; 
 	  String paymentStatus;
+	  String invoicetype;
 	  
 	public String getProductName() {
 		return productName;
@@ -166,6 +167,12 @@ public class Purchase {
 	}
 	public void setPaymentStatus(String paymentStatus) {
 		this.paymentStatus = paymentStatus;
+	}
+	public String getInvoicetype() {
+		return invoicetype;
+	}
+	public void setInvoicetype(String invoicetype) {
+		this.invoicetype = invoicetype;
 	}
 	
 	 

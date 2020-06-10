@@ -21,15 +21,22 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.erp.dto.Purchase;
 import com.erp.mongo.dal.FinanceDAL;
+import com.erp.mongo.dal.PurchaseDAL;
+import com.erp.mongo.dal.SalesDAL;
+import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.PettyCash;
+import com.erp.mongo.model.SOInvoice;
 import com.erp.util.Custom;
 
 @SpringBootApplication
@@ -40,9 +47,13 @@ public class FinanceService implements Filter {
 	public static final Logger logger = LoggerFactory.getLogger(FinanceService.class);
 	PettyCash pettycash = null;
 	private final FinanceDAL financedal;
+	private final PurchaseDAL purchasedal;
+	private final SalesDAL salesdal;
 
-	public FinanceService(FinanceDAL financedal) {
+	public FinanceService(FinanceDAL financedal,PurchaseDAL purchasedal,SalesDAL salesdal) {
 		this.financedal = financedal;
+		this.purchasedal = purchasedal;
+		this.salesdal = salesdal;
 	}
 
 	@Override
@@ -165,6 +176,48 @@ public class FinanceService implements Filter {
 		} finally {
 
 		}
-
 	}
+	
+	@CrossOrigin(origins = "http://localhost:8080")
+	@GetMapping(value = "/loadInvoice", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> loadInvoice() {
+		logger.info("----- loadInvoice -------");
+		List<SOInvoice> solist = new ArrayList<SOInvoice>();
+		List<POInvoice> polist = new ArrayList<POInvoice>();
+		List<Purchase> responselist = new ArrayList<Purchase>();
+		Purchase purchase = null;
+		try {
+			polist = purchasedal.loadInvoice();
+			solist = salesdal.loadInvoice();
+			
+			for (POInvoice po : polist) {
+				purchase = new Purchase();
+				purchase.setInvoiceNumber(po.getInvoicenumber());
+				purchase.setFromdate(po.getInvoicedate());
+				purchase.setTotalAmount(po.getTotalprice());
+				purchase.setInvoicetype("Purchase Invoice");
+				purchase.setStatus(po.getStatus());
+				purchase.setPaymentStatus(po.getPaymentstatus());
+				responselist.add(purchase);
+			}
+			
+			for (SOInvoice so : solist) {
+				purchase = new Purchase();
+				purchase.setInvoiceNumber(so.getInvoicenumber());
+				purchase.setFromdate(so.getInvoicedate());
+				purchase.setTotalAmount(so.getTotalprice());
+				purchase.setInvoicetype("Sales Invoice");
+				purchase.setStatus(so.getStatus());
+				purchase.setPaymentStatus(so.getPaymentstatus());
+				responselist.add(purchase);   
+			}
+			
+			return new ResponseEntity<List<Purchase>>(responselist, HttpStatus.OK);				
+		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
+		} finally {
+		}
+	}
+	
 }
