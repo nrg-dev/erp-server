@@ -1,0 +1,77 @@
+{"properties": [
+  {
+    "name": "tran.currency",
+    "type": "java.lang.String",
+    "description": "A description for 'tran.currency'"
+  },
+  {
+    "name": "stockphase1.status",
+    "type": "java.lang.String",
+    "description": "A description for 'stockphase1.status'"
+  },
+  {
+    "name": "stockphase2.status",
+    "type": "java.lang.String",
+    "description": "A description for 'stockphase2.status'"
+  },
+  {
+    "name": "paymentphase1.status",
+    "type": "java.lang.String",
+    "description": "A description for 'paymentphase1.status'"
+  },
+  {
+    "name": "paymentphase2.status",
+    "type": "java.lang.String",
+    "description": "A description for 'paymentphase2.status'"
+  },
+  {
+    "name": "invoicephase1.status",
+    "type": "java.lang.String",
+    "description": "A description for 'invoicephase1.status'"
+  },
+  {
+    "name": "invoicephase2.status",
+    "type": "java.lang.String",
+    "description": "A description for 'invoicephase2.status'"
+  },
+  {
+    "name": "poinvcash.desc",
+    "type": "java.lang.String",
+    "description": "A description for 'poinvcash.desc'"
+  },
+  {
+    "name": "soinvcash.desc",
+    "type": "java.lang.String",
+    "description": "A description for 'soinvcash.desc'"
+  },
+  {
+    "name": "poretcash.desc",
+    "type": "java.lang.String",
+    "description": "A description for 'poretcash.desc'"
+  },
+  {
+    "name": "soretcash.desc",
+    "type": "java.lang.String",
+    "description": "A description for 'soretcash.desc'"
+  },
+  {
+    "name": "poinvoutcash.desc",
+    "type": "java.lang.String",
+    "description": "A description for 'poinvoutcash.desc'"
+  },
+  {
+    "name": "soinvoutcash.desc",
+    "type": "java.lang.String",
+    "description": "A description for 'soinvoutcash.desc'"
+  },
+  {
+    "name": "transphase1.status",
+    "type": "java.lang.String",
+    "description": "A description for 'transphase1.status'"
+  },
+  {
+    "name": "transphase2.status",
+    "type": "java.lang.String",
+    "description": "A description for 'transphase2.status'"
+  },
+]}

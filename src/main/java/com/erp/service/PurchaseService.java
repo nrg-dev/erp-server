@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 //import org.springframework.beans.factory.annotation.Autowire;
 
@@ -59,6 +60,28 @@ public class PurchaseService implements Filter {
 
 	@Autowired
 	ErpBo erpBo;
+	
+	@Value("${tran.currency}")
+	private String currency;
+	
+	@Value("${stockphase1.status}")
+	private String stockstatus1;
+	@Value("${stockphase2.status}")
+	private String stockstatus2;
+	
+	@Value("${paymentphase1.status}")
+	private String paymentstatus1;
+	@Value("${paymentphase2.status}")
+	private String paymentstatus2;
+	
+	@Value("${transphase1.status}")
+	private String transstatus1;
+	
+	@Value("${poinvcash.desc}")
+	private String poinvcash;
+	
+	@Value("${poretcash.desc}")
+	private String poretcash;
 
 	private final PurchaseDAL purchasedal;
 	private final RandomNumberDAL randomnumberdal;
@@ -140,9 +163,13 @@ public class PurchaseService implements Filter {
 			logger.debug("Invoice Date-->" + poinvoice.getInvoicedate());
 			poinvoice.setInvoicenumber(invoice);
 			poinvoice.setStatus("Pending");
-			poinvoice.setStockstatus("Pending");
+			poinvoice.setStockstatus(stockstatus1);
 			poinvoice.setPaymenttype(poinvoicedto.getPaymenttype());
-			poinvoice.setPaymentstatus("Pending"); 
+			if(poinvoicedto.getPaymenttype().equalsIgnoreCase("cash")) {
+				poinvoice.setPaymentstatus(paymentstatus2); 
+			}else {
+				poinvoice.setPaymentstatus(paymentstatus1); 
+			}
 			poinvoice.setSubtotal(poinvoicedto.getSubtotal());
 			poinvoice.setDeliveryprice(poinvoicedto.getDeliverycharge());
 			poinvoice.setTotalprice(poinvoicedto.getSubtotal()+poinvoicedto.getDeliverycharge());
@@ -183,12 +210,12 @@ public class PurchaseService implements Filter {
 				logger.debug("Transaction Invoice number-->" + traninvoice);
 				tran.setTransactionnumber(traninvoice);
 				tran.setTransactiondate(Custom.getCurrentInvoiceDate());
-				tran.setDescription("Purchase Invoice Cash");
+				tran.setDescription(poinvcash);
 				tran.setInvoicenumber(invoice);
 				tran.setCredit(0);
 				tran.setDebit(poinvoicedto.getSubtotal());
-				tran.setStatus("Pending");
-				tran.setCurrency("");
+				tran.setStatus(transstatus1);
+				tran.setCurrency(currency);
 				purchasedal.saveTransaction(tran);
 				randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
 				logger.info("Transation Insert done!");
@@ -210,8 +237,9 @@ public class PurchaseService implements Filter {
 	public ResponseEntity<?> loadInvoice() {
 		logger.info("loadInvoice");
 		List<POInvoice> responselist = new ArrayList<POInvoice>();
+		String paystatus = "All";
 		try {
-			responselist = purchasedal.loadInvoice();
+			responselist = purchasedal.loadInvoice(paystatus);
 			return new ResponseEntity<List<POInvoice>>(responselist, HttpStatus.OK);				
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
@@ -831,13 +859,13 @@ public class PurchaseService implements Filter {
 				logger.debug("Return Transaction Invoice number-->" + traninvoice);
 				trans.setTransactionnumber(traninvoice);
 				trans.setTransactiondate(Custom.getCurrentInvoiceDate());
-				trans.setDescription("Purchase Return Cash");
+				trans.setDescription(poretcash);
 				trans.setInvoicenumber(invoice);
 				long totalAmount = poreturn.getPrice() * Integer.valueOf(poreturn.getQty());
 				trans.setCredit(0);
 				trans.setDebit(totalAmount);
-				trans.setStatus("Pending");
-				trans.setCurrency("");
+				trans.setStatus(transstatus1);
+				trans.setCurrency(currency);
 				purchasedal.saveTransaction(trans);
 				randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
 				logger.info("Return Transation Insert done!");
@@ -865,4 +893,5 @@ public class PurchaseService implements Filter {
 		} finally {
 		}
 	}
+	
 }

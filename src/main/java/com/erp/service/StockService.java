@@ -584,7 +584,7 @@ public class StockService implements Filter {
 			}
 
 			poinv = purchasedal.loadPOInvoice(invoiceNumber);
-			purchasedal.updatePOInvoice(poinv);
+			purchasedal.updatePOInvoice(poinv,1);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());

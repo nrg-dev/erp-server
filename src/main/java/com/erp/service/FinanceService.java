@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
 //import org.springframework.beans.factory.annotation.Autowire;
 
@@ -33,10 +34,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.erp.dto.Purchase;
 import com.erp.mongo.dal.FinanceDAL;
 import com.erp.mongo.dal.PurchaseDAL;
+import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.dal.SalesDAL;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.PettyCash;
+import com.erp.mongo.model.RandomNumber;
 import com.erp.mongo.model.SOInvoice;
+import com.erp.mongo.model.Transaction;
 import com.erp.util.Custom;
 
 @SpringBootApplication
@@ -49,11 +53,29 @@ public class FinanceService implements Filter {
 	private final FinanceDAL financedal;
 	private final PurchaseDAL purchasedal;
 	private final SalesDAL salesdal;
+	private final RandomNumberDAL randomnumberdal;
+	
+	@Value("${tran.currency}")
+	private String currency;
+	
+	@Value("${poinvoutcash.desc}")
+	private String poinvoutcash;
+	@Value("${soinvoutcash.desc}")
+	private String soinvoutcash;
+	
+	@Value("${paymentphase1.status}")
+	private String paymentstatus1;
+	@Value("${paymentphase2.status}")
+	private String paymentstatus2;
+	
+	@Value("${transphase2.status}")
+	private String transstatus2;
 
-	public FinanceService(FinanceDAL financedal,PurchaseDAL purchasedal,SalesDAL salesdal) {
+	public FinanceService(FinanceDAL financedal,PurchaseDAL purchasedal,SalesDAL salesdal,RandomNumberDAL randomnumberdal) {
 		this.financedal = financedal;
 		this.purchasedal = purchasedal;
 		this.salesdal = salesdal;
+		this.randomnumberdal = randomnumberdal;
 	}
 
 	@Override
@@ -139,22 +161,6 @@ public class FinanceService implements Filter {
 		}
 	}
 
-	/*// update
-	@CrossOrigin(origins = "http://localhost:8080")
-	@RequestMapping(value = "/update", method = RequestMethod.PUT)
-	public ResponseEntity<?> updatePetty(@RequestBody PettyCash pettycash) {
-		try {
-			pettycash = financedal.updatePettyCash(pettycash);
-			return new ResponseEntity<>(HttpStatus.OK);
-		} catch (Exception e) {
-			logger.error("Exception-->" + e.getMessage());
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
-		} finally {
-
-		}
-	}*/
-
 	// Remove
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/remove", method = RequestMethod.DELETE)
@@ -186,16 +192,17 @@ public class FinanceService implements Filter {
 		List<POInvoice> polist = new ArrayList<POInvoice>();
 		List<Purchase> responselist = new ArrayList<Purchase>();
 		Purchase purchase = null;
+		String paystatus = "Pending";
 		try {
-			polist = purchasedal.loadInvoice();
-			solist = salesdal.loadInvoice();
+			polist = purchasedal.loadInvoice(paystatus);
+			solist = salesdal.loadInvoice(paystatus);
 			
 			for (POInvoice po : polist) {
 				purchase = new Purchase();
 				purchase.setInvoiceNumber(po.getInvoicenumber());
 				purchase.setFromdate(po.getInvoicedate());
 				purchase.setTotalAmount(po.getTotalprice());
-				purchase.setInvoicetype("Purchase Invoice");
+				purchase.setInvoicetype(poinvoutcash);
 				purchase.setStatus(po.getStatus());
 				purchase.setPaymentStatus(po.getPaymentstatus());
 				responselist.add(purchase);
@@ -206,7 +213,7 @@ public class FinanceService implements Filter {
 				purchase.setInvoiceNumber(so.getInvoicenumber());
 				purchase.setFromdate(so.getInvoicedate());
 				purchase.setTotalAmount(so.getTotalprice());
-				purchase.setInvoicetype("Sales Invoice");
+				purchase.setInvoicetype(soinvoutcash);
 				purchase.setStatus(so.getStatus());
 				purchase.setPaymentStatus(so.getPaymentstatus());
 				responselist.add(purchase);   
@@ -217,6 +224,82 @@ public class FinanceService implements Filter {
 			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
 		} finally {
+		}
+	}
+	
+	// Make Payment
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/makePayment", method = RequestMethod.POST)
+	public ResponseEntity<?> makePayment(@RequestBody Transaction trans) {
+		logger.info("--------- makePayment -------");
+		logger.info("Invoice Number -->" + trans.getInvoicenumber());
+		logger.info("Debit Amount -->" + trans.getDebit());
+		RandomNumber randomnumber = null;
+		int randomtrId=19;
+		POInvoice poinv = new POInvoice();
+		try {			
+			//-- Transaction Table Insert
+			randomnumber = randomnumberdal.getRandamNumber(randomtrId);
+			String traninvoice = randomnumber.getCode() + randomnumber.getNumber();
+			logger.debug("Return Transaction Invoice number-->" + traninvoice);
+			trans.setTransactionnumber(traninvoice);
+			trans.setTransactiondate(Custom.getCurrentInvoiceDate());
+			trans.setDescription(poinvoutcash);
+			trans.setInvoicenumber(trans.getInvoicenumber());
+			trans.setCredit(0);
+			trans.setDebit(trans.getDebit());
+			trans.setStatus(transstatus2);
+			trans.setCurrency(currency);
+			purchasedal.saveTransaction(trans);
+			randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
+			logger.info("Finance Make Payment Transation Insert done!");
+			
+			//---- Update Payment in SalesInvoice
+			poinv.setInvoicenumber(trans.getInvoicenumber()); 
+			purchasedal.updatePOInvoice(poinv,2);
+			
+			return new ResponseEntity<>(HttpStatus.OK); // 200
+		}catch(Exception e) {
+			logger.error("Exception-->"+e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 400
+		}
+	}
+
+	// Receive Payment
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/receivePayment", method = RequestMethod.POST)
+	public ResponseEntity<?> receivePayment(@RequestBody Transaction trans) {
+		logger.info("--------- receivePayment -------");
+		logger.info("Invoice Number -->" + trans.getInvoicenumber());
+		logger.info("Debit Amount -->" + trans.getCredit());
+		RandomNumber randomnumber = null;
+		int randomtrId=19;
+		SOInvoice soinv = new SOInvoice();
+		try {			
+			//-- Transaction Table Insert
+			randomnumber = randomnumberdal.getRandamNumber(randomtrId);
+			String traninvoice = randomnumber.getCode() + randomnumber.getNumber();
+			logger.debug("Return Transaction Invoice number-->" + traninvoice);
+			trans.setTransactionnumber(traninvoice);
+			trans.setTransactiondate(Custom.getCurrentInvoiceDate());
+			trans.setDescription(soinvoutcash);
+			trans.setInvoicenumber(trans.getInvoicenumber());
+			trans.setCredit(trans.getCredit());
+			trans.setDebit(0);
+			trans.setStatus(transstatus2);
+			trans.setCurrency(currency);
+			salesdal.saveTransaction(trans);
+			randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
+			logger.info("Finance Receive Payment Transation Insert done!");
+			
+			//---- Update Payment in SalesInvoice
+			soinv.setInvoicenumber(trans.getInvoicenumber()); 
+			salesdal.updateSOInvoice(soinv,2);
+			
+			return new ResponseEntity<>(HttpStatus.OK); // 200
+		}catch(Exception e) {
+			logger.error("Exception-->"+e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 400
 		}
 	}
 	

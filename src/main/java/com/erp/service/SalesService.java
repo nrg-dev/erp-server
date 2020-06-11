@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 //import org.springframework.beans.factory.annotation.Autowire;
 
@@ -67,6 +68,28 @@ public class SalesService implements Filter {
 
 	@Autowired
 	ErpBo erpBo;
+	
+	@Value("${tran.currency}")
+	private String currency;
+	
+	@Value("${stockphase1.status}")
+	private String stockstatus1;
+	@Value("${stockphase2.status}")
+	private String stockstatus2;
+	
+	@Value("${paymentphase1.status}")
+	private String paymentstatus1;
+	@Value("${paymentphase2.status}")
+	private String paymentstatus2;
+	
+	@Value("${transphase1.status}")
+	private String transstatus1;
+	
+	@Value("${soinvcash.desc}")
+	private String soinvcash;
+	
+	@Value("${soretcash.desc}")
+	private String soretcash;
 
 	// private final RandamNumberRepository randamNumberRepository;
 
@@ -541,7 +564,7 @@ public class SalesService implements Filter {
 			logger.info("After soInvoice Total Qty -->" + soinvoice.getQty());
 			logger.info("After soInvoice Total Price -->" + soinvoice.getTotalprice());
 			//soinvoice.setTotalitem(totalitem);
-			salesdal.updateSOInvoice(soinvoice);
+			salesdal.updateSOInvoice(soinvoice,1);
 			sales.setStatus("success");
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
@@ -829,7 +852,11 @@ public class SalesService implements Filter {
 			soinvoice.setInvoicenumber(invoice);
 			soinvoice.setStatus("Pending");
 			soinvoice.setPaymenttype(soinvoicedto.getPaymenttype());
-			soinvoice.setPaymentstatus("Pending"); 
+			if(soinvoicedto.getPaymenttype().equalsIgnoreCase("cash")) {
+				soinvoice.setPaymentstatus(paymentstatus2); 
+			}else {
+				soinvoice.setPaymentstatus(paymentstatus1); 
+			}			
 			soinvoice.setSubtotal(soinvoicedto.getSubtotal());
 			soinvoice.setDeliveryprice(soinvoicedto.getDeliverycharge());
 			soinvoice.setTotalprice(soinvoicedto.getSubtotal()+soinvoicedto.getDeliverycharge());
@@ -865,12 +892,12 @@ public class SalesService implements Filter {
 				logger.debug("Transaction Invoice number-->" + traninvoice);
 				tran.setTransactionnumber(traninvoice);
 				tran.setTransactiondate(Custom.getCurrentInvoiceDate());
-				tran.setDescription("Sales Invoice Cash");
+				tran.setDescription(soinvcash);
 				tran.setInvoicenumber(invoice);
 				tran.setCredit(soinvoicedto.getSubtotal());
 				tran.setDebit(0);
-				tran.setStatus("Pending");
-				tran.setCurrency("");
+				tran.setStatus(transstatus1);
+				tran.setCurrency(currency);
 				salesdal.saveTransaction(tran);
 				randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
 				logger.info("Transation Insert done!");
@@ -892,8 +919,9 @@ public class SalesService implements Filter {
 	public ResponseEntity<?> loadInvoice() {
 		logger.info("----- loadInvoice -------");
 		List<SOInvoice> responselist = new ArrayList<SOInvoice>();
+		String paystatus = "All";
 		try {
-			responselist = salesdal.loadInvoice();
+			responselist = salesdal.loadInvoice(paystatus);
 			return new ResponseEntity<List<SOInvoice>>(responselist, HttpStatus.OK);				
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
@@ -939,13 +967,13 @@ public class SalesService implements Filter {
 				logger.debug("Return Transaction Invoice number-->" + traninvoice);
 				trans.setTransactionnumber(traninvoice);
 				trans.setTransactiondate(Custom.getCurrentInvoiceDate());
-				trans.setDescription("Sales Return Cash");
+				trans.setDescription(soretcash);
 				trans.setInvoicenumber(invoice);
 				long totalAmount = soreturn.getPrice() * Integer.valueOf(soreturn.getQty());
 				trans.setCredit(totalAmount);
 				trans.setDebit(0);
-				trans.setStatus("Pending");
-				trans.setCurrency("");
+				trans.setStatus(transstatus1);
+				trans.setCurrency(currency);
 				salesdal.saveTransaction(trans);
 				randomnumberdal.updateRandamNumber(randomnumber,randomtrId);
 				logger.info("Return Transation Insert done!");
@@ -973,4 +1001,6 @@ public class SalesService implements Filter {
 		} finally {
 		}
 	}
+	
+	
 }

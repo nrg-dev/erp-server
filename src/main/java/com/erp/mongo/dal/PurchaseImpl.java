@@ -1,11 +1,14 @@
 package com.erp.mongo.dal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -18,6 +21,7 @@ import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PurchaseOrder;
+import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.Transaction;
 import com.erp.mongo.model.Vendor;
 
@@ -33,6 +37,21 @@ public class PurchaseImpl implements PurchaseDAL {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
+	@Value("${stockphase1.status}")
+	private String stockstatus1;
+	@Value("${stockphase2.status}")
+	private String stockstatus2;
+	
+	@Value("${paymentphase1.status}")
+	private String paymentstatus1;
+	@Value("${paymentphase2.status}")
+	private String paymentstatus2;
+	
+	@Value("${invoicephase1.status}")
+	private String invoicestatus1;
+	@Value("${invoicephase2.status}")
+	private String invoicestatus2;
+	
 	/*
 	 * @Autowired ErpBo investmentBo1;
 	 */
@@ -67,12 +86,19 @@ public class PurchaseImpl implements PurchaseDAL {
 	 * .find(query, OwnTree.class); return return list; }
 	 */
 	
-	public List<POInvoice> loadInvoice(){
+	public List<POInvoice> loadInvoice(String paystatus){
 		// List<PurchaseOrder>
-		List<POInvoice> list;
-		Query query = new Query();
-	    query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
-		list = mongoTemplate.find(query,POInvoice.class);
+		List<POInvoice> list = new ArrayList<POInvoice>();
+		if(paystatus.equalsIgnoreCase("All")) {
+			Query query = new Query();
+		    query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
+			list = mongoTemplate.find(query,POInvoice.class);
+		}else if(paystatus.equalsIgnoreCase("Pending")) {
+			Query query = new Query();
+		    query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
+		    query.addCriteria(Criteria.where("paymentstatus").is(paystatus));
+			list = mongoTemplate.find(query,POInvoice.class);
+		}		
 		logger.debug("Size-->"+list.size());
 		for (POInvoice e : list) {
 		    logger.debug("Invoice Number -->"+e.getInvoicenumber());    
@@ -189,23 +215,33 @@ public class PurchaseImpl implements PurchaseDAL {
 		return poinvoice;
 	}
 	
-	@Override public POInvoice updatePOInvoice(POInvoice purchase) {
+	@Override public POInvoice updatePOInvoice(POInvoice purchase, int i) {
 		logger.info("Update POInvoice Number --->"+purchase.getInvoicenumber());
 		Update update = new Update();
 		Query query = new Query();
 		query.addCriteria(Criteria.where("invoicenumber").is(purchase.getInvoicenumber()));
-		update.set("invoicedate", purchase.getInvoicedate());
-		update.set("invoicenumber", purchase.getInvoicenumber());
-		update.set("vendorname", purchase.getVendorname());
-		update.set("vendorcode", purchase.getVendorcode());
-		update.set("qty", purchase.getQty());
-		update.set("subtotal", purchase.getSubtotal());
-		update.set("deliveryprice",purchase.getDeliveryprice());
-		update.set("totalprice", purchase.getTotalprice());
-		update.set("status", "Delivered");
-		update.set("stockstatus", "Received");
-		update.set("base64", purchase.getBase64());
-		mongoTemplate.updateFirst(query,update, POInvoice.class);
+		if(i == 1) {
+			update.set("invoicedate", purchase.getInvoicedate());
+			update.set("invoicenumber", purchase.getInvoicenumber());
+			update.set("vendorname", purchase.getVendorname());
+			update.set("vendorcode", purchase.getVendorcode());
+			update.set("qty", purchase.getQty());
+			update.set("subtotal", purchase.getSubtotal());
+			update.set("deliveryprice",purchase.getDeliveryprice());
+			update.set("totalprice", purchase.getTotalprice());
+			update.set("status", invoicestatus2);
+			update.set("stockstatus", stockstatus2);
+			update.set("base64", purchase.getBase64());
+			//mongoTemplate.updateFirst(query,update, POInvoice.class);
+			mongoTemplate.findAndModify(query, update,
+					new FindAndModifyOptions().returnNew(true), POInvoice.class);
+		}else if(i == 2) {
+			logger.debug("Transaction Based POInvoice Payment Status Update -->");
+			update.set("paymentstatus", paymentstatus2);
+			mongoTemplate.findAndModify(query, update,
+					new FindAndModifyOptions().returnNew(true), POInvoice.class);
+			logger.debug("After POInvoice Payment Status Update -->");
+		}
 		return purchase; 
 	}
 	

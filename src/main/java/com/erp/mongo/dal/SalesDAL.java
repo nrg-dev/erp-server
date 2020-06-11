@@ -39,7 +39,7 @@ public interface SalesDAL {
 
 	public SOReturnDetails insertReturn(SOReturnDetails soreturndetails);
 	
-	public SOInvoice updateSOInvoice(SOInvoice soinvoice);
+	public SOInvoice updateSOInvoice(SOInvoice soinvoice, int i);
 	
 	public SOInvoice loadSOInvoice(String invoicenumber);
 	
@@ -54,7 +54,7 @@ public interface SalesDAL {
 
 	public boolean updateSO(String invoice,String[] value);
 
-	public List<SOInvoice> loadInvoice();
+	public List<SOInvoice> loadInvoice(String paystatus);
 
 	public List<SOReturnDetails> loadReturn();
 

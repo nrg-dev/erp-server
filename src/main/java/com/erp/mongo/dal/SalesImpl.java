@@ -6,9 +6,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -33,6 +35,9 @@ public class SalesImpl implements SalesDAL {
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
+	
+	@Value("${paymentphase2.status}")
+	private String paymentstatus2;
 
 	/*
 	 * @Autowired ErpBo investmentBo1;
@@ -172,21 +177,29 @@ public class SalesImpl implements SalesDAL {
 	
 	// update SOInvoice
 	@Override
-	public SOInvoice updateSOInvoice(SOInvoice purchase) {
+	public SOInvoice updateSOInvoice(SOInvoice purchase,int i) {		
 		Update update = new Update();
 		Query query = new Query();
 		query.addCriteria(Criteria.where("invoicenumber").is(purchase.getInvoicenumber()));
-		
-		update.set("invoicedate", purchase.getInvoicedate());
-		update.set("invoicenumber", purchase.getInvoicenumber());
-		update.set("customername", purchase.getCustomername());
-		update.set("deliveryprice", purchase.getDeliveryprice());
-		update.set("qty", purchase.getQty());
-		update.set("totalprice", purchase.getTotalprice());
-		//update.set("totalitem", purchase.getTotalitem());
-		update.set("status", purchase.getStatus());
-
-		mongoTemplate.updateFirst(query, update, SOInvoice.class);
+		if(i == 1) {
+			update.set("invoicedate", purchase.getInvoicedate());
+			update.set("invoicenumber", purchase.getInvoicenumber());
+			update.set("customername", purchase.getCustomername());
+			update.set("deliveryprice", purchase.getDeliveryprice());
+			update.set("qty", purchase.getQty());
+			update.set("totalprice", purchase.getTotalprice());
+			//update.set("totalitem", purchase.getTotalitem());
+			update.set("status", purchase.getStatus());
+			mongoTemplate.findAndModify(query, update,
+					new FindAndModifyOptions().returnNew(true), SOInvoice.class);
+			//mongoTemplate.updateFirst(query, update, SOInvoice.class);
+		}else if(i == 2 ) {
+			logger.debug("Transaction Based SOInvoice Payment Status Update -->");
+			update.set("paymentstatus", paymentstatus2);
+			mongoTemplate.findAndModify(query, update,
+					new FindAndModifyOptions().returnNew(true), SOInvoice.class);
+			logger.debug("After SOInvoice Payment Status Update -->");
+		}
 		return purchase;
 	}
 
@@ -298,11 +311,17 @@ public class SalesImpl implements SalesDAL {
 		}
 	}
 	
-	public List<SOInvoice> loadInvoice(){
-		List<SOInvoice> list;
+	public List<SOInvoice> loadInvoice(String paystatus){
+		List<SOInvoice> list = new ArrayList<SOInvoice>();
 		Query query = new Query();
-	    query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
-		list = mongoTemplate.find(query,SOInvoice.class);
+		if(paystatus.equalsIgnoreCase("All")) {
+		    query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
+			list = mongoTemplate.find(query,SOInvoice.class);
+		}else if(paystatus.equalsIgnoreCase("Pending")) {
+		    query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
+		    query.addCriteria(Criteria.where("paymentstatus").is(paystatus));
+			list = mongoTemplate.find(query,SOInvoice.class);
+		}		
 		logger.info("Size-->"+list.size());
 		for (SOInvoice e : list) {
 		    logger.info("Invoice Number -->"+e.getInvoicenumber());    
