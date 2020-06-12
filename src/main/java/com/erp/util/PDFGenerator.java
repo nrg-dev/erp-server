@@ -111,14 +111,14 @@ public class PDFGenerator {
             
             PdfPCell rcell = new PdfPCell();
        
-            String imagePath = "E://WS//ERP-Frontend2//src//assets//images//nrg_logo.png";
-            Image img = Image.getInstance(imagePath); 
-            img.scaleAbsoluteHeight(120f);
-            img.scaleAbsoluteWidth(120f);
-            img.setAlignment(Element.ALIGN_RIGHT);
-            rcell.addElement(img);
-            rcell.setBorder(Rectangle.NO_BORDER);
-            ptable.addCell(rcell);
+			/*
+			 * String imagePath =
+			 * "E://WS//ERP-Frontend2//src//assets//images//nrg_logo.png"; Image img =
+			 * Image.getInstance(imagePath); img.scaleAbsoluteHeight(120f);
+			 * img.scaleAbsoluteWidth(120f); img.setAlignment(Element.ALIGN_RIGHT);
+			 * rcell.addElement(img); rcell.setBorder(Rectangle.NO_BORDER);
+			 * ptable.addCell(rcell);
+			 */
             
             PdfPCell rcell1;
             rcell1 = new PdfPCell(new Phrase("NICKY OKITA TANAKA,"));
@@ -423,14 +423,14 @@ public class PDFGenerator {
             
             PdfPCell rcell = new PdfPCell();
        
-            String imagePath = "E://WS//ERP-Frontend2//src//assets//images//nrg_logo.png";
-            Image img = Image.getInstance(imagePath); 
-            img.scaleAbsoluteHeight(120f);
-            img.scaleAbsoluteWidth(120f);
-            img.setAlignment(Element.ALIGN_RIGHT);
-            rcell.addElement(img);
-            rcell.setBorder(Rectangle.NO_BORDER);
-            ptable.addCell(rcell);
+			/*
+			 * String imagePath =
+			 * "E://WS//ERP-Frontend2//src//assets//images//nrg_logo.png"; Image img =
+			 * Image.getInstance(imagePath); img.scaleAbsoluteHeight(120f);
+			 * img.scaleAbsoluteWidth(120f); img.setAlignment(Element.ALIGN_RIGHT);
+			 * rcell.addElement(img); rcell.setBorder(Rectangle.NO_BORDER);
+			 * ptable.addCell(rcell);
+			 */
             
             PdfPCell rcell1;
             rcell1 = new PdfPCell(new Phrase("NICKY OKITA TANAKA,"));
