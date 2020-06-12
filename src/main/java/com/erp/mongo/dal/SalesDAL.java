@@ -56,9 +56,11 @@ public interface SalesDAL {
 
 	public List<SOInvoice> loadInvoice(String paystatus);
 
-	public List<SOReturnDetails> loadReturn();
+	public List<SOReturnDetails> loadReturn(String paystatus);
 
-	public Transaction saveTransaction(Transaction tran);  
+	public Transaction saveTransaction(Transaction tran);
+
+	public SOReturnDetails updateSOReturn(SOReturnDetails soret);  
 	
 
 }

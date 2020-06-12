@@ -74,4 +74,24 @@
     "type": "java.lang.String",
     "description": "A description for 'transphase2.status'"
   },
+  {
+    "name": "poretcredit.desc",
+    "type": "java.lang.String",
+    "description": "A description for 'poretcredit.desc'"
+  },
+  {
+    "name": "soretcredit.desc",
+    "type": "java.lang.String",
+    "description": "A description for 'soretcredit.desc'"
+  },
+  {
+    "name": "poretvoucher.desc",
+    "type": "java.lang.String",
+    "description": "A description for 'poretvoucher.desc'"
+  },
+  {
+    "name": "soretvoucher.desc",
+    "type": "java.lang.String",
+    "description": "A description for 'soretvoucher.desc'"
+  }
 ]}

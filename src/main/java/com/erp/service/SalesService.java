@@ -955,6 +955,11 @@ public class SalesService implements Filter {
 			//purchasedal.updateSO(invoice,poinvoicedto.getOrdernumbers());
 			soreturn.setInvoicenumber(invoice);
 			soreturn.setCreateddate(Custom.getCurrentInvoiceDate());
+			if(soreturn.getReturnStatus().equalsIgnoreCase("cash")) {
+				soreturn.setPaymentstatus(paymentstatus2); 
+			}else {
+				soreturn.setPaymentstatus(paymentstatus1); 
+			}
 			salesdal.insertReturn(soreturn);
 			randomnumberdal.updateRandamNumber(randomnumber,randomId);
 			logger.info("createReturn done!");
@@ -992,8 +997,9 @@ public class SalesService implements Filter {
 	public ResponseEntity<?> loadReturn() {
 		logger.info("-------- loadReturn ----------");
 		List<SOReturnDetails> responselist = new ArrayList<SOReturnDetails>();
+		String paystatus = "All";
 		try {
-			responselist = salesdal.loadReturn();
+			responselist = salesdal.loadReturn(paystatus);
 			return new ResponseEntity<List<SOReturnDetails>>(responselist, HttpStatus.OK);				
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());

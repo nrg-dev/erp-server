@@ -44,6 +44,7 @@ db.stock.remove( { } )
 
 db.menu.remove( { } )
 
+db.randomNumber.remove( {"randomID" :19 } )
 
 db.menu.insertOne({ "menucode":"MEN10000","menuname":"Dashboard","submenuname":"","langcode":"EN"});
 db.menu.insertOne({ "menucode":"MEN10000","menuname":"Dasbor","submenuname":"","langcode":"INDO"});

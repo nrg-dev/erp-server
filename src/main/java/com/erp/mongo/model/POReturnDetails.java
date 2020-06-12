@@ -22,6 +22,7 @@ public class POReturnDetails {
 	private String invoiceddate;
 	private long price;
 	private String pocode;
+	private String paymentstatus;
 
 	public String getId() {
 		return id;
@@ -142,6 +143,14 @@ public class POReturnDetails {
 
 	public void setPocode(String pocode) {
 		this.pocode = pocode;
+	}
+
+	public String getPaymentstatus() {
+		return paymentstatus;
+	}
+
+	public void setPaymentstatus(String paymentstatus) {
+		this.paymentstatus = paymentstatus;
 	}
 
 	

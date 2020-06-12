@@ -22,7 +22,8 @@ public class SOReturnDetails {
 	private String invoiceddate;
 	private long price;
 	private String socode;
-	
+	private String paymentstatus;
+
 	public String getId() {
 		return id;
 	}
@@ -141,6 +142,14 @@ public class SOReturnDetails {
 
 	public void setSocode(String socode) {
 		this.socode = socode;
+	}
+
+	public String getPaymentstatus() {
+		return paymentstatus;
+	}
+
+	public void setPaymentstatus(String paymentstatus) {
+		this.paymentstatus = paymentstatus;
 	}
 
 	 

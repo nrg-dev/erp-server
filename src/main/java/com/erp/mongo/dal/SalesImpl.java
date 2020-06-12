@@ -331,13 +331,20 @@ public class SalesImpl implements SalesDAL {
 	}
 	
 	@Override
-	public List<SOReturnDetails> loadReturn() {
-		List<SOReturnDetails> list=null;
-		Query query = new Query();
-		query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
-		list = mongoTemplate.find(query,SOReturnDetails.class);
-		logger.info("Return List Size ------>"+list.size());
-		return list; 
+	public List<SOReturnDetails> loadReturn(String paystatus) {
+		List<SOReturnDetails> list = new ArrayList<SOReturnDetails>();
+		if(paystatus.equalsIgnoreCase("All")) {
+			Query query = new Query();
+		    query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
+			list = mongoTemplate.find(query,SOReturnDetails.class);
+		}else if(paystatus.equalsIgnoreCase("Pending")) {
+			Query query = new Query();
+		    query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
+		    query.addCriteria(Criteria.where("paymentstatus").is(paystatus));
+			list = mongoTemplate.find(query,SOReturnDetails.class);
+		}		
+		logger.debug("Return List Size-->"+list.size());
+		return list;
 	}
 	
 	//--- Insert Transaction Table ---
@@ -346,6 +353,20 @@ public class SalesImpl implements SalesDAL {
 		mongoTemplate.save(trans);
 		trans.setStatus("success"); 
 		return trans;
+	}
+	
+	//-------- Update SoReturn Table ----
+	@Override 
+	public SOReturnDetails updateSOReturn(SOReturnDetails soreturn) {
+		logger.info("Update SOReturn Number --->"+soreturn.getInvoicenumber());
+		Update update = new Update();
+		Query query = new Query();
+		query.addCriteria(Criteria.where("invoicenumber").is(soreturn.getInvoicenumber()));
+		update.set("paymentstatus", paymentstatus2);
+		mongoTemplate.findAndModify(query, update,
+				new FindAndModifyOptions().returnNew(true), SOReturnDetails.class);
+		logger.debug("After POReturn Payment Status Update -->");
+		return soreturn; 
 	}
 
 }

@@ -847,6 +847,11 @@ public class PurchaseService implements Filter {
 			logger.debug("Invoice number -->" + invoice);
 			poreturn.setInvoicenumber(invoice);
 			poreturn.setCreateddate(Custom.getCurrentInvoiceDate());
+			if(poreturn.getReturnStatus().equalsIgnoreCase("cash")) {
+				poreturn.setPaymentstatus(paymentstatus2); 
+			}else {
+				poreturn.setPaymentstatus(paymentstatus1); 
+			}
 			purchasedal.insertReturn(poreturn);
 			randomnumberdal.updateRandamNumber(randomnumber,randomId);
 			logger.info("createReturn done!");
@@ -884,8 +889,9 @@ public class PurchaseService implements Filter {
 	public ResponseEntity<?> loadReturn() {
 		logger.info("-------- loadReturn ----------");
 		List<POReturnDetails> responselist = new ArrayList<POReturnDetails>();
+		String paystatus = "All";
 		try {
-			responselist = purchasedal.loadReturn();
+			responselist = purchasedal.loadReturn(paystatus);
 			return new ResponseEntity<List<POReturnDetails>>(responselist, HttpStatus.OK);				
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());

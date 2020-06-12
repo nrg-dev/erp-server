@@ -52,9 +52,11 @@ public interface PurchaseDAL {
 	public boolean updatePurchaseOrder(PurchaseOrder purchaseorder);
 	public boolean updatePO(String invoice,String[] value);
 
-	public List<POReturnDetails> loadReturn();
+	public List<POReturnDetails> loadReturn(String paystatus);
 
 	public Transaction saveTransaction(Transaction tran);
+
+	public POReturnDetails updatePOReturn(POReturnDetails poret); 
 	
 
 

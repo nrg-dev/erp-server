@@ -381,13 +381,21 @@ public class PurchaseImpl implements PurchaseDAL {
 		}
 		
 		@Override
-		public List<POReturnDetails> loadReturn() {
-			List<POReturnDetails> list=null;
-			Query query = new Query();
-			query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
-			list = mongoTemplate.find(query,POReturnDetails.class);
+		public List<POReturnDetails> loadReturn(String paystatus) {
+			List<POReturnDetails> list = new ArrayList<POReturnDetails>();
+			if(paystatus.equalsIgnoreCase("All")) {
+				Query query = new Query();
+			    query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
+				list = mongoTemplate.find(query,POReturnDetails.class);
+			}else if(paystatus.equalsIgnoreCase("Pending")) {
+				Query query = new Query();
+			    query.with(new Sort(new Order(Direction.DESC, "invoicenumber")));
+			    query.addCriteria(Criteria.where("paymentstatus").is(paystatus));
+				list = mongoTemplate.find(query,POReturnDetails.class);
+			}		
 			logger.debug("Return List Size-->"+list.size());
-			return list; 
+			return list;
+
 		}
 		
 		//--- Insert Transaction Table ---
@@ -397,4 +405,19 @@ public class PurchaseImpl implements PurchaseDAL {
 			trans.setStatus("success"); 
 			return trans;
 		}
+		
+		//-------- Update PoReturn Table ----
+		@Override 
+		public POReturnDetails updatePOReturn(POReturnDetails poret) {
+			logger.info("Update POReturn Number --->"+poret.getInvoicenumber());
+			Update update = new Update();
+			Query query = new Query();
+			query.addCriteria(Criteria.where("invoicenumber").is(poret.getInvoicenumber()));
+			update.set("paymentstatus", paymentstatus2);
+			mongoTemplate.findAndModify(query, update,
+					new FindAndModifyOptions().returnNew(true), POReturnDetails.class);
+			logger.debug("After POReturn Payment Status Update -->");
+			return poret; 
+		}
+		
 }
