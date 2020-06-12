@@ -444,4 +444,23 @@ public class FinanceService implements Filter {
 		}
 	}
 	
+	// Load petty cash data
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/profitandloss", method = RequestMethod.GET)
+	public ResponseEntity<?> profitandloss() {
+		logger.info("profitandloss");
+		List<Transaction> profitlosslist = null;
+		try {
+			logger.info("Before Calling load profitandloss list");
+			profitlosslist = financedal.loadProfitLoss();
+			logger.info("Successfully Called load profitandloss list");
+			return new ResponseEntity<List<Transaction>>(profitlosslist, HttpStatus.CREATED);
+
+		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} finally {
+
+		}
+	}
 }

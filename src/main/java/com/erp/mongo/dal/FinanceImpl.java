@@ -6,6 +6,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -13,7 +16,9 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import com.erp.mongo.model.Customer;
+import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PettyCash;
+import com.erp.mongo.model.Transaction;
 import com.erp.mongo.model.Vendor;
 
 @Repository
@@ -76,5 +81,15 @@ public class FinanceImpl implements FinanceDAL {
 		mongoTemplate.remove(query, PettyCash.class);
 		return response;
 	}
+	
+	@Override
+	public List<Transaction> loadProfitLoss() {
+		List<Transaction> list = new ArrayList<Transaction>();
+		Query query = new Query();
+	    query.with(new Sort(new Order(Direction.DESC, "transactionnumber")));
+		list = mongoTemplate.find(query,Transaction.class);
+		return list;
+	}
+					
 
 }
