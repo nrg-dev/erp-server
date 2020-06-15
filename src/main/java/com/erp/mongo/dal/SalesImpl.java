@@ -38,6 +38,9 @@ public class SalesImpl implements SalesDAL {
 	
 	@Value("${paymentphase2.status}")
 	private String paymentstatus2;
+	
+	@Value("${salesorderphase2.status}")
+	private String salesorderstatus2;
 
 	/*
 	 * @Autowired ErpBo investmentBo1;
@@ -288,7 +291,6 @@ public class SalesImpl implements SalesDAL {
 		logger.info("----- DAO updateSO -----");
 		Update update = null;
 		Query query = null;
-		String changestatus="Invoiced";
 		try {
 			for(String v:value) {
 				update = new Update();
@@ -296,7 +298,7 @@ public class SalesImpl implements SalesDAL {
 				logger.info("SO numbers-->"+v);
 				query.addCriteria(Criteria.where("socode").is(v));
 				update.set("invoicenumber", invoice);
-				update.set("status", changestatus);
+				update.set("status", salesorderstatus2);
 				mongoTemplate.updateFirst(query, update, SalesOrder.class);
 			}
 			logger.info("updateSO done!");
@@ -305,7 +307,6 @@ public class SalesImpl implements SalesDAL {
 			logger.error("Exception  -->"+e.getMessage());
 			return false;
 		}finally {
-			changestatus=null;
 			update=null;
 			query=null;
 		}

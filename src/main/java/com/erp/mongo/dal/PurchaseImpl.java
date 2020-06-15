@@ -52,6 +52,9 @@ public class PurchaseImpl implements PurchaseDAL {
 	@Value("${invoicephase2.status}")
 	private String invoicestatus2;
 	
+	@Value("${purchaseorderphase2.status}")
+	private String purchaseorderstatus2;
+	
 	/*
 	 * @Autowired ErpBo investmentBo1;
 	 */
@@ -323,7 +326,6 @@ public class PurchaseImpl implements PurchaseDAL {
 		logger.info("DAO updatePO");
 		Update update = null;//new Update();
 		Query query = null;//new Query();
-		String changestatus="Invoiced";
 		try {
 			for(String v:value) {
 				update = new Update();
@@ -331,7 +333,7 @@ public class PurchaseImpl implements PurchaseDAL {
 				logger.debug("PO numbers-->"+v);
 				query.addCriteria(Criteria.where("pocode").is(v));
 				update.set("invoicenumber", invoice);
-				update.set("status", changestatus);
+				update.set("status", purchaseorderstatus2);
 				mongoTemplate.updateFirst(query, update, PurchaseOrder.class);
 			}
 			logger.info("updatePO done!");
@@ -340,7 +342,6 @@ public class PurchaseImpl implements PurchaseDAL {
 			logger.error("Exception-->"+e.getMessage());
 			return false;
 		}finally {
-			changestatus=null;
 			update=null;
 			query=null;
 		}

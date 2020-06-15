@@ -82,6 +82,9 @@ public class SalesService implements Filter {
 	@Value("${paymentphase2.status}")
 	private String paymentstatus2;
 	
+	@Value("${salesorderphase1.status}")
+	private String salesorderstatus1;
+	
 	@Value("${transphase1.status}")
 	private String transstatus1;
 	
@@ -850,7 +853,7 @@ public class SalesService implements Filter {
 			soinvoice.setInvoicedate(soinvoicedto.getCreateddate());
 			logger.debug("Invoice Date-->" + soinvoice.getInvoicedate());
 			soinvoice.setInvoicenumber(invoice);
-			soinvoice.setStatus("Pending");
+			soinvoice.setStatus(salesorderstatus1);
 			soinvoice.setPaymenttype(soinvoicedto.getPaymenttype());
 			if(soinvoicedto.getPaymenttype().equalsIgnoreCase("cash")) {
 				soinvoice.setPaymentstatus(paymentstatus2); 

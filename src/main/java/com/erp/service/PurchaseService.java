@@ -74,6 +74,9 @@ public class PurchaseService implements Filter {
 	@Value("${paymentphase2.status}")
 	private String paymentstatus2;
 	
+	@Value("${purchaseorderphase1.status}")
+	private String purchaseorderstatus1;
+	
 	@Value("${transphase1.status}")
 	private String transstatus1;
 	
@@ -162,7 +165,7 @@ public class PurchaseService implements Filter {
 			poinvoice.setInvoicedate(poinvoicedto.getCreateddate());
 			logger.debug("Invoice Date-->" + poinvoice.getInvoicedate());
 			poinvoice.setInvoicenumber(invoice);
-			poinvoice.setStatus("Pending");
+			poinvoice.setStatus(purchaseorderstatus1);
 			poinvoice.setStockstatus(stockstatus1);
 			poinvoice.setPaymenttype(poinvoicedto.getPaymenttype());
 			if(poinvoicedto.getPaymenttype().equalsIgnoreCase("cash")) {
