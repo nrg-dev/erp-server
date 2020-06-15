@@ -16,6 +16,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import com.erp.mongo.model.Customer;
+import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PettyCash;
 import com.erp.mongo.model.Transaction;
@@ -88,6 +89,13 @@ public class FinanceImpl implements FinanceDAL {
 		Query query = new Query();
 	    query.with(new Sort(new Order(Direction.DESC, "transactionnumber")));
 		list = mongoTemplate.find(query,Transaction.class);
+		return list;
+	}
+	
+	//----- Load Profit and Loss Based on date --
+	public List<Transaction> loadfilterProfitData(List<Transaction> list,String fromdate, String todate) {
+		list = mongoTemplate.find(
+                Query.query(Criteria.where("transactiondate").gte(fromdate).lt(todate)),Transaction.class);
 		return list;
 	}
 					

@@ -1,7 +1,9 @@
 package com.erp.service;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.Filter;
@@ -36,6 +38,7 @@ import com.erp.mongo.dal.FinanceDAL;
 import com.erp.mongo.dal.PurchaseDAL;
 import com.erp.mongo.dal.RandomNumberDAL;
 import com.erp.mongo.dal.SalesDAL;
+import com.erp.mongo.model.Item;
 import com.erp.mongo.model.POInvoice;
 import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PettyCash;
@@ -456,6 +459,34 @@ public class FinanceService implements Filter {
 			logger.info("Successfully Called load profitandloss list");
 			return new ResponseEntity<List<Transaction>>(profitlosslist, HttpStatus.CREATED);
 
+		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} finally {
+
+		}
+	}
+	
+	// Remove
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/filterByDate", method = RequestMethod.GET)
+	public ResponseEntity<?> filterByDate(String fromdate, String todate) {
+		List<Transaction> trans = new ArrayList<Transaction>();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat your_format = new SimpleDateFormat("dd-MM-yyyy");
+		try {
+			logger.info("----------- Before Calling  filterByDate ----------");
+			logger.info("From Date -->" + fromdate);
+			logger.info("To Date -->" + todate);
+			
+			Date dt1 = format.parse(fromdate);
+			String startdate = your_format.format(dt1);
+			logger.debug("Start Date-->" + startdate);
+			Date dt2 = format.parse(todate);
+			String enddate = your_format.format(dt2);
+			logger.debug("End Date -->" + enddate);
+			trans = financedal.loadfilterProfitData(trans, startdate, enddate);
+			return new ResponseEntity<List<Transaction>>(trans, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

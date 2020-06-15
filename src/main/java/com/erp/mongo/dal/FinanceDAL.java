@@ -17,5 +17,7 @@ public interface FinanceDAL {
 
 	public PettyCash removePettyCash(String id);
 
-	public List<Transaction> loadProfitLoss(); 
+	public List<Transaction> loadProfitLoss();
+
+	public List<Transaction> loadfilterProfitData(List<Transaction> trans, String startdate, String enddate); 
 }
