@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import com.erp.mongo.model.POInvoiceDetails;
 import com.erp.mongo.model.POReturnDetails;
+import com.erp.mongo.model.SOInvoice;
 import com.erp.mongo.model.SOReturnDetails;
 import com.erp.mongo.model.Stock;
 import com.erp.mongo.model.StockDamage;
@@ -226,6 +228,12 @@ public class StockImpl implements StockDAL {
 			update.set("recentStock", stock.getAddedqty());
 			update.set("unit", stock.getUnit());
 			update.set("status", "Ready for Sales");
+			mongoTemplate.updateFirst(query, update, Stock.class);
+		}else if(id == "update") {
+			query.addCriteria(Criteria.where("id").is(stock.getId()));
+			update.set("recentStock", stock.getRecentStock());
+			mongoTemplate.findAndModify(query, update,
+					new FindAndModifyOptions().returnNew(true), Stock.class);
 		}else {
 			query.addCriteria(Criteria.where("id").is(id));
 			update.set("invoicedate", stock.getInvoicedate());
@@ -235,9 +243,8 @@ public class StockImpl implements StockDAL {
 			update.set("recentStock", stock.getRecentStock());
 			update.set("addedqty", stock.getAddedqty());
 			update.set("status", stock.getStatus());
+			mongoTemplate.updateFirst(query, update, Stock.class);
 		}
-		
-		mongoTemplate.updateFirst(query, update, Stock.class);
 		return stock;
 	}
 	

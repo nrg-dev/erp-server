@@ -49,6 +49,7 @@ import com.erp.mongo.model.Stock;
 import com.erp.mongo.model.StockDamage;
 import com.erp.mongo.model.StockInDetails;
 import com.erp.mongo.model.StockReturn;
+import com.erp.mongo.model.Transaction;
 import com.erp.util.Custom;
 
 @SpringBootApplication
@@ -587,6 +588,24 @@ public class StockService implements Filter {
 			purchasedal.updatePOInvoice(poinv,1);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} finally {
+
+		}
+	}
+	
+	// update
+	@CrossOrigin(origins = "http://localhost:8080")
+	@RequestMapping(value = "/updateStock", method = RequestMethod.PUT)
+	public ResponseEntity<?> updateStock(@RequestBody Stock stock) {
+		try {
+			logger.debug("Stock Id-->" + stock.getId());
+			logger.debug("Recent Stock-->" + stock.getRecentStock());
+			stock = stockdal.updateStock(stock,"update");
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			stock.setStatus("failure");
 			logger.error("Exception-->" + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} finally {
