@@ -1,5 +1,6 @@
 package com.erp.mongo.dal;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,5 +20,5 @@ public interface FinanceDAL {
 
 	public List<Transaction> loadProfitLoss();
 
-	public List<Transaction> loadfilterProfitData(List<Transaction> trans, String startdate, String enddate); 
+	public List<Transaction> loadfilterProfitData(List<Transaction> trans, String startdate, String enddate) throws ParseException; 
 }

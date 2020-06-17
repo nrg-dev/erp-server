@@ -1,5 +1,6 @@
 package com.erp.mongo.dal;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,11 +17,10 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import com.erp.mongo.model.Customer;
-import com.erp.mongo.model.POInvoice;
-import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.PettyCash;
 import com.erp.mongo.model.Transaction;
 import com.erp.mongo.model.Vendor;
+import com.erp.util.Custom;
 
 @Repository
 public class FinanceImpl implements FinanceDAL {
@@ -93,9 +93,19 @@ public class FinanceImpl implements FinanceDAL {
 	}
 	
 	//----- Load Profit and Loss Based on date --
-	public List<Transaction> loadfilterProfitData(List<Transaction> list,String fromdate, String todate) {
-		list = mongoTemplate.find(
-                Query.query(Criteria.where("transactiondate").gte(fromdate).lt(todate)),Transaction.class);
+	public List<Transaction> loadfilterProfitData(List<Transaction> list,String fromdate, String todate) throws ParseException {
+		Query query = new Query();
+		if(fromdate.equalsIgnoreCase(todate)) {
+			logger.debug("-------- Both Dates are Equal --------");
+			String transdate = Custom.convertStringToData(fromdate);
+			logger.debug("Transaction Date -->"+transdate);
+			query.addCriteria(Criteria.where("transactiondate").is(transdate));
+			list = mongoTemplate.find(query,Transaction.class);
+		}else {
+			logger.debug("-------- Both Dates are Not Equal --------");
+			query.addCriteria(Criteria.where("transactiondate").gte(fromdate).lte(todate));
+			list = mongoTemplate.find(query,Transaction.class);
+		}	
 		return list;
 	}
 					

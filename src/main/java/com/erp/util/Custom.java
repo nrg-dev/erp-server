@@ -1,6 +1,7 @@
 package com.erp.util;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 /*import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,14 +14,13 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.erp.service.VendorService;
-
-import java.util.Date;
-
 public class Custom {
 
 	//private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
    // private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+	
+	public static final String DATE_DASH_FORMAT = "yyyy-MM-dd";
+	public static final String DATE_FORMAT = "MM/dd/yyyy"; 
 	
 	public static final Logger logger = LoggerFactory.getLogger(Custom.class);
 
@@ -33,9 +33,16 @@ public class Custom {
 		logger.debug("Invoice Date -->"+date);
 		return formatter.format(date);
 	}
+	
+	public static String convertStringToData(String stringData) throws ParseException {
 
-	
-	
+	    SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
+	    SimpleDateFormat output = new SimpleDateFormat("dd/mm/yyyy");
+	    Date data = sdf.parse(stringData);
+	    String formattedTime = output.format(data);
+	    logger.debug("Formatter -->"+formattedTime);
+	    return formattedTime;
+	}
 	
 	
 	
