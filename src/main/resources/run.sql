@@ -46,6 +46,9 @@ db.menu.remove( { } )
 
 db.randomNumber.remove( {"randomID" :19 } )
 
+db.purchaseOrder.update({"_id" :ObjectId("5e84406bb184021e9421f6d3") },{$set : {"status":'Open'}})
+
+
 db.menu.insertOne({ "menucode":"MEN10000","menuname":"Dashboard","submenuname":"","langcode":"EN"});
 db.menu.insertOne({ "menucode":"MEN10000","menuname":"Dasbor","submenuname":"","langcode":"INDO"});
 

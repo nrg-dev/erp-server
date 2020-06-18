@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Repository;
 
 import com.erp.bo.ErpBo;
 import com.erp.mongo.model.Customer;
+import com.erp.mongo.model.Stock;
 import com.erp.mongo.model.Vendor;
 
 @Repository
@@ -69,12 +71,13 @@ public class VendorImpl implements VendorDAL {
 		query.addCriteria(Criteria.where("vendorcode").is(vendor.getVendorcode()));
 		update.set("vendorName", vendor.getVendorName());
 		update.set("phoneNumber", vendor.getPhoneNumber());
-		update.set("mobileNumber", vendor.getMobileNumber());
 		update.set("country", vendor.getCountry());
 		update.set("email", vendor.getEmail());
 		update.set("city", vendor.getCity());
 		update.set("address", vendor.getAddress());
-		mongoTemplate.updateFirst(query, update, Vendor.class);
+		mongoTemplate.findAndModify(query, update,
+				new FindAndModifyOptions().returnNew(true), Vendor.class);
+		//mongoTemplate.updateFirst(query, update, Vendor.class);
 		return vendor;
 	}
 
