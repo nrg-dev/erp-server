@@ -56,7 +56,11 @@ public class FinanceImpl implements FinanceDAL {
 
 	// load petty cash list
 	public List<PettyCash> load() {
-		List<PettyCash> pettycashlist = mongoTemplate.findAll(PettyCash.class);
+		List<PettyCash> pettycashlist = new ArrayList<PettyCash>();
+		Query query = new Query();
+	    query.with(new Sort(new Order(Direction.DESC, "addedDate")));
+	    pettycashlist = mongoTemplate.find(query,PettyCash.class);
+		//List<PettyCash> pettycashlist = mongoTemplate.findAll(PettyCash.class);
 		return pettycashlist;
 	}
 
