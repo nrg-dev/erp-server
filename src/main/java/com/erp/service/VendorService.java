@@ -89,6 +89,7 @@ public class VendorService implements Filter {
 			logger.debug("Invoice number-->" + invoice);
 			vendor.setVendorcode(invoice);
 			vendor.setAddeddate(Custom.getCurrentInvoiceDate());
+			vendor.setStatus("Active"); 
 			logger.debug("Current Date-->" + Custom.getCurrentDate());
 			logger.debug("Vendor Image Base 64 -->" + vendor.getVendorbase64());
 			vendor = vendordal.saveVendor(vendor);

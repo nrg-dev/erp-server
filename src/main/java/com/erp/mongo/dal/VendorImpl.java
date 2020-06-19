@@ -45,6 +45,9 @@ public class VendorImpl implements VendorDAL {
 	public List<Vendor> loadVendor(List<Vendor> list) {
 		 Query query = new Query();
 		 query.with(new Sort(new Order(Direction.DESC, "vendorcode")));
+		 query.addCriteria( new Criteria().orOperator(
+					Criteria.where("status").is(""),Criteria.where("status").is(null),
+					Criteria.where("status").is("Active") ));
   		 list = mongoTemplate.find(query,Vendor.class);
 		 //list = mongoTemplate.findAll(Vendor.class);// .find(query, OwnTree.class);
 		 return list;
@@ -85,8 +88,15 @@ public class VendorImpl implements VendorDAL {
 	public Vendor removeVendor(String vendorcode) {
 		Vendor response = null;
 		Query query = new Query();
+		Update update = new Update();
 		query.addCriteria(Criteria.where("vendorcode").is(vendorcode));
-		mongoTemplate.remove(query, Vendor.class);
+		update.set("status", "InActive");
+		mongoTemplate.findAndModify(query, update,
+				new FindAndModifyOptions().returnNew(true), Vendor.class);
+		/*
+		 * query.addCriteria(Criteria.where("vendorcode").is(vendorcode));
+		 * mongoTemplate.remove(query, Vendor.class);
+		 */
 		return response;
 	}
 
