@@ -1,5 +1,6 @@
 package com.erp.mongo.dal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -12,10 +13,12 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import com.erp.bo.ErpBo;
+import com.erp.dto.Enquiry;
 import com.erp.dto.User;
 import com.erp.model.UserLogin;
 import com.erp.mongo.model.Login;
 import com.erp.mongo.model.POInvoiceDetails;
+import com.erp.mongo.model.POReturnDetails;
 import com.erp.mongo.model.StockDamage;
 import com.erp.mongo.model.Vendor;
 
@@ -102,6 +105,23 @@ public class LoginImpl implements LoginDAL {
 			
 		}
 		return user;
+	}
+	
+
+	public Enquiry saveEnquiry(Enquiry enquiry) {
+		mongoTemplate.save(enquiry);
+		return enquiry;
+	}
+	
+	@Override
+	public List<Enquiry> loadEnquiry(List<Enquiry> enquirylist) {
+		//Query query = new Query();
+	    //query.with(new Sort(new Order(Direction.DESC, "addeddate")));
+		//list = mongoTemplate.find(query,Enquiry.class);	
+		enquirylist = mongoTemplate.findAll(Enquiry.class);	
+		logger.debug("Enquiry list Size-->"+enquirylist.size());
+		return enquirylist;
+
 	}
 
 }

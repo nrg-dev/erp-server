@@ -23,10 +23,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.erp.dao.ErpDao;
 import com.erp.dto.Dropbox;
+import com.erp.dto.Enquiry;
 import com.erp.dto.Member;
 import com.erp.dto.User;
 
@@ -45,6 +51,7 @@ import com.erp.util.Email;
 import com.erp.util.ErpException;
 import com.erp.mongo.model.Customer;
 import com.erp.mongo.model.Login;
+import com.erp.mongo.model.POReturnDetails;
 
 
 @Service("bo")
@@ -111,5 +118,17 @@ public class ErpBoImpl implements ErpBo{
 		
 		return user;
 	}
+	
+	public Enquiry saveEnquiry(Enquiry enquiry) {
+		enquiry = logindal.saveEnquiry(enquiry);
+		return enquiry;
+	} 
+	
+	@Override
+	public List<Enquiry> loadEnquiry(List<Enquiry> enquirylist) {
+		enquirylist = logindal.loadEnquiry(enquirylist);
+		return enquirylist;
+	}
+
 	
 }

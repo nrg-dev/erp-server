@@ -10,4 +10,6 @@ import com.erp.model.IndustryDetail;
 import com.erp.model.UserDetail;
 import com.erp.model.UserLogin;
 
-public interface ErpDao {}
+public interface ErpDao {
+
+}
