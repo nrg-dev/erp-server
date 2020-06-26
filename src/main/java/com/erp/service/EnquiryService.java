@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 //import org.springframework.beans.factory.annotation.Autowire;
 
@@ -22,8 +23,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,7 +35,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.bo.ErpBo;
 import com.erp.dto.Enquiry;
+import com.erp.dto.User;
 import com.erp.mongo.dal.RandomNumberDAL;
+import com.erp.mongo.model.POReturnDetails;
 import com.erp.util.Custom;
 
 @SpringBootApplication
@@ -43,6 +49,11 @@ public class EnquiryService implements Filter {
 
 	@Autowired
 	ErpBo bo;
+	
+	@Value("${enquiry.userName}")
+	private String username;
+	@Value("${enquiry.passWord}")
+	private String password;
 
 	private final RandomNumberDAL randomnumberdal;
 
@@ -92,4 +103,37 @@ public class EnquiryService implements Filter {
 		}
 	}
 	
+	@CrossOrigin(origins = "http://localhost:8080")
+	@GetMapping(value = "/getUserAndPass", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getUserAndPass() {
+		logger.info("-------- getUserAndPass ----------");
+		User user = new User();
+		try {
+			logger.info("User Name --->"+username);
+			logger.info("Passowrd --->"+password);
+			user.setUsername(username);
+			user.setPassword(password); 
+			return new ResponseEntity<User>(user, HttpStatus.OK);				
+		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
+		} finally {
+		}
+	}
+	
+	@CrossOrigin(origins = "http://localhost:8080")
+	@GetMapping(value = "/loadEnquiry", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> loadEnquiry() {
+		logger.info("-------- loadEnquiry ----------");
+		List<Enquiry> enquirylist = new ArrayList<Enquiry>();
+		try {
+			enquirylist = bo.loadEnquiry(enquirylist);
+			return new ResponseEntity<List<Enquiry>>(enquirylist, HttpStatus.OK);				
+		} catch (Exception e) {
+			logger.error("Exception-->" + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400
+		} finally {
+		}
+	}
+		
 }

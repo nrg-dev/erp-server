@@ -110,6 +110,7 @@ public class LoginImpl implements LoginDAL {
 
 	public Enquiry saveEnquiry(Enquiry enquiry) {
 		mongoTemplate.save(enquiry);
+		enquiry.setStatus("Success"); 
 		return enquiry;
 	}
 	
